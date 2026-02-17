@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+if [ -z "$DATABASE_URL" ]; then
+  echo "[Migrations] ERROR: DATABASE_URL is not set. Cannot run migrations."
+  exit 1
+fi
+
 echo "[Migrations] Running database migrations..."
 
 for f in /app/db/migrations/*.sql; do
