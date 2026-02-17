@@ -1,9 +1,3 @@
-databases:
-  - name: playbook-db
-    plan: free
-    databaseName: playbook
-    user: playbook
-
 services:
   - type: web
     name: practitioners-playbook
@@ -12,9 +6,7 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: playbook-db
-          property: connectionString
+        sync: false
       - key: NODE_ENV
         value: production
       - key: JWT_SECRET
