@@ -6,7 +6,7 @@ databases:
 
 services:
   - type: web
-    name: practitioners-playbook
+    name: ssage
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
