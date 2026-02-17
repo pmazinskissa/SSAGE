@@ -4,11 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "paths": {
-      "@playbook/shared": ["../shared/src/types/index.ts"]
-    },
-    "baseUrl": "."
+    "moduleResolution": "NodeNext"
   },
   "include": ["src"]
 }
