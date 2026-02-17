@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import crypto from 'crypto';
+import type { AuthUser } from '@playbook/shared';
 import { config } from '../config/env.js';
 import { requireAuth } from '../middleware/auth.js';
-import { signToken, ensureDevUserInDb, getDevUser } from '../services/auth.service.js';
+import { signToken, ensureDevUserInDb, getDevUser, registerLocalUser, authenticateLocalUser } from '../services/auth.service.js';
 import { findOrCreateOAuthUser } from '../services/auth.service.js';
 import { isOAuthEnabled, buildAuthUrl, handleCallback } from '../services/oauth.service.js';
 
@@ -31,10 +32,13 @@ const COOKIE_OPTIONS = {
 
 // GET /api/auth/providers — available auth methods
 router.get('/providers', (_req, res) => {
+  // Local auth is available when no OAuth provider is configured (OAUTH_PROVIDER=none)
+  const localAuth = !isOAuthEnabled() && !config.devAuthBypass;
   res.json({
     data: {
       oauth: isOAuthEnabled() ? config.oauthProvider : null,
       devBypass: config.devAuthBypass,
+      localAuth,
     },
   });
 });
@@ -106,6 +110,47 @@ router.post('/dev-login', async (req, res) => {
   } catch (err: any) {
     console.error('[Auth] Dev login error:', err.message);
     res.status(500).json({ error: { message: 'Failed to create dev session' } });
+  }
+});
+
+// POST /api/auth/register — local registration
+router.post('/register', async (req, res) => {
+  try {
+    const { email, name, password } = req.body;
+    if (!email || !name || !password) {
+      return res.status(400).json({ error: { message: 'Email, name, and password are required' } });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: { message: 'Password must be at least 6 characters' } });
+    }
+
+    const user = await registerLocalUser({ email, name, password });
+    const authUser: AuthUser = { id: user.id, email: user.email, name: user.name, role: user.role };
+    const token = signToken(authUser);
+    res.cookie('session_token', token, COOKIE_OPTIONS);
+    res.json({ data: authUser });
+  } catch (err: any) {
+    console.error('[Auth] Register error:', err.message);
+    res.status(400).json({ error: { message: err.message || 'Registration failed' } });
+  }
+});
+
+// POST /api/auth/local-login — email/password login
+router.post('/local-login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: { message: 'Email and password are required' } });
+    }
+
+    const user = await authenticateLocalUser(email, password);
+    const authUser: AuthUser = { id: user.id, email: user.email, name: user.name, role: user.role };
+    const token = signToken(authUser);
+    res.cookie('session_token', token, COOKIE_OPTIONS);
+    res.json({ data: authUser });
+  } catch (err: any) {
+    console.error('[Auth] Local login error:', err.message);
+    res.status(401).json({ error: { message: err.message || 'Login failed' } });
   }
 });
 

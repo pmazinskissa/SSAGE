@@ -72,7 +72,7 @@ export default function AIChatPanel() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 z-40 w-[380px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-6rem)] bg-white border border-border rounded-2xl shadow-xl flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-40 w-[520px] max-w-[calc(100vw-2rem)] h-[680px] max-h-[calc(100vh-6rem)] bg-white border border-border rounded-2xl shadow-xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface/50">

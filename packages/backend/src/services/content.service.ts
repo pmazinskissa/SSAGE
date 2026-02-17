@@ -114,16 +114,38 @@ export function getCourseNavTree(courseSlug: string): CourseNavTree | null {
       };
     }
 
-    const lessons: NavLesson[] = mod.lessons.map((lessonSlug, lessonIndex) => ({
-      title: lessonSlug
+    const lessons: NavLesson[] = mod.lessons.map((lessonSlug, lessonIndex) => {
+      // Read frontmatter title from MDX file
+      let title = lessonSlug
         .replace(/^\d+-/, '')
         .replace(/-/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase()),
-      slug: lessonSlug,
-      order: lessonIndex + 1,
-      estimated_duration_minutes: 5,
-      status: 'not_started' as const,
-    }));
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+      let duration = 5;
+
+      const mdxPath = path.join(coursesDir(), courseSlug, 'modules', moduleSlug, 'lessons', `${lessonSlug}.mdx`);
+      if (fs.existsSync(mdxPath)) {
+        try {
+          const source = fs.readFileSync(mdxPath, 'utf-8');
+          const fmMatch = source.match(/^---\n([\s\S]*?)\n---/);
+          if (fmMatch) {
+            const titleMatch = fmMatch[1].match(/^title:\s*"?([^"\n]+)"?/m);
+            if (titleMatch) title = titleMatch[1].trim();
+            const durationMatch = fmMatch[1].match(/^estimated_duration_minutes:\s*(\d+)/m);
+            if (durationMatch) duration = parseInt(durationMatch[1], 10);
+          }
+        } catch {
+          // Fall back to slug-derived title
+        }
+      }
+
+      return {
+        title,
+        slug: lessonSlug,
+        order: lessonIndex + 1,
+        estimated_duration_minutes: duration,
+        status: 'not_started' as const,
+      };
+    });
 
     return {
       title: mod.title,

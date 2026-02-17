@@ -24,6 +24,9 @@ RUN npm run build
 # Stage 2: Production
 FROM node:20-alpine
 
+# Install PostgreSQL client for migrations
+RUN apk add --no-cache postgresql-client
+
 WORKDIR /app
 
 # Copy built backend
@@ -43,6 +46,11 @@ RUN npm install --omit=dev --workspace=packages/backend
 # Copy content
 COPY content/ ./content/
 
+# Copy migrations
+COPY db/ ./db/
+RUN chmod +x ./db/run-migrations.sh
+
 EXPOSE 3001
 
-CMD ["node", "packages/backend/dist/index.js"]
+# Run migrations then start the server
+CMD sh ./db/run-migrations.sh && node packages/backend/dist/index.js

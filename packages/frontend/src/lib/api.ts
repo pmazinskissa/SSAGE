@@ -14,6 +14,7 @@ import type {
   UserDetail,
   ContentFeedback,
   SearchResult,
+  UserWithModuleAnalytics,
 } from '@playbook/shared';
 
 const BASE_URL = '/api';
@@ -53,10 +54,20 @@ export const api = {
 
   // Auth
   getProviders: () =>
-    fetchApi<{ oauth: string | null; devBypass: boolean }>('/auth/providers'),
+    fetchApi<{ oauth: string | null; devBypass: boolean; localAuth: boolean }>('/auth/providers'),
   getMe: () => fetchApi<AuthUser>('/auth/me'),
   devLogin: () =>
     fetchApi<AuthUser>('/auth/dev-login', { method: 'POST' }),
+  register: (data: { email: string; name: string; password: string }) =>
+    fetchApi<AuthUser>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  localLogin: (data: { email: string; password: string }) =>
+    fetchApi<AuthUser>('/auth/local-login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
   logout: () =>
     fetchApi<{ message: string }>('/auth/logout', { method: 'POST' }),
 
@@ -85,8 +96,10 @@ export const api = {
 
   // Admin — Users
   getAdminUsers: () => fetchApi<UserWithProgress[]>('/admin/users'),
+  getAdminUserAnalytics: (courseSlug: string) =>
+    fetchApi<UserWithModuleAnalytics[]>(`/admin/users/analytics?course=${encodeURIComponent(courseSlug)}`),
   getAdminUserDetail: (id: string) => fetchApi<UserDetail>(`/admin/users/${id}`),
-  updateUserRole: (id: string, role: 'learner' | 'admin') =>
+  updateUserRole: (id: string, role: 'learner' | 'admin' | 'dev_admin') =>
     fetchApi<{ message: string }>(`/admin/users/${id}/role`, {
       method: 'PUT',
       body: JSON.stringify({ role }),
@@ -97,13 +110,14 @@ export const api = {
     fetchApi<{ message: string }>(`/admin/users/${id}/activate`, { method: 'PUT' }),
   deleteUser: (id: string) =>
     fetchApi<{ message: string }>(`/admin/users/${id}`, { method: 'DELETE' }),
-  exportUsersCSV: async () => {
-    const res = await fetch(`${BASE_URL}/admin/users/export`, { credentials: 'include' });
+  exportUsersCSV: async (courseSlug?: string) => {
+    const qs = courseSlug ? `?course=${encodeURIComponent(courseSlug)}` : '';
+    const res = await fetch(`${BASE_URL}/admin/users/export${qs}`, { credentials: 'include' });
     if (!res.ok) throw new Error('Failed to export CSV');
     const blob = await res.blob();
     return URL.createObjectURL(blob);
   },
-  preEnrollUsers: (entries: { name: string; email: string; role: 'learner' | 'admin' }[]) =>
+  preEnrollUsers: (entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[]) =>
     fetchApi<{ added: number; skipped: number }>('/admin/users/pre-enroll', {
       method: 'POST',
       body: JSON.stringify({ entries }),

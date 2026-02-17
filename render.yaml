@@ -1,0 +1,33 @@
+databases:
+  - name: playbook-db
+    plan: free
+    databaseName: playbook
+    user: playbook
+
+services:
+  - type: web
+    name: practitioners-playbook
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: playbook-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: OAUTH_PROVIDER
+        value: none
+      - key: DEV_AUTH_BYPASS
+        value: "false"
+      - key: APP_URL
+        sync: false
+      - key: INITIAL_ADMIN_EMAIL
+        sync: false
+      - key: ACTIVE_THEME
+        value: protective-life

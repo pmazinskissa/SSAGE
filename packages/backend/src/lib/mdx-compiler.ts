@@ -1,4 +1,5 @@
 import { compile } from '@mdx-js/mdx';
+import remarkGfm from 'remark-gfm';
 import { getFromCache, setInCache } from './content-cache.js';
 
 export async function compileMdx(source: string, filePath: string): Promise<string> {
@@ -9,6 +10,7 @@ export async function compileMdx(source: string, filePath: string): Promise<stri
   const compiled = await compile(source, {
     outputFormat: 'function-body',
     development: false,
+    remarkPlugins: [remarkGfm],
   });
 
   const result = String(compiled);

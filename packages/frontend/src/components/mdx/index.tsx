@@ -10,6 +10,7 @@ import ComparisonMatrix from './ComparisonMatrix';
 import Diagram from './Diagram';
 import DataChart from './DataChart';
 import GlossaryTerm from './GlossaryTerm';
+import AutoGlossaryHighlight from './AutoGlossaryHighlight';
 import ReflectionPrompt from './ReflectionPrompt';
 import DecisionPoint from './DecisionPoint';
 import VideoEmbed from './VideoEmbed';
@@ -30,7 +31,21 @@ function createHeading(level: 1 | 2 | 3) {
 }
 
 function MdxParagraph(props: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p {...props} />;
+  const { children, ...rest } = props;
+  return (
+    <p {...rest}>
+      <AutoGlossaryHighlight>{children}</AutoGlossaryHighlight>
+    </p>
+  );
+}
+
+function MdxListItem(props: React.LiHTMLAttributes<HTMLLIElement>) {
+  const { children, ...rest } = props;
+  return (
+    <li {...rest}>
+      <AutoGlossaryHighlight>{children}</AutoGlossaryHighlight>
+    </li>
+  );
 }
 
 function MdxBlockquote(props: React.HTMLAttributes<HTMLQuoteElement>) {
@@ -57,11 +72,16 @@ function MdxThead(props: React.HTMLAttributes<HTMLTableSectionElement>) {
 }
 
 function MdxTh(props: React.ThHTMLAttributes<HTMLTableCellElement>) {
-  return <th className="px-4 py-3 text-left font-semibold text-xs" {...props} />;
+  return <th className="px-4 py-3 text-left font-semibold text-xs text-white" {...props} />;
 }
 
 function MdxTd(props: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className="px-4 py-3 border-t border-border text-text-secondary" {...props} />;
+  const { children, ...rest } = props;
+  return (
+    <td className="px-4 py-3 border-t border-border text-text-secondary" {...rest}>
+      <AutoGlossaryHighlight>{children}</AutoGlossaryHighlight>
+    </td>
+  );
 }
 
 export const mdxComponents: Record<string, ComponentType<any>> = {
@@ -89,6 +109,7 @@ export const mdxComponents: Record<string, ComponentType<any>> = {
   h2: createHeading(2),
   h3: createHeading(3),
   p: MdxParagraph,
+  li: MdxListItem,
   blockquote: MdxBlockquote,
   table: MdxTable,
   thead: MdxThead,
@@ -109,6 +130,7 @@ export {
   Diagram,
   DataChart,
   GlossaryTerm,
+  AutoGlossaryHighlight,
   ReflectionPrompt,
   DecisionPoint,
   VideoEmbed,

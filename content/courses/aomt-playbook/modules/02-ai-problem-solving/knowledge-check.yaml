@@ -84,7 +84,7 @@ questions:
       - "synthesis"
     explanation: "The diagnostic process flows from framing the problem, to collecting data, to analyzing and visualizing patterns, and finally synthesizing findings into actionable opportunities."
     lesson_link: "02-phase1-diagnosis-overview"
-    lesson_link_label: "Review: Phase 1 Diagnosis Overview"
+    lesson_link_label: "Review: Diagnosis Overview"
 
   - id: "m2-q6"
     type: "fill-in-blank"

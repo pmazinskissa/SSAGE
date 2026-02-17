@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogIn, AlertCircle } from 'lucide-react';
+import { LogIn, AlertCircle, UserPlus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/ui/Card';
@@ -14,9 +14,16 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 export default function LoginPage() {
-  const { user, loading, error, providers, login, devLogin } = useAuth();
+  const { user, loading, error, providers, login, devLogin, register, localLogin } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
+
+  // Local auth form state
+  const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   // Auto-redirect if already authenticated
   useEffect(() => {
@@ -24,6 +31,21 @@ export default function LoginPage() {
       navigate('/', { replace: true });
     }
   }, [loading, user, navigate]);
+
+  const handleLocalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      if (isRegister) {
+        await register(email, name, password);
+      } else {
+        await localLogin(email, password);
+      }
+    } catch {
+      // Error is set in AuthContext
+    }
+    setSubmitting(false);
+  };
 
   if (loading) {
     return (
@@ -56,7 +78,11 @@ export default function LoginPage() {
             >
               {theme?.organization_name || 'Practitioners Playbook'}
             </h1>
-            <p className="text-sm text-text-secondary mt-1">Sign in to continue</p>
+            <p className="text-sm text-text-secondary mt-1">
+              {providers?.localAuth
+                ? (isRegister ? 'Create an account' : 'Sign in to continue')
+                : 'Sign in to continue'}
+            </p>
           </div>
 
           <AnimatePresence mode="wait">
@@ -89,7 +115,59 @@ export default function LoginPage() {
               </Button>
             )}
 
-            {!providers?.oauth && !providers?.devBypass && (
+            {providers?.localAuth && (
+              <form onSubmit={handleLocalSubmit} className="space-y-3">
+                {isRegister && (
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Full name"
+                    required
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                )}
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  required
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  required
+                  minLength={6}
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                />
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full justify-center gap-2"
+                >
+                  {isRegister ? <UserPlus size={16} /> : <LogIn size={16} />}
+                  {submitting
+                    ? (isRegister ? 'Creating account...' : 'Signing in...')
+                    : (isRegister ? 'Create Account' : 'Sign In')}
+                </Button>
+                <p className="text-xs text-text-secondary text-center">
+                  {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setIsRegister(!isRegister); }}
+                    className="text-link hover:underline font-medium"
+                  >
+                    {isRegister ? 'Sign in' : 'Register'}
+                  </button>
+                </p>
+              </form>
+            )}
+
+            {!providers?.oauth && !providers?.devBypass && !providers?.localAuth && (
               <p className="text-sm text-text-secondary text-center">
                 No authentication providers configured.
               </p>

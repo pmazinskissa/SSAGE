@@ -16,7 +16,7 @@ export default function AdminUserDetail({ userId, onClose }: AdminUserDetailProp
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState<'delete' | 'role' | null>(null);
-  const [pendingRole, setPendingRole] = useState<'learner' | 'admin'>('learner');
+  const [pendingRole, setPendingRole] = useState<'learner' | 'admin' | 'dev_admin'>('learner');
 
   useEffect(() => {
     setLoading(true);
@@ -132,10 +132,14 @@ export default function AdminUserDetail({ userId, onClose }: AdminUserDetailProp
                       <h2 className="text-xl font-bold text-text-primary">{user.name}</h2>
                       <span
                         className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                          user.role === 'admin' ? 'bg-primary-light text-primary' : 'bg-gray-100 text-gray-600'
+                          user.role === 'dev_admin'
+                            ? 'bg-purple-100 text-purple-700'
+                            : user.role === 'admin'
+                            ? 'bg-primary-light text-primary'
+                            : 'bg-gray-100 text-gray-600'
                         }`}
                       >
-                        {user.role}
+                        {user.role === 'dev_admin' ? 'dev admin' : user.role}
                       </span>
                       {!user.is_active && (
                         <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-600">
@@ -154,13 +158,14 @@ export default function AdminUserDetail({ userId, onClose }: AdminUserDetailProp
                     <select
                       value={user.role}
                       onChange={(e) => {
-                        setPendingRole(e.target.value as 'learner' | 'admin');
+                        setPendingRole(e.target.value as 'learner' | 'admin' | 'dev_admin');
                         setConfirmAction('role');
                       }}
                       className="text-xs border border-border rounded-input px-2 py-1.5 focus:outline-none focus:border-primary"
                     >
                       <option value="learner">Learner</option>
                       <option value="admin">Admin</option>
+                      <option value="dev_admin">Dev Admin</option>
                     </select>
 
                     <Button

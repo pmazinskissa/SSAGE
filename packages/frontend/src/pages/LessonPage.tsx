@@ -174,7 +174,7 @@ export default function LessonPage() {
         <TopographicBg />
         <div className="relative max-w-prose mx-auto px-6 py-8">
           {/* MDX content */}
-          <article className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-text-primary prose-p:text-text-secondary prose-a:text-link prose-strong:text-text-primary prose-code:text-primary prose-code:bg-primary-light prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100">
+          <article className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-text-primary prose-p:text-text-secondary prose-a:text-link prose-strong:text-text-primary prose-code:text-primary prose-code:bg-primary-light prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-th:text-white">
             {MdxComponent && <MdxComponent />}
           </article>
 

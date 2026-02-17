@@ -6,6 +6,7 @@ import { api } from '../lib/api';
 interface Providers {
   oauth: string | null;
   devBypass: boolean;
+  localAuth: boolean;
 }
 
 interface AuthContextValue {
@@ -15,6 +16,8 @@ interface AuthContextValue {
   providers: Providers | null;
   login: () => void;
   devLogin: () => Promise<void>;
+  register: (email: string, name: string, password: string) => Promise<void>;
+  localLogin: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -25,6 +28,8 @@ const AuthContext = createContext<AuthContextValue>({
   providers: null,
   login: () => {},
   devLogin: async () => {},
+  register: async () => {},
+  localLogin: async () => {},
   logout: async () => {},
 });
 
@@ -76,6 +81,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const register = useCallback(async (email: string, name: string, password: string) => {
+    try {
+      setError(null);
+      const me = await api.register({ email, name, password });
+      setUser(me);
+    } catch (err: any) {
+      setError(err.message || 'Registration failed');
+      throw err;
+    }
+  }, []);
+
+  const localLogin = useCallback(async (email: string, password: string) => {
+    try {
+      setError(null);
+      const me = await api.localLogin({ email, password });
+      setUser(me);
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+      throw err;
+    }
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       await api.logout();
@@ -87,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, providers, login, devLogin, logout }}>
+    <AuthContext.Provider value={{ user, loading, error, providers, login, devLogin, register, localLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );

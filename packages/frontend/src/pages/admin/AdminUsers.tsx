@@ -44,7 +44,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
   const [sortField, setSortField] = useState<SortField>('created_at');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [showPreEnroll, setShowPreEnroll] = useState(false);
-  const [preEnrollEntries, setPreEnrollEntries] = useState<{ name: string; email: string; role: 'learner' | 'admin' }[]>([
+  const [preEnrollEntries, setPreEnrollEntries] = useState<{ name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[]>([
     { name: '', email: '', role: 'learner' },
   ]);
   const [preEnrollResult, setPreEnrollResult] = useState<{ added: number; skipped: number } | null>(null);
@@ -118,7 +118,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
 
   const handleExport = async () => {
     try {
-      const url = await api.exportUsersCSV();
+      const url = await api.exportUsersCSV(selectedCourse || undefined);
       const a = document.createElement('a');
       a.href = url;
       a.download = `users-${new Date().toISOString().slice(0, 10)}.csv`;
@@ -178,7 +178,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
   const resetPreEnroll = () => {
     setShowPreEnroll(false);
     setPreEnrollResult(null);
-    setPreEnrollEntries([{ name: '', email: '', role: 'learner' }]);
+    setPreEnrollEntries([{ name: '', email: '', role: 'learner' as const }]);
     setPreEnrollTab('form');
     setCsvFile(null);
   };
@@ -355,12 +355,14 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
                     <td className="py-3 px-3">
                       <span
                         className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                          user.role === 'admin'
+                          user.role === 'dev_admin'
+                            ? 'bg-purple-100 text-purple-700'
+                            : user.role === 'admin'
                             ? 'bg-primary-light text-primary'
                             : 'bg-gray-100 text-gray-600'
                         }`}
                       >
-                        {user.role}
+                        {user.role === 'dev_admin' ? 'dev admin' : user.role}
                       </span>
                     </td>
                     <td className="py-3 px-3 text-text-secondary text-xs">
@@ -446,6 +448,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
                     >
                       <option value="learner">Learner</option>
                       <option value="admin">Admin</option>
+                      <option value="dev_admin">Dev Admin</option>
                     </select>
                     {preEnrollEntries.length > 1 && (
                       <button

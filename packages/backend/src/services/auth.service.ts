@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { pool } from '../config/database.js';
 import { config } from '../config/env.js';
 import type { AuthUser, User } from '@playbook/shared';
@@ -82,4 +83,73 @@ export async function ensureDevUserInDb(): Promise<User> {
     [DEV_USER.id, DEV_USER.email, DEV_USER.name]
   );
   return result.rows[0] as User;
+}
+
+export async function registerLocalUser(params: {
+  email: string;
+  name: string;
+  password: string;
+}): Promise<User> {
+  const { email, name, password } = params;
+
+  // Check if user already exists
+  const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+  if (existing.rows.length > 0) {
+    throw new Error('An account with this email already exists');
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  // Check if pre-enrolled (may have a role assigned)
+  const preEnrolled = await pool.query('SELECT role FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
+  const preRole = preEnrolled.rows[0]?.role;
+
+  // Determine role: initial admin email gets admin, pre-enrolled role, or learner
+  let role = 'learner';
+  if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()) {
+    role = 'admin';
+  } else if (preRole) {
+    role = preRole;
+  }
+
+  const result = await pool.query(
+    `INSERT INTO users (id, email, name, password_hash, role, is_active, created_at, last_active_at)
+     VALUES ($1, $2, $3, $4, $5, true, NOW(), NOW())
+     RETURNING *`,
+    [crypto.randomUUID(), email.toLowerCase(), name, passwordHash, role]
+  );
+
+  // Clean up pre-enrollment
+  if (preEnrolled.rows.length > 0) {
+    await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
+  }
+
+  return result.rows[0] as User;
+}
+
+export async function authenticateLocalUser(email: string, password: string): Promise<User> {
+  const result = await pool.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase()]);
+  const user = result.rows[0];
+
+  if (!user) {
+    throw new Error('Invalid email or password');
+  }
+
+  if (!user.password_hash) {
+    throw new Error('This account uses SSO login. Please sign in with your identity provider.');
+  }
+
+  if (!user.is_active) {
+    throw new Error('Account deactivated');
+  }
+
+  const valid = await bcrypt.compare(password, user.password_hash);
+  if (!valid) {
+    throw new Error('Invalid email or password');
+  }
+
+  // Update last active
+  await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
+
+  return user as User;
 }

@@ -364,6 +364,50 @@ const adminTabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
 ];
 
 /* ------------------------------------------------------------------ */
+/*  Admin Tab Bar                                                       */
+/* ------------------------------------------------------------------ */
+
+const allTabs: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
+  { id: 'courses', label: 'Courses', icon: BookOpen },
+  ...adminTabs,
+];
+
+function AdminTabBar({
+  activeTab,
+  setActiveTab,
+}: {
+  activeTab: Tab;
+  setActiveTab: (t: Tab) => void;
+}) {
+  return (
+    <nav className="sticky top-14 z-30 bg-primary border-b border-primary">
+      <div className="max-w-6xl mx-auto px-6 flex overflow-x-auto -mb-px items-center">
+        {allTabs.map((tab, index) => {
+          const isActive = activeTab === tab.id;
+          const Icon = tab.icon;
+          return (
+            <div key={tab.id} className="flex items-center">
+              {index > 0 && <div className="w-px h-5 bg-white/20 mx-0.5" />}
+              <button
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 text-sm whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'border-b-[3px] border-white text-white font-semibold'
+                    : 'border-b-[3px] border-transparent text-white/70 hover:text-white hover:border-white/30'
+                }`}
+              >
+                <Icon size={16} />
+                {tab.label}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main Page                                                           */
 /* ------------------------------------------------------------------ */
 
@@ -376,7 +420,7 @@ export default function CourseCatalog() {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'admin' || user?.role === 'dev_admin';
 
   useEffect(() => {
     api.getCourses()
@@ -495,35 +539,10 @@ export default function CourseCatalog() {
 
       {/* Tab bar */}
       {isAdmin ? (
-        <nav className="sticky top-14 z-30 bg-white/80 backdrop-blur-md border-b border-border">
-          <div className="max-w-6xl mx-auto px-6 flex overflow-x-auto -mb-px">
-            <button
-              onClick={() => setActiveTab('courses')}
-              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
-                activeTab === 'courses'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-text-secondary hover:text-text-primary hover:border-border'
-              }`}
-            >
-              <BookOpen size={16} />
-              Courses
-            </button>
-            {adminTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-text-secondary hover:text-text-primary hover:border-border'
-                }`}
-              >
-                <tab.icon size={16} />
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </nav>
+        <AdminTabBar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
       ) : (
         /* Thin accent line for non-admins — visual separation */
         <div className="h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
@@ -557,7 +576,7 @@ export default function CourseCatalog() {
                       className="text-3xl sm:text-4xl font-semibold text-text-primary tracking-tight mb-3"
                       style={{ fontFamily: 'var(--font-heading)' }}
                     >
-                      Your Learning Library
+                      Your Course Catalog
                     </h1>
                     <p className="text-text-secondary max-w-xl leading-relaxed">
                       Pick up where you left off or start something new. Each course is designed to build

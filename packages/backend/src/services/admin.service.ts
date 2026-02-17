@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { pool } from '../config/database.js';
 import { getCourseNavTree, listCourses } from './content.service.js';
-import type { UserWithProgress, UserDetail, DashboardMetrics } from '@playbook/shared';
+import type { UserWithProgress, UserDetail, DashboardMetrics, UserWithModuleAnalytics, UserModuleProgress } from '@playbook/shared';
 
 export async function listUsers(): Promise<UserWithProgress[]> {
   const usersResult = await pool.query(
@@ -92,7 +92,7 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
   };
 }
 
-export async function updateUserRole(userId: string, role: 'learner' | 'admin'): Promise<void> {
+export async function updateUserRole(userId: string, role: 'learner' | 'admin' | 'dev_admin'): Promise<void> {
   await pool.query('UPDATE users SET role = $1 WHERE id = $2', [role, userId]);
 }
 
@@ -109,7 +109,7 @@ export async function deleteUser(userId: string): Promise<void> {
 }
 
 export async function preEnrollUsers(
-  entries: { name: string; email: string; role: 'learner' | 'admin' }[],
+  entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[],
   enrolledBy: string,
 ): Promise<{ added: number; skipped: number }> {
   let added = 0;
@@ -123,7 +123,7 @@ export async function preEnrollUsers(
     }
 
     const name = entry.name?.trim() || '';
-    const role = entry.role === 'admin' ? 'admin' : 'learner';
+    const role = entry.role === 'admin' ? 'admin' : entry.role === 'dev_admin' ? 'dev_admin' : 'learner';
 
     // Skip if user already exists
     const existing = await pool.query(
@@ -246,14 +246,167 @@ export async function getDashboardMetrics(courseSlug?: string): Promise<Dashboar
   };
 }
 
-export async function exportUsersCSV(): Promise<string> {
+export async function getUsersWithModuleProgress(courseSlug: string): Promise<UserWithModuleAnalytics[]> {
+  const navTree = getCourseNavTree(courseSlug);
+  if (!navTree) return [];
+
+  const modules = navTree.modules.map((m) => ({
+    slug: m.slug,
+    title: m.title,
+    lessonCount: m.lessons.length,
+  }));
+
+  const usersResult = await pool.query('SELECT id, name, email, role FROM users ORDER BY name ASC');
+
+  const results: UserWithModuleAnalytics[] = [];
+
+  for (const user of usersResult.rows) {
+    // Course-level progress
+    const cpResult = await pool.query(
+      'SELECT status, total_time_seconds FROM course_progress WHERE user_id = $1 AND course_slug = $2',
+      [user.id, courseSlug]
+    );
+    const cp = cpResult.rows[0];
+
+    // Lesson progress per module
+    const lpResult = await pool.query(
+      `SELECT module_slug,
+              COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
+              COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
+       FROM lesson_progress
+       WHERE user_id = $1 AND course_slug = $2
+       GROUP BY module_slug`,
+      [user.id, courseSlug]
+    );
+    const lpMap: Record<string, { completed: number; time_seconds: number }> = {};
+    for (const row of lpResult.rows) {
+      lpMap[row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
+    }
+
+    // KC scores per module
+    const kcResult = await pool.query(
+      `SELECT module_slug,
+              COUNT(*)::int as total,
+              SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::int as correct
+       FROM knowledge_check_results
+       WHERE user_id = $1 AND course_slug = $2
+       GROUP BY module_slug`,
+      [user.id, courseSlug]
+    );
+    const kcMap: Record<string, { total: number; correct: number }> = {};
+    for (const row of kcResult.rows) {
+      kcMap[row.module_slug] = { total: row.total, correct: row.correct };
+    }
+
+    const moduleProgress: UserModuleProgress[] = modules.map((m) => {
+      const lp = lpMap[m.slug];
+      const kc = kcMap[m.slug];
+      return {
+        module_slug: m.slug,
+        module_title: m.title,
+        lessons_completed: lp?.completed || 0,
+        total_lessons: m.lessonCount,
+        time_spent_seconds: lp?.time_seconds || 0,
+        kc_score: kc && kc.total > 0 ? Math.round((kc.correct / kc.total) * 100) : null,
+      };
+    });
+
+    results.push({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: cp?.status || 'not_started',
+      total_time_seconds: cp?.total_time_seconds || 0,
+      modules: moduleProgress,
+    });
+  }
+
+  return results;
+}
+
+export async function exportUsersCSV(courseSlug?: string): Promise<string> {
   const users = await listUsers();
-  const header = 'Name,Email,Role,Status,Completion %,Total Time (s),Enrolled,Last Active';
-  const rows = users.map((u) => {
-    const cp = u.course_progress[0];
+
+  // If a course is specified, get its nav tree for per-module columns
+  let modules: { slug: string; title: string; lessonCount: number }[] = [];
+  if (courseSlug) {
+    const navTree = getCourseNavTree(courseSlug);
+    if (navTree) {
+      modules = navTree.modules.map((m) => ({
+        slug: m.slug,
+        title: m.title,
+        lessonCount: m.lessons.length,
+      }));
+    }
+  }
+
+  // Build header
+  const baseHeaders = ['Name', 'Email', 'Role', 'Status', 'Total Time (min)', 'Enrolled', 'Last Active'];
+  const moduleHeaders = modules.flatMap((m) => [
+    `${m.title} - Status`,
+    `${m.title} - Lessons Completed`,
+    `${m.title} - Time (min)`,
+    `${m.title} - KC Score %`,
+  ]);
+  const header = [...baseHeaders, ...moduleHeaders].map((h) => `"${h}"`).join(',');
+
+  // Build rows
+  const rows: string[] = [];
+  for (const u of users) {
+    const cp = courseSlug
+      ? u.course_progress.find((p) => p.course_slug === courseSlug)
+      : u.course_progress[0];
     const status = cp?.status || 'not_started';
-    const totalTime = cp?.total_time_seconds || 0;
-    return `"${u.name}","${u.email}","${u.role}","${status}","","${totalTime}","${u.created_at}","${u.last_active_at}"`;
-  });
+    const totalTime = Math.round((cp?.total_time_seconds || 0) / 60);
+
+    const baseCols = [u.name, u.email, u.role, status, String(totalTime), u.created_at, u.last_active_at];
+
+    let moduleCols: string[] = [];
+    if (courseSlug && modules.length > 0) {
+      // Fetch per-module lesson progress for this user
+      const lpResult = await pool.query(
+        `SELECT module_slug, COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
+                COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
+         FROM lesson_progress
+         WHERE user_id = $1 AND course_slug = $2
+         GROUP BY module_slug`,
+        [u.id, courseSlug]
+      );
+      const lpMap: Record<string, { completed: number; time_seconds: number }> = {};
+      for (const row of lpResult.rows) {
+        lpMap[row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
+      }
+
+      // Fetch per-module KC scores
+      const kcResult = await pool.query(
+        `SELECT module_slug,
+                COUNT(*)::int as total,
+                SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::int as correct
+         FROM knowledge_check_results
+         WHERE user_id = $1 AND course_slug = $2
+         GROUP BY module_slug`,
+        [u.id, courseSlug]
+      );
+      const kcMap: Record<string, { total: number; correct: number }> = {};
+      for (const row of kcResult.rows) {
+        kcMap[row.module_slug] = { total: row.total, correct: row.correct };
+      }
+
+      moduleCols = modules.flatMap((m) => {
+        const lp = lpMap[m.slug];
+        const kc = kcMap[m.slug];
+        const lessonsCompleted = lp?.completed || 0;
+        const moduleStatus = lessonsCompleted >= m.lessonCount ? 'completed' : lessonsCompleted > 0 ? 'in_progress' : 'not_started';
+        const timeMin = Math.round((lp?.time_seconds || 0) / 60);
+        const kcScore = kc && kc.total > 0 ? Math.round((kc.correct / kc.total) * 100) : '';
+        return [moduleStatus, `${lessonsCompleted}/${m.lessonCount}`, String(timeMin), String(kcScore)];
+      });
+    }
+
+    const allCols = [...baseCols, ...moduleCols].map((c) => `"${c}"`).join(',');
+    rows.push(allCols);
+  }
+
   return [header, ...rows].join('\n');
 }

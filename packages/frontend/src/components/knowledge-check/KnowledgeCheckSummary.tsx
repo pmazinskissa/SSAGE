@@ -118,11 +118,11 @@ export default function KnowledgeCheckSummary({ result, moduleSlug, nextModuleSl
           </Link>
         ) : courseCompleted ? (
           <Link
-            to={`/courses/${slug}/completion`}
+            to={`/courses/${slug}/feedback`}
             className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-success rounded-button hover:opacity-90 transition-opacity"
           >
             <Trophy size={16} />
-            View Course Completion
+            Continue to Finish
           </Link>
         ) : (
           <Link

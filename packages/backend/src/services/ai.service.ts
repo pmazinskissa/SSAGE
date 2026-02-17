@@ -42,7 +42,7 @@ export async function streamChatResponse(
       const client = new Anthropic({ apiKey: aiConfig.apiKey });
       const stream = client.messages.stream({
         model: aiConfig.model,
-        max_tokens: 2048,
+        max_tokens: 512,
         system: systemPrompt,
         messages: messages.map((m) => ({
           role: m.role,
@@ -57,6 +57,7 @@ export async function streamChatResponse(
       const client = new OpenAI({ apiKey: aiConfig.apiKey });
       const stream = await client.chat.completions.create({
         model: aiConfig.model,
+        max_tokens: 512,
         stream: true,
         messages: [
           { role: 'system', content: systemPrompt },
@@ -143,7 +144,8 @@ export async function buildSystemPrompt(
 Important instructions:
 - You are scoped to this course. Do not answer questions unrelated to the course material.
 - Reference specific concepts from the lesson when relevant.
-- Keep responses concise but thorough.
-- Use markdown formatting (bold, lists, code) where helpful.
+- Keep responses to 3-5 sentences maximum. Be concise and direct.
+- Do NOT use markdown headings (no # or ## symbols). Use bold, lists, or code formatting instead.
+- Always end your response with a brief follow-up question to encourage deeper thinking.
 - If you don't know the answer from the course material, say so honestly.`;
 }

@@ -41,8 +41,15 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
 }
 
 export async function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  if (!req.user || req.user.role !== 'admin') {
+  if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'dev_admin')) {
     return res.status(403).json({ error: { message: 'Admin access required' } });
+  }
+  next();
+}
+
+export async function requireDevAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!req.user || req.user.role !== 'dev_admin') {
+    return res.status(403).json({ error: { message: 'Dev admin access required' } });
   }
   next();
 }

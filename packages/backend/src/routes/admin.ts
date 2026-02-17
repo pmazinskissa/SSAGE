@@ -10,6 +10,7 @@ import {
   deleteUser,
   preEnrollUsers,
   getDashboardMetrics,
+  getUsersWithModuleProgress,
   exportUsersCSV,
 } from '../services/admin.service.js';
 import { getAllSettings, upsertSetting } from '../services/settings.service.js';
@@ -48,10 +49,26 @@ router.get('/users', async (_req, res) => {
   }
 });
 
-// GET /api/admin/users/export — CSV export
-router.get('/users/export', async (_req, res) => {
+// GET /api/admin/users/analytics — per-module user analytics
+router.get('/users/analytics', async (req, res) => {
   try {
-    const csv = await exportUsersCSV();
+    const courseSlug = req.query.course as string;
+    if (!courseSlug) {
+      return res.status(400).json({ error: { message: 'course query parameter is required' } });
+    }
+    const data = await getUsersWithModuleProgress(courseSlug);
+    res.json({ data });
+  } catch (err: any) {
+    console.error('[Admin] User analytics error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to load user analytics' } });
+  }
+});
+
+// GET /api/admin/users/export — CSV export
+router.get('/users/export', async (req, res) => {
+  try {
+    const courseSlug = req.query.course as string | undefined;
+    const csv = await exportUsersCSV(courseSlug);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader('Content-Disposition', `attachment; filename="users-${timestamp}.csv"`);
@@ -80,9 +97,23 @@ router.get('/users/:id', async (req, res) => {
 router.put('/users/:id/role', async (req, res) => {
   try {
     const { role } = req.body;
-    if (role !== 'learner' && role !== 'admin') {
-      return res.status(400).json({ error: { message: 'Role must be "learner" or "admin"' } });
+    if (role !== 'learner' && role !== 'admin' && role !== 'dev_admin') {
+      return res.status(400).json({ error: { message: 'Role must be "learner", "admin", or "dev_admin"' } });
     }
+
+    // Only dev_admin can promote to dev_admin
+    if (role === 'dev_admin' && req.user!.role !== 'dev_admin') {
+      return res.status(403).json({ error: { message: 'Only dev admins can assign the dev_admin role' } });
+    }
+
+    // Regular admins cannot change other admins or dev_admins
+    if (req.user!.role === 'admin') {
+      const target = await getUserDetail(req.params.id);
+      if (target && (target.role === 'admin' || target.role === 'dev_admin')) {
+        return res.status(403).json({ error: { message: 'Admins cannot change the role of other admins' } });
+      }
+    }
+
     await updateUserRole(req.params.id, role);
     res.json({ data: { message: 'Role updated' } });
   } catch (err: any) {

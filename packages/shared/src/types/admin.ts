@@ -19,13 +19,13 @@ export interface UserDetail extends User {
 export interface PreEnrollEntry {
   email: string;
   name: string;
-  role: 'learner' | 'admin';
+  role: 'learner' | 'admin' | 'dev_admin';
   enrolled_at: string;
   enrolled_by: string | null;
 }
 
 export interface RoleChangePayload {
-  role: 'learner' | 'admin';
+  role: 'learner' | 'admin' | 'dev_admin';
 }
 
 export interface DashboardMetrics {
@@ -40,6 +40,25 @@ export interface DashboardMetrics {
     module_title: string;
     completion_pct: number;
   }[];
+}
+
+export interface UserModuleProgress {
+  module_slug: string;
+  module_title: string;
+  lessons_completed: number;
+  total_lessons: number;
+  time_spent_seconds: number;
+  kc_score: number | null;
+}
+
+export interface UserWithModuleAnalytics {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  total_time_seconds: number;
+  modules: UserModuleProgress[];
 }
 
 export interface ContentFeedback {
