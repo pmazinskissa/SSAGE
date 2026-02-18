@@ -53,4 +53,4 @@ RUN chmod +x ./db/run-migrations.sh
 EXPOSE 3001
 
 # Run migrations then start the server
-CMD sh ./db/run-migrations.sh && node packages/backend/dist/index.js
+CMD sh ./db/run-migrations.sh && node packages/backend/dist/backend/src/index.js
