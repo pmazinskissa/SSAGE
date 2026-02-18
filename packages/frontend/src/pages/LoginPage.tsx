@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogIn, AlertCircle, UserPlus } from 'lucide-react';
+import { LogIn, AlertCircle, UserPlus, Mail, Lock, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { NoiseOverlay, GradientMesh } from '../components/ui/Backgrounds';
 
 const PROVIDER_LABELS: Record<string, string> = {
   microsoft: 'Microsoft',
@@ -58,123 +59,182 @@ export default function LoginPage() {
   if (user) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-sm"
-      >
-        <Card elevation={2} className="p-8">
-          <div className="flex flex-col items-center mb-8">
-            <img
-              src="/api/themes/logo"
-              alt={theme?.organization_name || 'Logo'}
-              className="h-12 mb-4"
-            />
-            <h1
-              className="text-xl font-bold text-text-primary text-center"
-              style={{ fontFamily: 'var(--font-heading)' }}
-            >
-              {theme?.organization_name || 'Practitioners Playbook'}
-            </h1>
-            <p className="text-sm text-text-secondary mt-1">
-              {providers?.localAuth
-                ? (isRegister ? 'Create an account' : 'Sign in to continue')
-                : 'Sign in to continue'}
-            </p>
-          </div>
+    <div className="min-h-screen bg-background relative flex flex-col">
+      {/* Noise texture */}
+      <NoiseOverlay />
 
-          <AnimatePresence mode="wait">
-            {error && (
-              <motion.div
-                key="error"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="flex items-start gap-2 p-3 mb-4 rounded-card bg-error/10 border border-error/20"
+      {/* Header — matches CourseCatalog */}
+      <header className="sticky top-0 z-40 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-elevation-1 px-6 h-14 flex items-center justify-center">
+        <img
+          src="/assets/Protective_Life_logo.svg.png"
+          alt={theme?.organization_name || 'Protective Life'}
+          className="h-7"
+        />
+      </header>
+
+      {/* Thin accent line */}
+      <div className="h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+      {/* Main content */}
+      <div className="flex-1 flex items-center justify-center relative overflow-hidden px-4 py-12">
+        {/* Animated gradient mesh */}
+        <GradientMesh />
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
+          className="w-full max-w-md relative z-10"
+        >
+          <Card elevation={2} className="p-10">
+            {/* Logo + heading */}
+            <div className="flex flex-col items-center mb-8">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+                <img
+                  src="/assets/Protective_Life_logo.svg.png"
+                  alt={theme?.organization_name || 'Protective Life'}
+                  className="h-9"
+                />
+              </div>
+              <h1
+                className="text-2xl font-semibold text-text-primary text-center tracking-tight"
+                style={{ fontFamily: 'var(--font-heading)' }}
               >
-                <AlertCircle size={16} className="text-error flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-error">{error}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                {theme?.organization_name || "Practitioner's Playbook"}
+              </h1>
+              <p className="text-sm text-text-secondary mt-2">
+                {providers?.localAuth
+                  ? (isRegister ? 'Create your account to get started' : 'Sign in to continue learning')
+                  : 'Sign in to continue learning'}
+              </p>
+            </div>
 
-          <div className="space-y-3">
-            {providers?.oauth && (
-              <Button onClick={login} className="w-full justify-center gap-2">
-                <LogIn size={16} />
-                Sign in with {PROVIDER_LABELS[providers.oauth] || providers.oauth}
-              </Button>
-            )}
-
-            {providers?.devBypass && (
-              <Button onClick={devLogin} className="w-full justify-center gap-2">
-                <LogIn size={16} />
-                Dev Login
-              </Button>
-            )}
-
-            {providers?.localAuth && (
-              <form onSubmit={handleLocalSubmit} className="space-y-3">
-                {isRegister && (
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Full name"
-                    required
-                    className="w-full px-3 py-2.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                  />
-                )}
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email address"
-                  required
-                  className="w-full px-3 py-2.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
-                  minLength={6}
-                  className="w-full px-3 py-2.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                />
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full justify-center gap-2"
+            {/* Error banner */}
+            <AnimatePresence mode="wait">
+              {error && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex items-start gap-2.5 p-3.5 mb-6 rounded-card bg-error/10 border border-error/20"
                 >
-                  {isRegister ? <UserPlus size={16} /> : <LogIn size={16} />}
-                  {submitting
-                    ? (isRegister ? 'Creating account...' : 'Signing in...')
-                    : (isRegister ? 'Create Account' : 'Sign In')}
+                  <AlertCircle size={16} className="text-error flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-error">{error}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="space-y-4">
+              {providers?.oauth && (
+                <Button onClick={login} className="w-full justify-center gap-2">
+                  <LogIn size={16} />
+                  Sign in with {PROVIDER_LABELS[providers.oauth] || providers.oauth}
                 </Button>
-                <p className="text-xs text-text-secondary text-center">
-                  {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
+              )}
+
+              {providers?.devBypass && (
+                <Button onClick={devLogin} variant="tertiary" className="w-full justify-center gap-2">
+                  <LogIn size={16} />
+                  Dev Login
+                </Button>
+              )}
+
+              {providers?.localAuth && (
+                <form onSubmit={handleLocalSubmit} className="space-y-4">
+                  <AnimatePresence mode="wait">
+                    {isRegister && (
+                      <motion.div
+                        key="name-field"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="relative">
+                          <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary/50" />
+                          <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Full name"
+                            required
+                            className="w-full pl-10 pr-4 py-3 text-sm bg-surface/50 border border-border rounded-card focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all placeholder:text-text-secondary/40"
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <div className="relative">
+                    <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary/50" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Email address"
+                      required
+                      className="w-full pl-10 pr-4 py-3 text-sm bg-surface/50 border border-border rounded-card focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all placeholder:text-text-secondary/40"
+                    />
+                  </div>
+                  <div className="relative">
+                    <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary/50" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Password"
+                      required
+                      minLength={6}
+                      className="w-full pl-10 pr-4 py-3 text-sm bg-surface/50 border border-border rounded-card focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all placeholder:text-text-secondary/40"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full justify-center gap-2 py-3"
+                  >
+                    {isRegister ? <UserPlus size={16} /> : <LogIn size={16} />}
+                    {submitting
+                      ? (isRegister ? 'Creating account...' : 'Signing in...')
+                      : (isRegister ? 'Create Account' : 'Sign In')}
+                  </Button>
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-3 pt-1">
+                    <div className="flex-1 h-px bg-border/50" />
+                    <span className="text-xs text-text-secondary/60">
+                      {isRegister ? 'Already have an account?' : 'New here?'}
+                    </span>
+                    <div className="flex-1 h-px bg-border/50" />
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => { setIsRegister(!isRegister); }}
-                    className="text-link hover:underline font-medium"
+                    onClick={() => setIsRegister(!isRegister)}
+                    className="w-full py-2.5 text-sm font-medium text-primary hover:text-primary-hover border-2 border-primary/20 hover:border-primary/40 rounded-button transition-all bg-white/50 hover:bg-white/80"
                   >
-                    {isRegister ? 'Sign in' : 'Register'}
+                    {isRegister ? 'Sign in instead' : 'Create an account'}
                   </button>
-                </p>
-              </form>
-            )}
+                </form>
+              )}
 
-            {!providers?.oauth && !providers?.devBypass && !providers?.localAuth && (
-              <p className="text-sm text-text-secondary text-center">
-                No authentication providers configured.
-              </p>
-            )}
-          </div>
-        </Card>
-      </motion.div>
+              {!providers?.oauth && !providers?.devBypass && !providers?.localAuth && (
+                <p className="text-sm text-text-secondary text-center">
+                  No authentication providers configured.
+                </p>
+              )}
+            </div>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Footer — matches CourseCatalog */}
+      <footer className="border-t border-border/50 bg-white/40 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-secondary">
+          <span>{theme?.organization_name || 'Protective Life'} &copy; {new Date().getFullYear()}</span>
+          <span>Practitioner&apos;s Playbook</span>
+        </div>
+      </footer>
     </div>
   );
 }
