@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UserX, UserCheck, Trash2, ChevronDown, CheckCircle2, Circle, Disc, BookOpen, BarChart3, Users as UsersIcon } from 'lucide-react';
 import { api } from '../../lib/api';
@@ -7,11 +8,15 @@ import Button from '../../components/ui/Button';
 import type { UserDetail, CourseConfig, CourseEnrollment, CourseNavTree, LessonProgressEntry } from '@playbook/shared';
 
 interface AdminUserDetailProps {
-  userId: string;
-  onClose: () => void;
+  userId?: string;
+  onClose?: () => void;
 }
 
-export default function AdminUserDetail({ userId, onClose }: AdminUserDetailProps) {
+export default function AdminUserDetail({ userId: userIdProp, onClose: onCloseProp }: AdminUserDetailProps) {
+  const { id: paramId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const userId = userIdProp ?? paramId ?? '';
+  const onClose = onCloseProp ?? (() => navigate('/admin/users'));
   const [user, setUser] = useState<UserDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

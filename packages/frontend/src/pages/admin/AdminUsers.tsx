@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown, Eye, UserX, UserCheck } from 'lucide-react';
 import { api } from '../../lib/api';
@@ -26,6 +27,11 @@ interface AdminUsersProps {
 }
 
 export default function AdminUsers({ onUserClick }: AdminUsersProps) {
+  const navigate = useNavigate();
+  const handleUserClick = (userId: string) => {
+    if (onUserClick) onUserClick(userId);
+    else navigate(`/admin/users/${userId}`);
+  };
   const [users, setUsers] = useState<UserWithProgress[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -368,7 +374,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
                 return (
                   <tr
                     key={user.id}
-                    onClick={() => !isPre && onUserClick?.(user.id)}
+                    onClick={() => !isPre && handleUserClick(user.id)}
                     className={`border-b border-border/50 hover:bg-surface/50 transition-colors ${isPre ? 'opacity-75' : 'cursor-pointer'}`}
                   >
                     <td className="py-3 px-3 font-medium text-text-primary">
@@ -416,7 +422,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
                       {!isPre && (
                         <div className="flex items-center gap-1.5">
                           <button
-                            onClick={(e) => { e.stopPropagation(); onUserClick?.(user.id); }}
+                            onClick={(e) => { e.stopPropagation(); handleUserClick(user.id); }}
                             className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-primary bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-all"
                             title="View details"
                           >
