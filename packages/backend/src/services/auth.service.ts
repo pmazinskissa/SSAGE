@@ -32,9 +32,9 @@ export async function findOrCreateOAuthUser(params: {
     [email]
   );
 
-  // Determine role: admin if matches INITIAL_ADMIN_EMAIL
+  // Determine role: dev_admin if matches INITIAL_ADMIN_EMAIL
   const role = config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()
-    ? 'admin'
+    ? 'dev_admin'
     : 'learner';
 
   // Upsert user
@@ -104,10 +104,10 @@ export async function registerLocalUser(params: {
   const preEnrolled = await pool.query('SELECT role FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
   const preRole = preEnrolled.rows[0]?.role;
 
-  // Determine role: initial admin email gets admin, pre-enrolled role, or learner
+  // Determine role: initial admin email gets dev_admin, pre-enrolled role, or learner
   let role = 'learner';
   if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()) {
-    role = 'admin';
+    role = 'dev_admin';
   } else if (preRole) {
     role = preRole;
   }
