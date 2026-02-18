@@ -29,8 +29,8 @@ RUN apk add --no-cache postgresql-client
 
 WORKDIR /app
 
-# Copy built backend
-COPY --from=builder /app/packages/backend/dist ./packages/backend/dist
+# Copy built backend (flatten nested dist/backend/src/ to dist/)
+COPY --from=builder /app/packages/backend/dist/backend/src ./packages/backend/dist
 COPY --from=builder /app/packages/backend/package.json ./packages/backend/
 
 # Copy built frontend
@@ -53,4 +53,4 @@ RUN chmod +x ./db/run-migrations.sh
 EXPOSE 3001
 
 # Run migrations then start the server
-CMD sh ./db/run-migrations.sh && node packages/backend/dist/backend/src/index.js
+CMD sh ./db/run-migrations.sh && node packages/backend/dist/index.js
