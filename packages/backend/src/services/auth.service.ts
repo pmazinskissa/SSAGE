@@ -148,8 +148,13 @@ export async function authenticateLocalUser(email: string, password: string): Pr
     throw new Error('Invalid email or password');
   }
 
-  // Update last active
-  await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
+  // Promote to dev_admin if matches INITIAL_ADMIN_EMAIL
+  if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase() && user.role !== 'dev_admin') {
+    await pool.query('UPDATE users SET role = $1, last_active_at = NOW() WHERE id = $2', ['dev_admin', user.id]);
+    user.role = 'dev_admin';
+  } else {
+    await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
+  }
 
   return user as User;
 }
