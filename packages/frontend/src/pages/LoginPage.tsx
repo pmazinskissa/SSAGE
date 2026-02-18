@@ -87,20 +87,13 @@ export default function LoginPage() {
           className="w-full max-w-md relative z-10"
         >
           <Card elevation={2} className="p-10">
-            {/* Logo + heading */}
+            {/* Heading */}
             <div className="flex flex-col items-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
-                <img
-                  src="/assets/Protective_Life_logo.svg.png"
-                  alt={theme?.organization_name || 'Protective Life'}
-                  className="h-9"
-                />
-              </div>
               <h1
                 className="text-2xl font-semibold text-text-primary text-center tracking-tight"
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
-                {theme?.organization_name || "Practitioner's Playbook"}
+                SSAGE
               </h1>
               <p className="text-sm text-text-secondary mt-2">
                 {providers?.localAuth
@@ -232,7 +225,7 @@ export default function LoginPage() {
       <footer className="border-t border-border/50 bg-white/40 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-secondary">
           <span>{theme?.organization_name || 'Protective Life'} &copy; {new Date().getFullYear()}</span>
-          <span>Practitioner&apos;s Playbook</span>
+          <span>SSA &amp; Co Guided Education</span>
         </div>
       </footer>
     </div>

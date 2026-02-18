@@ -1,6 +1,7 @@
 import type { LessonStatus } from './navigation.js';
 
 export interface LessonProgressEntry {
+  course_slug?: string;
   module_slug: string;
   lesson_slug: string;
   status: LessonStatus;
@@ -10,6 +11,7 @@ export interface LessonProgressEntry {
 }
 
 export interface KnowledgeCheckSummaryEntry {
+  course_slug?: string;
   module_slug: string;
   total_questions: number;
   correct_answers: number;

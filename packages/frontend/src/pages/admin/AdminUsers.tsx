@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown } from 'lucide-react';
+import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown, Eye, UserX, UserCheck } from 'lucide-react';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -8,29 +8,21 @@ import SearchInput from '../../components/ui/SearchInput';
 import { fadeInUp } from '../../lib/animations';
 import type { UserWithProgress, CourseConfig } from '@playbook/shared';
 
-type StatusFilter = 'all' | 'not_started' | 'in_progress' | 'completed';
-type SortField = 'name' | 'email' | 'role' | 'created_at' | 'last_active_at' | 'status' | 'time';
+interface PreEnrolledUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  enrolled_at: string;
+  enrolled_by: string | null;
+}
+
+type StatusFilter = 'all' | 'pre_enrolled' | 'deactivated';
+type SortField = 'name' | 'email' | 'role' | 'created_at' | 'last_active_at';
 type SortDir = 'asc' | 'desc';
 
 interface AdminUsersProps {
   onUserClick?: (userId: string) => void;
-}
-
-/** Get the course_progress entry matching the selected course, or aggregate across all courses. */
-function getProgress(user: UserWithProgress, selectedCourse: string) {
-  if (selectedCourse) {
-    return user.course_progress.find((cp) => cp.course_slug === selectedCourse) || null;
-  }
-  // Aggregate: best status, sum time
-  if (user.course_progress.length === 0) return null;
-  const statusRank: Record<string, number> = { completed: 2, in_progress: 1, not_started: 0 };
-  let bestStatus = 'not_started';
-  let totalTime = 0;
-  for (const cp of user.course_progress) {
-    if ((statusRank[cp.status] ?? 0) > (statusRank[bestStatus] ?? 0)) bestStatus = cp.status;
-    totalTime += cp.total_time_seconds || 0;
-  }
-  return { status: bestStatus, total_time_seconds: totalTime, course_slug: '' };
 }
 
 export default function AdminUsers({ onUserClick }: AdminUsersProps) {
@@ -44,20 +36,23 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
   const [sortField, setSortField] = useState<SortField>('created_at');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [showPreEnroll, setShowPreEnroll] = useState(false);
-  const [preEnrollEntries, setPreEnrollEntries] = useState<{ name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[]>([
-    { name: '', email: '', role: 'learner' },
+  const [preEnrollEntries, setPreEnrollEntries] = useState<{ name: string; email: string; role: 'learner' | 'admin' | 'dev_admin'; courses: string[] }[]>([
+    { name: '', email: '', role: 'learner', courses: [] },
   ]);
   const [preEnrollResult, setPreEnrollResult] = useState<{ added: number; skipped: number } | null>(null);
   const [preEnrollTab, setPreEnrollTab] = useState<'form' | 'csv'>('form');
   const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [preEnrolledUsers, setPreEnrolledUsers] = useState<PreEnrolledUser[]>([]);
 
-  useEffect(() => {
+  const fetchAll = () => {
     api.getCourses().then(setCourses).catch(() => {});
-    api.getAdminUsers()
-      .then(setUsers)
+    Promise.all([api.getAdminUsers(), api.getPreEnrolledUsers()])
+      .then(([u, pe]) => { setUsers(u); setPreEnrolledUsers(pe); })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(() => { fetchAll(); }, []);
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -68,16 +63,34 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     }
   };
 
-  const filtered = useMemo(() => {
-    let list = [...users];
+  // Merge registered users and pre-enrolled users into a unified list
+  type UnifiedUser = UserWithProgress & { _preEnrolled?: boolean };
 
-    // Status filter
-    if (statusFilter !== 'all') {
-      list = list.filter((u) => {
-        const cp = getProgress(u, selectedCourse);
-        const status = cp?.status || 'not_started';
-        return status === statusFilter;
-      });
+  const filtered = useMemo(() => {
+    // Build unified list
+    const registered: UnifiedUser[] = users.map((u) => ({ ...u, _preEnrolled: false }));
+    const pending: UnifiedUser[] = preEnrolledUsers.map((pe) => ({
+      id: pe.id,
+      email: pe.email,
+      name: pe.name,
+      role: pe.role as any,
+      is_active: true,
+      created_at: pe.enrolled_at,
+      last_active_at: '',
+      oauth_provider: null,
+      oauth_subject_id: null,
+      course_progress: [],
+      _preEnrolled: true,
+    } as unknown as UnifiedUser));
+
+    let list: UnifiedUser[];
+
+    if (statusFilter === 'pre_enrolled') {
+      list = [...pending];
+    } else if (statusFilter === 'deactivated') {
+      list = registered.filter((u) => !u.is_active);
+    } else {
+      list = [...registered, ...pending];
     }
 
     // Search
@@ -97,24 +110,12 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
         case 'role': cmp = a.role.localeCompare(b.role); break;
         case 'created_at': cmp = a.created_at.localeCompare(b.created_at); break;
         case 'last_active_at': cmp = (a.last_active_at || '').localeCompare(b.last_active_at || ''); break;
-        case 'status': {
-          const sa = getProgress(a, selectedCourse)?.status || 'not_started';
-          const sb = getProgress(b, selectedCourse)?.status || 'not_started';
-          cmp = sa.localeCompare(sb);
-          break;
-        }
-        case 'time': {
-          const ta = getProgress(a, selectedCourse)?.total_time_seconds || 0;
-          const tb = getProgress(b, selectedCourse)?.total_time_seconds || 0;
-          cmp = ta - tb;
-          break;
-        }
       }
       return sortDir === 'asc' ? cmp : -cmp;
     });
 
     return list;
-  }, [users, statusFilter, search, sortField, sortDir, selectedCourse]);
+  }, [users, preEnrolledUsers, statusFilter, search, sortField, sortDir]);
 
   const handleExport = async () => {
     try {
@@ -143,8 +144,9 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
         const json = await res.json();
         if (!res.ok) throw new Error(json.error?.message || 'Failed');
         setPreEnrollResult(json.data);
-        const updated = await api.getAdminUsers();
+        const [updated, updatedPe] = await Promise.all([api.getAdminUsers(), api.getPreEnrolledUsers()]);
         setUsers(updated);
+        setPreEnrolledUsers(updatedPe);
       } catch {
         alert('Failed to pre-enroll users from CSV');
       }
@@ -154,17 +156,21 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     const validEntries = preEnrollEntries.filter((e) => e.email.trim());
     if (validEntries.length === 0) return;
     try {
-      const result = await api.preEnrollUsers(validEntries);
+      const result = await api.preEnrollUsers(validEntries.map((e) => ({
+        ...e,
+        courses: e.courses.length > 0 ? e.courses : undefined,
+      })));
       setPreEnrollResult(result);
-      const updated = await api.getAdminUsers();
+      const [updated, updatedPe] = await Promise.all([api.getAdminUsers(), api.getPreEnrolledUsers()]);
       setUsers(updated);
+      setPreEnrolledUsers(updatedPe);
     } catch {
       alert('Failed to pre-enroll users');
     }
   };
 
   const addEntry = () => {
-    setPreEnrollEntries([...preEnrollEntries, { name: '', email: '', role: 'learner' }]);
+    setPreEnrollEntries([...preEnrollEntries, { name: '', email: '', role: 'learner', courses: [] }]);
   };
 
   const removeEntry = (index: number) => {
@@ -175,10 +181,18 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     setPreEnrollEntries(preEnrollEntries.map((e, i) => (i === index ? { ...e, [field]: value } : e)));
   };
 
+  const toggleEntryCourse = (index: number, slug: string) => {
+    setPreEnrollEntries(preEnrollEntries.map((e, i) => {
+      if (i !== index) return e;
+      const has = e.courses.includes(slug);
+      return { ...e, courses: has ? e.courses.filter((s) => s !== slug) : [...e.courses, slug] };
+    }));
+  };
+
   const resetPreEnroll = () => {
     setShowPreEnroll(false);
     setPreEnrollResult(null);
-    setPreEnrollEntries([{ name: '', email: '', role: 'learner' as const }]);
+    setPreEnrollEntries([{ name: '', email: '', role: 'learner' as const, courses: [] }]);
     setPreEnrollTab('form');
     setCsvFile(null);
   };
@@ -189,17 +203,36 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     return diff > 14 * 24 * 60 * 60 * 1000; // 14 days
   };
 
-  const statusBadge = (status: string) => {
-    const classes: Record<string, string> = {
-      completed: 'bg-green-100 text-green-700',
-      in_progress: 'bg-blue-100 text-blue-700',
-      not_started: 'bg-gray-100 text-gray-600',
-    };
-    return (
-      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${classes[status] || classes.not_started}`}>
-        {status.replace('_', ' ')}
-      </span>
-    );
+  const handleDeletePreEnrolled = async (id: string) => {
+    try {
+      await api.deletePreEnrolledUser(id);
+      setPreEnrolledUsers((prev) => prev.filter((u) => u.id !== id));
+    } catch {
+      alert('Failed to remove pre-enrolled user');
+    }
+  };
+
+  const handleToggleActive = async (userId: string, currentlyActive: boolean) => {
+    try {
+      if (currentlyActive) {
+        await api.deactivateUser(userId);
+      } else {
+        await api.activateUser(userId);
+      }
+      setUsers((prev) => prev.map((u) => u.id === userId ? { ...u, is_active: !currentlyActive } : u));
+    } catch {
+      alert('Failed to update user status');
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, userName: string) => {
+    if (!confirm(`Permanently delete ${userName}? This cannot be undone.`)) return;
+    try {
+      await api.deleteUser(userId);
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+    } catch {
+      alert('Failed to delete user');
+    }
   };
 
   const SortHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
@@ -237,9 +270,8 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
 
   const filters: { label: string; value: StatusFilter }[] = [
     { label: 'All', value: 'all' },
-    { label: 'Not Started', value: 'not_started' },
-    { label: 'In Progress', value: 'in_progress' },
-    { label: 'Completed', value: 'completed' },
+    { label: 'Pre-Enrolled', value: 'pre_enrolled' },
+    { label: 'Deactivated', value: 'deactivated' },
   ];
 
   return (
@@ -262,23 +294,6 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
               </h2>
               <p className="text-text-secondary mt-2 max-w-xl">Manage enrollments, track individual progress, and pre-enroll new learners.</p>
             </motion.div>
-            {courses.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="shrink-0">
-                <div className="relative">
-                  <select
-                    value={selectedCourse}
-                    onChange={(e) => setSelectedCourse(e.target.value)}
-                    className="appearance-none bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm rounded-lg px-4 py-2.5 pr-9 text-sm font-medium text-text-primary hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
-                  >
-                    <option value="">All Courses</option>
-                    {courses.map((c) => (
-                      <option key={c.slug} value={c.slug}>{c.title}</option>
-                    ))}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-                </div>
-              </motion.div>
-            )}
           </div>
         </div>
       </section>
@@ -289,7 +304,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="p-6 max-w-6xl mx-auto">
       {/* Filter bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
           {filters.map((f) => (
             <button
               key={f.value}
@@ -321,7 +336,15 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
 
       {/* Table */}
       <Card className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm table-fixed">
+          <colgroup>
+            <col className="w-[18%]" />
+            <col className="w-[22%]" />
+            <col className="w-[10%]" />
+            <col className="w-[12%]" />
+            <col className="w-[12%]" />
+            <col className="w-[26%]" />
+          </colgroup>
           <thead className="border-b border-border">
             <tr>
               <SortHeader field="name">Name</SortHeader>
@@ -329,28 +352,28 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
               <SortHeader field="role">Role</SortHeader>
               <SortHeader field="created_at">Enrolled</SortHeader>
               <SortHeader field="last_active_at">Last Active</SortHeader>
-              <SortHeader field="status">Status</SortHeader>
-              <SortHeader field="time">Time</SortHeader>
+              <th className="text-center text-xs font-medium text-text-secondary uppercase tracking-wide py-3 px-3 border-l border-border">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center py-8 text-text-secondary">
+                <td colSpan={6} className="text-center py-8 text-text-secondary">
                   No users found
                 </td>
               </tr>
             ) : (
               filtered.map((user) => {
-                const cp = getProgress(user, selectedCourse);
-                const status = cp?.status || 'not_started';
+                const isPre = !!(user as any)._preEnrolled;
                 return (
                   <tr
                     key={user.id}
-                    onClick={() => onUserClick?.(user.id)}
-                    className="border-b border-border/50 hover:bg-surface/50 cursor-pointer transition-colors"
+                    onClick={() => !isPre && onUserClick?.(user.id)}
+                    className={`border-b border-border/50 hover:bg-surface/50 transition-colors ${isPre ? 'opacity-75' : 'cursor-pointer'}`}
                   >
-                    <td className="py-3 px-3 font-medium text-text-primary">{user.name}</td>
+                    <td className="py-3 px-3 font-medium text-text-primary">
+                      {user.name || <span className="text-text-secondary italic">—</span>}
+                    </td>
                     <td className="py-3 px-3 text-text-secondary">{user.email}</td>
                     <td className="py-3 px-3">
                       <span
@@ -369,18 +392,59 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
                       {new Date(user.created_at).toLocaleDateString()}
                     </td>
                     <td className="py-3 px-3 text-text-secondary text-xs">
-                      <span className="inline-flex items-center gap-1">
-                        {user.last_active_at ? new Date(user.last_active_at).toLocaleDateString() : '—'}
-                        {isStale(user.last_active_at) && (
-                          <span title="Inactive > 14 days"><AlertTriangle size={12} className="text-warning" /></span>
-                        )}
-                      </span>
+                      {isPre ? (
+                        <span className="inline-flex items-center gap-2">
+                          <span className="text-text-secondary italic">awaiting registration</span>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDeletePreEnrolled(user.id); }}
+                            className="text-error hover:text-error/80 transition-colors"
+                            title="Remove pre-enrollment"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1">
+                          {user.last_active_at ? new Date(user.last_active_at).toLocaleDateString() : '—'}
+                          {isStale(user.last_active_at) && (
+                            <span title="Inactive > 14 days"><AlertTriangle size={12} className="text-warning" /></span>
+                          )}
+                        </span>
+                      )}
                     </td>
-                    <td className="py-3 px-3">{statusBadge(status)}</td>
-                    <td className="py-3 px-3 text-text-secondary text-xs">
-                      {cp?.total_time_seconds
-                        ? `${Math.round(cp.total_time_seconds / 60)}m`
-                        : '—'}
+                    <td className="py-3 px-3 border-l border-border">
+                      {!isPre && (
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); onUserClick?.(user.id); }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-primary bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-all"
+                            title="View details"
+                          >
+                            <Eye size={13} />
+                            View
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleToggleActive(user.id, user.is_active); }}
+                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-all ${
+                              user.is_active
+                                ? 'text-text-secondary bg-surface/50 border-border hover:bg-surface hover:border-border/80'
+                                : 'text-success bg-green-50 border-green-200 hover:bg-green-100'
+                            }`}
+                            title={user.is_active ? 'Deactivate user' : 'Activate user'}
+                          >
+                            {user.is_active ? <UserX size={13} /> : <UserCheck size={13} />}
+                            {user.is_active ? 'Deactivate' : 'Activate'}
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDeleteUser(user.id, user.name); }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-all"
+                            title="Delete user"
+                          >
+                            <Trash2 size={13} />
+                            Delete
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 );
@@ -422,41 +486,73 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
             </div>
 
             {preEnrollTab === 'form' ? (
-              <div className="space-y-3 max-h-72 overflow-y-auto">
+              <div className="space-y-4 max-h-96 overflow-y-auto">
                 {preEnrollEntries.map((entry, i) => (
-                  <div key={i} className="flex gap-2 items-start">
-                    <div className="flex-1 space-y-2">
-                      <input
-                        type="text"
-                        value={entry.name}
-                        onChange={(e) => updateEntry(i, 'name', e.target.value)}
-                        placeholder="Name"
-                        className="w-full px-3 py-1.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary"
-                      />
-                      <input
-                        type="email"
-                        value={entry.email}
-                        onChange={(e) => updateEntry(i, 'email', e.target.value)}
-                        placeholder="Email *"
-                        className="w-full px-3 py-1.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary"
-                      />
-                    </div>
-                    <select
-                      value={entry.role}
-                      onChange={(e) => updateEntry(i, 'role', e.target.value)}
-                      className="px-2 py-1.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary mt-0.5"
-                    >
-                      <option value="learner">Learner</option>
-                      <option value="admin">Admin</option>
-                      <option value="dev_admin">Dev Admin</option>
-                    </select>
-                    {preEnrollEntries.length > 1 && (
-                      <button
-                        onClick={() => removeEntry(i)}
-                        className="p-1.5 text-text-secondary hover:text-error rounded mt-0.5"
+                  <div key={i} className="border border-border/50 rounded-lg p-3 space-y-2">
+                    <div className="flex gap-2 items-start">
+                      <div className="flex-1 space-y-2">
+                        <input
+                          type="text"
+                          value={entry.name}
+                          onChange={(e) => updateEntry(i, 'name', e.target.value)}
+                          placeholder="Name"
+                          className="w-full px-3 py-1.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary"
+                        />
+                        <input
+                          type="email"
+                          value={entry.email}
+                          onChange={(e) => updateEntry(i, 'email', e.target.value)}
+                          placeholder="Email *"
+                          className="w-full px-3 py-1.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <select
+                        value={entry.role}
+                        onChange={(e) => updateEntry(i, 'role', e.target.value)}
+                        className="px-2 py-1.5 text-sm border border-border rounded-input focus:outline-none focus:border-primary mt-0.5"
                       >
-                        <Trash2 size={14} />
-                      </button>
+                        <option value="learner">Learner</option>
+                        <option value="admin">Admin</option>
+                        <option value="dev_admin">Dev Admin</option>
+                      </select>
+                      {preEnrollEntries.length > 1 && (
+                        <button
+                          onClick={() => removeEntry(i)}
+                          className="p-1.5 text-text-secondary hover:text-error rounded mt-0.5"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
+                    </div>
+                    {/* Collapsible course enrollment */}
+                    {courses.length > 0 && (
+                      <details className="group">
+                        <summary className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-text-secondary hover:text-text-primary select-none list-none">
+                          <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
+                          Courses
+                          {entry.courses.length > 0 && (
+                            <span className="text-[10px] bg-primary text-white px-1.5 py-0.5 rounded-full ml-1">
+                              {entry.courses.length}
+                            </span>
+                          )}
+                        </summary>
+                        <div className="mt-2 space-y-1 pl-1">
+                          {courses.map((c) => (
+                            <label
+                              key={c.slug}
+                              className="flex items-center gap-2 py-1 px-2 rounded-md hover:bg-surface/50 cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={entry.courses.includes(c.slug)}
+                                onChange={() => toggleEntryCourse(i, c.slug)}
+                                className="accent-primary w-3.5 h-3.5"
+                              />
+                              <span className="text-xs text-text-primary">{c.title}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </details>
                     )}
                   </div>
                 ))}
@@ -471,7 +567,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
             ) : (
               <div className="space-y-3">
                 <p className="text-xs text-text-secondary">
-                  Upload a CSV with columns: <strong>Name, Email, Role</strong> (role is optional, defaults to learner).
+                  Upload a CSV with columns: <strong>Name, Email, Role, Course1, Course2, ...</strong> (role and courses are optional; each course slug is a separate column).
                 </p>
                 <label className="flex flex-col items-center gap-2 p-6 border-2 border-dashed border-border rounded-card cursor-pointer hover:border-primary/50 transition-colors">
                   <Upload size={20} className="text-text-secondary" />

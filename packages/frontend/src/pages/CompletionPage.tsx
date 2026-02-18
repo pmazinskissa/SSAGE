@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, Clock, Award, ArrowLeft, MessageSquare } from 'lucide-react';
+import { Trophy, Clock, Award, ArrowLeft, MessageSquare, BookOpen, CheckCircle2 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useCourse } from '../context/CourseContext';
 import Card from '../components/ui/Card';
@@ -13,7 +13,7 @@ import type { CourseProgress } from '@playbook/shared';
 
 export default function CompletionPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { course } = useCourse();
+  const { course, navTree } = useCourse();
   const [progress, setProgress] = useState<CourseProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -129,6 +129,60 @@ export default function CompletionPage() {
               </Card>
             </motion.div>
           </motion.div>
+
+          {/* Course summary — what you learned */}
+          {navTree && navTree.modules.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mb-10"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <BookOpen size={20} className="text-primary" />
+                <h2
+                  className="text-lg font-semibold text-text-primary"
+                  style={{ fontFamily: 'var(--font-heading)' }}
+                >
+                  What You Learned
+                </h2>
+              </div>
+              {course?.description && (
+                <p className="text-sm text-text-secondary mb-5 leading-relaxed">
+                  {course.description}
+                </p>
+              )}
+              <div className="relative">
+                {/* Vertical timeline line */}
+                <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-primary/20" />
+
+                <div className="space-y-4">
+                  {navTree.modules.map((mod, idx) => (
+                    <div key={mod.slug} className="relative flex gap-4">
+                      {/* Numbered circle on the line */}
+                      <div className="relative z-10 flex-shrink-0 w-[31px] h-[31px] rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shadow-sm shadow-primary/25">
+                        {idx + 1}
+                      </div>
+                      {/* Module card */}
+                      <Card elevation={0} className="flex-1 p-4">
+                        <h3 className="text-sm font-semibold text-text-primary mb-2">{mod.title}</h3>
+                        {mod.objectives.length > 0 && (
+                          <ul className="space-y-1.5">
+                            {mod.objectives.map((obj, i) => (
+                              <li key={i} className="flex items-start gap-2 text-xs text-text-secondary">
+                                <CheckCircle2 size={13} className="text-success mt-0.5 flex-shrink-0" />
+                                <span>{obj}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Per-module KC scores */}
           {progress?.knowledge_checks && progress.knowledge_checks.length > 0 && (

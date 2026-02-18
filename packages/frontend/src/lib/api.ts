@@ -15,6 +15,7 @@ import type {
   ContentFeedback,
   SearchResult,
   UserWithModuleAnalytics,
+  CourseEnrollment,
 } from '@playbook/shared';
 
 const BASE_URL = '/api';
@@ -96,6 +97,10 @@ export const api = {
 
   // Admin — Users
   getAdminUsers: () => fetchApi<UserWithProgress[]>('/admin/users'),
+  getPreEnrolledUsers: () =>
+    fetchApi<{ id: string; email: string; name: string; role: string; enrolled_at: string; enrolled_by: string | null }[]>('/admin/users/pre-enrolled'),
+  deletePreEnrolledUser: (id: string) =>
+    fetchApi<{ message: string }>(`/admin/users/pre-enrolled/${id}`, { method: 'DELETE' }),
   getAdminUserAnalytics: (courseSlug: string) =>
     fetchApi<UserWithModuleAnalytics[]>(`/admin/users/analytics?course=${encodeURIComponent(courseSlug)}`),
   getAdminUserDetail: (id: string) => fetchApi<UserDetail>(`/admin/users/${id}`),
@@ -117,10 +122,24 @@ export const api = {
     const blob = await res.blob();
     return URL.createObjectURL(blob);
   },
-  preEnrollUsers: (entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[]) =>
+  preEnrollUsers: (entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin'; courses?: string[] }[]) =>
     fetchApi<{ added: number; skipped: number }>('/admin/users/pre-enroll', {
       method: 'POST',
       body: JSON.stringify({ entries }),
+    }),
+
+  // Admin — Enrollments
+  getEnrollments: (email: string) =>
+    fetchApi<CourseEnrollment[]>(`/admin/enrollments/${encodeURIComponent(email)}`),
+  enrollUser: (email: string, courseSlugs: string[]) =>
+    fetchApi<{ message: string }>('/admin/enrollments', {
+      method: 'POST',
+      body: JSON.stringify({ email, course_slugs: courseSlugs }),
+    }),
+  unenrollUser: (email: string, courseSlug: string) =>
+    fetchApi<{ message: string }>('/admin/enrollments', {
+      method: 'DELETE',
+      body: JSON.stringify({ email, course_slug: courseSlug }),
     }),
 
   // Admin — Settings
@@ -156,7 +175,7 @@ export const api = {
     fetchApi<{ message: string }>(`/admin/feedback/${id}`, { method: 'DELETE' }),
 
   // Feedback (any authenticated user)
-  submitFeedback: (data: { course_slug: string; feedback_text: string; submitter_name?: string }) =>
+  submitFeedback: (data: { course_slug: string; feedback_text: string; submitter_name?: string; rating?: number }) =>
     fetchApi<ContentFeedback>('/feedback', {
       method: 'POST',
       body: JSON.stringify(data),

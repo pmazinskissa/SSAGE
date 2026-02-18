@@ -57,10 +57,10 @@ export default function LessonNav({
         </Link>
       ) : (
         <Link
-          to={`/courses/${courseSlug}`}
+          to={`/courses/${courseSlug}/completion`}
           className="flex items-center gap-2 px-4 py-2 text-sm bg-success text-white rounded-button hover:opacity-90 transition-opacity"
         >
-          Course Overview
+          Complete Course
         </Link>
       )}
     </div>

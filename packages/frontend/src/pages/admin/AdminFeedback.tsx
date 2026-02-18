@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, CheckCircle, Circle, Trash2, ChevronDown } from 'lucide-react';
+import { MessageSquare, CheckCircle, Circle, Trash2, ChevronDown, Hash, Users, Star, Search } from 'lucide-react';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -13,7 +13,7 @@ export default function AdminFeedback() {
   const [error, setError] = useState<string | null>(null);
   const [courses, setCourses] = useState<CourseConfig[]>([]);
   const [filterCourse, setFilterCourse] = useState('');
-  const [filterModule, setFilterModule] = useState('');
+  const [filterUser, setFilterUser] = useState('');
   const [filterResolved, setFilterResolved] = useState<boolean | undefined>(undefined);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
@@ -23,9 +23,8 @@ export default function AdminFeedback() {
 
   const fetchFeedback = () => {
     setLoading(true);
-    const filters: { course?: string; module?: string; resolved?: boolean } = {};
+    const filters: { course?: string; resolved?: boolean } = {};
     if (filterCourse) filters.course = filterCourse;
-    if (filterModule) filters.module = filterModule;
     if (filterResolved !== undefined) filters.resolved = filterResolved;
     api.getAdminFeedback(filters)
       .then(setFeedback)
@@ -35,12 +34,7 @@ export default function AdminFeedback() {
 
   useEffect(() => {
     fetchFeedback();
-  }, [filterCourse, filterModule, filterResolved]);
-
-  // Reset module filter when course changes (modules are course-specific)
-  useEffect(() => {
-    setFilterModule('');
-  }, [filterCourse]);
+  }, [filterCourse, filterResolved]);
 
   const handleResolveToggle = async (item: ContentFeedback) => {
     try {
@@ -63,11 +57,29 @@ export default function AdminFeedback() {
     }
   };
 
-  // Collect unique module slugs from current feedback for filter dropdown
-  const modules = [...new Set(feedback.map((f) => f.module_slug))].sort();
-
   // Build a course slug → title lookup
   const courseTitleMap = new Map(courses.map((c) => [c.slug, c.title]));
+
+  // Filtered feedback (user search is client-side on top of server-filtered data)
+  const filteredFeedback = useMemo(() => {
+    if (!filterUser) return feedback;
+    const lower = filterUser.toLowerCase();
+    return feedback.filter((f) => {
+      const name = (f.submitter_name || f.user_name || '').toLowerCase();
+      return name.includes(lower);
+    });
+  }, [feedback, filterUser]);
+
+  // Metrics computed from filtered feedback
+  const metrics = useMemo(() => {
+    const total = filteredFeedback.length;
+    const users = new Set(filteredFeedback.map((f) => f.user_id)).size;
+    const rated = filteredFeedback.filter((f) => f.rating != null);
+    const avgScore = rated.length > 0
+      ? rated.reduce((sum, f) => sum + f.rating!, 0) / rated.length
+      : null;
+    return { total, users, avgScore };
+  }, [filteredFeedback]);
 
   if (loading && feedback.length === 0) {
     return (
@@ -110,23 +122,6 @@ export default function AdminFeedback() {
               </h2>
               <p className="text-text-secondary mt-2 max-w-xl">Review and respond to learner feedback on course content.</p>
             </motion.div>
-            {courses.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="shrink-0">
-                <div className="relative">
-                  <select
-                    value={filterCourse}
-                    onChange={(e) => setFilterCourse(e.target.value)}
-                    className="appearance-none bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm rounded-lg px-4 py-2.5 pr-9 text-sm font-medium text-text-primary hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
-                  >
-                    <option value="">All Courses</option>
-                    {courses.map((c) => (
-                      <option key={c.slug} value={c.slug}>{c.title}</option>
-                    ))}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-                </div>
-              </motion.div>
-            )}
           </div>
         </div>
       </section>
@@ -135,22 +130,33 @@ export default function AdminFeedback() {
       <div className="absolute inset-0 -z-10 bg-surface/30" />
       <div className="absolute inset-0 -z-10 opacity-[0.07]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px, transparent 41px, transparent 80px), repeating-radial-gradient(circle at 30% 70%, transparent 0, transparent 60px, var(--color-primary) 60px, var(--color-primary) 61px, transparent 61px, transparent 120px), repeating-radial-gradient(circle at 70% 30%, transparent 0, transparent 50px, var(--color-primary) 50px, var(--color-primary) 51px, transparent 51px, transparent 100px)' }} />
     <div className="p-6 max-w-4xl mx-auto">
+
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        {courses.length > 0 && (
+          <div className="relative">
+            <select
+              value={filterCourse}
+              onChange={(e) => setFilterCourse(e.target.value)}
+              className="appearance-none bg-white border border-border shadow-sm rounded-lg px-4 py-2 pr-9 text-sm font-medium text-text-primary hover:bg-surface/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
+            >
+              <option value="">All Courses</option>
+              {courses.map((c) => (
+                <option key={c.slug} value={c.slug}>{c.title}</option>
+              ))}
+            </select>
+            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          </div>
+        )}
         <div className="relative">
-          <select
-            value={filterModule}
-            onChange={(e) => setFilterModule(e.target.value)}
-            className="appearance-none bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm rounded-lg px-4 py-2.5 pr-9 text-sm font-medium text-text-primary hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
-          >
-            <option value="">All Modules</option>
-            {modules.map((m) => (
-              <option key={m} value={m}>
-                {m.replace(/^\d+-/, '').replace(/-/g, ' ')}
-              </option>
-            ))}
-          </select>
-          <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          <input
+            type="text"
+            value={filterUser}
+            onChange={(e) => setFilterUser(e.target.value)}
+            placeholder="Filter users..."
+            className="bg-white border border-border shadow-sm rounded-lg pl-8 pr-3 py-2 text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all w-64"
+          />
         </div>
 
         <div className="flex gap-1">
@@ -174,8 +180,29 @@ export default function AdminFeedback() {
         </div>
       </div>
 
+      {/* Metric callout boxes */}
+      <div className="grid grid-cols-3 gap-4 mb-6">
+        <Card elevation={1} className="p-4 text-center">
+          <Hash size={18} className="text-primary mx-auto mb-1.5" />
+          <p className="text-2xl font-bold text-text-primary">{metrics.total}</p>
+          <p className="text-xs text-text-secondary mt-0.5">Total Feedback</p>
+        </Card>
+        <Card elevation={1} className="p-4 text-center">
+          <Users size={18} className="text-primary mx-auto mb-1.5" />
+          <p className="text-2xl font-bold text-text-primary">{metrics.users}</p>
+          <p className="text-xs text-text-secondary mt-0.5">Unique Users</p>
+        </Card>
+        <Card elevation={1} className="p-4 text-center">
+          <Star size={18} className="text-primary mx-auto mb-1.5" />
+          <p className="text-2xl font-bold text-text-primary">
+            {metrics.avgScore != null ? metrics.avgScore.toFixed(1) : '—'}
+          </p>
+          <p className="text-xs text-text-secondary mt-0.5">Avg. Score</p>
+        </Card>
+      </div>
+
       {/* Feedback list */}
-      {feedback.length === 0 ? (
+      {filteredFeedback.length === 0 ? (
         <Card className="p-8 text-center">
           <MessageSquare size={48} className="mx-auto text-text-secondary/40 mb-4" />
           <p className="text-lg font-semibold text-text-primary">No feedback yet</p>
@@ -185,7 +212,7 @@ export default function AdminFeedback() {
         </Card>
       ) : (
         <motion.div variants={stagger} initial="hidden" animate="visible" className="space-y-3">
-          {feedback.map((item) => (
+          {filteredFeedback.map((item) => (
             <motion.div key={item.id} variants={fadeInUp}>
               <Card className="p-4">
                 <div className="flex items-start justify-between gap-4">
@@ -197,11 +224,16 @@ export default function AdminFeedback() {
                           &gt;{' '}
                         </span>
                       )}
-                      {item.module_slug.replace(/^\d+-/, '').replace(/-/g, ' ')} &gt;{' '}
-                      {item.lesson_slug.replace(/^\d+-/, '').replace(/-/g, ' ')}
+                      {(item.module_slug || '').replace(/^\d+-/, '').replace(/-/g, ' ')}
+                      {item.lesson_slug ? <> &gt; {item.lesson_slug.replace(/^\d+-/, '').replace(/-/g, ' ')}</> : null}
                     </p>
                     <p className="text-sm text-text-primary">{item.feedback_text}</p>
                     <div className="flex items-center gap-3 mt-2 text-xs text-text-secondary">
+                      {item.rating != null && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-primary/10 text-primary font-semibold">
+                          {item.rating}/5
+                        </span>
+                      )}
                       <span>{item.submitter_name || item.user_name || 'Anonymous'}</span>
                       <span>{new Date(item.created_at).toLocaleDateString()}</span>
                     </div>

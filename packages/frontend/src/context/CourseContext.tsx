@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, useCallback, type ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import type { CourseConfig, CourseNavTree } from '@playbook/shared';
 import { api } from '../lib/api';
@@ -15,6 +15,7 @@ interface CourseContextValue {
   loading: boolean;
   error: string | null;
   continueLesson: ContinueLesson | null;
+  refreshNavTree: () => void;
 }
 
 const CourseContext = createContext<CourseContextValue>({
@@ -23,6 +24,7 @@ const CourseContext = createContext<CourseContextValue>({
   loading: true,
   error: null,
   continueLesson: null,
+  refreshNavTree: () => {},
 });
 
 export function CourseProvider({ children }: { children: ReactNode }) {
@@ -32,19 +34,28 @@ export function CourseProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    setError(null);
-
-    api.getCourse(slug)
+  const fetchCourse = useCallback((courseSlug: string, showLoading = true) => {
+    if (showLoading) {
+      setLoading(true);
+      setError(null);
+    }
+    api.getCourse(courseSlug)
       .then((data) => {
         setCourse(data.course);
         setNavTree(data.navTree);
       })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [slug]);
+      .catch((err) => { if (showLoading) setError(err.message); })
+      .finally(() => { if (showLoading) setLoading(false); });
+  }, []);
+
+  useEffect(() => {
+    if (!slug) return;
+    fetchCourse(slug, true);
+  }, [slug, fetchCourse]);
+
+  const refreshNavTree = useCallback(() => {
+    if (slug) fetchCourse(slug, false);
+  }, [slug, fetchCourse]);
 
   // Compute continue lesson from navTree progress
   const continueLesson = useMemo<ContinueLesson | null>(() => {
@@ -72,7 +83,7 @@ export function CourseProvider({ children }: { children: ReactNode }) {
   }, [navTree]);
 
   return (
-    <CourseContext.Provider value={{ course, navTree, loading, error, continueLesson }}>
+    <CourseContext.Provider value={{ course, navTree, loading, error, continueLesson, refreshNavTree }}>
       {children}
     </CourseContext.Provider>
   );

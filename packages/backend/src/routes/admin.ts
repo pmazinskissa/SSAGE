@@ -3,15 +3,20 @@ import multer from 'multer';
 import { parse } from 'csv-parse/sync';
 import {
   listUsers,
+  listPreEnrolledUsers,
   getUserDetail,
   updateUserRole,
   deactivateUser,
   activateUser,
   deleteUser,
+  deletePreEnrolledUser,
   preEnrollUsers,
   getDashboardMetrics,
   getUsersWithModuleProgress,
   exportUsersCSV,
+  getEnrollmentsForEmail,
+  enrollUserInCourses,
+  unenrollUserFromCourse,
 } from '../services/admin.service.js';
 import { getAllSettings, upsertSetting } from '../services/settings.service.js';
 import { testConnection } from '../services/ai.service.js';
@@ -76,6 +81,28 @@ router.get('/users/export', async (req, res) => {
   } catch (err: any) {
     console.error('[Admin] Export CSV error:', err.message);
     res.status(500).json({ error: { message: 'Failed to export users' } });
+  }
+});
+
+// GET /api/admin/users/pre-enrolled — list pre-enrolled users
+router.get('/users/pre-enrolled', async (_req, res) => {
+  try {
+    const users = await listPreEnrolledUsers();
+    res.json({ data: users });
+  } catch (err: any) {
+    console.error('[Admin] List pre-enrolled users error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to list pre-enrolled users' } });
+  }
+});
+
+// DELETE /api/admin/users/pre-enrolled/:id — remove a pre-enrolled user
+router.delete('/users/pre-enrolled/:id', async (req, res) => {
+  try {
+    await deletePreEnrolledUser(req.params.id);
+    res.json({ data: { message: 'Pre-enrolled user removed' } });
+  } catch (err: any) {
+    console.error('[Admin] Delete pre-enrolled user error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to remove pre-enrolled user' } });
   }
 });
 
@@ -164,17 +191,21 @@ router.delete('/users/:id', async (req, res) => {
 // POST /api/admin/users/pre-enroll — structured entries or CSV upload
 router.post('/users/pre-enroll', upload.single('file'), async (req, res) => {
   try {
-    let entries: { name: string; email: string; role: 'learner' | 'admin' }[] = [];
+    let entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin'; courses?: string[] }[] = [];
 
     if (req.file) {
-      // Parse CSV with columns: name, email, role
+      // Parse CSV with columns: name, email, role, courses (comma-separated slugs)
       const content = req.file.buffer.toString('utf-8');
       const records = parse(content, { columns: false, skip_empty_lines: true, relax_column_count: true });
       for (const row of records) {
         if (!Array.isArray(row) || row.length < 2) continue;
-        // Support: name,email,role OR email (legacy)
+        // Support: name,email,role,courses OR name,email,role OR email (legacy)
         if (row.length >= 3) {
-          entries.push({ name: row[0]?.trim() || '', email: row[1]?.trim() || '', role: row[2]?.trim() === 'admin' ? 'admin' : 'learner' });
+          const role = row[2]?.trim() === 'admin' ? 'admin' as const : row[2]?.trim() === 'dev_admin' ? 'dev_admin' as const : 'learner' as const;
+          // Columns 4+ are course slugs (csv-parse splits on commas, so each slug is its own column)
+          const courseCols = row.slice(3).map((s: string) => s.trim()).filter(Boolean);
+          const courses = courseCols.length > 0 ? courseCols : undefined;
+          entries.push({ name: row[0]?.trim() || '', email: row[1]?.trim() || '', role, courses });
         } else if (row.length === 2) {
           // Could be name,email or just two emails
           if (row[1]?.includes('@')) {
@@ -197,6 +228,49 @@ router.post('/users/pre-enroll', upload.single('file'), async (req, res) => {
   } catch (err: any) {
     console.error('[Admin] Pre-enroll error:', err.message);
     res.status(500).json({ error: { message: 'Failed to pre-enroll users' } });
+  }
+});
+
+// --- Course Enrollments ---
+
+// GET /api/admin/enrollments/:email — list enrollments for an email
+router.get('/enrollments/:email', async (req, res) => {
+  try {
+    const enrollments = await getEnrollmentsForEmail(req.params.email);
+    res.json({ data: enrollments });
+  } catch (err: any) {
+    console.error('[Admin] Get enrollments error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to get enrollments' } });
+  }
+});
+
+// POST /api/admin/enrollments — enroll user in courses
+router.post('/enrollments', async (req, res) => {
+  try {
+    const { email, course_slugs } = req.body;
+    if (!email || !Array.isArray(course_slugs) || course_slugs.length === 0) {
+      return res.status(400).json({ error: { message: 'email and course_slugs[] are required' } });
+    }
+    await enrollUserInCourses(email, course_slugs, req.user!.id);
+    res.json({ data: { message: 'Enrolled successfully' } });
+  } catch (err: any) {
+    console.error('[Admin] Enroll error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to enroll user' } });
+  }
+});
+
+// DELETE /api/admin/enrollments — unenroll user from a course
+router.delete('/enrollments', async (req, res) => {
+  try {
+    const { email, course_slug } = req.body;
+    if (!email || !course_slug) {
+      return res.status(400).json({ error: { message: 'email and course_slug are required' } });
+    }
+    await unenrollUserFromCourse(email, course_slug);
+    res.json({ data: { message: 'Unenrolled successfully' } });
+  } catch (err: any) {
+    console.error('[Admin] Unenroll error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to unenroll user' } });
   }
 });
 
@@ -277,11 +351,11 @@ router.get('/feedback', async (req, res) => {
 // POST /api/admin/feedback — create feedback (admin can also submit from admin panel)
 router.post('/feedback', async (req, res) => {
   try {
-    const { course_slug, feedback_text, submitter_name } = req.body;
+    const { course_slug, feedback_text, submitter_name, rating } = req.body;
     if (!course_slug || !feedback_text) {
       return res.status(400).json({ error: { message: 'course_slug and feedback_text are required' } });
     }
-    const feedback = await createFeedback(req.user!.id, course_slug, feedback_text, submitter_name);
+    const feedback = await createFeedback(req.user!.id, course_slug, feedback_text, submitter_name, rating);
     res.json({ data: feedback });
   } catch (err: any) {
     console.error('[Admin] Create feedback error:', err.message);

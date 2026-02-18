@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Clock, TrendingUp, LayoutDashboard, ChevronDown, ChevronRight } from 'lucide-react';
+import { Users, Clock, TrendingUp, LayoutDashboard, ChevronDown, Search, CheckCircle2, Circle, Disc } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import { stagger, fadeInUp } from '../../lib/animations';
-import type { DashboardMetrics, CourseConfig, UserWithModuleAnalytics } from '@playbook/shared';
+import type { DashboardMetrics, CourseConfig, UserWithModuleAnalytics, UserDetail, CourseNavTree, LessonProgressEntry } from '@playbook/shared';
 
 type TabView = 'course' | 'users';
 
@@ -21,6 +21,14 @@ export default function AdminDashboard() {
   const [userAnalytics, setUserAnalytics] = useState<UserWithModuleAnalytics[]>([]);
   const [userAnalyticsLoading, setUserAnalyticsLoading] = useState(false);
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
+  const [userSearch, setUserSearch] = useState('');
+
+  // User Analytics: expanded progress tree state
+  const [expandedUserDetail, setExpandedUserDetail] = useState<Record<string, UserDetail>>({});
+  const [expandedUserCourses, setExpandedUserCourses] = useState<Set<string>>(new Set());
+  const [expandedUserModules, setExpandedUserModules] = useState<Set<string>>(new Set());
+  const [userNavTrees, setUserNavTrees] = useState<Record<string, CourseNavTree>>({});
+  const [userDetailLoading, setUserDetailLoading] = useState<string | null>(null);
 
   useEffect(() => {
     api.getCourses().then(setCourses).catch(() => {});
@@ -34,16 +42,17 @@ export default function AdminDashboard() {
       .finally(() => setLoading(false));
   }, [selectedCourse]);
 
-  // Load user analytics when switching to users tab with a course selected
+  // Load user analytics when switching to users tab — auto-select first course if needed
   useEffect(() => {
-    if (activeTab === 'users' && selectedCourse) {
-      setUserAnalyticsLoading(true);
-      api.getAdminUserAnalytics(selectedCourse)
-        .then(setUserAnalytics)
-        .catch(() => setUserAnalytics([]))
-        .finally(() => setUserAnalyticsLoading(false));
-    }
-  }, [activeTab, selectedCourse]);
+    if (activeTab !== 'users') return;
+    const slug = selectedCourse || (courses.length > 0 ? courses[0].slug : '');
+    if (!slug) return;
+    setUserAnalyticsLoading(true);
+    api.getAdminUserAnalytics(slug)
+      .then(setUserAnalytics)
+      .catch(() => setUserAnalytics([]))
+      .finally(() => setUserAnalyticsLoading(false));
+  }, [activeTab, selectedCourse, courses]);
 
   if (loading && !metrics) {
     return (
@@ -117,6 +126,61 @@ export default function AdminDashboard() {
     return `${h}h ${m}m`;
   };
 
+  const toggleUserExpand = async (userId: string) => {
+    if (expandedUserId === userId) {
+      setExpandedUserId(null);
+      return;
+    }
+    setExpandedUserId(userId);
+    setExpandedUserCourses(new Set());
+    setExpandedUserModules(new Set());
+    if (!expandedUserDetail[userId]) {
+      setUserDetailLoading(userId);
+      try {
+        const detail = await api.getAdminUserDetail(userId);
+        setExpandedUserDetail(prev => ({ ...prev, [userId]: detail }));
+      } catch { /* ignore */ }
+      setUserDetailLoading(null);
+    }
+  };
+
+  const toggleUserCourse = (key: string, courseSlug: string) => {
+    setExpandedUserCourses(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+        if (!userNavTrees[courseSlug]) {
+          api.getCourse(courseSlug).then(data => {
+            setUserNavTrees(prev => ({ ...prev, [courseSlug]: data.navTree }));
+          }).catch(() => {});
+        }
+      }
+      return next;
+    });
+  };
+
+  const toggleUserModule = (key: string) => {
+    setExpandedUserModules(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const StatusIcon = ({ status, size = 14 }: { status: string; size?: number }) => {
+    switch (status) {
+      case 'completed':
+        return <CheckCircle2 size={size} className="text-success flex-shrink-0" />;
+      case 'in_progress':
+        return <Disc size={size} className="text-primary flex-shrink-0" />;
+      default:
+        return <Circle size={size} className="text-primary/30 flex-shrink-0" />;
+    }
+  };
+
   const cards = [
     {
       label: 'Total Enrolled',
@@ -148,19 +212,6 @@ export default function AdminDashboard() {
     { label: 'Not Started', count: metrics.not_started, color: 'bg-gray-300' },
   ];
 
-  const statusBadge = (status: string) => {
-    const classes: Record<string, string> = {
-      completed: 'bg-green-100 text-green-700',
-      in_progress: 'bg-blue-100 text-blue-700',
-      not_started: 'bg-gray-100 text-gray-600',
-    };
-    return (
-      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${classes[status] || classes.not_started}`}>
-        {status.replace('_', ' ')}
-      </span>
-    );
-  };
-
   return (
     <>
       {/* Hero */}
@@ -170,35 +221,16 @@ export default function AdminDashboard() {
           <div className="absolute w-[400px] h-[400px] rounded-full opacity-20 blur-[100px] animate-[meshFloat2_14s_ease-in-out_infinite]" style={{ background: 'var(--color-primary-hover)', top: '20%', right: '-8%' }} />
         </div>
         <div className="relative max-w-6xl mx-auto px-6 pt-10 pb-8">
-          <div className="flex items-start sm:items-center justify-between gap-4">
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <div className="flex items-center gap-2 text-primary mb-2">
-                <LayoutDashboard size={16} />
-                <span className="text-sm font-medium">Analytics Overview</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
-                Dashboard
-              </h2>
-              <p className="text-text-secondary mt-2 max-w-xl">Track enrollment, completion rates, and learner progress at a glance.</p>
-            </motion.div>
-            {courses.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="shrink-0">
-                <div className="relative">
-                  <select
-                    value={selectedCourse}
-                    onChange={(e) => setSelectedCourse(e.target.value)}
-                    className="appearance-none bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm rounded-lg px-4 py-2.5 pr-9 text-sm font-medium text-text-primary hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
-                  >
-                    <option value="">All Courses</option>
-                    {courses.map((c) => (
-                      <option key={c.slug} value={c.slug}>{c.title}</option>
-                    ))}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-                </div>
-              </motion.div>
-            )}
-          </div>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <div className="flex items-center gap-2 text-primary mb-2">
+              <LayoutDashboard size={16} />
+              <span className="text-sm font-medium">Analytics Overview</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
+              Dashboard
+            </h2>
+            <p className="text-text-secondary mt-2 max-w-xl">Track enrollment, completion rates, and learner progress at a glance.</p>
+          </motion.div>
         </div>
       </section>
 
@@ -206,24 +238,55 @@ export default function AdminDashboard() {
       <div className="absolute inset-0 -z-10 bg-surface/30" />
       <div className="absolute inset-0 -z-10 opacity-[0.07]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px, transparent 41px, transparent 80px), repeating-radial-gradient(circle at 30% 70%, transparent 0, transparent 60px, var(--color-primary) 60px, var(--color-primary) 61px, transparent 61px, transparent 120px), repeating-radial-gradient(circle at 70% 30%, transparent 0, transparent 50px, var(--color-primary) 50px, var(--color-primary) 51px, transparent 51px, transparent 100px)' }} />
     <div className="p-6 max-w-6xl mx-auto">
-      {/* Tab Switcher */}
-      <div className="flex gap-1 mb-6 bg-surface rounded-lg p-1 w-fit">
-        <button
-          onClick={() => setActiveTab('course')}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeTab === 'course' ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
-          }`}
-        >
-          Course Analytics
-        </button>
-        <button
-          onClick={() => setActiveTab('users')}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeTab === 'users' ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
-          }`}
-        >
-          User Analytics
-        </button>
+      {/* Tab Switcher + Filter */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+        <div className="flex gap-1 bg-surface rounded-lg p-1 w-fit">
+          <button
+            onClick={() => setActiveTab('course')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'course' ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            Course Analytics
+          </button>
+          <button
+            onClick={() => setActiveTab('users')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'users' ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            User Analytics
+          </button>
+        </div>
+
+        <div className="sm:ml-auto flex items-center gap-3">
+          {activeTab === 'users' ? (
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+              <input
+                type="text"
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
+                placeholder="Filter users..."
+                className="bg-white border border-border shadow-sm rounded-lg pl-8 pr-3 py-2 text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all w-64"
+              />
+            </div>
+          ) : courses.length > 0 ? (
+            <div className="relative">
+              <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+                className="appearance-none bg-white border border-border shadow-sm rounded-lg px-4 py-2 pr-9 text-sm font-medium text-text-primary hover:bg-surface/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
+              >
+                <option value="">All Courses</option>
+                {courses.map((c) => (
+                  <option key={c.slug} value={c.slug}>{c.title}</option>
+                ))}
+              </select>
+              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {activeTab === 'course' ? (
@@ -319,136 +382,197 @@ export default function AdminDashboard() {
       ) : (
         /* User Analytics Tab */
         <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-          {!selectedCourse ? (
-            <Card className="p-8 text-center">
-              <Users size={36} className="mx-auto text-text-secondary/40 mb-3" />
-              <p className="text-sm font-semibold text-text-primary">Select a course</p>
-              <p className="text-xs text-text-secondary mt-1">
-                Choose a course from the dropdown above to view per-user module progress.
-              </p>
-            </Card>
-          ) : userAnalyticsLoading ? (
+          {userAnalyticsLoading ? (
             <div className="animate-pulse space-y-3">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-14 bg-surface rounded" />
               ))}
             </div>
-          ) : userAnalytics.length === 0 ? (
-            <Card className="p-8 text-center">
-              <p className="text-sm text-text-secondary">No user data found for this course.</p>
-            </Card>
-          ) : (
-            <Card className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border">
-                  <tr>
-                    <th className="text-left text-xs font-medium text-text-secondary uppercase tracking-wide py-3 px-3 w-8" />
-                    <th className="text-left text-xs font-medium text-text-secondary uppercase tracking-wide py-3 px-3">Name</th>
-                    <th className="text-left text-xs font-medium text-text-secondary uppercase tracking-wide py-3 px-3">Email</th>
-                    <th className="text-left text-xs font-medium text-text-secondary uppercase tracking-wide py-3 px-3">Status</th>
-                    <th className="text-left text-xs font-medium text-text-secondary uppercase tracking-wide py-3 px-3">Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userAnalytics.map((user) => {
-                    const isExpanded = expandedUserId === user.id;
-                    return (
-                      <UserAnalyticsRow
-                        key={user.id}
-                        user={user}
-                        isExpanded={isExpanded}
-                        onToggle={() => setExpandedUserId(isExpanded ? null : user.id)}
-                        formatTime={formatTime}
-                        statusBadge={statusBadge}
-                      />
-                    );
-                  })}
-                </tbody>
-              </table>
-            </Card>
-          )}
+          ) : (() => {
+            const lower = userSearch.toLowerCase();
+            const filtered = lower
+              ? userAnalytics.filter((u) => u.name.toLowerCase().includes(lower) || u.email.toLowerCase().includes(lower))
+              : userAnalytics;
+            if (filtered.length === 0) return (
+              <Card className="p-8 text-center">
+                <p className="text-sm text-text-secondary">No user data found.</p>
+              </Card>
+            );
+            return (
+              <div className="space-y-2">
+                {filtered.map((user) => {
+                  const isExpanded = expandedUserId === user.id;
+                  const detail = expandedUserDetail[user.id];
+                  const isDetailLoading = userDetailLoading === user.id;
+
+                  return (
+                    <Card key={user.id} className="overflow-hidden">
+                      <button
+                        onClick={() => toggleUserExpand(user.id)}
+                        className="w-full flex items-center gap-3 p-3.5 text-left hover:bg-surface/30 transition-colors"
+                      >
+                        <StatusIcon status={user.status} size={16} />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-semibold text-text-primary">{user.name}</span>
+                          <p className="text-xs text-text-secondary truncate">{user.email}</p>
+                        </div>
+                        {user.total_time_seconds > 0 && (
+                          <span className="text-xs text-text-secondary">{formatTime(user.total_time_seconds)}</span>
+                        )}
+                        <ChevronDown
+                          size={16}
+                          className={`text-text-secondary transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+
+                      {isExpanded && (
+                        <div className="border-t border-border/50 px-3.5 pb-3.5">
+                          {isDetailLoading ? (
+                            <div className="flex items-center gap-2 py-4 pl-7 text-xs text-text-secondary">
+                              <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                              Loading progress...
+                            </div>
+                          ) : detail ? (() => {
+                            const lessonLookup = new Map<string, Map<string, Map<string, LessonProgressEntry>>>();
+                            for (const lp of detail.lesson_progress) {
+                              const cs = lp.course_slug || '';
+                              if (!lessonLookup.has(cs)) lessonLookup.set(cs, new Map());
+                              const modMap = lessonLookup.get(cs)!;
+                              if (!modMap.has(lp.module_slug)) modMap.set(lp.module_slug, new Map());
+                              modMap.get(lp.module_slug)!.set(lp.lesson_slug, lp);
+                            }
+                            const kcLookup = new Map<string, { score: number }>();
+                            for (const kc of detail.knowledge_check_scores) {
+                              kcLookup.set(`${kc.course_slug || ''}:${kc.module_slug}`, kc);
+                            }
+                            const enrolledSlugs = new Set((detail.enrollments || []).map(e => e.course_slug));
+                            const enrolledCourses = courses.filter(c => enrolledSlugs.has(c.slug));
+
+                            if (enrolledCourses.length === 0) {
+                              return <p className="text-xs text-text-secondary py-4 pl-7">No courses enrolled.</p>;
+                            }
+
+                            return (
+                              <div className="mt-2 space-y-1">
+                                {enrolledCourses.map((course) => {
+                                  const courseKey = `${user.id}:${course.slug}`;
+                                  const isCourseExpanded = expandedUserCourses.has(courseKey);
+                                  const tree = userNavTrees[course.slug];
+                                  const courseLessons = lessonLookup.get(course.slug);
+                                  const cp = detail.course_progress.find(p => p.course_slug === course.slug);
+                                  const courseStatus = cp?.status || 'not_started';
+
+                                  return (
+                                    <div key={course.slug} className="border border-border/40 rounded-xl bg-white/50 overflow-hidden">
+                                      <button
+                                        onClick={() => toggleUserCourse(courseKey, course.slug)}
+                                        className="w-full flex items-center gap-3 p-3 text-left hover:bg-surface/30 transition-colors"
+                                      >
+                                        <StatusIcon status={courseStatus} size={16} />
+                                        <span className="flex-1 text-sm font-semibold text-text-primary truncate">{course.title}</span>
+                                        <ChevronDown
+                                          size={14}
+                                          className={`text-text-secondary transition-transform ${isCourseExpanded ? 'rotate-180' : ''}`}
+                                        />
+                                      </button>
+
+                                      {isCourseExpanded && (
+                                        <div className="px-3 pb-3 border-t border-border/30">
+                                          {!tree ? (
+                                            <div className="flex items-center gap-2 py-3 pl-7 text-xs text-text-secondary">
+                                              <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                                              Loading modules...
+                                            </div>
+                                          ) : (
+                                            <div className="mt-2 space-y-1">
+                                              {tree.modules.map((mod) => {
+                                                const modKey = `${user.id}:${course.slug}:${mod.slug}`;
+                                                const isModExpanded = expandedUserModules.has(modKey);
+                                                const modLessons = courseLessons?.get(mod.slug);
+                                                const completedCount = modLessons
+                                                  ? Array.from(modLessons.values()).filter(l => l.status === 'completed').length
+                                                  : 0;
+                                                const totalCount = mod.lessons.length;
+                                                const modStatus = completedCount >= totalCount && totalCount > 0
+                                                  ? 'completed'
+                                                  : completedCount > 0
+                                                    ? 'in_progress'
+                                                    : 'not_started';
+                                                const kc = kcLookup.get(`${course.slug}:${mod.slug}`);
+
+                                                return (
+                                                  <div key={mod.slug}>
+                                                    <button
+                                                      onClick={() => toggleUserModule(modKey)}
+                                                      className="w-full flex items-center gap-2.5 py-2 pl-7 pr-2 text-left hover:bg-surface/30 rounded-md transition-colors"
+                                                    >
+                                                      <StatusIcon status={modStatus} />
+                                                      <span className="flex-1 text-xs font-medium text-text-primary truncate">{mod.title}</span>
+                                                      <span className={`text-[11px] font-medium ${
+                                                        modStatus === 'completed' ? 'text-success' : modStatus === 'in_progress' ? 'text-primary' : 'text-text-secondary'
+                                                      }`}>
+                                                        {modStatus === 'completed'
+                                                          ? 'complete'
+                                                          : modStatus === 'in_progress'
+                                                            ? `in progress (${completedCount}/${totalCount})`
+                                                            : `0/${totalCount}`}
+                                                      </span>
+                                                      {kc && (
+                                                        <span className="text-[10px] font-medium text-primary ml-1">KC: {kc.score}%</span>
+                                                      )}
+                                                      <ChevronDown
+                                                        size={12}
+                                                        className={`text-text-secondary/50 transition-transform ${isModExpanded ? 'rotate-180' : ''}`}
+                                                      />
+                                                    </button>
+
+                                                    {isModExpanded && (
+                                                      <div className="pl-12 pr-2 pb-1 space-y-0.5">
+                                                        {mod.lessons.map((lesson) => {
+                                                          const lp = modLessons?.get(lesson.slug);
+                                                          const lessonStatus = lp?.status || 'not_started';
+                                                          return (
+                                                            <div key={lesson.slug} className="flex items-center gap-2 py-1.5 text-xs">
+                                                              <StatusIcon status={lessonStatus} size={12} />
+                                                              <span className="flex-1 text-text-primary truncate">{lesson.title}</span>
+                                                              {lp?.time_spent_seconds ? (
+                                                                <span className="text-text-secondary">{Math.round(lp.time_spent_seconds / 60)}m</span>
+                                                              ) : null}
+                                                              {lp?.completed_at && (
+                                                                <span className="text-text-secondary">{new Date(lp.completed_at).toLocaleDateString()}</span>
+                                                              )}
+                                                            </div>
+                                                          );
+                                                        })}
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                );
+                                              })}
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })() : (
+                            <p className="text-xs text-text-secondary py-4 pl-7">Failed to load user details.</p>
+                          )}
+                        </div>
+                      )}
+                    </Card>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </motion.div>
       )}
     </div>
     </div>
-    </>
-  );
-}
-
-function UserAnalyticsRow({
-  user,
-  isExpanded,
-  onToggle,
-  formatTime,
-  statusBadge,
-}: {
-  user: UserWithModuleAnalytics;
-  isExpanded: boolean;
-  onToggle: () => void;
-  formatTime: (s: number) => string;
-  statusBadge: (s: string) => JSX.Element;
-}) {
-  return (
-    <>
-      <tr
-        onClick={onToggle}
-        className="border-b border-border/50 hover:bg-surface/50 cursor-pointer transition-colors"
-      >
-        <td className="py-3 px-3">
-          <ChevronRight
-            size={14}
-            className={`text-text-secondary transition-transform ${isExpanded ? 'rotate-90' : ''}`}
-          />
-        </td>
-        <td className="py-3 px-3 font-medium text-text-primary">{user.name}</td>
-        <td className="py-3 px-3 text-text-secondary">{user.email}</td>
-        <td className="py-3 px-3">{statusBadge(user.status)}</td>
-        <td className="py-3 px-3 text-text-secondary text-xs">
-          {user.total_time_seconds > 0 ? formatTime(user.total_time_seconds) : '—'}
-        </td>
-      </tr>
-      {isExpanded && (
-        <tr>
-          <td colSpan={5} className="p-0">
-            <div className="bg-surface/30 px-6 py-4 border-b border-border/50">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="text-text-secondary">
-                    <th className="text-left py-1.5 font-medium uppercase tracking-wide">Module</th>
-                    <th className="text-left py-1.5 font-medium uppercase tracking-wide">Lessons</th>
-                    <th className="text-left py-1.5 font-medium uppercase tracking-wide">Time</th>
-                    <th className="text-left py-1.5 font-medium uppercase tracking-wide">KC Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {user.modules.map((mod) => (
-                    <tr key={mod.module_slug} className="border-t border-border/30">
-                      <td className="py-2 text-text-primary capitalize">
-                        {mod.module_title}
-                      </td>
-                      <td className="py-2 text-text-secondary">
-                        {mod.lessons_completed}/{mod.total_lessons}
-                      </td>
-                      <td className="py-2 text-text-secondary">
-                        {mod.time_spent_seconds > 0 ? formatTime(mod.time_spent_seconds) : '—'}
-                      </td>
-                      <td className="py-2">
-                        {mod.kc_score !== null ? (
-                          <span className={`font-medium ${mod.kc_score >= 80 ? 'text-success' : mod.kc_score >= 60 ? 'text-warning' : 'text-error'}`}>
-                            {mod.kc_score}%
-                          </span>
-                        ) : (
-                          <span className="text-text-secondary">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </td>
-        </tr>
-      )}
     </>
   );
 }

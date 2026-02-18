@@ -10,10 +10,19 @@ export interface UserWithProgress extends User {
   }[];
 }
 
+export interface CourseEnrollment {
+  id: string;
+  email: string;
+  course_slug: string;
+  enrolled_at: string;
+  enrolled_by: string | null;
+}
+
 export interface UserDetail extends User {
   lesson_progress: LessonProgressEntry[];
   knowledge_check_scores: KnowledgeCheckSummaryEntry[];
   course_progress: CourseProgress[];
+  enrollments: CourseEnrollment[];
 }
 
 export interface PreEnrollEntry {
@@ -70,6 +79,7 @@ export interface ContentFeedback {
   lesson_slug: string;
   feedback_text: string;
   submitter_name: string | null;
+  rating: number | null;
   is_resolved: boolean;
   created_at: string;
 }

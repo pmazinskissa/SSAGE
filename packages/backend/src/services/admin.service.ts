@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { pool } from '../config/database.js';
 import { getCourseNavTree, listCourses } from './content.service.js';
-import type { UserWithProgress, UserDetail, DashboardMetrics, UserWithModuleAnalytics, UserModuleProgress } from '@playbook/shared';
+import type { UserWithProgress, UserDetail, DashboardMetrics, UserWithModuleAnalytics, UserModuleProgress, CourseEnrollment } from '@playbook/shared';
 
 export async function listUsers(): Promise<UserWithProgress[]> {
   const usersResult = await pool.query(
@@ -40,17 +40,17 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
   const user = userResult.rows[0];
 
   const lpResult = await pool.query(
-    'SELECT module_slug, lesson_slug, status, time_spent_seconds, first_viewed_at, completed_at FROM lesson_progress WHERE user_id = $1',
+    'SELECT course_slug, module_slug, lesson_slug, status, time_spent_seconds, first_viewed_at, completed_at FROM lesson_progress WHERE user_id = $1',
     [userId]
   );
 
   const kcResult = await pool.query(
-    `SELECT module_slug,
+    `SELECT course_slug, module_slug,
             COUNT(*)::int as total_questions,
             SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::int as correct_answers,
             MAX(attempted_at) as attempted_at
      FROM knowledge_check_results WHERE user_id = $1
-     GROUP BY module_slug`,
+     GROUP BY course_slug, module_slug`,
     [userId]
   );
 
@@ -59,11 +59,14 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
     [userId]
   );
 
+  const enrollments = await getEnrollmentsForEmail(user.email);
+
   return {
     ...user,
     created_at: user.created_at?.toISOString() || '',
     last_active_at: user.last_active_at?.toISOString() || '',
     lesson_progress: lpResult.rows.map((row: any) => ({
+      course_slug: row.course_slug,
       module_slug: row.module_slug,
       lesson_slug: row.lesson_slug,
       status: row.status,
@@ -72,6 +75,7 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
       completed_at: row.completed_at?.toISOString() || null,
     })),
     knowledge_check_scores: kcResult.rows.map((row: any) => ({
+      course_slug: row.course_slug,
       module_slug: row.module_slug,
       total_questions: row.total_questions,
       correct_answers: row.correct_answers,
@@ -89,6 +93,7 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
       lessons: [],
       knowledge_checks: [],
     })),
+    enrollments,
   };
 }
 
@@ -108,8 +113,26 @@ export async function deleteUser(userId: string): Promise<void> {
   await pool.query('DELETE FROM users WHERE id = $1', [userId]);
 }
 
+export async function listPreEnrolledUsers(): Promise<{ id: string; email: string; name: string; role: string; enrolled_at: string; enrolled_by: string | null }[]> {
+  const result = await pool.query(
+    'SELECT id, email, name, role, enrolled_at, enrolled_by FROM pre_enrolled_users ORDER BY enrolled_at DESC'
+  );
+  return result.rows.map((row: any) => ({
+    id: row.id,
+    email: row.email,
+    name: row.name || '',
+    role: row.role,
+    enrolled_at: row.enrolled_at?.toISOString() || '',
+    enrolled_by: row.enrolled_by,
+  }));
+}
+
+export async function deletePreEnrolledUser(id: string): Promise<void> {
+  await pool.query('DELETE FROM pre_enrolled_users WHERE id = $1', [id]);
+}
+
 export async function preEnrollUsers(
-  entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[],
+  entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin'; courses?: string[] }[],
   enrolledBy: string,
 ): Promise<{ added: number; skipped: number }> {
   let added = 0;
@@ -131,6 +154,10 @@ export async function preEnrollUsers(
       [email]
     );
     if (existing.rows.length > 0) {
+      // Still enroll in courses even if user exists
+      if (entry.courses && entry.courses.length > 0) {
+        await enrollUserInCourses(email, entry.courses, enrolledBy);
+      }
       skipped++;
       continue;
     }
@@ -141,6 +168,10 @@ export async function preEnrollUsers(
       [email]
     );
     if (preExisting.rows.length > 0) {
+      // Still enroll in courses even if already pre-enrolled
+      if (entry.courses && entry.courses.length > 0) {
+        await enrollUserInCourses(email, entry.courses, enrolledBy);
+      }
       skipped++;
       continue;
     }
@@ -149,10 +180,50 @@ export async function preEnrollUsers(
       'INSERT INTO pre_enrolled_users (id, email, name, role, enrolled_at, enrolled_by) VALUES ($1, $2, $3, $4, NOW(), $5)',
       [crypto.randomUUID(), email, name, role, enrolledBy]
     );
+
+    // Create course enrollments
+    if (entry.courses && entry.courses.length > 0) {
+      await enrollUserInCourses(email, entry.courses, enrolledBy);
+    }
+
     added++;
   }
 
   return { added, skipped };
+}
+
+// --- Course Enrollments ---
+
+export async function getEnrollmentsForEmail(email: string): Promise<CourseEnrollment[]> {
+  const result = await pool.query(
+    'SELECT id, email, course_slug, enrolled_at, enrolled_by FROM course_enrollments WHERE email = $1 ORDER BY enrolled_at DESC',
+    [email.toLowerCase()]
+  );
+  return result.rows.map((row: any) => ({
+    id: row.id,
+    email: row.email,
+    course_slug: row.course_slug,
+    enrolled_at: row.enrolled_at?.toISOString() || '',
+    enrolled_by: row.enrolled_by,
+  }));
+}
+
+export async function enrollUserInCourses(email: string, courseSlugs: string[], enrolledBy: string): Promise<void> {
+  for (const slug of courseSlugs) {
+    await pool.query(
+      `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+       VALUES ($1, $2, $3, NOW(), $4)
+       ON CONFLICT (email, course_slug) DO NOTHING`,
+      [crypto.randomUUID(), email.toLowerCase(), slug, enrolledBy]
+    );
+  }
+}
+
+export async function unenrollUserFromCourse(email: string, courseSlug: string): Promise<void> {
+  await pool.query(
+    'DELETE FROM course_enrollments WHERE email = $1 AND course_slug = $2',
+    [email.toLowerCase(), courseSlug]
+  );
 }
 
 export async function getDashboardMetrics(courseSlug?: string): Promise<DashboardMetrics> {

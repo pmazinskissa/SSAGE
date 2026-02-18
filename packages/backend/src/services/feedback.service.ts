@@ -30,7 +30,7 @@ export async function listFeedback(filters?: FeedbackFilters): Promise<ContentFe
 
   const result = await pool.query(
     `SELECT cf.id, cf.user_id, u.name as user_name, cf.course_slug, cf.module_slug,
-            cf.lesson_slug, cf.feedback_text, cf.submitter_name, cf.is_resolved, cf.created_at
+            cf.lesson_slug, cf.feedback_text, cf.submitter_name, cf.rating, cf.is_resolved, cf.created_at
      FROM content_feedback cf
      LEFT JOIN users u ON cf.user_id = u.id
      ${whereClause}
@@ -43,10 +43,11 @@ export async function listFeedback(filters?: FeedbackFilters): Promise<ContentFe
     user_id: row.user_id,
     user_name: row.user_name || 'Unknown',
     course_slug: row.course_slug,
-    module_slug: row.module_slug,
-    lesson_slug: row.lesson_slug,
+    module_slug: row.module_slug || '',
+    lesson_slug: row.lesson_slug || '',
     feedback_text: row.feedback_text,
     submitter_name: row.submitter_name || null,
+    rating: row.rating ?? null,
     is_resolved: row.is_resolved,
     created_at: row.created_at?.toISOString() || '',
   }));
@@ -57,12 +58,13 @@ export async function createFeedback(
   courseSlug: string,
   text: string,
   submitterName?: string,
+  rating?: number,
 ): Promise<ContentFeedback> {
   const id = crypto.randomUUID();
   await pool.query(
-    `INSERT INTO content_feedback (id, user_id, course_slug, feedback_text, submitter_name, created_at)
-     VALUES ($1, $2, $3, $4, $5, NOW())`,
-    [id, userId, courseSlug, text, submitterName || null]
+    `INSERT INTO content_feedback (id, user_id, course_slug, feedback_text, submitter_name, rating, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+    [id, userId, courseSlug, text, submitterName || null, rating ?? null]
   );
 
   const userResult = await pool.query('SELECT name FROM users WHERE id = $1', [userId]);
@@ -75,6 +77,7 @@ export async function createFeedback(
     lesson_slug: '',
     feedback_text: text,
     submitter_name: submitterName || null,
+    rating: rating ?? null,
     is_resolved: false,
     created_at: new Date().toISOString(),
   };

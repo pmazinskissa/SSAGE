@@ -8,13 +8,30 @@ import { searchCourseContent } from '../services/search.service.js';
 import { config } from '../config/env.js';
 import { optionalAuth } from '../middleware/auth.js';
 import { getCourseProgress } from '../services/progress.service.js';
+import { getEnrollmentsForEmail } from '../services/admin.service.js';
 import type { CourseNavTree } from '@playbook/shared';
 
 const router = Router();
 
-// GET /api/courses — list all courses
-router.get('/', (_req, res) => {
+// GET /api/courses — list all courses (filtered by enrollment for non-admins)
+router.get('/', async (req, res) => {
   const courses = listCourses();
+  // Admins and dev_admins see all courses
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'dev_admin')) {
+    return res.json({ data: courses });
+  }
+  // Learners: filter to enrolled courses only
+  if (req.user) {
+    try {
+      const enrollments = await getEnrollmentsForEmail(req.user.email);
+      const enrolledSlugs = new Set(enrollments.map((e) => e.course_slug));
+      const filtered = courses.filter((c) => enrolledSlugs.has(c.slug));
+      return res.json({ data: filtered });
+    } catch (err) {
+      console.warn('[Courses] Failed to check enrollments:', err);
+      return res.json({ data: courses });
+    }
+  }
   res.json({ data: courses });
 });
 
@@ -25,6 +42,20 @@ router.get('/:slug', optionalAuth, async (req, res) => {
   if (!course) {
     return res.status(404).json({ error: { message: 'Course not found' } });
   }
+
+  // Enrollment guard for non-admins
+  if (req.user && req.user.role !== 'admin' && req.user.role !== 'dev_admin') {
+    try {
+      const enrollments = await getEnrollmentsForEmail(req.user.email);
+      const enrolledSlugs = new Set(enrollments.map((e) => e.course_slug));
+      if (!enrolledSlugs.has(slug)) {
+        return res.status(403).json({ error: { message: 'Not enrolled in this course' } });
+      }
+    } catch (err) {
+      console.warn('[Courses] Failed to check enrollment:', err);
+    }
+  }
+
   const navTree = getCourseNavTree(slug);
 
   // Overlay user progress if authenticated

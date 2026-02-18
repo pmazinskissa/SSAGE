@@ -475,8 +475,14 @@ export default function CourseCatalog() {
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="text-center">
           <BookOpen size={48} className="text-text-secondary mx-auto mb-4" />
-          <h1 className="text-xl font-semibold text-text-primary">No Courses Available</h1>
-          <p className="text-sm text-text-secondary mt-2">Check back later for new content.</p>
+          <h1 className="text-xl font-semibold text-text-primary">
+            {isAdmin ? 'No Courses Available' : 'No Courses Assigned'}
+          </h1>
+          <p className="text-sm text-text-secondary mt-2">
+            {isAdmin
+              ? 'Check back later for new content.'
+              : 'No courses have been assigned to you yet. Contact your administrator to get enrolled.'}
+          </p>
         </div>
       </div>
     );
@@ -688,7 +694,7 @@ export default function CourseCatalog() {
       <footer className="border-t border-border/50 bg-white/40 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-secondary">
           <span>{theme?.organization_name || 'Protective Life'} &copy; {new Date().getFullYear()}</span>
-          <span>Practitioner&apos;s Playbook</span>
+          <span>SSA &amp; Co Guided Education</span>
         </div>
       </footer>
     </div>

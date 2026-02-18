@@ -17,11 +17,15 @@ export default function LessonPage() {
     lessonSlug: string;
   }>();
 
-  const { navTree } = useCourse();
+  const { navTree, refreshNavTree } = useCourse();
   const { meta, MdxComponent, loading, error } = useLessonContent(slug, moduleSlug, lessonSlug);
 
   // Heartbeat for time tracking
   useHeartbeat(slug, moduleSlug, lessonSlug);
+
+  // Keep refreshNavTree stable in a ref so the cleanup effect always has the latest
+  const refreshRef = useRef(refreshNavTree);
+  refreshRef.current = refreshNavTree;
 
   // Track current lesson in a ref so the cleanup function always has the latest values
   const currentRef = useRef<{ courseSlug: string; lessonSlug: string; moduleSlug: string } | null>(null);
@@ -32,7 +36,9 @@ export default function LessonPage() {
     // Mark the previous lesson complete when navigating to a different lesson
     const prev = currentRef.current;
     if (prev && (prev.lessonSlug !== lessonSlug || prev.moduleSlug !== moduleSlug)) {
-      api.completeLesson(prev.courseSlug, prev.lessonSlug, prev.moduleSlug).catch(() => {});
+      api.completeLesson(prev.courseSlug, prev.lessonSlug, prev.moduleSlug)
+        .then(() => refreshRef.current())
+        .catch(() => {});
     }
 
     currentRef.current = { courseSlug: slug, lessonSlug, moduleSlug };
@@ -41,7 +47,9 @@ export default function LessonPage() {
     return () => {
       const cur = currentRef.current;
       if (cur) {
-        api.completeLesson(cur.courseSlug, cur.lessonSlug, cur.moduleSlug).catch(() => {});
+        api.completeLesson(cur.courseSlug, cur.lessonSlug, cur.moduleSlug)
+          .then(() => refreshRef.current())
+          .catch(() => {});
         currentRef.current = null;
       }
     };
