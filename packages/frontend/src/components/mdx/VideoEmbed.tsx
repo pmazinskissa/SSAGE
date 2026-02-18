@@ -9,11 +9,14 @@ interface VideoEmbedProps {
 }
 
 function toEmbedUrl(url: string): string {
-  // YouTube
+  // YouTube — use privacy-enhanced domain and pass origin
   const ytMatch = url.match(
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
   );
-  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+  if (ytMatch) {
+    const origin = encodeURIComponent(window.location.origin);
+    return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?origin=${origin}&rel=0`;
+  }
 
   // Vimeo
   const vimeoMatch = url.match(
@@ -45,6 +48,7 @@ export default function VideoEmbed({ url, title, caption }: VideoEmbedProps) {
             title={title || 'Video'}
             className="absolute inset-0 w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
           />
         </div>
