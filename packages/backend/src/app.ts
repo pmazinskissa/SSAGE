@@ -22,7 +22,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export function createApp() {
   const app = express();
 
-  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  }));
   app.use(cors({ origin: config.appUrl, credentials: true }));
   app.use(express.json({ limit: '1mb' }));
   app.use(cookieParser());
