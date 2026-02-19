@@ -18,6 +18,10 @@ COPY packages/shared/ ./packages/shared/
 COPY packages/backend/ ./packages/backend/
 COPY packages/frontend/ ./packages/frontend/
 
+# Pass Vite env vars into the build stage
+ARG VITE_REVIEW_MODE=false
+ENV VITE_REVIEW_MODE=$VITE_REVIEW_MODE
+
 # Build all packages
 RUN npm run build
 
