@@ -113,6 +113,42 @@ export async function deleteUser(userId: string): Promise<void> {
   await pool.query('DELETE FROM users WHERE id = $1', [userId]);
 }
 
+export async function bulkDeleteUsers(userIds: string[]): Promise<void> {
+  if (userIds.length === 0) return;
+  await pool.query('DELETE FROM users WHERE id = ANY($1::uuid[])', [userIds]);
+}
+
+export async function bulkDeactivateUsers(userIds: string[]): Promise<void> {
+  if (userIds.length === 0) return;
+  await pool.query('UPDATE users SET is_active = false WHERE id = ANY($1::uuid[])', [userIds]);
+}
+
+export async function bulkActivateUsers(userIds: string[]): Promise<void> {
+  if (userIds.length === 0) return;
+  await pool.query('UPDATE users SET is_active = true WHERE id = ANY($1::uuid[])', [userIds]);
+}
+
+export async function bulkEnrollUsers(emails: string[], courseSlugs: string[], enrolledBy: string): Promise<void> {
+  for (const email of emails) {
+    for (const slug of courseSlugs) {
+      await pool.query(
+        `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+         VALUES ($1, $2, $3, NOW(), $4)
+         ON CONFLICT (email, course_slug) DO NOTHING`,
+        [crypto.randomUUID(), email.toLowerCase(), slug, enrolledBy]
+      );
+    }
+  }
+}
+
+export async function bulkUnenrollUsers(emails: string[], courseSlug: string): Promise<void> {
+  if (emails.length === 0) return;
+  await pool.query(
+    'DELETE FROM course_enrollments WHERE email = ANY($1) AND course_slug = $2',
+    [emails.map((e) => e.toLowerCase()), courseSlug]
+  );
+}
+
 export async function updateUserProfile(userId: string, name: string, email: string): Promise<void> {
   const current = await pool.query('SELECT email FROM users WHERE id = $1', [userId]);
   if (current.rows.length === 0) throw new Error('User not found');
