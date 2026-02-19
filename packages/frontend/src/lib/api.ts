@@ -116,6 +116,36 @@ export const api = {
     fetchApi<{ message: string }>(`/admin/users/${id}/activate`, { method: 'PUT' }),
   deleteUser: (id: string) =>
     fetchApi<{ message: string }>(`/admin/users/${id}`, { method: 'DELETE' }),
+  updateUserProfile: (id: string, name: string, email: string) =>
+    fetchApi<{ message: string }>(`/admin/users/${id}/profile`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, email }),
+    }),
+  bulkDeleteUsers: (ids: string[]) =>
+    fetchApi<{ message: string }>('/admin/users/bulk/delete', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkDeactivateUsers: (ids: string[]) =>
+    fetchApi<{ message: string }>('/admin/users/bulk/deactivate', {
+      method: 'PUT',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkActivateUsers: (ids: string[]) =>
+    fetchApi<{ message: string }>('/admin/users/bulk/activate', {
+      method: 'PUT',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkEnrollUsers: (emails: string[], courseSlugs: string[]) =>
+    fetchApi<{ message: string }>('/admin/enrollments/bulk', {
+      method: 'POST',
+      body: JSON.stringify({ emails, course_slugs: courseSlugs }),
+    }),
+  bulkUnenrollUsers: (emails: string[], courseSlug: string) =>
+    fetchApi<{ message: string }>('/admin/enrollments/bulk', {
+      method: 'DELETE',
+      body: JSON.stringify({ emails, course_slug: courseSlug }),
+    }),
   exportUsersCSV: async (courseSlug?: string) => {
     const qs = courseSlug ? `?course=${encodeURIComponent(courseSlug)}` : '';
     const res = await fetch(`${BASE_URL}/admin/users/export${qs}`, { credentials: 'include' });

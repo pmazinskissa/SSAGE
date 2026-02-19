@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown, Eye, UserX, UserCheck } from 'lucide-react';
+import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown, Eye, UserX, UserCheck, BookOpen, BookX } from 'lucide-react';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -50,6 +50,12 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [preEnrolledUsers, setPreEnrolledUsers] = useState<PreEnrolledUser[]>([]);
 
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkEnrollCourse, setBulkEnrollCourse] = useState('');
+  const [bulkUnenrollCourse, setBulkUnenrollCourse] = useState('');
+
   const fetchAll = () => {
     api.getCourses().then(setCourses).catch(() => {});
     Promise.all([api.getAdminUsers(), api.getPreEnrolledUsers()])
@@ -73,7 +79,6 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
   type UnifiedUser = UserWithProgress & { _preEnrolled?: boolean };
 
   const filtered = useMemo(() => {
-    // Build unified list
     const registered: UnifiedUser[] = users.map((u) => ({ ...u, _preEnrolled: false }));
     const pending: UnifiedUser[] = preEnrolledUsers.map((pe) => ({
       id: pe.id,
@@ -99,7 +104,6 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
       list = [...registered, ...pending];
     }
 
-    // Search
     if (search) {
       const lower = search.toLowerCase();
       list = list.filter(
@@ -107,7 +111,6 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
       );
     }
 
-    // Sort
     list.sort((a, b) => {
       let cmp = 0;
       switch (sortField) {
@@ -122,6 +125,105 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
 
     return list;
   }, [users, preEnrolledUsers, statusFilter, search, sortField, sortDir]);
+
+  // Bulk selection helpers — only registered (non-pre-enrolled) users are selectable
+  const selectableIds = useMemo(
+    () => filtered.filter((u) => !(u as any)._preEnrolled).map((u) => u.id),
+    [filtered]
+  );
+  const allSelected = selectableIds.length > 0 && selectableIds.every((id) => selectedIds.has(id));
+
+  const toggleSelect = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(selectableIds));
+    }
+  };
+
+  // Bulk action handlers
+  const handleBulkDeactivate = async () => {
+    if (selectedIds.size === 0) return;
+    setBulkLoading(true);
+    try {
+      await api.bulkDeactivateUsers([...selectedIds]);
+      setUsers((prev) => prev.map((u) => selectedIds.has(u.id) ? { ...u, is_active: false } : u));
+      setSelectedIds(new Set());
+    } catch {
+      alert('Failed to deactivate users');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleBulkActivate = async () => {
+    if (selectedIds.size === 0) return;
+    setBulkLoading(true);
+    try {
+      await api.bulkActivateUsers([...selectedIds]);
+      setUsers((prev) => prev.map((u) => selectedIds.has(u.id) ? { ...u, is_active: true } : u));
+      setSelectedIds(new Set());
+    } catch {
+      alert('Failed to activate users');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`Permanently delete ${selectedIds.size} user${selectedIds.size > 1 ? 's' : ''}? This cannot be undone.`)) return;
+    setBulkLoading(true);
+    try {
+      await api.bulkDeleteUsers([...selectedIds]);
+      setUsers((prev) => prev.filter((u) => !selectedIds.has(u.id)));
+      setSelectedIds(new Set());
+    } catch {
+      alert('Failed to delete users');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleBulkEnroll = async () => {
+    if (selectedIds.size === 0 || !bulkEnrollCourse) return;
+    setBulkLoading(true);
+    const emails = users.filter((u) => selectedIds.has(u.id)).map((u) => u.email);
+    try {
+      await api.bulkEnrollUsers(emails, [bulkEnrollCourse]);
+      setBulkEnrollCourse('');
+      setSelectedIds(new Set());
+    } catch {
+      alert('Failed to enroll users');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleBulkUnenroll = async () => {
+    if (selectedIds.size === 0 || !bulkUnenrollCourse) return;
+    setBulkLoading(true);
+    const emails = users.filter((u) => selectedIds.has(u.id)).map((u) => u.email);
+    try {
+      await api.bulkUnenrollUsers(emails, bulkUnenrollCourse);
+      setBulkUnenrollCourse('');
+      setSelectedIds(new Set());
+    } catch {
+      alert('Failed to unenroll users');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
 
   const handleExport = async () => {
     try {
@@ -138,7 +240,6 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
 
   const handlePreEnroll = async () => {
     if (preEnrollTab === 'csv' && csvFile) {
-      // Upload CSV file
       const formData = new FormData();
       formData.append('file', csvFile);
       try {
@@ -206,7 +307,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
   const isStale = (lastActive: string) => {
     if (!lastActive) return false;
     const diff = Date.now() - new Date(lastActive).getTime();
-    return diff > 14 * 24 * 60 * 60 * 1000; // 14 days
+    return diff > 14 * 24 * 60 * 60 * 1000;
   };
 
   const handleDeletePreEnrolled = async (id: string) => {
@@ -280,6 +381,10 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     { label: 'Deactivated', value: 'deactivated' },
   ];
 
+  // Determine if all selected users are deactivated (for showing activate vs deactivate)
+  const selectedUsers = users.filter((u) => selectedIds.has(u.id));
+  const allSelectedDeactivated = selectedUsers.length > 0 && selectedUsers.every((u) => !u.is_active);
+
   return (
     <>
       {/* Hero */}
@@ -307,7 +412,7 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
     <div className="relative flex-1">
       <div className="absolute inset-0 -z-10 bg-surface/30" />
       <div className="absolute inset-0 -z-10 opacity-[0.07]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px, transparent 41px, transparent 80px), repeating-radial-gradient(circle at 30% 70%, transparent 0, transparent 60px, var(--color-primary) 60px, var(--color-primary) 61px, transparent 61px, transparent 120px), repeating-radial-gradient(circle at 70% 30%, transparent 0, transparent 50px, var(--color-primary) 50px, var(--color-primary) 51px, transparent 51px, transparent 100px)' }} />
-    <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="p-6 max-w-6xl mx-auto">
+    <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="p-6 max-w-6xl mx-auto pb-24">
       {/* Filter bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="flex gap-1 items-center">
@@ -344,15 +449,25 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
       <Card className="overflow-x-auto">
         <table className="w-full text-sm table-fixed">
           <colgroup>
-            <col className="w-[18%]" />
-            <col className="w-[22%]" />
+            <col className="w-[3%]" />
+            <col className="w-[17%]" />
+            <col className="w-[21%]" />
             <col className="w-[10%]" />
-            <col className="w-[12%]" />
-            <col className="w-[12%]" />
-            <col className="w-[26%]" />
+            <col className="w-[11%]" />
+            <col className="w-[11%]" />
+            <col className="w-[27%]" />
           </colgroup>
           <thead className="border-b border-border">
             <tr>
+              <th className="py-3 px-3">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={toggleSelectAll}
+                  className="accent-primary w-3.5 h-3.5 cursor-pointer"
+                  title={allSelected ? 'Deselect all' : 'Select all'}
+                />
+              </th>
               <SortHeader field="name">Name</SortHeader>
               <SortHeader field="email">Email</SortHeader>
               <SortHeader field="role">Role</SortHeader>
@@ -364,19 +479,33 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-8 text-text-secondary">
+                <td colSpan={7} className="text-center py-8 text-text-secondary">
                   No users found
                 </td>
               </tr>
             ) : (
               filtered.map((user) => {
                 const isPre = !!(user as any)._preEnrolled;
+                const isSelected = selectedIds.has(user.id);
                 return (
                   <tr
                     key={user.id}
                     onClick={() => !isPre && handleUserClick(user.id)}
-                    className={`border-b border-border/50 hover:bg-surface/50 transition-colors ${isPre ? 'opacity-75' : 'cursor-pointer'}`}
+                    className={`border-b border-border/50 transition-colors ${
+                      isSelected ? 'bg-primary/5' : 'hover:bg-surface/50'
+                    } ${isPre ? 'opacity-75' : 'cursor-pointer'}`}
                   >
+                    <td className="py-3 px-3" onClick={(e) => e.stopPropagation()}>
+                      {!isPre && (
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => {}}
+                          onClick={(e) => toggleSelect(user.id, e)}
+                          className="accent-primary w-3.5 h-3.5 cursor-pointer"
+                        />
+                      )}
+                    </td>
                     <td className="py-3 px-3 font-medium text-text-primary">
                       {user.name || <span className="text-text-secondary italic">—</span>}
                     </td>
@@ -530,7 +659,6 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
                         </button>
                       )}
                     </div>
-                    {/* Collapsible course enrollment */}
                     {courses.length > 0 && (
                       <details className="group">
                         <summary className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-text-secondary hover:text-text-primary select-none list-none">
@@ -604,6 +732,104 @@ export default function AdminUsers({ onUserClick }: AdminUsersProps) {
       )}
     </motion.div>
     </div>
+
+    {/* Bulk action toolbar — floats at bottom when rows are selected */}
+    {selectedIds.size > 0 && (
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-2xl shadow-2xl ring-1 ring-white/10 flex-wrap justify-center">
+        {/* Count + clear */}
+        <span className="text-sm font-semibold text-white/90 mr-1">
+          {selectedIds.size} selected
+        </span>
+        <button
+          onClick={() => setSelectedIds(new Set())}
+          className="p-1 rounded-md text-white/50 hover:text-white hover:bg-white/10 transition-colors mr-2"
+          title="Clear selection"
+        >
+          <X size={14} />
+        </button>
+
+        {/* Divider */}
+        <div className="w-px h-5 bg-white/20" />
+
+        {/* Enroll in course */}
+        <div className="flex items-center gap-1.5">
+          <BookOpen size={14} className="text-white/60 shrink-0" />
+          <select
+            value={bulkEnrollCourse}
+            onChange={(e) => setBulkEnrollCourse(e.target.value)}
+            className="bg-white/10 border border-white/20 text-white text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-white/40 max-w-[140px]"
+          >
+            <option value="">Enroll in…</option>
+            {courses.map((c) => (
+              <option key={c.slug} value={c.slug}>{c.title}</option>
+            ))}
+          </select>
+          <button
+            onClick={handleBulkEnroll}
+            disabled={!bulkEnrollCourse || bulkLoading}
+            className="px-2.5 py-1.5 text-xs font-medium bg-primary hover:bg-primary/80 disabled:opacity-40 rounded-lg transition-colors"
+          >
+            Go
+          </button>
+        </div>
+
+        {/* Unenroll from course */}
+        <div className="flex items-center gap-1.5">
+          <BookX size={14} className="text-white/60 shrink-0" />
+          <select
+            value={bulkUnenrollCourse}
+            onChange={(e) => setBulkUnenrollCourse(e.target.value)}
+            className="bg-white/10 border border-white/20 text-white text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-white/40 max-w-[140px]"
+          >
+            <option value="">Unenroll from…</option>
+            {courses.map((c) => (
+              <option key={c.slug} value={c.slug}>{c.title}</option>
+            ))}
+          </select>
+          <button
+            onClick={handleBulkUnenroll}
+            disabled={!bulkUnenrollCourse || bulkLoading}
+            className="px-2.5 py-1.5 text-xs font-medium bg-white/10 hover:bg-white/20 disabled:opacity-40 border border-white/20 rounded-lg transition-colors"
+          >
+            Go
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="w-px h-5 bg-white/20" />
+
+        {/* Activate / Deactivate */}
+        {allSelectedDeactivated ? (
+          <button
+            onClick={handleBulkActivate}
+            disabled={bulkLoading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-green-600 hover:bg-green-500 disabled:opacity-40 rounded-lg transition-colors"
+          >
+            <UserCheck size={13} />
+            Activate
+          </button>
+        ) : (
+          <button
+            onClick={handleBulkDeactivate}
+            disabled={bulkLoading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/10 hover:bg-white/20 disabled:opacity-40 border border-white/20 rounded-lg transition-colors"
+          >
+            <UserX size={13} />
+            Deactivate
+          </button>
+        )}
+
+        {/* Delete */}
+        <button
+          onClick={handleBulkDelete}
+          disabled={bulkLoading}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-red-600 hover:bg-red-500 disabled:opacity-40 rounded-lg transition-colors"
+        >
+          <Trash2 size={13} />
+          Delete
+        </button>
+      </div>
+    )}
     </>
   );
 }

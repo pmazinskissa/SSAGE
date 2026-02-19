@@ -6,6 +6,12 @@ import {
   listPreEnrolledUsers,
   getUserDetail,
   updateUserRole,
+  updateUserProfile,
+  bulkDeleteUsers,
+  bulkDeactivateUsers,
+  bulkActivateUsers,
+  bulkEnrollUsers,
+  bulkUnenrollUsers,
   deactivateUser,
   activateUser,
   deleteUser,
@@ -120,6 +126,27 @@ router.get('/users/:id', async (req, res) => {
   }
 });
 
+// PUT /api/admin/users/:id/profile — update name and email
+router.put('/users/:id/profile', async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    if (!name?.trim() || !email?.trim()) {
+      return res.status(400).json({ error: { message: 'name and email are required' } });
+    }
+    if (!email.includes('@')) {
+      return res.status(400).json({ error: { message: 'Invalid email address' } });
+    }
+    await updateUserProfile(req.params.id, name.trim(), email.trim());
+    res.json({ data: { message: 'Profile updated' } });
+  } catch (err: any) {
+    if (err.message === 'Email already in use') {
+      return res.status(409).json({ error: { message: err.message } });
+    }
+    console.error('[Admin] Update profile error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to update profile' } });
+  }
+});
+
 // PUT /api/admin/users/:id/role — change role
 router.put('/users/:id/role', async (req, res) => {
   try {
@@ -185,6 +212,83 @@ router.delete('/users/:id', async (req, res) => {
   } catch (err: any) {
     console.error('[Admin] Delete error:', err.message);
     res.status(500).json({ error: { message: 'Failed to delete user' } });
+  }
+});
+
+// POST /api/admin/users/bulk/delete — bulk delete users
+router.post('/users/bulk/delete', async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: { message: 'ids array is required' } });
+    }
+    const filteredIds = ids.filter((id) => id !== req.user!.id);
+    await bulkDeleteUsers(filteredIds);
+    res.json({ data: { message: `${filteredIds.length} users deleted` } });
+  } catch (err: any) {
+    console.error('[Admin] Bulk delete error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to delete users' } });
+  }
+});
+
+// PUT /api/admin/users/bulk/deactivate — bulk deactivate
+router.put('/users/bulk/deactivate', async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: { message: 'ids array is required' } });
+    }
+    const filteredIds = ids.filter((id) => id !== req.user!.id);
+    await bulkDeactivateUsers(filteredIds);
+    res.json({ data: { message: `${filteredIds.length} users deactivated` } });
+  } catch (err: any) {
+    console.error('[Admin] Bulk deactivate error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to deactivate users' } });
+  }
+});
+
+// PUT /api/admin/users/bulk/activate — bulk activate
+router.put('/users/bulk/activate', async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: { message: 'ids array is required' } });
+    }
+    await bulkActivateUsers(ids);
+    res.json({ data: { message: `${ids.length} users activated` } });
+  } catch (err: any) {
+    console.error('[Admin] Bulk activate error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to activate users' } });
+  }
+});
+
+// POST /api/admin/enrollments/bulk — bulk enroll
+router.post('/enrollments/bulk', async (req, res) => {
+  try {
+    const { emails, course_slugs } = req.body;
+    if (!Array.isArray(emails) || !Array.isArray(course_slugs) || emails.length === 0 || course_slugs.length === 0) {
+      return res.status(400).json({ error: { message: 'emails and course_slugs arrays are required' } });
+    }
+    await bulkEnrollUsers(emails, course_slugs, req.user!.id);
+    res.json({ data: { message: 'Users enrolled' } });
+  } catch (err: any) {
+    console.error('[Admin] Bulk enroll error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to enroll users' } });
+  }
+});
+
+// DELETE /api/admin/enrollments/bulk — bulk unenroll
+router.delete('/enrollments/bulk', async (req, res) => {
+  try {
+    const { emails, course_slug } = req.body;
+    if (!Array.isArray(emails) || !course_slug || emails.length === 0) {
+      return res.status(400).json({ error: { message: 'emails and course_slug are required' } });
+    }
+    await bulkUnenrollUsers(emails, course_slug);
+    res.json({ data: { message: 'Users unenrolled' } });
+  } catch (err: any) {
+    console.error('[Admin] Bulk unenroll error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to unenroll users' } });
   }
 });
 
