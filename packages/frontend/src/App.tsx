@@ -15,6 +15,7 @@ import GlossaryFullPage from './pages/GlossaryFullPage';
 import CompletionPage from './pages/CompletionPage';
 import FeedbackPage from './pages/FeedbackPage';
 import SearchPage from './pages/SearchPage';
+import ReviewWidget from './components/review/ReviewWidget';
 
 export default function App() {
   return (
@@ -62,6 +63,7 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        {import.meta.env.VITE_REVIEW_MODE === 'true' && <ReviewWidget />}
       </AuthProvider>
     </ThemeProvider>
   );

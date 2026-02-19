@@ -16,6 +16,7 @@ import type {
   SearchResult,
   UserWithModuleAnalytics,
   CourseEnrollment,
+  ReviewAnnotation,
 } from '@playbook/shared';
 
 const BASE_URL = '/api';
@@ -184,6 +185,15 @@ export const api = {
   // Search
   searchContent: (courseSlug: string, query: string) =>
     fetchApi<SearchResult[]>(`/courses/${courseSlug}/search?q=${encodeURIComponent(query)}`),
+
+  // Review Mode
+  getReviewStatus: () =>
+    fetchApi<{ enabled: boolean }>('/review/status'),
+  createReviewAnnotation: (data: { page_path: string; page_title?: string; annotation_text: string; annotation_type?: string }) =>
+    fetchApi<ReviewAnnotation>('/review/annotations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 
   // AI
   getAIStatus: () =>
