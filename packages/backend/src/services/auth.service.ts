@@ -55,6 +55,14 @@ export async function findOrCreateOAuthUser(params: {
     await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email]);
   }
 
+  // Auto-enroll new users in the AOMT course
+  await pool.query(
+    `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+     VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
+     ON CONFLICT (email, course_slug) DO NOTHING`,
+    [crypto.randomUUID(), email.toLowerCase()]
+  );
+
   return result.rows[0] as User;
 }
 
@@ -123,6 +131,14 @@ export async function registerLocalUser(params: {
   if (preEnrolled.rows.length > 0) {
     await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
   }
+
+  // Auto-enroll new users in the AOMT course
+  await pool.query(
+    `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+     VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
+     ON CONFLICT (email, course_slug) DO NOTHING`,
+    [crypto.randomUUID(), email.toLowerCase()]
+  );
 
   return result.rows[0] as User;
 }
