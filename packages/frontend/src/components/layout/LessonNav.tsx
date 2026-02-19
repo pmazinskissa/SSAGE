@@ -26,8 +26,7 @@ export default function LessonNav({
           className="flex items-center gap-2 px-4 py-2 text-sm text-text-secondary hover:text-primary transition-colors rounded-button border border-border hover:border-primary"
         >
           <ChevronLeft size={16} />
-          <span className="hidden sm:inline">{prevLesson.title}</span>
-          <span className="sm:hidden">Previous</span>
+          Back
         </Link>
       ) : (
         <div />
@@ -42,8 +41,7 @@ export default function LessonNav({
           to={`/courses/${courseSlug}/modules/${nextLesson.moduleSlug}/lessons/${nextLesson.slug}`}
           className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover transition-colors rounded-button"
         >
-          <span className="hidden sm:inline">{nextLesson.title}</span>
-          <span className="sm:hidden">Next</span>
+          Next
           <ChevronRight size={16} />
         </Link>
       ) : knowledgeCheckLink ? (
