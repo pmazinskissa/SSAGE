@@ -89,6 +89,11 @@ questions:
   - id: "m5-q6"
     type: "fill-in-blank"
     question: "Complete the sentence about performance scorecards."
+    word_bank:
+      - "responses"
+      - "decision triggers"
+      - "KPIs"
+      - "metrics"
     segments:
       - type: "text"
         value: "Scorecards differ from standard dashboards because they include "

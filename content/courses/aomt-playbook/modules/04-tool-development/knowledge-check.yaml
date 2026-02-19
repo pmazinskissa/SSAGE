@@ -67,6 +67,11 @@ questions:
   - id: "m4-q5"
     type: "fill-in-blank"
     question: "Complete the sentence about prototype validation."
+    word_bank:
+      - "security"
+      - "feasibility"
+      - "scalability"
+      - "cost"
     segments:
       - type: "text"
         value: "Before investing significant time in prototype development, validate technical "
