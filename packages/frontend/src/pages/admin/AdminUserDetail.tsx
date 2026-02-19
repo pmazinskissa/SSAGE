@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UserX, UserCheck, Trash2, ChevronDown, CheckCircle2, Circle, Disc, BookOpen, BarChart3, Users as UsersIcon } from 'lucide-react';
+import { X, UserX, UserCheck, Trash2, ChevronDown, CheckCircle2, Circle, Disc, BookOpen, BarChart3, Users as UsersIcon, Pencil } from 'lucide-react';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -26,6 +26,11 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
   const [enrollments, setEnrollments] = useState<CourseEnrollment[]>([]);
   const [enrollLoading, setEnrollLoading] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'enrollment' | 'progress'>('enrollment');
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
 
   // Progress tab state: expanded courses and modules, fetched nav trees
   const [expandedCourses, setExpandedCourses] = useState<Set<string>>(new Set());
@@ -51,6 +56,21 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, [userId]);
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setProfileSaving(true);
+    setProfileError(null);
+    try {
+      await api.updateUserProfile(userId, editName.trim(), editEmail.trim());
+      setUser({ ...user, name: editName.trim(), email: editEmail.trim() });
+      setEditingProfile(false);
+    } catch (err: any) {
+      setProfileError(err.message);
+    } finally {
+      setProfileSaving(false);
+    }
+  };
 
   const handleRoleChange = async () => {
     if (!user) return;
@@ -445,21 +465,65 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
                 <div className="flex items-center gap-4">
                   {/* Left: user info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-xl font-semibold text-text-primary tracking-tight truncate" style={{ fontFamily: 'var(--font-heading)' }}>
-                        {user.name}
-                      </h2>
-                      {!user.is_active && (
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-600 border border-red-200">
-                          Deactivated
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-text-secondary truncate">{user.email}</p>
-                    <div className="flex gap-4 mt-1.5 text-xs text-text-secondary">
-                      <span>Enrolled: {new Date(user.created_at).toLocaleDateString()}</span>
-                      <span>Last active: {user.last_active_at ? new Date(user.last_active_at).toLocaleDateString() : '—'}</span>
-                    </div>
+                    {editingProfile ? (
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          placeholder="Name"
+                          className="w-full px-3 py-1.5 text-sm bg-white/70 backdrop-blur-sm border border-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        />
+                        <input
+                          type="email"
+                          value={editEmail}
+                          onChange={(e) => setEditEmail(e.target.value)}
+                          placeholder="Email"
+                          className="w-full px-3 py-1.5 text-sm bg-white/70 backdrop-blur-sm border border-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        />
+                        {profileError && <p className="text-xs text-red-600">{profileError}</p>}
+                        <div className="flex gap-2">
+                          <button
+                            onClick={handleSaveProfile}
+                            disabled={profileSaving}
+                            className="px-3 py-1 text-xs font-medium bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-60"
+                          >
+                            {profileSaving ? 'Saving…' : 'Save'}
+                          </button>
+                          <button
+                            onClick={() => { setEditingProfile(false); setProfileError(null); }}
+                            className="px-3 py-1 text-xs font-medium text-text-secondary bg-white/70 border border-white/50 rounded-lg hover:bg-white/90"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-xl font-semibold text-text-primary tracking-tight truncate" style={{ fontFamily: 'var(--font-heading)' }}>
+                            {user.name}
+                          </h2>
+                          {!user.is_active && (
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-600 border border-red-200">
+                              Deactivated
+                            </span>
+                          )}
+                          <button
+                            onClick={() => { setEditName(user.name); setEditEmail(user.email); setEditingProfile(true); setProfileError(null); }}
+                            className="p-1 rounded-md text-text-secondary/50 hover:text-text-secondary hover:bg-black/5 transition-colors"
+                            title="Edit name and email"
+                          >
+                            <Pencil size={13} />
+                          </button>
+                        </div>
+                        <p className="text-sm text-text-secondary truncate">{user.email}</p>
+                        <div className="flex gap-4 mt-1.5 text-xs text-text-secondary">
+                          <span>Enrolled: {new Date(user.created_at).toLocaleDateString()}</span>
+                          <span>Last active: {user.last_active_at ? new Date(user.last_active_at).toLocaleDateString() : '—'}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Right: role + actions, vertically centered */}

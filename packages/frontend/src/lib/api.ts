@@ -115,6 +115,11 @@ export const api = {
     fetchApi<{ message: string }>(`/admin/users/${id}/activate`, { method: 'PUT' }),
   deleteUser: (id: string) =>
     fetchApi<{ message: string }>(`/admin/users/${id}`, { method: 'DELETE' }),
+  updateUserProfile: (id: string, name: string, email: string) =>
+    fetchApi<{ message: string }>(`/admin/users/${id}/profile`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, email }),
+    }),
   exportUsersCSV: async (courseSlug?: string) => {
     const qs = courseSlug ? `?course=${encodeURIComponent(courseSlug)}` : '';
     const res = await fetch(`${BASE_URL}/admin/users/export${qs}`, { credentials: 'include' });

@@ -113,6 +113,23 @@ export async function deleteUser(userId: string): Promise<void> {
   await pool.query('DELETE FROM users WHERE id = $1', [userId]);
 }
 
+export async function updateUserProfile(userId: string, name: string, email: string): Promise<void> {
+  const current = await pool.query('SELECT email FROM users WHERE id = $1', [userId]);
+  if (current.rows.length === 0) throw new Error('User not found');
+  const oldEmail = current.rows[0].email;
+
+  if (email.toLowerCase() !== oldEmail.toLowerCase()) {
+    const existing = await pool.query('SELECT id FROM users WHERE email = $1 AND id != $2', [email.toLowerCase(), userId]);
+    if (existing.rows.length > 0) throw new Error('Email already in use');
+  }
+
+  await pool.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [name, email.toLowerCase(), userId]);
+
+  if (email.toLowerCase() !== oldEmail.toLowerCase()) {
+    await pool.query('UPDATE course_enrollments SET email = $1 WHERE email = $2', [email.toLowerCase(), oldEmail.toLowerCase()]);
+  }
+}
+
 export async function listPreEnrolledUsers(): Promise<{ id: string; email: string; name: string; role: string; enrolled_at: string; enrolled_by: string | null }[]> {
   const result = await pool.query(
     'SELECT id, email, name, role, enrolled_at, enrolled_by FROM pre_enrolled_users ORDER BY enrolled_at DESC'

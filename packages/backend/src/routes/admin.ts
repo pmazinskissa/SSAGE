@@ -6,6 +6,7 @@ import {
   listPreEnrolledUsers,
   getUserDetail,
   updateUserRole,
+  updateUserProfile,
   deactivateUser,
   activateUser,
   deleteUser,
@@ -117,6 +118,27 @@ router.get('/users/:id', async (req, res) => {
   } catch (err: any) {
     console.error('[Admin] Get user detail error:', err.message);
     res.status(500).json({ error: { message: 'Failed to get user details' } });
+  }
+});
+
+// PUT /api/admin/users/:id/profile — update name and email
+router.put('/users/:id/profile', async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    if (!name?.trim() || !email?.trim()) {
+      return res.status(400).json({ error: { message: 'name and email are required' } });
+    }
+    if (!email.includes('@')) {
+      return res.status(400).json({ error: { message: 'Invalid email address' } });
+    }
+    await updateUserProfile(req.params.id, name.trim(), email.trim());
+    res.json({ data: { message: 'Profile updated' } });
+  } catch (err: any) {
+    if (err.message === 'Email already in use') {
+      return res.status(409).json({ error: { message: err.message } });
+    }
+    console.error('[Admin] Update profile error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to update profile' } });
   }
 });
 
