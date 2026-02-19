@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, XCircle, BookOpen } from 'lucide-react';
+import { CheckCircle2, XCircle, BookOpen, Bot } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { springBounce } from '../../lib/animations';
 import type { KnowledgeCheckQuestion } from '@playbook/shared';
+import { useAI } from '../../context/AIContext';
 import MultipleChoiceSingle from './MultipleChoiceSingle';
 import MultipleChoiceMulti from './MultipleChoiceMulti';
 import TrueFalse from './TrueFalse';
@@ -36,6 +37,7 @@ export default function QuestionCard({
   moduleSlug,
 }: QuestionCardProps) {
   const { slug } = useParams<{ slug: string }>();
+  const { available: aiAvailable, setChatOpen } = useAI();
   const checked = feedback !== null;
 
   const hasAnswer = (() => {
@@ -170,7 +172,18 @@ export default function QuestionCard({
         )}
 
         {/* Action buttons */}
-        <div className="px-5 pb-5 flex justify-end gap-3">
+        <div className="px-5 pb-5 flex items-center justify-between gap-3">
+          {aiAvailable ? (
+            <button
+              onClick={() => setChatOpen(true)}
+              className="flex items-center gap-1.5 text-xs text-text-secondary/60 hover:text-primary transition-colors"
+            >
+              <Bot size={13} />
+              Ask the AI assistant
+            </button>
+          ) : (
+            <div />
+          )}
           {!checked ? (
             <button
               onClick={onCheck}
