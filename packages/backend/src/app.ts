@@ -16,6 +16,7 @@ import progressRouter from './routes/progress.js';
 import adminRouter from './routes/admin.js';
 import aiRouter from './routes/ai.js';
 import feedbackRouter from './routes/feedback.js';
+import reviewRouter from './routes/review.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -45,6 +46,9 @@ export function createApp() {
 
   // Feedback route (any authenticated user)
   app.use('/api/feedback', requireAuth, feedbackRouter);
+
+  // Review annotations (authenticated, export requires admin)
+  app.use('/api/review', requireAuth, reviewRouter);
 
   // Admin routes
   app.use('/api/admin', requireAuth, requireAdmin, adminRouter);
