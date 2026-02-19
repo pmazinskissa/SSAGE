@@ -89,6 +89,11 @@ questions:
   - id: "m2-q6"
     type: "fill-in-blank"
     question: "Complete the sentence about curiosity-enabled analysis."
+    word_bank:
+      - "curiosity"
+      - "zero"
+      - "efficiency"
+      - "budget"
     segments:
       - type: "text"
         value: "With AI, the marginal cost of asking one more question is nearly "

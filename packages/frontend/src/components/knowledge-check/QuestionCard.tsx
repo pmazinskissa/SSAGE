@@ -43,7 +43,13 @@ export default function QuestionCard({
     if (typeof answer === 'string') return answer.length > 0;
     if (typeof answer === 'boolean') return true;
     if (Array.isArray(answer)) return answer.length > 0;
-    if (typeof answer === 'object') return Object.keys(answer).length > 0;
+    if (typeof answer === 'object') {
+      if (question.type === 'fill-in-blank') {
+        const blankCount = question.segments.filter((s) => s.type === 'blank').length;
+        return Object.keys(answer).length >= blankCount;
+      }
+      return Object.keys(answer).length > 0;
+    }
     return false;
   })();
 

@@ -13,7 +13,7 @@ export default function AdminSettings() {
 
   // AI config form state
   const [aiKey, setAiKey] = useState('');
-  const [aiModel, setAiModel] = useState('claude-sonnet-4-5-20250929');
+  const [aiModel, setAiModel] = useState('claude-sonnet-4-6');
   const [aiEnabled, setAiEnabled] = useState(false);
   const [aiTestResult, setAiTestResult] = useState<{ success: boolean; message: string; latencyMs?: number } | null>(null);
   const [aiTesting, setAiTesting] = useState(false);
@@ -26,12 +26,9 @@ export default function AdminSettings() {
         setSettings(s);
         // Hydrate form from settings
         setAiKey(s['ai_api_key'] || '');
-        const VALID_MODELS = [
-          'claude-sonnet-4-5-20250929', 'claude-opus-4-6', 'claude-haiku-4-5-20251001',
-          'gpt-5.2', 'gpt-5', 'gpt-4o', 'gpt-4o-mini',
-        ];
+        const VALID_MODELS = ['claude-sonnet-4-6', 'gpt-5.2'];
         const saved = s['ai_model'] || '';
-        setAiModel(VALID_MODELS.includes(saved) ? saved : 'claude-sonnet-4-5-20250929');
+        setAiModel(VALID_MODELS.includes(saved) ? saved : 'claude-sonnet-4-6');
         setAiEnabled(s['ai_enabled'] === 'true');
       })
       .catch((err) => setError(err.message))
@@ -154,17 +151,8 @@ export default function AdminSettings() {
                 onChange={(e) => setAiModel(e.target.value)}
                 className="w-full px-3 py-2 text-sm border border-border rounded-input focus:outline-none focus:border-primary"
               >
-                <optgroup label="Anthropic">
-                  <option value="claude-sonnet-4-5-20250929">Claude Sonnet 4.5</option>
-                  <option value="claude-opus-4-6">Claude Opus 4.6</option>
-                  <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
-                </optgroup>
-                <optgroup label="OpenAI">
-                  <option value="gpt-5.2">GPT-5.2</option>
-                  <option value="gpt-5">GPT-5</option>
-                  <option value="gpt-4o">GPT-4o</option>
-                  <option value="gpt-4o-mini">GPT-4o Mini</option>
-                </optgroup>
+                <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
+                <option value="gpt-5.2">GPT-5.2</option>
               </select>
             </div>
 

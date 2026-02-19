@@ -58,6 +58,7 @@ export interface DragToRankQuestion extends BaseQuestion {
 export interface FillInBlankQuestion extends BaseQuestion {
   type: 'fill-in-blank';
   segments: FillInBlankSegment[];
+  word_bank?: string[];
 }
 
 export type KnowledgeCheckQuestion =

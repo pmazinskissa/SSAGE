@@ -45,19 +45,14 @@ function SortableItem({ id, text, disabled }: SortableItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-3 p-3 rounded-card border-2 bg-white transition-shadow ${
+      {...attributes}
+      {...listeners}
+      className={`flex items-center gap-3 p-3 rounded-card border-2 bg-white transition-shadow select-none ${
         isDragging ? 'shadow-elevation-2 border-primary' : 'border-border'
-      } ${disabled ? 'opacity-80' : ''}`}
+      } ${disabled ? 'opacity-80 cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}`}
+      aria-label={`Reorder ${text}`}
     >
-      <button
-        {...attributes}
-        {...listeners}
-        className={`flex-shrink-0 text-text-secondary/50 ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}`}
-        tabIndex={disabled ? -1 : 0}
-        aria-label={`Reorder ${text}`}
-      >
-        <GripVertical size={18} />
-      </button>
+      <GripVertical size={18} className="flex-shrink-0 text-text-secondary/50" />
       <span className="text-sm text-text-primary">{text}</span>
     </div>
   );
@@ -72,7 +67,7 @@ interface Props {
 
 export default function DragToRank({ question, orderedIds, onAnswer, disabled }: Props) {
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 

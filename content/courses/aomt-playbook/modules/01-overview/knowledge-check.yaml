@@ -64,6 +64,11 @@ questions:
   - id: "m1-q5"
     type: "fill-in-blank"
     question: "Complete the sentence about the AOMT approach."
+    word_bank:
+      - "AI"
+      - "non-linear"
+      - "sequential"
+      - "ML"
     segments:
       - type: "text"
         value: "The AOMT methodology uses a "
