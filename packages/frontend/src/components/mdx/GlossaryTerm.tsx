@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
@@ -10,10 +11,13 @@ interface GlossaryTermProps {
   children?: React.ReactNode;
 }
 
+const POPUP_WIDTH = 288;
+
 export default function GlossaryTerm({ term, children }: GlossaryTermProps) {
   const [open, setOpen] = useState(false);
-  const [alignRight, setAlignRight] = useState(false);
+  const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
   const ref = useRef<HTMLSpanElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
   const hideTimeout = useRef<ReturnType<typeof setTimeout>>();
   const { slug } = useParams<{ slug: string }>();
   const { lookup } = useGlossary();
@@ -30,13 +34,25 @@ export default function GlossaryTerm({ term, children }: GlossaryTermProps) {
     return () => document.removeEventListener('keydown', handleEsc);
   }, [open]);
 
-  // Check if popup would overflow right edge
-  useEffect(() => {
-    if (open && ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      setAlignRight(rect.left + 288 > window.innerWidth);
+  const updatePosition = useCallback(() => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    let left = rect.left;
+    // If popup would overflow right edge, align to right side of trigger
+    if (left + POPUP_WIDTH > window.innerWidth - 16) {
+      left = rect.right - POPUP_WIDTH;
     }
-  }, [open]);
+    // Clamp so it doesn't go off left edge
+    if (left < 16) left = 16;
+    setPosition({
+      top: rect.bottom + 8,
+      left,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (open) updatePosition();
+  }, [open, updatePosition]);
 
   const handleMouseEnter = () => {
     clearTimeout(hideTimeout.current);
@@ -50,7 +66,7 @@ export default function GlossaryTerm({ term, children }: GlossaryTermProps) {
   return (
     <span
       ref={ref}
-      className="relative inline"
+      className="inline"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -59,28 +75,33 @@ export default function GlossaryTerm({ term, children }: GlossaryTermProps) {
       >
         {children || term}
       </span>
-      <AnimatePresence>
-        {open && entry && (
-          <motion.div
-            variants={scaleIn}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            className={`absolute z-50 top-full mt-2 w-72 bg-white border border-border rounded-card shadow-elevation-2 p-4 ${alignRight ? 'right-0' : 'left-0'}`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <p className="font-semibold text-sm text-text-primary mb-1">{entry.term}</p>
-            <p className="text-sm text-text-secondary leading-relaxed">{entry.definition}</p>
-            <Link
-              to={`/courses/${slug}/glossary`}
-              className="flex items-center gap-1 text-xs text-link mt-3 hover:underline"
+      {createPortal(
+        <AnimatePresence>
+          {open && entry && position && (
+            <motion.div
+              ref={popupRef}
+              variants={scaleIn}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              style={{ top: position.top, left: position.left, width: POPUP_WIDTH }}
+              className="fixed z-[9999] bg-white border border-border rounded-card shadow-elevation-2 p-4"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
-              View in Glossary <ExternalLink size={12} />
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <p className="font-semibold text-sm text-text-primary mb-1">{entry.term}</p>
+              <p className="text-sm text-text-secondary leading-relaxed">{entry.definition}</p>
+              <Link
+                to={`/courses/${slug}/glossary`}
+                className="flex items-center gap-1 text-xs text-link mt-3 hover:underline"
+              >
+                View in Glossary <ExternalLink size={12} />
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </span>
   );
 }

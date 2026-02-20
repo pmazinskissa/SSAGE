@@ -98,7 +98,21 @@ Respond in this exact JSON format only, no markdown:
       const parsed: ScoreResult = JSON.parse(cleaned);
       setResult(parsed);
     } catch {
-      setRawFallback(response);
+      // If JSON was truncated, try to repair by closing open strings/objects
+      try {
+        let repaired = cleaned;
+        // Close any unclosed string
+        const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length;
+        if (quoteCount % 2 !== 0) repaired += '"';
+        // Close open braces/brackets
+        const opens = (repaired.match(/[{[]/g) || []).length;
+        const closes = (repaired.match(/[}\]]/g) || []).length;
+        for (let i = 0; i < opens - closes; i++) repaired += '}';
+        const repairedParsed: ScoreResult = JSON.parse(repaired);
+        setResult(repairedParsed);
+      } catch {
+        setRawFallback(response);
+      }
     }
   };
 

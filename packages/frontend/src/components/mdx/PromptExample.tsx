@@ -18,27 +18,27 @@ export default function PromptExample({ prompt, response, model = 'AI' }: Prompt
         </div>
 
         {/* User prompt */}
-        <div className="flex gap-3 p-4 border-b border-border">
+        <div className="flex gap-3 p-4 bg-white border-l-4 border-l-primary border-b border-border">
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
             <User size={16} className="text-primary" />
           </div>
           <div className="flex-1">
             <p className="text-xs font-semibold text-text-secondary mb-1">You</p>
             <p className="text-sm font-mono text-text-primary whitespace-pre-wrap leading-relaxed">
-              {prompt}
+              {prompt.replace(/\\n/g, '\n')}
             </p>
           </div>
         </div>
 
         {/* AI response */}
-        <div className="flex gap-3 p-4 bg-white">
+        <div className="flex gap-3 p-4 bg-gray-50 border-l-4 border-l-success">
           <div className="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center flex-shrink-0">
             <Bot size={16} className="text-success" />
           </div>
           <div className="flex-1">
             <p className="text-xs font-semibold text-text-secondary mb-1">{model}</p>
-            <p className="text-sm text-text-secondary whitespace-pre-wrap leading-relaxed">
-              {response}
+            <p className="text-sm font-mono text-text-primary whitespace-pre-wrap leading-relaxed">
+              {response.replace(/\\n/g, '\n')}
             </p>
           </div>
         </div>

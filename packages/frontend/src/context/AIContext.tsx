@@ -8,6 +8,8 @@ interface AIContextValue {
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
   loading: boolean;
+  pendingMessage: { displayText: string; fullText: string } | null;
+  setPendingMessage: (msg: { displayText: string; fullText: string } | null) => void;
 }
 
 const AIContext = createContext<AIContextValue>({
@@ -16,6 +18,8 @@ const AIContext = createContext<AIContextValue>({
   chatOpen: false,
   setChatOpen: () => {},
   loading: true,
+  pendingMessage: null,
+  setPendingMessage: () => {},
 });
 
 export function AIProvider({ children }: { children: ReactNode }) {
@@ -24,6 +28,7 @@ export function AIProvider({ children }: { children: ReactNode }) {
   const [model, setModel] = useState<string | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [pendingMessage, setPendingMessage] = useState<{ displayText: string; fullText: string } | null>(null);
 
   useEffect(() => {
     api.getAIStatus()
@@ -42,7 +47,7 @@ export function AIProvider({ children }: { children: ReactNode }) {
   const available = globalAvailable && !!course?.ai_features_enabled;
 
   return (
-    <AIContext.Provider value={{ available, model, chatOpen, setChatOpen, loading }}>
+    <AIContext.Provider value={{ available, model, chatOpen, setChatOpen, loading, pendingMessage, setPendingMessage }}>
       {children}
     </AIContext.Provider>
   );

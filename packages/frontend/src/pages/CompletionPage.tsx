@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, Clock, Award, ArrowLeft, MessageSquare, BookOpen, CheckCircle2 } from 'lucide-react';
+import { Trophy, Clock, Award, ArrowLeft, MessageSquare, BookOpen, CheckCircle2, GraduationCap, Target } from 'lucide-react';
 import { api } from '../lib/api';
 import { useCourse } from '../context/CourseContext';
 import Card from '../components/ui/Card';
@@ -42,12 +42,18 @@ export default function CompletionPage() {
   const mins = totalTimeMinutes % 60;
   const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
-  const completedDate = progress?.completed_at
-    ? new Date(progress.completed_at).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+  const completedDate = new Date(progress?.completed_at || Date.now()).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const totalLessons = navTree?.modules.reduce((sum, mod) => sum + mod.lessons.length, 0) || 0;
+  const completedLessons = progress?.lessons.filter((l) => l.status === 'completed').length || 0;
+
+  const kcScores = progress?.knowledge_checks || [];
+  const avgKcScore = kcScores.length > 0
+    ? Math.round(kcScores.reduce((sum, kc) => sum + kc.score, 0) / kcScores.length)
     : null;
 
   return (
@@ -112,15 +118,13 @@ export default function CompletionPage() {
             initial="hidden"
             animate="visible"
           >
-            {completedDate && (
-              <motion.div variants={fadeInUp}>
-                <Card elevation={1} className="p-4 text-center">
-                  <Award size={20} className="text-primary mx-auto mb-2" />
-                  <p className="text-xs text-text-secondary">Completed</p>
-                  <p className="text-sm font-semibold text-text-primary">{completedDate}</p>
-                </Card>
-              </motion.div>
-            )}
+            <motion.div variants={fadeInUp}>
+              <Card elevation={1} className="p-4 text-center">
+                <Award size={20} className="text-primary mx-auto mb-2" />
+                <p className="text-xs text-text-secondary">Completed</p>
+                <p className="text-sm font-semibold text-text-primary">{completedDate}</p>
+              </Card>
+            </motion.div>
             <motion.div variants={fadeInUp}>
               <Card elevation={1} className="p-4 text-center">
                 <Clock size={20} className="text-primary mx-auto mb-2" />
@@ -128,6 +132,22 @@ export default function CompletionPage() {
                 <p className="text-sm font-semibold text-text-primary">{timeStr}</p>
               </Card>
             </motion.div>
+            <motion.div variants={fadeInUp}>
+              <Card elevation={1} className="p-4 text-center">
+                <GraduationCap size={20} className="text-primary mx-auto mb-2" />
+                <p className="text-xs text-text-secondary">Lessons Completed</p>
+                <p className="text-sm font-semibold text-text-primary">{completedLessons}/{totalLessons}</p>
+              </Card>
+            </motion.div>
+            {avgKcScore !== null && (
+              <motion.div variants={fadeInUp}>
+                <Card elevation={1} className="p-4 text-center">
+                  <Target size={20} className="text-primary mx-auto mb-2" />
+                  <p className="text-xs text-text-secondary">Avg Quiz Score</p>
+                  <p className={`text-sm font-semibold ${avgKcScore >= 80 ? 'text-success' : avgKcScore >= 60 ? 'text-warning' : 'text-error'}`}>{avgKcScore}%</p>
+                </Card>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Course summary — what you learned */}
@@ -180,39 +200,6 @@ export default function CompletionPage() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Per-module KC scores */}
-          {progress?.knowledge_checks && progress.knowledge_checks.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mb-10"
-            >
-              <h2
-                className="text-lg font-semibold text-text-primary mb-4"
-                style={{ fontFamily: 'var(--font-heading)' }}
-              >
-                Knowledge Check Scores
-              </h2>
-              <div className="space-y-3">
-                {progress.knowledge_checks.map((kc) => (
-                  <Card key={kc.module_slug} elevation={0} className="p-4 flex items-center justify-between">
-                    <span className="text-sm text-text-primary capitalize">
-                      {kc.module_slug.replace(/-/g, ' ')}
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${
-                        kc.score >= 80 ? 'text-success' : kc.score >= 60 ? 'text-warning' : 'text-error'
-                      }`}
-                    >
-                      {kc.score}% ({kc.correct_answers}/{kc.total_questions})
-                    </span>
-                  </Card>
-                ))}
               </div>
             </motion.div>
           )}
