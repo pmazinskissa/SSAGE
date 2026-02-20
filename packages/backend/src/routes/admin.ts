@@ -24,7 +24,8 @@ import {
   enrollUserInCourses,
   unenrollUserFromCourse,
 } from '../services/admin.service.js';
-import { getAllSettings, upsertSetting } from '../services/settings.service.js';
+import { getAllSettings, upsertSetting, getCourseSettings } from '../services/settings.service.js';
+import { listCourses } from '../services/content.service.js';
 import { testConnection } from '../services/ai.service.js';
 import {
   listFeedback,
@@ -493,6 +494,53 @@ router.delete('/feedback/:id', async (req, res) => {
   } catch (err: any) {
     console.error('[Admin] Delete feedback error:', err.message);
     res.status(500).json({ error: { message: 'Failed to delete feedback' } });
+  }
+});
+
+// GET /api/admin/courses — list courses with their admin-configurable settings
+router.get('/courses', async (_req, res) => {
+  try {
+    const courses = listCourses();
+    const merged = await Promise.all(
+      courses.map(async (c) => {
+        const overrides = await getCourseSettings(c.slug);
+        return {
+          ...c,
+          ai_features_enabled:
+            overrides.ai_features_enabled !== undefined
+              ? overrides.ai_features_enabled === 'true'
+              : c.ai_features_enabled,
+          navigation_mode:
+            overrides.ordered_lessons !== undefined
+              ? overrides.ordered_lessons === 'true' ? 'linear' : 'open'
+              : c.navigation_mode,
+          require_knowledge_checks: overrides.require_knowledge_checks === 'true',
+          min_lesson_time_seconds: parseInt(overrides.min_lesson_time_seconds || '0', 10),
+        };
+      })
+    );
+    res.json({ data: merged });
+  } catch (err: any) {
+    console.error('[Admin] List courses error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to list courses' } });
+  }
+});
+
+// PUT /api/admin/courses/:slug/settings — save per-course admin settings
+router.put('/courses/:slug/settings', async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const { ai_features_enabled, ordered_lessons, require_knowledge_checks, min_lesson_time_seconds } = req.body;
+    await Promise.all([
+      upsertSetting(`course.${slug}.ai_features_enabled`, String(!!ai_features_enabled)),
+      upsertSetting(`course.${slug}.ordered_lessons`, String(!!ordered_lessons)),
+      upsertSetting(`course.${slug}.require_knowledge_checks`, String(!!require_knowledge_checks)),
+      upsertSetting(`course.${slug}.min_lesson_time_seconds`, String(Number(min_lesson_time_seconds) || 0)),
+    ]);
+    res.json({ data: { message: 'Course settings saved' } });
+  } catch (err: any) {
+    console.error('[Admin] Update course settings error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to save course settings' } });
   }
 });
 

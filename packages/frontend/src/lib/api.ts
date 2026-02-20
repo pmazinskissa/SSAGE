@@ -172,6 +172,17 @@ export const api = {
       body: JSON.stringify({ email, course_slug: courseSlug }),
     }),
 
+  // Admin — Courses
+  getAdminCourses: () => fetchApi<CourseConfig[]>('/admin/courses'),
+  updateCourseSettings: (
+    slug: string,
+    settings: { ai_features_enabled: boolean; ordered_lessons: boolean; require_knowledge_checks: boolean; min_lesson_time_seconds: number }
+  ) =>
+    fetchApi<{ message: string }>(`/admin/courses/${slug}/settings`, {
+      method: 'PUT',
+      body: JSON.stringify(settings),
+    }),
+
   // Admin — Settings
   getAdminSettings: () => fetchApi<Record<string, string>>('/admin/settings'),
   updateSetting: (key: string, value: string) =>

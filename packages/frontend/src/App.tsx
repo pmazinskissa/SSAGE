@@ -20,6 +20,7 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminUserDetail from './pages/admin/AdminUserDetail';
 import AdminFeedback from './pages/admin/AdminFeedback';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminCourses from './pages/admin/AdminCourses';
 import AdminLayout from './components/layout/AdminLayout';
 
 export default function App() {
@@ -78,6 +79,7 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="users/:id" element={<AdminUserDetail />} />
+            <Route path="courses" element={<AdminCourses />} />
             <Route path="feedback" element={<AdminFeedback />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
