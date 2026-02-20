@@ -91,6 +91,7 @@ export interface SearchResult {
 export interface ChatMessage {
     role: 'user' | 'assistant';
     content: string;
+    displayContent?: string;
     timestamp: string;
 }
 export interface AIConfig {

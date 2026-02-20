@@ -80,6 +80,12 @@ export default function KnowledgeCheckPage() {
     }));
   }, [currentQuestion, answers, currentIndex]);
 
+  const handlePrev = useCallback(() => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  }, [currentIndex]);
+
   const handleNext = useCallback(() => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
@@ -230,6 +236,8 @@ export default function KnowledgeCheckPage() {
               feedback={feedbacks[currentIndex] || null}
               onCheck={handleCheck}
               onNext={handleNext}
+              onPrev={handlePrev}
+              isFirst={currentIndex === 0}
               isLast={currentIndex === questions.length - 1}
               moduleSlug={moduleSlug || ''}
             />

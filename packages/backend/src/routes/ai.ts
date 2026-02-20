@@ -34,6 +34,10 @@ router.post('/chat', async (req, res) => {
     // Build system prompt with lesson context
     const systemPrompt = await buildSystemPrompt(course_slug, module_slug || '', lesson_slug || '');
 
+    // Exercise prompts (no module/lesson context) need more tokens for structured JSON responses
+    const isExercise = !module_slug && !lesson_slug;
+    const maxTokens = isExercise ? 2048 : 1024;
+
     // Set SSE headers
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -58,6 +62,7 @@ router.post('/chat', async (req, res) => {
         res.write('data: [DONE]\n\n');
         res.end();
       },
+      maxTokens,
     );
   } catch (err: any) {
     console.error('[AI] Chat error:', err.message);
