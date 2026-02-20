@@ -13,18 +13,25 @@ function deriveProvider(model: string): 'anthropic' | 'openai' {
 }
 
 export async function getAIConfig(): Promise<(AIConfig & { apiKey: string }) | null> {
-  const [enabled, apiKey, model] = await Promise.all([
+  const [enabled, model] = await Promise.all([
     getSetting('ai_enabled'),
-    getSetting('ai_api_key'),
     getSetting('ai_model'),
   ]);
 
-  if (enabled !== 'true' || !apiKey || !model) return null;
+  if (enabled !== 'true' || !model) return null;
+
+  const provider = deriveProvider(model);
+  const providerKeyName = provider === 'anthropic' ? 'anthropic_api_key' : 'openai_api_key';
+
+  // Provider-specific key takes precedence; fall back to legacy ai_api_key
+  const apiKey = (await getSetting(providerKeyName)) || (await getSetting('ai_api_key'));
+
+  if (!apiKey) return null;
 
   return {
     enabled: true,
     model,
-    provider: deriveProvider(model),
+    provider,
     apiKey,
   };
 }

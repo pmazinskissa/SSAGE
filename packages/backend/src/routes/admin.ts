@@ -419,13 +419,15 @@ router.put('/settings', async (req, res) => {
 router.post('/settings/test-ai', async (_req, res) => {
   try {
     const settings = await getAllSettings();
-    const apiKey = settings['ai_api_key'] || '';
     const model = settings['ai_model'] || '';
-    if (!apiKey) {
-      return res.json({ data: { success: false, message: 'No API key configured', latencyMs: 0 } });
-    }
     if (!model) {
       return res.json({ data: { success: false, message: 'No model configured', latencyMs: 0 } });
+    }
+    const isOpenAI = model.startsWith('gpt-') || model.startsWith('o1') || model.startsWith('o3');
+    const providerKey = isOpenAI ? 'openai_api_key' : 'anthropic_api_key';
+    const apiKey = settings[providerKey] || settings['ai_api_key'] || '';
+    if (!apiKey) {
+      return res.json({ data: { success: false, message: 'No API key configured for this provider', latencyMs: 0 } });
     }
     const result = await testConnection(apiKey, model);
     res.json({ data: result });
