@@ -17,6 +17,7 @@ export interface NavModule {
   lessons: NavLesson[];
   status: LessonStatus;
   has_knowledge_check: boolean;
+  knowledge_check_completed?: boolean;
 }
 
 export interface CourseNavTree {
