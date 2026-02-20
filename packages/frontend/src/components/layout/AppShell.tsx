@@ -35,14 +35,19 @@ export default function AppShell() {
           onClose={() => setSidebarOpen(false)}
           onCollapseToggle={() => setSidebarCollapsed((prev) => !prev)}
         />
-        <main className="flex-1 overflow-y-auto">
-          {loading ? (
-            <div className="flex items-center justify-center h-96">
-              <div className="animate-pulse text-text-secondary">Loading course...</div>
-            </div>
-          ) : (
-            <Outlet />
-          )}
+        <main className="flex-1 overflow-y-auto flex flex-col">
+          <div className="flex-1">
+            {loading ? (
+              <div className="flex items-center justify-center h-96">
+                <div className="animate-pulse text-text-secondary">Loading course...</div>
+              </div>
+            ) : (
+              <Outlet />
+            )}
+          </div>
+          <footer className="border-t border-border/50 py-3 px-6 text-center" data-print-hide>
+            <span className="text-xs text-text-secondary/60">© SSA 2026</span>
+          </footer>
         </main>
       </div>
       {aiAvailable && <AIChatPanel />}

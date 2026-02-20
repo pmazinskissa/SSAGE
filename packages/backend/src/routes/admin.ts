@@ -24,7 +24,8 @@ import {
   enrollUserInCourses,
   unenrollUserFromCourse,
 } from '../services/admin.service.js';
-import { getAllSettings, upsertSetting } from '../services/settings.service.js';
+import { getAllSettings, upsertSetting, getCourseSettings } from '../services/settings.service.js';
+import { listCourses } from '../services/content.service.js';
 import { testConnection } from '../services/ai.service.js';
 import {
   listFeedback,
@@ -419,13 +420,15 @@ router.put('/settings', async (req, res) => {
 router.post('/settings/test-ai', async (_req, res) => {
   try {
     const settings = await getAllSettings();
-    const apiKey = settings['ai_api_key'] || '';
     const model = settings['ai_model'] || '';
-    if (!apiKey) {
-      return res.json({ data: { success: false, message: 'No API key configured', latencyMs: 0 } });
-    }
     if (!model) {
       return res.json({ data: { success: false, message: 'No model configured', latencyMs: 0 } });
+    }
+    const isOpenAI = model.startsWith('gpt-') || model.startsWith('o1') || model.startsWith('o3');
+    const providerKey = isOpenAI ? 'openai_api_key' : 'anthropic_api_key';
+    const apiKey = settings[providerKey] || settings['ai_api_key'] || '';
+    if (!apiKey) {
+      return res.json({ data: { success: false, message: 'No API key configured for this provider', latencyMs: 0 } });
     }
     const result = await testConnection(apiKey, model);
     res.json({ data: result });
@@ -491,6 +494,53 @@ router.delete('/feedback/:id', async (req, res) => {
   } catch (err: any) {
     console.error('[Admin] Delete feedback error:', err.message);
     res.status(500).json({ error: { message: 'Failed to delete feedback' } });
+  }
+});
+
+// GET /api/admin/courses — list courses with their admin-configurable settings
+router.get('/courses', async (_req, res) => {
+  try {
+    const courses = listCourses();
+    const merged = await Promise.all(
+      courses.map(async (c) => {
+        const overrides = await getCourseSettings(c.slug);
+        return {
+          ...c,
+          ai_features_enabled:
+            overrides.ai_features_enabled !== undefined
+              ? overrides.ai_features_enabled === 'true'
+              : c.ai_features_enabled,
+          navigation_mode:
+            overrides.ordered_lessons !== undefined
+              ? overrides.ordered_lessons === 'true' ? 'linear' : 'open'
+              : c.navigation_mode,
+          require_knowledge_checks: overrides.require_knowledge_checks === 'true',
+          min_lesson_time_seconds: parseInt(overrides.min_lesson_time_seconds || '0', 10),
+        };
+      })
+    );
+    res.json({ data: merged });
+  } catch (err: any) {
+    console.error('[Admin] List courses error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to list courses' } });
+  }
+});
+
+// PUT /api/admin/courses/:slug/settings — save per-course admin settings
+router.put('/courses/:slug/settings', async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const { ai_features_enabled, ordered_lessons, require_knowledge_checks, min_lesson_time_seconds } = req.body;
+    await Promise.all([
+      upsertSetting(`course.${slug}.ai_features_enabled`, String(!!ai_features_enabled)),
+      upsertSetting(`course.${slug}.ordered_lessons`, String(!!ordered_lessons)),
+      upsertSetting(`course.${slug}.require_knowledge_checks`, String(!!require_knowledge_checks)),
+      upsertSetting(`course.${slug}.min_lesson_time_seconds`, String(Number(min_lesson_time_seconds) || 0)),
+    ]);
+    res.json({ data: { message: 'Course settings saved' } });
+  } catch (err: any) {
+    console.error('[Admin] Update course settings error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to save course settings' } });
   }
 });
 

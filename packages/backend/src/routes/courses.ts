@@ -9,6 +9,7 @@ import { config } from '../config/env.js';
 import { optionalAuth } from '../middleware/auth.js';
 import { getCourseProgress } from '../services/progress.service.js';
 import { getEnrollmentsForEmail } from '../services/admin.service.js';
+import { getCourseSettings } from '../services/settings.service.js';
 import type { CourseNavTree } from '@playbook/shared';
 
 const router = Router();
@@ -54,6 +55,25 @@ router.get('/:slug', optionalAuth, async (req, res) => {
     } catch (err) {
       console.warn('[Courses] Failed to check enrollment:', err);
     }
+  }
+
+  // Merge admin-configurable overrides from DB into the YAML config
+  try {
+    const overrides = await getCourseSettings(slug);
+    if (overrides.ai_features_enabled !== undefined) {
+      (course as any).ai_features_enabled = overrides.ai_features_enabled === 'true';
+    }
+    if (overrides.ordered_lessons !== undefined) {
+      (course as any).navigation_mode = overrides.ordered_lessons === 'true' ? 'linear' : 'open';
+    }
+    if (overrides.require_knowledge_checks !== undefined) {
+      (course as any).require_knowledge_checks = overrides.require_knowledge_checks === 'true';
+    }
+    if (overrides.min_lesson_time_seconds !== undefined) {
+      (course as any).min_lesson_time_seconds = parseInt(overrides.min_lesson_time_seconds, 10);
+    }
+  } catch {
+    // Non-fatal: serve with YAML defaults
   }
 
   const navTree = getCourseNavTree(slug);
@@ -107,6 +127,9 @@ function overlayProgress(navTree: CourseNavTree, progress: import('@playbook/sha
         allLessonsDone = false;
       }
     }
+
+    // Expose KC completion so frontend can compute locked state
+    mod.knowledge_check_completed = kcDone.has(mod.slug);
 
     // Module status: completed if KC done or all lessons done; in_progress if any started
     if (kcDone.has(mod.slug) || (allLessonsDone && mod.lessons.length > 0)) {

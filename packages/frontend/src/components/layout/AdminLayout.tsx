@@ -1,10 +1,11 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, MessageSquare, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, Settings, LogOut, BookMarked } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/users', label: 'Users', icon: Users, end: false },
+  { to: '/admin/courses', label: 'Courses', icon: BookMarked, end: false },
   { to: '/admin/feedback', label: 'Feedback', icon: MessageSquare, end: false },
   { to: '/admin/settings', label: 'Settings', icon: Settings, end: false },
 ];

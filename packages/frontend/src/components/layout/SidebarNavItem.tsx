@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { CheckCircle2, Circle, Disc, ClipboardCheck } from 'lucide-react';
+import { CheckCircle2, Circle, Disc, ClipboardCheck, Lock } from 'lucide-react';
 import type { LessonStatus } from '@playbook/shared';
 
 interface SidebarNavItemProps {
@@ -8,9 +8,13 @@ interface SidebarNavItemProps {
   status: LessonStatus;
   isModule?: boolean;
   isKnowledgeCheck?: boolean;
+  locked?: boolean;
 }
 
-function StatusIcon({ status, isKnowledgeCheck }: { status: LessonStatus; isKnowledgeCheck?: boolean }) {
+function StatusIcon({ status, isKnowledgeCheck, locked }: { status: LessonStatus; isKnowledgeCheck?: boolean; locked?: boolean }) {
+  if (locked) {
+    return <Lock size={14} className="text-text-secondary/50 flex-shrink-0" />;
+  }
   if (isKnowledgeCheck) {
     return <ClipboardCheck size={16} className="text-primary flex-shrink-0" />;
   }
@@ -24,7 +28,21 @@ function StatusIcon({ status, isKnowledgeCheck }: { status: LessonStatus; isKnow
   }
 }
 
-export default function SidebarNavItem({ to, title, status, isModule, isKnowledgeCheck }: SidebarNavItemProps) {
+export default function SidebarNavItem({ to, title, status, isModule, isKnowledgeCheck, locked }: SidebarNavItemProps) {
+  if (locked) {
+    return (
+      <span
+        className={`flex items-center gap-3 px-4 py-2 text-sm rounded-md mx-2 cursor-not-allowed opacity-50 ${
+          isModule ? 'font-semibold mt-4 first:mt-0' : 'pl-8'
+        } text-slate-400`}
+        title="Complete previous lessons to unlock"
+      >
+        <StatusIcon status={status} isKnowledgeCheck={isKnowledgeCheck} locked />
+        <span className="truncate">{title}</span>
+      </span>
+    );
+  }
+
   return (
     <NavLink
       to={to}

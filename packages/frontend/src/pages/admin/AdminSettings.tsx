@@ -12,23 +12,29 @@ export default function AdminSettings() {
   const [error, setError] = useState<string | null>(null);
 
   // AI config form state
-  const [aiKey, setAiKey] = useState('');
+  const [anthropicKey, setAnthropicKey] = useState('');
+  const [openaiKey, setOpenaiKey] = useState('');
   const [aiModel, setAiModel] = useState('claude-sonnet-4-6');
   const [aiEnabled, setAiEnabled] = useState(false);
   const [aiTestResult, setAiTestResult] = useState<{ success: boolean; message: string; latencyMs?: number } | null>(null);
   const [aiTesting, setAiTesting] = useState(false);
   const [aiSaving, setAiSaving] = useState(false);
-  const [showApiKey, setShowApiKey] = useState(false);
+  const [showAnthropicKey, setShowAnthropicKey] = useState(false);
+  const [showOpenaiKey, setShowOpenaiKey] = useState(false);
 
   useEffect(() => {
     api.getAdminSettings()
       .then((s) => {
         setSettings(s);
         // Hydrate form from settings
-        setAiKey(s['ai_api_key'] || '');
+        // Provider-specific keys; fall back to legacy ai_api_key for migration
+        const legacyKey = s['ai_api_key'] || '';
+        const savedModel = s['ai_model'] || '';
+        const isGpt = savedModel.startsWith('gpt-');
+        setAnthropicKey(s['anthropic_api_key'] || (!isGpt ? legacyKey : ''));
+        setOpenaiKey(s['openai_api_key'] || (isGpt ? legacyKey : ''));
         const VALID_MODELS = ['claude-sonnet-4-6', 'gpt-5.2'];
-        const saved = s['ai_model'] || '';
-        setAiModel(VALID_MODELS.includes(saved) ? saved : 'claude-sonnet-4-6');
+        setAiModel(VALID_MODELS.includes(savedModel) ? savedModel : 'claude-sonnet-4-6');
         setAiEnabled(s['ai_enabled'] === 'true');
       })
       .catch((err) => setError(err.message))
@@ -39,7 +45,8 @@ export default function AdminSettings() {
     setAiSaving(true);
     try {
       await Promise.all([
-        api.updateSetting('ai_api_key', aiKey),
+        api.updateSetting('anthropic_api_key', anthropicKey),
+        api.updateSetting('openai_api_key', openaiKey),
         api.updateSetting('ai_model', aiModel),
         api.updateSetting('ai_enabled', String(aiEnabled)),
       ]);
@@ -124,22 +131,43 @@ export default function AdminSettings() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">API Key</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">Anthropic API Key <span className="text-text-secondary/50">(Claude)</span></label>
               <div className="relative">
                 <input
-                  type={showApiKey ? 'text' : 'password'}
-                  value={aiKey}
-                  onChange={(e) => setAiKey(e.target.value)}
+                  type={showAnthropicKey ? 'text' : 'password'}
+                  value={anthropicKey}
+                  onChange={(e) => setAnthropicKey(e.target.value)}
+                  placeholder="sk-ant-..."
+                  className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowAnthropicKey(!showAnthropicKey)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
+                  title={showAnthropicKey ? 'Hide key' : 'Show key'}
+                >
+                  {showAnthropicKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-text-secondary mb-1">OpenAI API Key <span className="text-text-secondary/50">(GPT)</span></label>
+              <div className="relative">
+                <input
+                  type={showOpenaiKey ? 'text' : 'password'}
+                  value={openaiKey}
+                  onChange={(e) => setOpenaiKey(e.target.value)}
                   placeholder="sk-..."
                   className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowApiKey(!showApiKey)}
+                  onClick={() => setShowOpenaiKey(!showOpenaiKey)}
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
-                  title={showApiKey ? 'Hide API key' : 'Show API key'}
+                  title={showOpenaiKey ? 'Hide key' : 'Show key'}
                 >
-                  {showApiKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showOpenaiKey ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -166,10 +194,16 @@ export default function AdminSettings() {
               <span className="text-sm text-text-primary">Enable AI features</span>
             </label>
 
-            {aiEnabled && !aiKey && (
+            {aiEnabled && aiModel.startsWith('gpt-') && !openaiKey && (
               <p className="text-xs text-warning flex items-center gap-1">
                 <Key size={12} />
-                AI is enabled but no API key is set
+                AI is enabled but no OpenAI API key is set
+              </p>
+            )}
+            {aiEnabled && !aiModel.startsWith('gpt-') && !anthropicKey && (
+              <p className="text-xs text-warning flex items-center gap-1">
+                <Key size={12} />
+                AI is enabled but no Anthropic API key is set
               </p>
             )}
 
