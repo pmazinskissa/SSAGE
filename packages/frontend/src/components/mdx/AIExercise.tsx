@@ -115,12 +115,7 @@ export default function AIExercise({
                 </div>
               )}
             </>
-          ) : (
-            <div className="flex items-center gap-2 px-4 py-3 bg-warning/10 border border-warning/20 rounded-card text-sm text-warning">
-              <AlertCircle size={16} />
-              AI features are not enabled. Contact your administrator.
-            </div>
-          )}
+          ) : null}
 
           {/* Reference comparison */}
           {(referencePrompt || referenceResponse) && (
@@ -155,7 +150,7 @@ export default function AIExercise({
                   </AnimatePresence>
                 </>
               ) : (
-                <ReferenceBlock prompt={referencePrompt} response={referenceResponse} />
+                <ReferenceBlock prompt={referencePrompt} response={referenceResponse} label="Sample Answer" />
               )}
             </div>
           )}
@@ -165,12 +160,12 @@ export default function AIExercise({
   );
 }
 
-function ReferenceBlock({ prompt, response }: { prompt?: string; response?: string }) {
+function ReferenceBlock({ prompt, response, label = 'Reference Example' }: { prompt?: string; response?: string; label?: string }) {
   return (
     <div className="mt-4 rounded-card border border-border bg-surface overflow-hidden">
       <div className="border-b border-border bg-primary/5 px-4 py-2">
         <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-          Reference Example
+          {label}
         </span>
       </div>
       {prompt && (

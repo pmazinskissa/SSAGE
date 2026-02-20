@@ -278,19 +278,14 @@ Respond in this exact JSON format only, no markdown:
                 </motion.div>
               )}
             </>
-          ) : (
-            <div className="flex items-center gap-2 px-4 py-3 bg-warning/10 border border-warning/20 rounded-card text-sm text-warning">
-              <AlertCircle size={16} />
-              AI features are not enabled. Contact your administrator.
-            </div>
-          )}
+          ) : null}
 
-          {/* Reference prompt (always visible, no AI needed) */}
+          {/* Reference prompt — labeled as Sample Answer when AI is off */}
           {referencePrompt && (
             <div className="mt-4 rounded-card border border-border bg-surface overflow-hidden">
               <div className="border-b border-border bg-primary/5 px-4 py-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                  Reference Prompt
+                  {available ? 'Reference Prompt' : 'Sample Answer'}
                 </span>
               </div>
               <div className="p-4">
