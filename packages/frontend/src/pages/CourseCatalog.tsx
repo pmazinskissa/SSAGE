@@ -27,6 +27,7 @@ import AdminUsers from './admin/AdminUsers';
 import AdminUserDetail from './admin/AdminUserDetail';
 import AdminSettings from './admin/AdminSettings';
 import AdminFeedback from './admin/AdminFeedback';
+import Footer from '../components/layout/Footer';
 import type { CourseConfig, CourseNavTree } from '@playbook/shared';
 
 /* ------------------------------------------------------------------ */
@@ -690,13 +691,7 @@ export default function CourseCatalog() {
         ) : null}
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 bg-white/40 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-secondary">
-          <span>{theme?.organization_name || 'Protective Life'} &copy; {new Date().getFullYear()}</span>
-          <span>SSA &amp; Co Guided Education</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

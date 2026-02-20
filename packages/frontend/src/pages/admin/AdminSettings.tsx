@@ -1,13 +1,172 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Key, ShieldCheck, Zap, Settings as SettingsIcon } from 'lucide-react';
+import { Eye, EyeOff, Key, ShieldCheck, Zap, Settings as SettingsIcon, BookOpen, Bot, ListOrdered, ClipboardCheck, Clock } from 'lucide-react';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { fadeInUp, stagger } from '../../lib/animations';
+import type { CourseConfig } from '@playbook/shared';
+
+/* ------------------------------------------------------------------ */
+/*  Course configuration components                                    */
+/* ------------------------------------------------------------------ */
+
+interface CourseSettingsState {
+  ai_features_enabled: boolean;
+  ordered_lessons: boolean;
+  require_knowledge_checks: boolean;
+  min_lesson_time_minutes: number;
+}
+
+function SettingRow({
+  icon,
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: () => void;
+}) {
+  return (
+    <label className="flex items-start gap-3 cursor-pointer group">
+      <div className="mt-0.5 flex-shrink-0">{icon}</div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-text-primary group-hover:text-primary transition-colors">{label}</p>
+        <p className="text-xs text-text-secondary mt-0.5">{description}</p>
+      </div>
+      <div className="flex-shrink-0 mt-0.5">
+        <div
+          onClick={onChange}
+          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+            checked ? 'bg-primary' : 'bg-border'
+          }`}
+        >
+          <span
+            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${
+              checked ? 'translate-x-4' : 'translate-x-0.5'
+            }`}
+          />
+        </div>
+      </div>
+    </label>
+  );
+}
+
+function CourseCard({ course }: { course: CourseConfig }) {
+  const [settings, setSettings] = useState<CourseSettingsState>({
+    ai_features_enabled: course.ai_features_enabled,
+    ordered_lessons: course.navigation_mode === 'linear',
+    require_knowledge_checks: course.require_knowledge_checks ?? false,
+    min_lesson_time_minutes: Math.round((course.min_lesson_time_seconds ?? 0) / 60),
+  });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      await api.updateCourseSettings(course.slug, {
+        ai_features_enabled: settings.ai_features_enabled,
+        ordered_lessons: settings.ordered_lessons,
+        require_knowledge_checks: settings.require_knowledge_checks,
+        min_lesson_time_seconds: settings.min_lesson_time_minutes * 60,
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch {
+      setError('Failed to save settings');
+    }
+    setSaving(false);
+  };
+
+  const toggle = (key: keyof Omit<CourseSettingsState, 'min_lesson_time_minutes'>) =>
+    setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  return (
+    <Card className="p-6 mb-6">
+      <div className="flex items-center gap-2 mb-6">
+        <BookOpen size={18} className="text-success" />
+        <h3 className="text-sm font-semibold text-text-primary">Course Configuration</h3>
+      </div>
+
+      <div className="space-y-5">
+        <SettingRow
+          icon={<Bot size={15} className="text-primary" />}
+          label="AI Assistant"
+          description="Allow learners to use the AI chat assistant while taking this course."
+          checked={settings.ai_features_enabled}
+          onChange={() => toggle('ai_features_enabled')}
+        />
+        <SettingRow
+          icon={<ListOrdered size={15} className="text-primary" />}
+          label="Ordered Lessons"
+          description="Require learners to complete lessons in sequence before unlocking the next one."
+          checked={settings.ordered_lessons}
+          onChange={() => toggle('ordered_lessons')}
+        />
+        <SettingRow
+          icon={<ClipboardCheck size={15} className="text-primary" />}
+          label="Require Knowledge Checks"
+          description="Learners must pass the knowledge check before advancing to the next module."
+          checked={settings.require_knowledge_checks}
+          onChange={() => toggle('require_knowledge_checks')}
+        />
+
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5 flex-shrink-0 text-primary"><Clock size={15} /></div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-text-primary">Minimum Time per Lesson</p>
+                <p className="text-xs text-text-secondary mt-0.5">
+                  Learners must spend at least this long on each lesson before it can be marked complete. Set to 0 to disable.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <input
+                  type="number"
+                  min={0}
+                  max={60}
+                  value={settings.min_lesson_time_minutes}
+                  onChange={(e) =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      min_lesson_time_minutes: Math.max(0, parseInt(e.target.value) || 0),
+                    }))
+                  }
+                  className="w-16 px-2 py-1.5 text-sm text-center border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                />
+                <span className="text-xs text-text-secondary whitespace-nowrap">min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center gap-2">
+        <Button onClick={handleSave} disabled={saving} className="text-xs">
+          {saving ? 'Saving...' : 'Save Course Settings'}
+        </Button>
+        {error && <p className="text-xs text-error">{error}</p>}
+        {saved && <p className="text-xs text-success">Settings saved</p>}
+      </div>
+    </Card>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Main Settings component                                            */
+/* ------------------------------------------------------------------ */
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState<Record<string, string>>({});
+  const [courses, setCourses] = useState<CourseConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,9 +182,13 @@ export default function AdminSettings() {
   const [showOpenaiKey, setShowOpenaiKey] = useState(false);
 
   useEffect(() => {
-    api.getAdminSettings()
-      .then((s) => {
+    Promise.all([
+      api.getAdminSettings(),
+      api.getAdminCourses(),
+    ])
+      .then(([s, c]) => {
         setSettings(s);
+        setCourses(c);
         // Hydrate form from settings
         // Provider-specific keys; fall back to legacy ai_api_key for migration
         const legacyKey = s['ai_api_key'] || '';
@@ -263,6 +426,13 @@ export default function AdminSettings() {
           </p>
         </Card>
       </motion.div>
+
+      {/* Course Configuration */}
+      {courses.map((course) => (
+        <motion.div key={course.slug} variants={fadeInUp}>
+          <CourseCard course={course} />
+        </motion.div>
+      ))}
 
     </motion.div>
     </div>

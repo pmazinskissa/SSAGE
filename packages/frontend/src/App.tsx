@@ -16,13 +16,6 @@ import CompletionPage from './pages/CompletionPage';
 import FeedbackPage from './pages/FeedbackPage';
 import SearchPage from './pages/SearchPage';
 import ReviewWidget from './components/review/ReviewWidget';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminUsers from './pages/admin/AdminUsers';
-import AdminUserDetail from './pages/admin/AdminUserDetail';
-import AdminFeedback from './pages/admin/AdminFeedback';
-import AdminSettings from './pages/admin/AdminSettings';
-import AdminCourses from './pages/admin/AdminCourses';
-import AdminLayout from './components/layout/AdminLayout';
 
 export default function App() {
   return (
@@ -67,22 +60,6 @@ export default function App() {
             <Route path="feedback" element={<FeedbackPage />} />
             <Route path="completion" element={<CompletionPage />} />
             <Route path="search" element={<SearchPage />} />
-          </Route>
-          {/* Admin routes */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute requireAdmin>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<AdminDashboard />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="users/:id" element={<AdminUserDetail />} />
-            <Route path="courses" element={<AdminCourses />} />
-            <Route path="feedback" element={<AdminFeedback />} />
-            <Route path="settings" element={<AdminSettings />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
