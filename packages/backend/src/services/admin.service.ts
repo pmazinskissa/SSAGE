@@ -283,7 +283,23 @@ export async function unenrollUserFromCourse(email: string, courseSlug: string):
   );
 }
 
-export async function getDashboardMetrics(courseSlug?: string, userId?: string): Promise<DashboardMetrics> {
+export async function getDashboardMetrics(courseSlug?: string, userIds?: string[]): Promise<DashboardMetrics> {
+  const hasUserFilter = userIds && userIds.length > 0;
+
+  // Helper: append user ID filter condition (single or multi)
+  const addUserFilter = (conditions: string[], params: any[], startIdx: number): number => {
+    if (!hasUserFilter) return startIdx;
+    if (userIds!.length === 1) {
+      conditions.push(`user_id = $${startIdx}`);
+      params.push(userIds![0]);
+      return startIdx + 1;
+    }
+    const placeholders = userIds!.map((_, i) => `$${startIdx + i}`).join(', ');
+    conditions.push(`user_id IN (${placeholders})`);
+    params.push(...userIds!);
+    return startIdx + userIds!.length;
+  };
+
   // Total enrolled = users + pre_enrolled_users (always aggregate)
   const usersCount = await pool.query('SELECT COUNT(*)::int as count FROM users');
   const preEnrolledCount = await pool.query('SELECT COUNT(*)::int as count FROM pre_enrolled_users');
@@ -294,7 +310,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
   const statusParams: any[] = [];
   let paramIdx = 1;
   if (courseSlug) { statusConditions.push(`course_slug = $${paramIdx++}`); statusParams.push(courseSlug); }
-  if (userId) { statusConditions.push(`user_id = $${paramIdx++}`); statusParams.push(userId); }
+  paramIdx = addUserFilter(statusConditions, statusParams, paramIdx);
   const statusWhere = statusConditions.length > 0 ? `WHERE ${statusConditions.join(' AND ')}` : '';
 
   const statusResult = await pool.query(
@@ -308,7 +324,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
   const completed = statusMap['completed'] || 0;
   const inProgress = statusMap['in_progress'] || 0;
   const withProgress = completed + inProgress + (statusMap['not_started'] || 0);
-  const denominator = userId ? 1 : totalUsers;
+  const denominator = hasUserFilter ? userIds!.length : totalUsers;
   const notStarted = Math.max(0, denominator - withProgress) + (statusMap['not_started'] || 0);
 
   // Average time to completion
@@ -316,7 +332,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
   const avgTimeParams: any[] = [];
   let atIdx = 1;
   if (courseSlug) { avgTimeConditions.push(`course_slug = $${atIdx++}`); avgTimeParams.push(courseSlug); }
-  if (userId) { avgTimeConditions.push(`user_id = $${atIdx++}`); avgTimeParams.push(userId); }
+  atIdx = addUserFilter(avgTimeConditions, avgTimeParams, atIdx);
   const avgTimeResult = await pool.query(
     `SELECT COALESCE(AVG(total_time_seconds), 0)::int as avg_time FROM course_progress WHERE ${avgTimeConditions.join(' AND ')}`,
     avgTimeParams
@@ -328,7 +344,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
   const targetSlug = courseSlug || courses[0]?.slug;
   const navTree = targetSlug ? getCourseNavTree(targetSlug) : null;
 
-  const activeUsersCount = userId ? 1 : usersCount.rows[0].count;
+  const activeUsersCount = hasUserFilter ? userIds!.length : usersCount.rows[0].count;
 
   let avgCompletionPct = 0;
   if (navTree && navTree.modules.length > 0 && activeUsersCount > 0) {
@@ -336,7 +352,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
     const lpParams: any[] = [];
     let lpIdx = 1;
     if (targetSlug) { lpConditions.push(`course_slug = $${lpIdx++}`); lpParams.push(targetSlug); }
-    if (userId) { lpConditions.push(`user_id = $${lpIdx++}`); lpParams.push(userId); }
+    lpIdx = addUserFilter(lpConditions, lpParams, lpIdx);
 
     const lpResult = await pool.query(
       `SELECT user_id, module_slug, COUNT(*)::int as completed
@@ -375,7 +391,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
   const kcParams: any[] = [];
   let kcIdx = 1;
   if (courseSlug) { kcConditions.push(`course_slug = $${kcIdx++}`); kcParams.push(courseSlug); }
-  if (userId) { kcConditions.push(`user_id = $${kcIdx++}`); kcParams.push(userId); }
+  kcIdx = addUserFilter(kcConditions, kcParams, kcIdx);
   const kcWhere = kcConditions.length > 0 ? `WHERE ${kcConditions.join(' AND ')}` : '';
 
   const kcScoreResult = await pool.query(
@@ -398,7 +414,7 @@ export async function getDashboardMetrics(courseSlug?: string, userId?: string):
       let funnelIdx = 2;
       const funnelExtra: string[] = [];
       if (targetSlug) { funnelExtra.push(`course_slug = $${funnelIdx++}`); funnelParams.push(targetSlug); }
-      if (userId) { funnelExtra.push(`user_id = $${funnelIdx++}`); funnelParams.push(userId); }
+      funnelIdx = addUserFilter(funnelExtra, funnelParams, funnelIdx);
       const extraWhere = funnelExtra.length > 0 ? `AND ${funnelExtra.join(' AND ')}` : '';
 
       const modResult = await pool.query(

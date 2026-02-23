@@ -93,9 +93,9 @@ export const api = {
     }),
 
   // Admin — Dashboard
-  getAdminDashboard: (userId?: string) => {
+  getAdminDashboard: (userIds?: string[]) => {
     const params = new URLSearchParams();
-    if (userId) params.set('userId', userId);
+    if (userIds && userIds.length > 0) params.set('userIds', userIds.join(','));
     const qs = params.toString();
     return fetchApi<DashboardMetrics>(`/admin/dashboard${qs ? `?${qs}` : ''}`);
   },
