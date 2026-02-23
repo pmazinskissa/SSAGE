@@ -24,14 +24,14 @@ router.get('/:courseSlug', async (req, res) => {
 // POST /api/progress/:courseSlug/heartbeat — record view + update time
 router.post('/:courseSlug/heartbeat', async (req, res) => {
   try {
-    const { module_slug, lesson_slug, time_delta_seconds } = req.body as HeartbeatPayload;
+    const { module_slug, lesson_slug, time_delta_seconds, active_time_delta_seconds, scroll_depth } = req.body as HeartbeatPayload;
     if (!module_slug || !lesson_slug) {
       return res.status(400).json({ error: { message: 'module_slug and lesson_slug required' } });
     }
 
     await recordLessonView(req.user!.id, req.params.courseSlug, module_slug, lesson_slug);
     if (time_delta_seconds > 0) {
-      await updateTimeOnTask(req.user!.id, req.params.courseSlug, module_slug, lesson_slug, time_delta_seconds);
+      await updateTimeOnTask(req.user!.id, req.params.courseSlug, module_slug, lesson_slug, time_delta_seconds, active_time_delta_seconds, scroll_depth);
     }
 
     res.json({ data: { ok: true } });

@@ -416,9 +416,16 @@ export default function AdminDashboard() {
                           <span className="text-sm font-semibold text-text-primary">{user.name}</span>
                           <p className="text-xs text-text-secondary truncate">{user.email}</p>
                         </div>
-                        {user.total_time_seconds > 0 && (
-                          <span className="text-xs text-text-secondary">{formatTime(user.total_time_seconds)}</span>
-                        )}
+                        {user.total_time_seconds > 0 && (() => {
+                          const active = user.active_time_seconds;
+                          const total = user.total_time_seconds;
+                          const showBoth = active != null && active < total * 0.9;
+                          return (
+                            <span className="text-xs text-text-secondary">
+                              {showBoth ? `${formatTime(active!)} active / ${formatTime(total)}` : formatTime(total)}
+                            </span>
+                          );
+                        })()}
                         <ChevronDown
                           size={16}
                           className={`text-text-secondary transition-transform ${isExpanded ? 'rotate-180' : ''}`}
@@ -531,12 +538,27 @@ export default function AdminDashboard() {
                                                         {mod.lessons.map((lesson) => {
                                                           const lp = modLessons?.get(lesson.slug);
                                                           const lessonStatus = lp?.status || 'not_started';
+                                                          const total = lp?.time_spent_seconds || 0;
+                                                          const active = lp?.active_time_seconds;
+                                                          const showBothTimes = active != null && total > 0 && active < total * 0.9;
                                                           return (
                                                             <div key={lesson.slug} className="flex items-center gap-2 py-1.5 text-xs">
                                                               <StatusIcon status={lessonStatus} size={12} />
                                                               <span className="flex-1 text-text-primary truncate">{lesson.title}</span>
-                                                              {lp?.time_spent_seconds ? (
-                                                                <span className="text-text-secondary">{Math.round(lp.time_spent_seconds / 60)}m</span>
+                                                              {lp?.max_scroll_depth != null && (
+                                                                <div
+                                                                  className="w-12 h-1.5 bg-surface rounded-full overflow-hidden flex-shrink-0"
+                                                                  title={`Scrolled ${lp.max_scroll_depth}% of page`}
+                                                                >
+                                                                  <div className="h-full bg-primary/50 rounded-full" style={{ width: `${lp.max_scroll_depth}%` }} />
+                                                                </div>
+                                                              )}
+                                                              {total > 0 ? (
+                                                                <span className="text-text-secondary">
+                                                                  {showBothTimes
+                                                                    ? `${Math.round(active! / 60)}m active / ${Math.round(total / 60)}m`
+                                                                    : `${Math.round(total / 60)}m`}
+                                                                </span>
                                                               ) : null}
                                                               {lp?.completed_at && (
                                                                 <span className="text-text-secondary">{new Date(lp.completed_at).toLocaleDateString()}</span>
