@@ -12,26 +12,27 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // User autocomplete state
+  // User autocomplete state (multi-select)
   const [allUsers, setAllUsers] = useState<UserWithProgress[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [userSearch, setUserSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Load all users on mount
   useEffect(() => {
     api.getAdminUsers().then(setAllUsers).catch(() => {});
   }, []);
 
-  // Load dashboard metrics — re-fetch when selectedUserId changes
+  // Load dashboard metrics — re-fetch when selectedUserIds changes
   useEffect(() => {
     setLoading(true);
-    api.getAdminDashboard(selectedUserId || undefined)
+    api.getAdminDashboard(selectedUserIds.length > 0 ? selectedUserIds : undefined)
       .then(setMetrics)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [selectedUserId]);
+  }, [selectedUserIds]);
 
   // Click-outside to close dropdown
   useEffect(() => {
@@ -44,13 +45,26 @@ export default function AdminDashboard() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  // Filtered users for dropdown
+  // Filtered users for dropdown (exclude already-selected)
   const lower = userSearch.toLowerCase();
-  const filteredUsers = lower
-    ? allUsers.filter((u) => u.name.toLowerCase().includes(lower) || u.email.toLowerCase().includes(lower)).slice(0, 8)
-    : allUsers.slice(0, 8);
+  const selectedSet = new Set(selectedUserIds);
+  const filteredUsers = (lower
+    ? allUsers.filter((u) => !selectedSet.has(u.id) && (u.name.toLowerCase().includes(lower) || u.email.toLowerCase().includes(lower)))
+    : allUsers.filter((u) => !selectedSet.has(u.id))
+  ).slice(0, 8);
 
-  const selectedUser = selectedUserId ? allUsers.find((u) => u.id === selectedUserId) : null;
+  const selectedUsers = selectedUserIds.map((id) => allUsers.find((u) => u.id === id)).filter(Boolean) as UserWithProgress[];
+
+  const addUser = (id: string) => {
+    setSelectedUserIds((prev) => [...prev, id]);
+    setUserSearch('');
+    setShowDropdown(false);
+    inputRef.current?.focus();
+  };
+
+  const removeUser = (id: string) => {
+    setSelectedUserIds((prev) => prev.filter((uid) => uid !== id));
+  };
 
   if (loading && !metrics) {
     return (
@@ -188,46 +202,62 @@ export default function AdminDashboard() {
       <div className="absolute inset-0 -z-10 bg-surface/30" />
       <div className="absolute inset-0 -z-10 opacity-[0.07]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px, transparent 41px, transparent 80px), repeating-radial-gradient(circle at 30% 70%, transparent 0, transparent 60px, var(--color-primary) 60px, var(--color-primary) 61px, transparent 61px, transparent 120px), repeating-radial-gradient(circle at 70% 30%, transparent 0, transparent 50px, var(--color-primary) 50px, var(--color-primary) 51px, transparent 51px, transparent 100px)' }} />
     <div className="p-6 max-w-6xl mx-auto">
-      {/* User autocomplete filter */}
+      {/* User autocomplete filter (multi-select) */}
       <div className="flex items-center gap-3 mb-6">
         <div className="sm:ml-auto relative" ref={dropdownRef}>
-          {selectedUser ? (
-            <div className="flex items-center gap-2 bg-primary/10 text-primary rounded-full pl-4 pr-2 py-1.5 text-sm font-medium">
-              <span>{selectedUser.name || selectedUser.email}</span>
+          <div
+            className="flex flex-wrap items-center gap-1.5 bg-white border border-border shadow-sm rounded-lg px-2 py-1.5 min-w-[16rem] max-w-md cursor-text focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all"
+            onClick={() => inputRef.current?.focus()}
+          >
+            <Search size={14} className="text-text-secondary pointer-events-none shrink-0" />
+            {selectedUsers.map((u) => (
+              <span
+                key={u.id}
+                className="inline-flex items-center gap-1 bg-primary/10 text-primary rounded-full pl-2.5 pr-1 py-0.5 text-xs font-medium"
+              >
+                {u.name || u.email}
+                <button
+                  onClick={(e) => { e.stopPropagation(); removeUser(u.id); }}
+                  className="p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            ))}
+            <input
+              ref={inputRef}
+              type="text"
+              value={userSearch}
+              onChange={(e) => {
+                setUserSearch(e.target.value);
+                setShowDropdown(true);
+              }}
+              onFocus={() => setShowDropdown(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Backspace' && !userSearch && selectedUserIds.length > 0) {
+                  removeUser(selectedUserIds[selectedUserIds.length - 1]);
+                }
+              }}
+              placeholder={selectedUsers.length === 0 ? 'Filter by user...' : ''}
+              className="flex-1 min-w-[80px] bg-transparent text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none py-0.5"
+            />
+            {selectedUserIds.length > 0 && (
               <button
-                onClick={() => { setSelectedUserId(null); setUserSearch(''); }}
-                className="p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                onClick={(e) => { e.stopPropagation(); setSelectedUserIds([]); setUserSearch(''); }}
+                className="p-0.5 rounded-full text-text-secondary hover:text-text-primary hover:bg-surface transition-colors shrink-0"
+                title="Clear all"
               >
                 <X size={14} />
               </button>
-            </div>
-          ) : (
-            <>
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-              <input
-                type="text"
-                value={userSearch}
-                onChange={(e) => {
-                  setUserSearch(e.target.value);
-                  setShowDropdown(true);
-                }}
-                onFocus={() => setShowDropdown(true)}
-                placeholder="Filter by user..."
-                className="bg-white border border-border shadow-sm rounded-lg pl-8 pr-3 py-2 text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all w-64"
-              />
-            </>
-          )}
+            )}
+          </div>
 
-          {showDropdown && !selectedUser && filteredUsers.length > 0 && (
+          {showDropdown && filteredUsers.length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto">
               {filteredUsers.map((u) => (
                 <button
                   key={u.id}
-                  onClick={() => {
-                    setSelectedUserId(u.id);
-                    setUserSearch('');
-                    setShowDropdown(false);
-                  }}
+                  onClick={() => addUser(u.id)}
                   className="w-full text-left px-3 py-2 hover:bg-surface/50 transition-colors first:rounded-t-lg last:rounded-b-lg"
                 >
                   <p className="text-sm font-medium text-text-primary truncate">{u.name || '(unnamed)'}</p>

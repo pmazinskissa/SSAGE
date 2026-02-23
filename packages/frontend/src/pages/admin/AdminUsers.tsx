@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown, UserX, UserCheck, BookOpen, BookX } from 'lucide-react';
+import { Download, UserPlus, AlertTriangle, ArrowUpDown, X, Upload, Plus, Trash2, Users as UsersIcon, ChevronDown, UserX, UserCheck, BookOpen, BookX, Eye } from 'lucide-react';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import SearchInput from '../../components/ui/SearchInput';
 import { fadeInUp } from '../../lib/animations';
+import AdminUserDetail from './AdminUserDetail';
 import type { UserWithProgress, CourseConfig } from '@playbook/shared';
 
 interface PreEnrolledUser {
@@ -45,6 +46,7 @@ export default function AdminUsers() {
   const [bulkLoading, setBulkLoading] = useState(false);
   const [bulkEnrollCourse, setBulkEnrollCourse] = useState('');
   const [bulkUnenrollCourse, setBulkUnenrollCourse] = useState('');
+  const [viewUserId, setViewUserId] = useState<string | null>(null);
 
   const fetchAll = () => {
     api.getCourses().then(setCourses).catch(() => {});
@@ -540,6 +542,14 @@ export default function AdminUsers() {
                       {!isPre && (
                         <div className="flex items-center gap-1.5">
                           <button
+                            onClick={(e) => { e.stopPropagation(); setViewUserId(user.id); }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-primary bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-all"
+                            title="View details"
+                          >
+                            <Eye size={13} />
+                            View
+                          </button>
+                          <button
                             onClick={(e) => { e.stopPropagation(); handleToggleActive(user.id, user.is_active); }}
                             className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-all ${
                               user.is_active
@@ -810,6 +820,14 @@ export default function AdminUsers() {
           Delete
         </button>
       </div>
+    )}
+
+    {/* User detail modal */}
+    {viewUserId && (
+      <AdminUserDetail
+        userId={viewUserId}
+        onClose={() => { setViewUserId(null); fetchAll(); }}
+      />
     )}
     </>
   );

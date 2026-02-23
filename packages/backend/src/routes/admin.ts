@@ -42,8 +42,13 @@ const upload = multer({ limits: { fileSize: 1024 * 1024 } }); // 1MB
 router.get('/dashboard', async (req, res) => {
   try {
     const courseSlug = req.query.course as string | undefined;
+    const userIds = req.query.userIds
+      ? (req.query.userIds as string).split(',').filter(Boolean)
+      : undefined;
+    // Legacy single-user support
     const userId = req.query.userId as string | undefined;
-    const metrics = await getDashboardMetrics(courseSlug, userId);
+    const resolvedIds = userIds && userIds.length > 0 ? userIds : userId ? [userId] : undefined;
+    const metrics = await getDashboardMetrics(courseSlug, resolvedIds);
     res.json({ data: metrics });
   } catch (err: any) {
     console.error('[Admin] Dashboard error:', err.message);
