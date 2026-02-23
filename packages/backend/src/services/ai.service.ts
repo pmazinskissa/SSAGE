@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import OpenAI from 'openai';
+import OpenAI, { AzureOpenAI } from 'openai';
 import fs from 'fs';
 import path from 'path';
 import { getSetting } from './settings.service.js';
@@ -7,12 +7,13 @@ import { getCourse, getModule } from './content.service.js';
 import { config } from '../config/env.js';
 import type { AIConfig, ChatMessage } from '@playbook/shared';
 
-function deriveProvider(model: string): 'anthropic' | 'openai' {
+function deriveProvider(model: string): 'anthropic' | 'openai' | 'azure-openai' {
+  if (model === 'azure-openai') return 'azure-openai';
   if (model.startsWith('gpt-') || model.startsWith('o1') || model.startsWith('o3')) return 'openai';
   return 'anthropic';
 }
 
-export async function getAIConfig(): Promise<(AIConfig & { apiKey: string }) | null> {
+export async function getAIConfig(): Promise<(AIConfig & { apiKey: string; azureEndpoint?: string; azureApiVersion?: string; azureDeployment?: string }) | null> {
   const [enabled, model] = await Promise.all([
     getSetting('ai_enabled'),
     getSetting('ai_model'),
@@ -21,6 +22,26 @@ export async function getAIConfig(): Promise<(AIConfig & { apiKey: string }) | n
   if (enabled !== 'true' || !model) return null;
 
   const provider = deriveProvider(model);
+
+  if (provider === 'azure-openai') {
+    const [apiKey, endpoint, apiVersion, deployment] = await Promise.all([
+      getSetting('azure_openai_api_key'),
+      getSetting('azure_openai_endpoint'),
+      getSetting('azure_openai_api_version'),
+      getSetting('azure_openai_deployment'),
+    ]);
+    if (!apiKey || !endpoint || !deployment) return null;
+    return {
+      enabled: true,
+      model,
+      provider,
+      apiKey,
+      azureEndpoint: endpoint,
+      azureApiVersion: apiVersion || '2024-10-21',
+      azureDeployment: deployment,
+    };
+  }
+
   const providerKeyName = provider === 'anthropic' ? 'anthropic_api_key' : 'openai_api_key';
 
   // Provider-specific key takes precedence; fall back to legacy ai_api_key
@@ -61,6 +82,32 @@ export async function streamChatResponse(
       stream.on('text', (text) => onChunk(text));
       stream.on('end', () => onDone());
       stream.on('error', (err) => onError(err instanceof Error ? err : new Error(String(err))));
+    } else if (aiConfig.provider === 'azure-openai') {
+      const azureConfig = aiConfig as AIConfig & { apiKey: string; azureEndpoint?: string; azureApiVersion?: string; azureDeployment?: string };
+      const client = new AzureOpenAI({
+        endpoint: azureConfig.azureEndpoint!,
+        apiKey: azureConfig.apiKey,
+        apiVersion: azureConfig.azureApiVersion || '2024-10-21',
+        deployment: azureConfig.azureDeployment!,
+      });
+      const stream = await client.chat.completions.create({
+        model: azureConfig.azureDeployment!,
+        max_tokens: maxTokens,
+        stream: true,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.map((m) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content,
+          })),
+        ],
+      });
+
+      for await (const chunk of stream) {
+        const text = chunk.choices[0]?.delta?.content;
+        if (text) onChunk(text);
+      }
+      onDone();
     } else {
       const client = new OpenAI({ apiKey: aiConfig.apiKey });
       const stream = await client.chat.completions.create({
@@ -90,6 +137,7 @@ export async function streamChatResponse(
 export async function testConnection(
   apiKey: string,
   model: string,
+  azureOptions?: { endpoint: string; apiVersion: string; deployment: string },
 ): Promise<{ success: boolean; message: string; latencyMs: number }> {
   const start = Date.now();
   const provider = deriveProvider(model);
@@ -99,6 +147,18 @@ export async function testConnection(
       const client = new Anthropic({ apiKey });
       await client.messages.create({
         model,
+        max_tokens: 16,
+        messages: [{ role: 'user', content: 'Respond with OK' }],
+      });
+    } else if (provider === 'azure-openai' && azureOptions) {
+      const client = new AzureOpenAI({
+        endpoint: azureOptions.endpoint,
+        apiKey,
+        apiVersion: azureOptions.apiVersion || '2024-10-21',
+        deployment: azureOptions.deployment,
+      });
+      await client.chat.completions.create({
+        model: azureOptions.deployment,
         max_tokens: 16,
         messages: [{ role: 'user', content: 'Respond with OK' }],
       });

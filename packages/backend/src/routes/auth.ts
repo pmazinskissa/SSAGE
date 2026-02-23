@@ -44,7 +44,7 @@ router.get('/providers', (_req, res) => {
 });
 
 // GET /api/auth/login — redirect to IdP
-router.get('/login', (req, res) => {
+router.get('/login', async (req, res) => {
   // Dev bypass: auto-login
   if (config.devAuthBypass) {
     return res.redirect(`${config.appUrl}/login?dev=true`);
@@ -58,7 +58,7 @@ router.get('/login', (req, res) => {
   const codeVerifier = crypto.randomBytes(32).toString('hex');
   pendingAuths.set(state, { codeVerifier, createdAt: Date.now() });
 
-  const authUrl = buildAuthUrl(state, codeVerifier);
+  const authUrl = await buildAuthUrl(state, codeVerifier);
   res.redirect(authUrl);
 });
 

@@ -1,6 +1,6 @@
-title: "AOMT Playbook: Agentic Operating Model Transformation"
+title: "AI-Enabled Problem Solving Playbook"
 slug: "aomt-playbook"
-description: "A comprehensive practitioner's guide to leveraging AI capabilities for operational transformations. Learn the AOMT methodology — a non-linear approach that moves farther and faster in achieving organizational objectives through data-first, AI-first principles."
+description: "A comprehensive practitioner's guide to leveraging AI capabilities for operational transformations. Learn the AI-Enabled Problem Solving methodology — a non-linear approach that moves farther and faster in achieving organizational objectives through data-first, AI-first principles."
 estimated_duration_minutes: 260
 audience: "Non-technical professionals and consultants involved in operational transformation, process improvement, and AI-enabled problem solving."
 prerequisites: []
@@ -8,7 +8,7 @@ navigation_mode: "linear"
 ai_features_enabled: true
 completion_certificate: false
 narrative_synopsis: |
-  This course follows the Metro Cable case study — a fictional telecommunications company facing operational challenges. Through this running example, you'll see every AOMT concept applied to real-world scenarios: diagnosing customer service problems with AI-powered data analysis, prioritizing improvement opportunities using WSJF scoring, prototyping AI-powered solutions, and sustaining improvements through structured governance.
+  This course follows the Metro Cable case study — a fictional telecommunications company facing operational challenges. Through this running example, you'll see every concept applied to real-world scenarios: diagnosing customer service problems with AI-powered data analysis, prioritizing improvement opportunities using WSJF scoring, prototyping AI-powered solutions, and sustaining improvements through structured governance.
 
   The playbook covers three main sections: a Practitioners Guide for AI-empowered problem solving and tool development, a Sustainment Framework for maintaining improvements, and an Organizational Change Management approach for driving adoption.
 modules:

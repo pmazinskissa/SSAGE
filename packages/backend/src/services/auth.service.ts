@@ -55,7 +55,7 @@ export async function findOrCreateOAuthUser(params: {
     await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email]);
   }
 
-  // Auto-enroll new users in the AOMT course
+  // Auto-enroll new users in the course
   await pool.query(
     `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
      VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
@@ -75,7 +75,7 @@ const DEV_USER: AuthUser = {
   id: '00000000-0000-0000-0000-000000000001',
   email: 'dev@localhost',
   name: 'Dev User',
-  role: 'admin',
+  role: 'dev_admin',
 };
 
 export function getDevUser(): AuthUser {
@@ -85,7 +85,7 @@ export function getDevUser(): AuthUser {
 export async function ensureDevUserInDb(): Promise<User> {
   const result = await pool.query(
     `INSERT INTO users (id, email, name, oauth_provider, oauth_subject_id, role, is_active, created_at, last_active_at)
-     VALUES ($1, $2, $3, 'dev', 'dev', 'admin', true, NOW(), NOW())
+     VALUES ($1, $2, $3, 'dev', 'dev', 'dev_admin', true, NOW(), NOW())
      ON CONFLICT (email) DO UPDATE SET last_active_at = NOW()
      RETURNING *`,
     [DEV_USER.id, DEV_USER.email, DEV_USER.name]
@@ -132,7 +132,7 @@ export async function registerLocalUser(params: {
     await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
   }
 
-  // Auto-enroll new users in the AOMT course
+  // Auto-enroll new users in the course
   await pool.query(
     `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
      VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)

@@ -131,10 +131,11 @@ function overlayProgress(navTree: CourseNavTree, progress: import('@playbook/sha
     // Expose KC completion so frontend can compute locked state
     mod.knowledge_check_completed = kcDone.has(mod.slug);
 
-    // Module status: completed if KC done or all lessons done; in_progress if any started
-    if (kcDone.has(mod.slug) || (allLessonsDone && mod.lessons.length > 0)) {
+    // Module status: completed only if all lessons done AND KC done (when applicable); in_progress if any started
+    const kcSatisfied = !mod.has_knowledge_check || kcDone.has(mod.slug);
+    if (allLessonsDone && mod.lessons.length > 0 && kcSatisfied) {
       mod.status = 'completed';
-    } else if (moduleHasProgress) {
+    } else if (moduleHasProgress || kcDone.has(mod.slug)) {
       mod.status = 'in_progress';
     }
   }

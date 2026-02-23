@@ -82,8 +82,13 @@ export function CourseProvider({ children }: { children: ReactNode }) {
     return null;
   }, [navTree]);
 
+  const value = useMemo(
+    () => ({ course, navTree, loading, error, continueLesson, refreshNavTree }),
+    [course, navTree, loading, error, continueLesson, refreshNavTree]
+  );
+
   return (
-    <CourseContext.Provider value={{ course, navTree, loading, error, continueLesson, refreshNavTree }}>
+    <CourseContext.Provider value={value}>
       {children}
     </CourseContext.Provider>
   );

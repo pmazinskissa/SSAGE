@@ -8,29 +8,33 @@ export async function listUsers(): Promise<UserWithProgress[]> {
     'SELECT * FROM users ORDER BY created_at DESC'
   );
 
-  const users: UserWithProgress[] = [];
+  const userIds = usersResult.rows.map((r: any) => r.id);
+  if (userIds.length === 0) return [];
 
-  for (const row of usersResult.rows) {
-    const cpResult = await pool.query(
-      `SELECT course_slug, status, total_time_seconds, completed_at
-       FROM course_progress WHERE user_id = $1`,
-      [row.id]
-    );
+  const cpResult = await pool.query(
+    `SELECT user_id, course_slug, status, total_time_seconds, completed_at
+     FROM course_progress WHERE user_id = ANY($1::uuid[])`,
+    [userIds]
+  );
 
-    users.push({
-      ...row,
-      created_at: row.created_at?.toISOString() || '',
-      last_active_at: row.last_active_at?.toISOString() || '',
-      course_progress: cpResult.rows.map((cp: any) => ({
-        course_slug: cp.course_slug,
-        status: cp.status,
-        total_time_seconds: cp.total_time_seconds || 0,
-        completed_at: cp.completed_at?.toISOString() || null,
-      })),
-    });
+  const cpMap = new Map<string, any[]>();
+  for (const cp of cpResult.rows) {
+    const list = cpMap.get(cp.user_id) || [];
+    list.push(cp);
+    cpMap.set(cp.user_id, list);
   }
 
-  return users;
+  return usersResult.rows.map((row: any) => ({
+    ...row,
+    created_at: row.created_at?.toISOString() || '',
+    last_active_at: row.last_active_at?.toISOString() || '',
+    course_progress: (cpMap.get(row.id) || []).map((cp: any) => ({
+      course_slug: cp.course_slug,
+      status: cp.status,
+      total_time_seconds: cp.total_time_seconds || 0,
+      completed_at: cp.completed_at?.toISOString() || null,
+    })),
+  }));
 }
 
 export async function getUserDetail(userId: string): Promise<UserDetail | null> {
@@ -279,18 +283,23 @@ export async function unenrollUserFromCourse(email: string, courseSlug: string):
   );
 }
 
-export async function getDashboardMetrics(courseSlug?: string): Promise<DashboardMetrics> {
-  // Total enrolled = users + pre_enrolled_users
+export async function getDashboardMetrics(courseSlug?: string, userId?: string): Promise<DashboardMetrics> {
+  // Total enrolled = users + pre_enrolled_users (always aggregate)
   const usersCount = await pool.query('SELECT COUNT(*)::int as count FROM users');
   const preEnrolledCount = await pool.query('SELECT COUNT(*)::int as count FROM pre_enrolled_users');
   const totalUsers = usersCount.rows[0].count + preEnrolledCount.rows[0].count;
 
-  // Status breakdown
+  // Build dynamic WHERE conditions for status breakdown
+  const statusConditions: string[] = [];
+  const statusParams: any[] = [];
+  let paramIdx = 1;
+  if (courseSlug) { statusConditions.push(`course_slug = $${paramIdx++}`); statusParams.push(courseSlug); }
+  if (userId) { statusConditions.push(`user_id = $${paramIdx++}`); statusParams.push(userId); }
+  const statusWhere = statusConditions.length > 0 ? `WHERE ${statusConditions.join(' AND ')}` : '';
+
   const statusResult = await pool.query(
-    `SELECT status, COUNT(*)::int as count FROM course_progress
-     ${courseSlug ? 'WHERE course_slug = $1' : ''}
-     GROUP BY status`,
-    courseSlug ? [courseSlug] : []
+    `SELECT status, COUNT(*)::int as count FROM course_progress ${statusWhere} GROUP BY status`,
+    statusParams
   );
   const statusMap: Record<string, number> = {};
   for (const row of statusResult.rows) {
@@ -298,63 +307,115 @@ export async function getDashboardMetrics(courseSlug?: string): Promise<Dashboar
   }
   const completed = statusMap['completed'] || 0;
   const inProgress = statusMap['in_progress'] || 0;
-  // Not started = total users - those with any course_progress record
   const withProgress = completed + inProgress + (statusMap['not_started'] || 0);
-  const notStarted = Math.max(0, totalUsers - withProgress) + (statusMap['not_started'] || 0);
+  const denominator = userId ? 1 : totalUsers;
+  const notStarted = Math.max(0, denominator - withProgress) + (statusMap['not_started'] || 0);
 
-  // Average time to completion (completers only)
+  // Average time to completion
+  const avgTimeConditions: string[] = ["status = 'completed'"];
+  const avgTimeParams: any[] = [];
+  let atIdx = 1;
+  if (courseSlug) { avgTimeConditions.push(`course_slug = $${atIdx++}`); avgTimeParams.push(courseSlug); }
+  if (userId) { avgTimeConditions.push(`user_id = $${atIdx++}`); avgTimeParams.push(userId); }
   const avgTimeResult = await pool.query(
-    `SELECT COALESCE(AVG(total_time_seconds), 0)::int as avg_time FROM course_progress
-     WHERE status = 'completed' ${courseSlug ? 'AND course_slug = $1' : ''}`,
-    courseSlug ? [courseSlug] : []
+    `SELECT COALESCE(AVG(total_time_seconds), 0)::int as avg_time FROM course_progress WHERE ${avgTimeConditions.join(' AND ')}`,
+    avgTimeParams
   );
   const avgTime = avgTimeResult.rows[0].avg_time;
 
-  // Average completion % across active users (users who have started)
-  // Get total lessons from nav tree
+  // Average completion % — per-module averaging
   const courses = listCourses();
   const targetSlug = courseSlug || courses[0]?.slug;
   const navTree = targetSlug ? getCourseNavTree(targetSlug) : null;
-  const totalLessons = navTree?.total_lessons || 1;
 
-  const activeUsersCount = usersCount.rows[0].count;
-
-  const avgCompResult = await pool.query(
-    `SELECT user_id, COUNT(*)::int as completed_lessons
-     FROM lesson_progress WHERE status = 'completed'
-     ${courseSlug ? 'AND course_slug = $1' : ''}
-     GROUP BY user_id`,
-    courseSlug ? [courseSlug] : []
-  );
+  const activeUsersCount = userId ? 1 : usersCount.rows[0].count;
 
   let avgCompletionPct = 0;
-  if (avgCompResult.rows.length > 0 && activeUsersCount > 0) {
-    const totalPct = avgCompResult.rows.reduce(
-      (sum: number, row: any) => sum + (row.completed_lessons / totalLessons) * 100,
-      0
+  if (navTree && navTree.modules.length > 0 && activeUsersCount > 0) {
+    const lpConditions: string[] = ["status = 'completed'"];
+    const lpParams: any[] = [];
+    let lpIdx = 1;
+    if (targetSlug) { lpConditions.push(`course_slug = $${lpIdx++}`); lpParams.push(targetSlug); }
+    if (userId) { lpConditions.push(`user_id = $${lpIdx++}`); lpParams.push(userId); }
+
+    const lpResult = await pool.query(
+      `SELECT user_id, module_slug, COUNT(*)::int as completed
+       FROM lesson_progress WHERE ${lpConditions.join(' AND ')}
+       GROUP BY user_id, module_slug`,
+      lpParams
     );
-    avgCompletionPct = Math.round(totalPct / activeUsersCount) || 0;
+
+    const userModules: Record<string, Record<string, number>> = {};
+    for (const row of lpResult.rows) {
+      if (!userModules[row.user_id]) userModules[row.user_id] = {};
+      userModules[row.user_id][row.module_slug] = row.completed;
+    }
+
+    const moduleTotals: Record<string, number> = {};
+    for (const mod of navTree.modules) {
+      moduleTotals[mod.slug] = mod.lessons.length;
+    }
+
+    let totalUserPct = 0;
+    for (const _userId of Object.keys(userModules)) {
+      let moduleSum = 0;
+      for (const mod of navTree.modules) {
+        const completedCount = userModules[_userId][mod.slug] || 0;
+        const total = moduleTotals[mod.slug] || 1;
+        moduleSum += Math.min(completedCount / total, 1) * 100;
+      }
+      totalUserPct += moduleSum / navTree.modules.length;
+    }
+
+    avgCompletionPct = Math.round(totalUserPct / activeUsersCount) || 0;
   }
+
+  // Knowledge check score
+  const kcConditions: string[] = [];
+  const kcParams: any[] = [];
+  let kcIdx = 1;
+  if (courseSlug) { kcConditions.push(`course_slug = $${kcIdx++}`); kcParams.push(courseSlug); }
+  if (userId) { kcConditions.push(`user_id = $${kcIdx++}`); kcParams.push(userId); }
+  const kcWhere = kcConditions.length > 0 ? `WHERE ${kcConditions.join(' AND ')}` : '';
+
+  const kcScoreResult = await pool.query(
+    `SELECT AVG(score)::int as avg_score FROM (
+      SELECT user_id,
+        ROUND(SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::numeric / COUNT(*)::numeric * 100) as score
+      FROM knowledge_check_results
+      ${kcWhere}
+      GROUP BY user_id
+    ) sub`,
+    kcParams
+  );
+  const avgKcScore = kcScoreResult.rows[0]?.avg_score || 0;
 
   // Module funnel
   const moduleFunnel: DashboardMetrics['module_funnel'] = [];
-  if (navTree) {
+  if (navTree && activeUsersCount > 0) {
     for (const mod of navTree.modules) {
+      const funnelParams: any[] = [mod.slug];
+      let funnelIdx = 2;
+      const funnelExtra: string[] = [];
+      if (targetSlug) { funnelExtra.push(`course_slug = $${funnelIdx++}`); funnelParams.push(targetSlug); }
+      if (userId) { funnelExtra.push(`user_id = $${funnelIdx++}`); funnelParams.push(userId); }
+      const extraWhere = funnelExtra.length > 0 ? `AND ${funnelExtra.join(' AND ')}` : '';
+
       const modResult = await pool.query(
-        `SELECT user_id FROM lesson_progress
-         WHERE module_slug = $1 AND status = 'completed'
-         ${courseSlug ? 'AND course_slug = $2' : ''}
-         GROUP BY user_id
-         HAVING COUNT(*) >= $${courseSlug ? '3' : '2'}`,
-        courseSlug
-          ? [mod.slug, courseSlug, mod.lessons.length]
-          : [mod.slug, mod.lessons.length]
+        `SELECT user_id, COUNT(*)::int as completed_count FROM lesson_progress
+         WHERE module_slug = $1 AND status = 'completed' ${extraWhere}
+         GROUP BY user_id`,
+        funnelParams
       );
-      const completedUsers = modResult.rows.length;
+      const totalModLessons = mod.lessons.length || 1;
+      const sumPct = modResult.rows.reduce(
+        (sum: number, row: any) => sum + Math.min(row.completed_count / totalModLessons, 1) * 100,
+        0
+      );
       moduleFunnel.push({
         module_slug: mod.slug,
         module_title: mod.title,
-        completion_pct: totalUsers > 0 ? Math.round((completedUsers / totalUsers) * 100) : 0,
+        completion_pct: Math.round(sumPct / activeUsersCount),
       });
     }
   }
@@ -366,6 +427,7 @@ export async function getDashboardMetrics(courseSlug?: string): Promise<Dashboar
     not_started: notStarted,
     avg_completion_pct: avgCompletionPct,
     avg_time_to_completion_seconds: avgTime,
+    avg_kc_score: avgKcScore,
     module_funnel: moduleFunnel,
   };
 }
@@ -381,50 +443,59 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
   }));
 
   const usersResult = await pool.query('SELECT id, name, email, role FROM users ORDER BY name ASC');
+  const userIds = usersResult.rows.map((r: any) => r.id);
+  if (userIds.length === 0) return [];
 
-  const results: UserWithModuleAnalytics[] = [];
-
-  for (const user of usersResult.rows) {
-    // Course-level progress
-    const cpResult = await pool.query(
-      'SELECT status, total_time_seconds FROM course_progress WHERE user_id = $1 AND course_slug = $2',
-      [user.id, courseSlug]
-    );
-    const cp = cpResult.rows[0];
-
-    // Lesson progress per module
-    const lpResult = await pool.query(
-      `SELECT module_slug,
+  const [cpResult, lpResult, kcResult] = await Promise.all([
+    pool.query(
+      'SELECT user_id, status, total_time_seconds FROM course_progress WHERE user_id = ANY($1::uuid[]) AND course_slug = $2',
+      [userIds, courseSlug]
+    ),
+    pool.query(
+      `SELECT user_id, module_slug,
               COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
               COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
        FROM lesson_progress
-       WHERE user_id = $1 AND course_slug = $2
-       GROUP BY module_slug`,
-      [user.id, courseSlug]
-    );
-    const lpMap: Record<string, { completed: number; time_seconds: number }> = {};
-    for (const row of lpResult.rows) {
-      lpMap[row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
-    }
-
-    // KC scores per module
-    const kcResult = await pool.query(
-      `SELECT module_slug,
+       WHERE user_id = ANY($1::uuid[]) AND course_slug = $2
+       GROUP BY user_id, module_slug`,
+      [userIds, courseSlug]
+    ),
+    pool.query(
+      `SELECT user_id, module_slug,
               COUNT(*)::int as total,
               SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::int as correct
        FROM knowledge_check_results
-       WHERE user_id = $1 AND course_slug = $2
-       GROUP BY module_slug`,
-      [user.id, courseSlug]
-    );
-    const kcMap: Record<string, { total: number; correct: number }> = {};
-    for (const row of kcResult.rows) {
-      kcMap[row.module_slug] = { total: row.total, correct: row.correct };
-    }
+       WHERE user_id = ANY($1::uuid[]) AND course_slug = $2
+       GROUP BY user_id, module_slug`,
+      [userIds, courseSlug]
+    ),
+  ]);
+
+  const cpMap = new Map<string, any>();
+  for (const row of cpResult.rows) {
+    cpMap.set(row.user_id, row);
+  }
+
+  const lpMap = new Map<string, Record<string, { completed: number; time_seconds: number }>>();
+  for (const row of lpResult.rows) {
+    if (!lpMap.has(row.user_id)) lpMap.set(row.user_id, {});
+    lpMap.get(row.user_id)![row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
+  }
+
+  const kcMap = new Map<string, Record<string, { total: number; correct: number }>>();
+  for (const row of kcResult.rows) {
+    if (!kcMap.has(row.user_id)) kcMap.set(row.user_id, {});
+    kcMap.get(row.user_id)![row.module_slug] = { total: row.total, correct: row.correct };
+  }
+
+  return usersResult.rows.map((user: any) => {
+    const cp = cpMap.get(user.id);
+    const userLp = lpMap.get(user.id) || {};
+    const userKc = kcMap.get(user.id) || {};
 
     const moduleProgress: UserModuleProgress[] = modules.map((m) => {
-      const lp = lpMap[m.slug];
-      const kc = kcMap[m.slug];
+      const lp = userLp[m.slug];
+      const kc = userKc[m.slug];
       return {
         module_slug: m.slug,
         module_title: m.title,
@@ -435,7 +506,7 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
       };
     });
 
-    results.push({
+    return {
       id: user.id,
       name: user.name,
       email: user.email,
@@ -443,17 +514,34 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
       status: cp?.status || 'not_started',
       total_time_seconds: cp?.total_time_seconds || 0,
       modules: moduleProgress,
-    });
-  }
-
-  return results;
+    };
+  });
 }
 
 export async function exportUsersCSV(courseSlug?: string): Promise<string> {
-  const users = await listUsers();
+  // Fetch users + course progress in batch (same as listUsers but inline to avoid double query)
+  const usersResult = await pool.query('SELECT * FROM users ORDER BY created_at DESC');
+  const userIds = usersResult.rows.map((r: any) => r.id);
+
+  if (userIds.length === 0) return '"Name","Email","Role","Status","Total Time (min)","Enrolled","Last Active"';
+
+  const cpResult = await pool.query(
+    `SELECT user_id, course_slug, status, total_time_seconds, completed_at
+     FROM course_progress WHERE user_id = ANY($1::uuid[])`,
+    [userIds]
+  );
+  const cpMap = new Map<string, any[]>();
+  for (const cp of cpResult.rows) {
+    const list = cpMap.get(cp.user_id) || [];
+    list.push(cp);
+    cpMap.set(cp.user_id, list);
+  }
 
   // If a course is specified, get its nav tree for per-module columns
   let modules: { slug: string; title: string; lessonCount: number }[] = [];
+  let lpMap = new Map<string, Record<string, { completed: number; time_seconds: number }>>();
+  let kcMap = new Map<string, Record<string, { total: number; correct: number }>>();
+
   if (courseSlug) {
     const navTree = getCourseNavTree(courseSlug);
     if (navTree) {
@@ -462,6 +550,38 @@ export async function exportUsersCSV(courseSlug?: string): Promise<string> {
         title: m.title,
         lessonCount: m.lessons.length,
       }));
+    }
+
+    if (modules.length > 0) {
+      const [lpResult, kcResult] = await Promise.all([
+        pool.query(
+          `SELECT user_id, module_slug,
+                  COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
+                  COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
+           FROM lesson_progress
+           WHERE user_id = ANY($1::uuid[]) AND course_slug = $2
+           GROUP BY user_id, module_slug`,
+          [userIds, courseSlug]
+        ),
+        pool.query(
+          `SELECT user_id, module_slug,
+                  COUNT(*)::int as total,
+                  SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::int as correct
+           FROM knowledge_check_results
+           WHERE user_id = ANY($1::uuid[]) AND course_slug = $2
+           GROUP BY user_id, module_slug`,
+          [userIds, courseSlug]
+        ),
+      ]);
+
+      for (const row of lpResult.rows) {
+        if (!lpMap.has(row.user_id)) lpMap.set(row.user_id, {});
+        lpMap.get(row.user_id)![row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
+      }
+      for (const row of kcResult.rows) {
+        if (!kcMap.has(row.user_id)) kcMap.set(row.user_id, {});
+        kcMap.get(row.user_id)![row.module_slug] = { total: row.total, correct: row.correct };
+      }
     }
   }
 
@@ -477,49 +597,32 @@ export async function exportUsersCSV(courseSlug?: string): Promise<string> {
 
   // Build rows
   const rows: string[] = [];
-  for (const u of users) {
+  for (const u of usersResult.rows) {
+    const userCp = cpMap.get(u.id) || [];
     const cp = courseSlug
-      ? u.course_progress.find((p) => p.course_slug === courseSlug)
-      : u.course_progress[0];
+      ? userCp.find((p: any) => p.course_slug === courseSlug)
+      : userCp[0];
     const status = cp?.status || 'not_started';
     const totalTime = Math.round((cp?.total_time_seconds || 0) / 60);
 
-    const baseCols = [u.name, u.email, u.role, status, String(totalTime), u.created_at, u.last_active_at];
+    const baseCols = [
+      u.name,
+      u.email,
+      u.role,
+      status,
+      String(totalTime),
+      u.created_at?.toISOString() || '',
+      u.last_active_at?.toISOString() || '',
+    ];
 
     let moduleCols: string[] = [];
     if (courseSlug && modules.length > 0) {
-      // Fetch per-module lesson progress for this user
-      const lpResult = await pool.query(
-        `SELECT module_slug, COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
-                COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
-         FROM lesson_progress
-         WHERE user_id = $1 AND course_slug = $2
-         GROUP BY module_slug`,
-        [u.id, courseSlug]
-      );
-      const lpMap: Record<string, { completed: number; time_seconds: number }> = {};
-      for (const row of lpResult.rows) {
-        lpMap[row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
-      }
-
-      // Fetch per-module KC scores
-      const kcResult = await pool.query(
-        `SELECT module_slug,
-                COUNT(*)::int as total,
-                SUM(CASE WHEN is_correct THEN 1 ELSE 0 END)::int as correct
-         FROM knowledge_check_results
-         WHERE user_id = $1 AND course_slug = $2
-         GROUP BY module_slug`,
-        [u.id, courseSlug]
-      );
-      const kcMap: Record<string, { total: number; correct: number }> = {};
-      for (const row of kcResult.rows) {
-        kcMap[row.module_slug] = { total: row.total, correct: row.correct };
-      }
+      const userLp = lpMap.get(u.id) || {};
+      const userKc = kcMap.get(u.id) || {};
 
       moduleCols = modules.flatMap((m) => {
-        const lp = lpMap[m.slug];
-        const kc = kcMap[m.slug];
+        const lp = userLp[m.slug];
+        const kc = userKc[m.slug];
         const lessonsCompleted = lp?.completed || 0;
         const moduleStatus = lessonsCompleted >= m.lessonCount ? 'completed' : lessonsCompleted > 0 ? 'in_progress' : 'not_started';
         const timeMin = Math.round((lp?.time_seconds || 0) / 60);

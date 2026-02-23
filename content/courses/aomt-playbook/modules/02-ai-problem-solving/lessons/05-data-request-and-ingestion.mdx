@@ -34,7 +34,7 @@ Once data is received, ingestion involves loading it into the AI analysis enviro
 4. **Document limitations** — Record known data quality issues, gaps, or caveats
 
 <Callout type="tip" title="More Data Is Better">
-In AOMT, the bias should always be toward requesting more data rather than less. AI tools can process large volumes efficiently, and datasets that seem peripheral often contain unexpected insights. The cost of ingesting extra data is minimal compared to the cost of missing a critical pattern because the data was never requested.
+In AI-Enabled Problem Solving, the bias should always be toward requesting more data rather than less. AI tools can process large volumes efficiently, and datasets that seem peripheral often contain unexpected insights. The cost of ingesting extra data is minimal compared to the cost of missing a critical pattern because the data was never requested.
 </Callout>
 
 <Callout type="warning" title="Data Governance">
@@ -42,7 +42,7 @@ Always follow your organization's data governance policies when requesting and h
 </Callout>
 
 <DecisionPoint
-  scenario="You're starting a new AOMT engagement. The client offers two data options: (A) a clean, curated dataset covering 3 months of operations, or (B) a raw, uncleaned dataset covering 18 months with known quality issues. Which do you choose?"
+  scenario="You're starting a new engagement. The client offers two data options: (A) a clean, curated dataset covering 3 months of operations, or (B) a raw, uncleaned dataset covering 18 months with known quality issues. Which do you choose?"
   options={[
     { id: "curated", label: "Option A: Clean 3-month dataset", outcome: "While easier to work with, 3 months may not capture seasonal patterns, trends, or rare events. You risk missing critical insights that only emerge over longer time periods." },
     { id: "raw", label: "Option B: Raw 18-month dataset", outcome: "AI tools can handle data cleaning efficiently. The longer time period reveals seasonal patterns, trends, and edge cases. The initial effort to clean the data is far outweighed by the analytical depth it enables.", recommended: true },

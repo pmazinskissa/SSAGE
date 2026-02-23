@@ -7,14 +7,19 @@ order: 8
 
 # Prompt Scoring Exercise
 
-Now it's your turn to practice the Context + Task + Output framework from the previous lesson. In this exercise, you'll write a prompt for a realistic AOMT scenario and receive AI-powered feedback on how well you applied each dimension of the C+T+O framework.
+Now it's your turn to practice the Context + Task + Output framework from the previous lesson. In this exercise, you'll write a prompt for a realistic scenario and receive AI-powered feedback on how well you applied each dimension of the C+T+O framework.
 
 <Callout type="tip" title="Before You Begin">
 Think back to the three components: **Context** (what data is available and what's been found so far), **Task** (the specific analytical method and variables), and **Output** (the format and level of detail you need). A strong prompt addresses all three clearly and specifically.
 </Callout>
 
 <PromptScorer
-  scenario="You are an AOMT practitioner analyzing Metro Cable's field service operations. You have completed initial data ingestion and want to investigate why certain service zones consistently underperform."
+  scenario="You are a practitioner analyzing Metro Cable's field service operations. You have completed initial data ingestion and want to investigate why certain service zones consistently underperform."
   dataContext="14 months of dispatch records (350,000+ rows) including technician IDs, job types, resolution outcomes, travel times, and zone assignments. Also: technician certification database, geographic zone maps, and customer satisfaction surveys by zone."
   objective="Write a prompt that uses the Context-Task-Output framework to analyze the relationship between technician travel distance and first-visit resolution rates across service zones."
+  referencePrompt={`Context: I have 14 months of Metro Cable dispatch records (350,000+ rows) with technician IDs, job types, resolution outcomes (first-visit fix vs. return visit), travel times, and zone assignments. I also have a technician certification database and geographic zone boundary maps. Initial analysis shows that zones 4, 7, and 12 have first-visit resolution rates 15–20% below the company average.
+
+Task: Perform a correlation analysis between average technician travel distance (calculated from dispatch-to-arrival timestamps) and first-visit resolution rate, grouped by service zone. Control for job type complexity and technician certification level to isolate the travel distance effect.
+
+Output: Return a summary table with one row per zone showing: zone ID, average travel distance (minutes), first-visit resolution rate (%), job complexity mix, and the partial correlation coefficient between travel distance and resolution rate. Flag any zones where travel distance appears to be the primary driver of underperformance. Include a brief interpretation of the top 3 findings.`}
 />

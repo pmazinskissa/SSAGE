@@ -1,10 +1,10 @@
 title: "Playbook Overview"
 slug: "01-overview"
-description: "Introduction to the AOMT framework, its principles, and playbook structure."
+description: "Introduction to the AI-Enabled Problem Solving framework, its principles, and playbook structure."
 objectives:
-  - "Understand the purpose and scope of the AOMT Playbook"
+  - "Understand the purpose and scope of the AI-Enabled Problem Solving Playbook"
   - "Learn the two core principles: Data First and AI First"
-  - "Familiarize with the AOMT core activities and playbook structure"
+  - "Familiarize with the core activities and playbook structure"
 estimated_duration_minutes: 30
 lessons:
   - "01-cover-and-overview"

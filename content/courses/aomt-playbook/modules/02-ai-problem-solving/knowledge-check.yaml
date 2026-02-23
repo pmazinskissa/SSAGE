@@ -59,9 +59,9 @@ questions:
 
   - id: "m2-q4"
     type: "true-false"
-    question: "In the AOMT methodology, you should pre-plan your entire analysis sequence before beginning any data exploration."
+    question: "In this methodology, you should pre-plan your entire analysis sequence before beginning any data exploration."
     correct_answer: false
-    explanation: "False. The AOMT approach recommends starting with a broad question, interpreting the results, and letting curiosity guide the next question. AI makes this exploratory, non-linear approach optimal."
+    explanation: "False. The AI-Enabled Problem Solving approach recommends starting with a broad question, interpreting the results, and letting curiosity guide the next question. AI makes this exploratory, non-linear approach optimal."
     lesson_link: "07-curiosity-enabled-analysis"
     lesson_link_label: "Review: Curiosity-Enabled Analysis"
 
