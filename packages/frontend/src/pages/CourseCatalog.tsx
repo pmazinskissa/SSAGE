@@ -520,14 +520,14 @@ export default function CourseCatalog() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-elevation-1">
         <div className="relative flex items-center h-14 px-4 gap-3">
-          <Link
-            to="/"
+          <button
+            onClick={() => setActiveTab('courses')}
             className="p-2 rounded-md hover:bg-surface transition-colors"
             aria-label="All Courses"
             title="All Courses"
           >
             <Home size={20} className="text-primary" />
-          </Link>
+          </button>
           <div className="hidden sm:block shrink-0">
             <img
               src="/assets/Protective_Life_logo.svg.png"
