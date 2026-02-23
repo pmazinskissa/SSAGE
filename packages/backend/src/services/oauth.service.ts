@@ -39,15 +39,15 @@ export function isOAuthEnabled(): boolean {
   return oidcConfig !== null;
 }
 
-export function buildAuthUrl(state: string, codeVerifier: string): string {
+export async function buildAuthUrl(state: string, codeVerifier: string): Promise<string> {
   if (!oidcConfig) throw new Error('OAuth not initialized');
 
-  const codeChallenge = client.calculatePKCECodeChallenge(codeVerifier);
+  const codeChallenge = await client.calculatePKCECodeChallenge(codeVerifier);
   const params: Record<string, string> = {
     redirect_uri: config.oauthCallbackUrl,
     scope: config.oauthScopes,
     state,
-    code_challenge: codeChallenge as unknown as string,
+    code_challenge: codeChallenge,
     code_challenge_method: 'S256',
   };
 

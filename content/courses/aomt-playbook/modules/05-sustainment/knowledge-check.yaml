@@ -3,7 +3,7 @@ description: "Test your understanding of the sustainment framework, structural a
 questions:
   - id: "m5-q1"
     type: "multiple-choice-single"
-    question: "What are the three pillars of the AOMT Sustainment Framework?"
+    question: "What are the three pillars of the Sustainment Framework?"
     options:
       - id: "a"
         text: "Plan, Execute, Monitor"
@@ -82,7 +82,7 @@ questions:
       - "b"
       - "d"
       - "e"
-    explanation: "The four types of drift identified in the sustainment framework are: process drift, model drift, priority drift, and knowledge drift. While budget changes can be a concern, 'budget drift' is not one of the defined drift categories in the AOMT framework."
+    explanation: "The four types of drift identified in the sustainment framework are: process drift, model drift, priority drift, and knowledge drift. While budget changes can be a concern, 'budget drift' is not one of the defined drift categories in this framework."
     lesson_link: "01-sustainment-framework"
     lesson_link_label: "Review: Sustainment Framework"
 

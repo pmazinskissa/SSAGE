@@ -5,6 +5,7 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  password_hash?: string | null;
   oauth_provider: string | null;
   oauth_subject_id: string | null;
   is_active: boolean;

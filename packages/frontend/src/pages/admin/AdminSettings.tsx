@@ -98,8 +98,8 @@ function CourseCard({ course }: { course: CourseConfig }) {
       <div className="space-y-5">
         <SettingRow
           icon={<Bot size={15} className="text-primary" />}
-          label="AI Assistant"
-          description="Allow learners to use the AI chat assistant while taking this course."
+          label="AI Features"
+          description="Enable all AI-powered features for this course, including the chat assistant, prompt scoring, and adaptive feedback."
           checked={settings.ai_features_enabled}
           onChange={() => toggle('ai_features_enabled')}
         />
@@ -174,12 +174,16 @@ export default function AdminSettings() {
   const [anthropicKey, setAnthropicKey] = useState('');
   const [openaiKey, setOpenaiKey] = useState('');
   const [aiModel, setAiModel] = useState('claude-sonnet-4-6');
-  const [aiEnabled, setAiEnabled] = useState(false);
   const [aiTestResult, setAiTestResult] = useState<{ success: boolean; message: string; latencyMs?: number } | null>(null);
   const [aiTesting, setAiTesting] = useState(false);
   const [aiSaving, setAiSaving] = useState(false);
   const [showAnthropicKey, setShowAnthropicKey] = useState(false);
   const [showOpenaiKey, setShowOpenaiKey] = useState(false);
+  const [azureEndpoint, setAzureEndpoint] = useState('');
+  const [azureApiKey, setAzureApiKey] = useState('');
+  const [azureApiVersion, setAzureApiVersion] = useState('2024-10-21');
+  const [azureDeployment, setAzureDeployment] = useState('');
+  const [showAzureKey, setShowAzureKey] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -196,9 +200,13 @@ export default function AdminSettings() {
         const isGpt = savedModel.startsWith('gpt-');
         setAnthropicKey(s['anthropic_api_key'] || (!isGpt ? legacyKey : ''));
         setOpenaiKey(s['openai_api_key'] || (isGpt ? legacyKey : ''));
-        const VALID_MODELS = ['claude-sonnet-4-6', 'gpt-5.2'];
+        setAzureEndpoint(s['azure_openai_endpoint'] || '');
+        setAzureApiKey(s['azure_openai_api_key'] || '');
+        setAzureApiVersion(s['azure_openai_api_version'] || '2024-10-21');
+        setAzureDeployment(s['azure_openai_deployment'] || '');
+        const VALID_MODELS = ['claude-sonnet-4-6', 'gpt-5.2', 'azure-openai'];
         setAiModel(VALID_MODELS.includes(savedModel) ? savedModel : 'claude-sonnet-4-6');
-        setAiEnabled(s['ai_enabled'] === 'true');
+        // ai_enabled is now controlled by the per-course AI Features toggle
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
@@ -211,7 +219,11 @@ export default function AdminSettings() {
         api.updateSetting('anthropic_api_key', anthropicKey),
         api.updateSetting('openai_api_key', openaiKey),
         api.updateSetting('ai_model', aiModel),
-        api.updateSetting('ai_enabled', String(aiEnabled)),
+        api.updateSetting('ai_enabled', 'true'),
+        api.updateSetting('azure_openai_endpoint', azureEndpoint),
+        api.updateSetting('azure_openai_api_key', azureApiKey),
+        api.updateSetting('azure_openai_api_version', azureApiVersion),
+        api.updateSetting('azure_openai_deployment', azureDeployment),
       ]);
     } catch {
       alert('Failed to save AI settings');
@@ -284,6 +296,13 @@ export default function AdminSettings() {
       animate="visible"
       className="p-6 max-w-3xl mx-auto"
     >
+      {/* Course Configuration */}
+      {courses.map((course) => (
+        <motion.div key={course.slug} variants={fadeInUp}>
+          <CourseCard course={course} />
+        </motion.div>
+      ))}
+
       {/* AI Configuration */}
       <motion.div variants={fadeInUp}>
         <Card className="p-6 mb-6">
@@ -294,48 +313,6 @@ export default function AdminSettings() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">Anthropic API Key <span className="text-text-secondary/50">(Claude)</span></label>
-              <div className="relative">
-                <input
-                  type={showAnthropicKey ? 'text' : 'password'}
-                  value={anthropicKey}
-                  onChange={(e) => setAnthropicKey(e.target.value)}
-                  placeholder="sk-ant-..."
-                  className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowAnthropicKey(!showAnthropicKey)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
-                  title={showAnthropicKey ? 'Hide key' : 'Show key'}
-                >
-                  {showAnthropicKey ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">OpenAI API Key <span className="text-text-secondary/50">(GPT)</span></label>
-              <div className="relative">
-                <input
-                  type={showOpenaiKey ? 'text' : 'password'}
-                  value={openaiKey}
-                  onChange={(e) => setOpenaiKey(e.target.value)}
-                  placeholder="sk-..."
-                  className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowOpenaiKey(!showOpenaiKey)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
-                  title={showOpenaiKey ? 'Hide key' : 'Show key'}
-                >
-                  {showOpenaiKey ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-
-            <div>
               <label className="block text-xs font-medium text-text-secondary mb-1">Model</label>
               <select
                 value={aiModel}
@@ -344,30 +321,123 @@ export default function AdminSettings() {
               >
                 <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
                 <option value="gpt-5.2">GPT-5.2</option>
+                <option value="azure-openai">Azure OpenAI</option>
               </select>
             </div>
 
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={aiEnabled}
-                onChange={(e) => setAiEnabled(e.target.checked)}
-                className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
-              />
-              <span className="text-sm text-text-primary">Enable AI features</span>
-            </label>
-
-            {aiEnabled && aiModel.startsWith('gpt-') && !openaiKey && (
-              <p className="text-xs text-warning flex items-center gap-1">
-                <Key size={12} />
-                AI is enabled but no OpenAI API key is set
-              </p>
-            )}
-            {aiEnabled && !aiModel.startsWith('gpt-') && !anthropicKey && (
-              <p className="text-xs text-warning flex items-center gap-1">
-                <Key size={12} />
-                AI is enabled but no Anthropic API key is set
-              </p>
+            {aiModel === 'azure-openai' ? (
+              <>
+                <div>
+                  <label className="block text-xs font-medium text-text-secondary mb-1">Azure Endpoint</label>
+                  <input
+                    type="text"
+                    value={azureEndpoint}
+                    onChange={(e) => setAzureEndpoint(e.target.value)}
+                    placeholder="https://your-resource.openai.azure.com"
+                    className="w-full px-3 py-2 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-text-secondary mb-1">Azure API Key</label>
+                  <div className="relative">
+                    <input
+                      type={showAzureKey ? 'text' : 'password'}
+                      value={azureApiKey}
+                      onChange={(e) => setAzureApiKey(e.target.value)}
+                      placeholder="your-azure-api-key"
+                      className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowAzureKey(!showAzureKey)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
+                      title={showAzureKey ? 'Hide key' : 'Show key'}
+                    >
+                      {showAzureKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  {!azureApiKey && (
+                    <p className="mt-1 text-xs text-warning flex items-center gap-1">
+                      <Key size={12} />
+                      No API key is set for Azure OpenAI
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-text-secondary mb-1">API Version</label>
+                  <input
+                    type="text"
+                    value={azureApiVersion}
+                    onChange={(e) => setAzureApiVersion(e.target.value)}
+                    placeholder="2024-10-21"
+                    className="w-full px-3 py-2 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-text-secondary mb-1">Deployment Name</label>
+                  <input
+                    type="text"
+                    value={azureDeployment}
+                    onChange={(e) => setAzureDeployment(e.target.value)}
+                    placeholder="my-gpt-4o-deployment"
+                    className="w-full px-3 py-2 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                </div>
+              </>
+            ) : aiModel.startsWith('gpt-') ? (
+              <div>
+                <label className="block text-xs font-medium text-text-secondary mb-1">OpenAI API Key</label>
+                <div className="relative">
+                  <input
+                    type={showOpenaiKey ? 'text' : 'password'}
+                    value={openaiKey}
+                    onChange={(e) => setOpenaiKey(e.target.value)}
+                    placeholder="sk-..."
+                    className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowOpenaiKey(!showOpenaiKey)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
+                    title={showOpenaiKey ? 'Hide key' : 'Show key'}
+                  >
+                    {showOpenaiKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {!openaiKey && (
+                  <p className="mt-1 text-xs text-warning flex items-center gap-1">
+                    <Key size={12} />
+                    No API key is set for the selected model
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div>
+                <label className="block text-xs font-medium text-text-secondary mb-1">Anthropic API Key</label>
+                <div className="relative">
+                  <input
+                    type={showAnthropicKey ? 'text' : 'password'}
+                    value={anthropicKey}
+                    onChange={(e) => setAnthropicKey(e.target.value)}
+                    placeholder="sk-ant-..."
+                    className="w-full px-3 py-2 pr-10 text-sm border border-border rounded-input focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowAnthropicKey(!showAnthropicKey)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-text-secondary hover:text-text-primary transition-colors"
+                    title={showAnthropicKey ? 'Hide key' : 'Show key'}
+                  >
+                    {showAnthropicKey ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {!anthropicKey && (
+                  <p className="mt-1 text-xs text-warning flex items-center gap-1">
+                    <Key size={12} />
+                    No API key is set for the selected model
+                  </p>
+                )}
+              </div>
             )}
 
             <p className="text-xs text-text-secondary">
@@ -426,13 +496,6 @@ export default function AdminSettings() {
           </p>
         </Card>
       </motion.div>
-
-      {/* Course Configuration */}
-      {courses.map((course) => (
-        <motion.div key={course.slug} variants={fadeInUp}>
-          <CourseCard course={course} />
-        </motion.div>
-      ))}
 
     </motion.div>
     </div>

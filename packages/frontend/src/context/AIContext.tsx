@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, type ReactNode } from 'react';
 import { api } from '../lib/api';
 import { useCourse } from './CourseContext';
 
@@ -46,8 +46,13 @@ export function AIProvider({ children }: { children: ReactNode }) {
   // AI is available only if globally enabled AND course has ai_features_enabled
   const available = globalAvailable && !!course?.ai_features_enabled;
 
+  const value = useMemo(
+    () => ({ available, model, chatOpen, setChatOpen, loading, pendingMessage, setPendingMessage }),
+    [available, model, chatOpen, loading, pendingMessage]
+  );
+
   return (
-    <AIContext.Provider value={{ available, model, chatOpen, setChatOpen, loading, pendingMessage, setPendingMessage }}>
+    <AIContext.Provider value={value}>
       {children}
     </AIContext.Provider>
   );

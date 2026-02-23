@@ -40,7 +40,7 @@ export function useAIChat() {
           course_slug: courseSlug,
           module_slug: moduleSlug,
           lesson_slug: lessonSlug,
-        });
+        }, abortRef.current.signal);
 
         if (!response.ok) {
           const err = await response.json().catch(() => ({ error: { message: 'AI request failed' } }));

@@ -93,8 +93,12 @@ export const api = {
     }),
 
   // Admin — Dashboard
-  getAdminDashboard: (courseSlug?: string) =>
-    fetchApi<DashboardMetrics>(`/admin/dashboard${courseSlug ? `?course=${courseSlug}` : ''}`),
+  getAdminDashboard: (userId?: string) => {
+    const params = new URLSearchParams();
+    if (userId) params.set('userId', userId);
+    const qs = params.toString();
+    return fetchApi<DashboardMetrics>(`/admin/dashboard${qs ? `?${qs}` : ''}`);
+  },
 
   // Admin — Users
   getAdminUsers: () => fetchApi<UserWithProgress[]>('/admin/users'),
@@ -244,11 +248,12 @@ export const api = {
     course_slug: string;
     module_slug: string;
     lesson_slug: string;
-  }) =>
+  }, signal?: AbortSignal) =>
     fetch(`${BASE_URL}/ai/chat`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal,
     }),
 };

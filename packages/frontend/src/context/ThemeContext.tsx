@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, type ReactNode } from 'react';
 import type { ThemeConfig } from '@playbook/shared';
 import { api } from '../lib/api';
 import { applyTheme } from '../lib/theme-loader';
@@ -24,6 +24,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
+  const value = useMemo(() => ({ theme, loading }), [theme, loading]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -33,7 +35,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, loading }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

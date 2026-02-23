@@ -24,18 +24,22 @@ export function useLessonContent(
   useEffect(() => {
     if (!courseSlug || !moduleSlug || !lessonSlug) return;
 
+    let stale = false;
     setLoading(true);
     setError(null);
     setMdxComponent(null);
 
     api.getLesson(courseSlug, moduleSlug, lessonSlug)
       .then(async (data) => {
+        if (stale) return;
         setMeta(data.meta);
         const Component = await renderMdx(data.compiledSource, mdxComponents);
-        setMdxComponent(() => Component);
+        if (!stale) setMdxComponent(() => Component);
       })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .catch((err) => { if (!stale) setError(err.message); })
+      .finally(() => { if (!stale) setLoading(false); });
+
+    return () => { stale = true; };
   }, [courseSlug, moduleSlug, lessonSlug]);
 
   return { meta, MdxComponent, loading, error };

@@ -8,6 +8,6 @@ objectives:
 estimated_duration_minutes: 31
 lessons:
   - "01-opportunity-documentation"
-  - "prioritization-methods-overview"
-  - "02-wsjf-scoring-method"
-  - "03-value-complexity-matrix"
+  - "02-prioritization-methods-overview"
+  - "03-wsjf-scoring-method"
+  - "04-value-complexity-matrix"
