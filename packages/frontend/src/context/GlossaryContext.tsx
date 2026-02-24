@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import type { GlossaryEntry } from '@playbook/shared';
 import { api } from '../lib/api';
@@ -35,8 +35,10 @@ export function GlossaryProvider({ children }: { children: ReactNode }) {
     [entries]
   );
 
+  const value = useMemo(() => ({ entries, loading, lookup }), [entries, loading, lookup]);
+
   return (
-    <GlossaryContext.Provider value={{ entries, loading, lookup }}>
+    <GlossaryContext.Provider value={value}>
       {children}
     </GlossaryContext.Provider>
   );

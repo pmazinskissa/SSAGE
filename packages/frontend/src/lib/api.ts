@@ -16,6 +16,7 @@ import type {
   SearchResult,
   UserWithModuleAnalytics,
   CourseEnrollment,
+  ReviewAnnotation,
 } from '@playbook/shared';
 
 const BASE_URL = '/api';
@@ -92,8 +93,12 @@ export const api = {
     }),
 
   // Admin — Dashboard
-  getAdminDashboard: (courseSlug?: string) =>
-    fetchApi<DashboardMetrics>(`/admin/dashboard${courseSlug ? `?course=${courseSlug}` : ''}`),
+  getAdminDashboard: (userIds?: string[]) => {
+    const params = new URLSearchParams();
+    if (userIds && userIds.length > 0) params.set('userIds', userIds.join(','));
+    const qs = params.toString();
+    return fetchApi<DashboardMetrics>(`/admin/dashboard${qs ? `?${qs}` : ''}`);
+  },
 
   // Admin — Users
   getAdminUsers: () => fetchApi<UserWithProgress[]>('/admin/users'),
@@ -226,6 +231,15 @@ export const api = {
   searchContent: (courseSlug: string, query: string) =>
     fetchApi<SearchResult[]>(`/courses/${courseSlug}/search?q=${encodeURIComponent(query)}`),
 
+  // Review Mode
+  getReviewStatus: () =>
+    fetchApi<{ enabled: boolean }>('/review/status'),
+  createReviewAnnotation: (data: { page_path: string; page_title?: string; annotation_text: string; annotation_type?: string }) =>
+    fetchApi<ReviewAnnotation>('/review/annotations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
   // AI
   getAIStatus: () =>
     fetchApi<{ available: boolean; model: string | null }>('/ai/status'),
@@ -234,11 +248,12 @@ export const api = {
     course_slug: string;
     module_slug: string;
     lesson_slug: string;
-  }) =>
+  }, signal?: AbortSignal) =>
     fetch(`${BASE_URL}/ai/chat`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal,
     }),
 };

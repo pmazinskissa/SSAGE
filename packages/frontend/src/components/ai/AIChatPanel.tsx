@@ -6,8 +6,19 @@ import { useAI } from '../../context/AIContext';
 import { useAIChat } from '../../hooks/useAIChat';
 import AIChatMessage from './AIChatMessage';
 
+function formatModelName(model: string | null): string | null {
+  if (!model) return null;
+  const displayNames: Record<string, string> = {
+    'claude-sonnet-4-6': 'Claude Sonnet 4.6',
+    'claude-sonnet-4-5-20241022': 'Claude Sonnet 4.6',
+    'claude-haiku-4-5-20251001': 'Claude Haiku 4.5',
+    'gpt-5.2': 'GPT-5.2',
+  };
+  return displayNames[model] || model;
+}
+
 export default function AIChatPanel() {
-  const { chatOpen, setChatOpen, model } = useAI();
+  const { chatOpen, setChatOpen, model, pendingMessage, setPendingMessage } = useAI();
   const { slug: courseSlug, moduleSlug, lessonSlug } = useParams<{
     slug: string;
     moduleSlug?: string;
@@ -30,6 +41,15 @@ export default function AIChatPanel() {
       setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [chatOpen]);
+
+  // Auto-send pending message when chat opens
+  useEffect(() => {
+    if (chatOpen && pendingMessage && !streaming && courseSlug) {
+      const { displayText, fullText } = pendingMessage;
+      setPendingMessage(null);
+      sendMessage(fullText, courseSlug, moduleSlug || '', lessonSlug || '', displayText);
+    }
+  }, [chatOpen, pendingMessage, streaming, courseSlug, moduleSlug, lessonSlug, sendMessage, setPendingMessage]);
 
   const handleSend = () => {
     const text = input.trim();
@@ -81,7 +101,7 @@ export default function AIChatPanel() {
                 <span className="text-sm font-semibold text-text-primary">AI Assistant</span>
                 {model && (
                   <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">
-                    {model}
+                    {formatModelName(model)}
                   </span>
                 )}
               </div>
@@ -122,7 +142,7 @@ export default function AIChatPanel() {
                   <AIChatMessage
                     key={i}
                     role={msg.role}
-                    content={msg.content}
+                    content={msg.displayContent || msg.content}
                     streaming={streaming && i === messages.length - 1 && msg.role === 'assistant'}
                   />
                 ))

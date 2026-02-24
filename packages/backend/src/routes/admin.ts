@@ -42,7 +42,13 @@ const upload = multer({ limits: { fileSize: 1024 * 1024 } }); // 1MB
 router.get('/dashboard', async (req, res) => {
   try {
     const courseSlug = req.query.course as string | undefined;
-    const metrics = await getDashboardMetrics(courseSlug);
+    const userIds = req.query.userIds
+      ? (req.query.userIds as string).split(',').filter(Boolean)
+      : undefined;
+    // Legacy single-user support
+    const userId = req.query.userId as string | undefined;
+    const resolvedIds = userIds && userIds.length > 0 ? userIds : userId ? [userId] : undefined;
+    const metrics = await getDashboardMetrics(courseSlug, resolvedIds);
     res.json({ data: metrics });
   } catch (err: any) {
     console.error('[Admin] Dashboard error:', err.message);
@@ -424,6 +430,19 @@ router.post('/settings/test-ai', async (_req, res) => {
     if (!model) {
       return res.json({ data: { success: false, message: 'No model configured', latencyMs: 0 } });
     }
+
+    if (model === 'azure-openai') {
+      const apiKey = settings['azure_openai_api_key'] || '';
+      const endpoint = settings['azure_openai_endpoint'] || '';
+      const apiVersion = settings['azure_openai_api_version'] || '2024-10-21';
+      const deployment = settings['azure_openai_deployment'] || '';
+      if (!apiKey || !endpoint || !deployment) {
+        return res.json({ data: { success: false, message: 'Azure OpenAI requires an API key, endpoint, and deployment name', latencyMs: 0 } });
+      }
+      const result = await testConnection(apiKey, model, { endpoint, apiVersion, deployment });
+      return res.json({ data: result });
+    }
+
     const isOpenAI = model.startsWith('gpt-') || model.startsWith('o1') || model.startsWith('o3');
     const providerKey = isOpenAI ? 'openai_api_key' : 'anthropic_api_key';
     const apiKey = settings[providerKey] || settings['ai_api_key'] || '';

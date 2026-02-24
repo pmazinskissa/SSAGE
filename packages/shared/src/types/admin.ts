@@ -44,6 +44,7 @@ export interface DashboardMetrics {
   not_started: number;
   avg_completion_pct: number;
   avg_time_to_completion_seconds: number;
+  avg_kc_score: number;
   module_funnel: {
     module_slug: string;
     module_title: string;
@@ -105,11 +106,12 @@ export interface SearchResult {
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
+  displayContent?: string;
   timestamp: string;
 }
 
 export interface AIConfig {
   enabled: boolean;
   model: string;
-  provider: 'anthropic' | 'openai';
+  provider: 'anthropic' | 'openai' | 'azure-openai';
 }

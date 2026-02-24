@@ -161,7 +161,7 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
     });
   };
 
-  // Build lesson progress lookup: course_slug → module_slug → lesson_slug → entry
+  // Build lesson progress lookup: course_slug -> module_slug -> lesson_slug -> entry
   const lessonLookup = new Map<string, Map<string, Map<string, LessonProgressEntry>>>();
   if (user) {
     for (const lp of user.lesson_progress) {
@@ -173,7 +173,7 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
     }
   }
 
-  // KC lookup: course_slug:module_slug → entry
+  // KC lookup: course_slug:module_slug -> entry
   const kcLookup = new Map<string, { score: number }>();
   if (user) {
     for (const kc of user.knowledge_check_scores) {
@@ -182,9 +182,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
     }
   }
 
-  /* ------------------------------------------------------------------ */
-  /*  Status icon helper                                                 */
-  /* ------------------------------------------------------------------ */
   const StatusIcon = ({ status, size = 14 }: { status: string; size?: number }) => {
     switch (status) {
       case 'completed':
@@ -196,9 +193,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
     }
   };
 
-  /* ------------------------------------------------------------------ */
-  /*  Enrollment tab                                                     */
-  /* ------------------------------------------------------------------ */
   const EnrollmentTab = () => (
     <div className="space-y-2">
       {courses.length === 0 ? (
@@ -243,9 +237,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
     </div>
   );
 
-  /* ------------------------------------------------------------------ */
-  /*  Progress tab: courses → modules → lessons                          */
-  /* ------------------------------------------------------------------ */
   const ProgressTab = () => {
     const enrolledSlugs = new Set(enrollments.map((e) => e.course_slug));
     const enrolledCourses = courses.filter((c) => enrolledSlugs.has(c.slug));
@@ -438,9 +429,8 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
             </button>
           </div>
 
-          {/* Hero bar — user info + controls (catalog-style gradient mesh) */}
+          {/* Hero bar */}
           <section className="relative overflow-hidden flex-shrink-0 bg-white">
-            {/* Gradient mesh — identical to CourseCatalog hero */}
             <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
               <div
                 className="absolute w-[500px] h-[500px] rounded-full opacity-30 blur-[100px] animate-[meshFloat1_12s_ease-in-out_infinite]"
@@ -457,7 +447,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
             </div>
 
             <div className="relative z-10 px-6 py-5">
-              {/* Loading state */}
               {loading && (
                 <div className="space-y-3">
                   <div className="h-5 bg-surface rounded w-40 animate-pulse" />
@@ -465,7 +454,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
                 </div>
               )}
 
-              {/* Error state */}
               {error && !loading && (
                 <div className="text-center py-2">
                   <p className="text-error font-semibold">Failed to load user</p>
@@ -473,10 +461,8 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
                 </div>
               )}
 
-              {/* User info + controls */}
               {user && !loading && (
                 <div className="flex items-center gap-4">
-                  {/* Left: user info */}
                   <div className="flex-1 min-w-0">
                     {editingProfile ? (
                       <div className="space-y-2">
@@ -501,7 +487,7 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
                             disabled={profileSaving}
                             className="px-3 py-1 text-xs font-medium bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-60"
                           >
-                            {profileSaving ? 'Saving…' : 'Save'}
+                            {profileSaving ? 'Saving...' : 'Save'}
                           </button>
                           <button
                             onClick={() => { setEditingProfile(false); setProfileError(null); }}
@@ -533,13 +519,12 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
                         <p className="text-sm text-text-secondary truncate">{user.email}</p>
                         <div className="flex gap-4 mt-1.5 text-xs text-text-secondary">
                           <span>Enrolled: {new Date(user.created_at).toLocaleDateString()}</span>
-                          <span>Last active: {user.last_active_at ? new Date(user.last_active_at).toLocaleDateString() : '—'}</span>
+                          <span>Last active: {user.last_active_at ? new Date(user.last_active_at).toLocaleDateString() : '-'}</span>
                         </div>
                       </>
                     )}
                   </div>
 
-                  {/* Right: role + actions, vertically centered */}
                   <div className="flex items-center gap-2 shrink-0">
                     <div className="relative">
                       <select
@@ -583,7 +568,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
           <div className="flex-1 overflow-y-auto bg-gradient-to-b from-white to-slate-50">
             {user && !loading && (
               <div className="p-6">
-                {/* Tabs: Enrollment | Progress */}
                 <div className="flex gap-2 mb-5">
                   <button
                     onClick={() => setActiveTab('enrollment')}
@@ -614,7 +598,6 @@ export default function AdminUserDetail({ userId: userIdProp, onClose: onClosePr
                   </button>
                 </div>
 
-                {/* Tab content */}
                 {activeTab === 'enrollment' ? <EnrollmentTab /> : <ProgressTab />}
               </div>
             )}

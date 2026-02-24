@@ -1,6 +1,6 @@
 entries:
-  - term: "AOMT"
-    definition: "Agentic Operating Model Transformation. A three-phase methodology for diagnosing operational problems, prioritizing solutions, and sustaining improvements using agile governance. Rests on two foundational principles: Data First and AI First."
+  - term: "AI-Enabled Problem Solving"
+    definition: "A three-phase methodology for diagnosing operational problems, prioritizing solutions, and sustaining improvements using agile governance. Rests on two foundational principles: Data First and AI First."
     first_lesson: "04-introducing-aomt"
 
   - term: "Data First"
@@ -25,19 +25,19 @@ entries:
 
   - term: "Validated Gap"
     definition: "The measured difference between current performance and a benchmark, confirmed by both quantitative data and qualitative interviews. A gap in data but not interviews (or vice versa) is a hypothesis, not validated."
-    first_lesson: "08-analysis-validation"
+    first_lesson: "09-analysis-validation"
 
   - term: "Baseline"
     definition: "The pre-implementation measurement used as a reference point. Must be specific, measured, and documented before any solution is implemented."
-    first_lesson: "08-analysis-validation"
+    first_lesson: "09-analysis-validation"
 
   - term: "Benchmark"
     definition: "An external or industry-standard reference point used to assess whether a gap is significant. Answers the question 'compared to what?'"
-    first_lesson: "09-ai-enabled-research"
+    first_lesson: "10-ai-enabled-research"
 
   - term: "Root Cause vs. Symptom"
     definition: "A root cause is the mechanism producing the observed problem. A symptom is the problem itself. Phase 1 requires root causes, not symptoms."
-    first_lesson: "08-analysis-validation"
+    first_lesson: "09-analysis-validation"
 
   - term: "Drift"
     definition: "Gradual, unintended regression of a metric toward its pre-implementation baseline. Dangerous because it is gradual and compounds over time."
@@ -45,39 +45,39 @@ entries:
 
   - term: "WSJF"
     definition: "Weighted Shortest Job First. Phase 2 scoring method: Cost of Delay / Job Size = WSJF Score. Cost of Delay = Business Value + Time Criticality + Risk Reduction & Opportunity Enablement."
-    first_lesson: "02-wsjf-scoring-method"
+    first_lesson: "03-wsjf-scoring-method"
 
   - term: "Business Value"
     definition: "A 1-10 rating of business value an option delivers. Scored by the cross-functional team. Common error: confusing effort required with value delivered."
-    first_lesson: "02-wsjf-scoring-method"
+    first_lesson: "03-wsjf-scoring-method"
 
   - term: "Time Criticality"
     definition: "A 1-10 rating of urgency. Higher scores indicate regulatory deadlines, competitive pressure, or customer attrition risk."
-    first_lesson: "02-wsjf-scoring-method"
+    first_lesson: "03-wsjf-scoring-method"
 
   - term: "Risk Reduction & Opportunity Enablement"
     definition: "A 1-10 rating of organizational risk mitigated or future capabilities unlocked by implementing the option."
-    first_lesson: "02-wsjf-scoring-method"
+    first_lesson: "03-wsjf-scoring-method"
 
   - term: "Job Size"
     definition: "A 1-10 rating of implementation duration and complexity. The divisor in WSJF, so high-effort options need proportionally higher value to justify ranking."
-    first_lesson: "02-wsjf-scoring-method"
+    first_lesson: "03-wsjf-scoring-method"
 
   - term: "Context + Task + Output"
-    definition: "The prompt structure used throughout AOMT for AI interactions. Context provides validated findings, Task specifies what AI should produce, Output defines the format."
+    definition: "The prompt structure used throughout the methodology for AI interactions. Context provides validated findings, Task specifies what AI should produce, Output defines the format."
     first_lesson: "07-curiosity-enabled-analysis"
 
   - term: "Sequential Prompting"
     definition: "Breaking a complex ask into multiple turns rather than one prompt. Each turn lets the practitioner check output before it becomes input for the next step."
-    first_lesson: "10-data-analysis-plan"
+    first_lesson: "11-data-analysis-plan"
 
   - term: "Hallucination"
-    definition: "When an AI model generates factually wrong but structurally plausible text. LLMs produce statistically likely text, not verified facts. AOMT treats all AI-generated figures as unverified until checked."
-    first_lesson: "08-analysis-validation"
+    definition: "When an AI model generates factually wrong but structurally plausible text. LLMs produce statistically likely text, not verified facts. The methodology treats all AI-generated figures as unverified until checked."
+    first_lesson: "09-analysis-validation"
 
   - term: "Sensitivity Analysis"
     definition: "Asking AI to generate scenarios when assumptions change. Best/likely/worst case. The scenarios are useful framing; specific numbers require independent verification."
-    first_lesson: "09-ai-enabled-research"
+    first_lesson: "10-ai-enabled-research"
 
   - term: "Agentic Tool"
     definition: "An AI system that performs tasks autonomously within defined parameters, planning steps, executing actions, and adapting based on results without requiring human direction at each stage."
@@ -105,15 +105,15 @@ entries:
 
   - term: "Option Set"
     definition: "The 2-4 solution options developed in Phase 1 for Phase 2 scoring. Must contain genuine trade-offs between speed, impact, risk, and cost."
-    first_lesson: "11-opportunity-synthesis"
+    first_lesson: "12-opportunity-synthesis"
 
   - term: "Quick Win"
     definition: "A low-risk, low-investment option implementable in weeks. Required in every option set. Trades magnitude for certainty."
-    first_lesson: "11-opportunity-synthesis"
+    first_lesson: "12-opportunity-synthesis"
 
   - term: "Transformational Option"
     definition: "A high-impact, high-investment option requiring months. Carries the most fragile assumptions. Verify with IT and procurement before presenting."
-    first_lesson: "11-opportunity-synthesis"
+    first_lesson: "12-opportunity-synthesis"
 
   - term: "Sustainment Framework"
     definition: "Three-pillar model: Structure (reporting lines, incentives), Support (continuous learning, collaboration), Feedback (goal setting, performance scorecards). All three must be present."
@@ -148,24 +148,24 @@ entries:
     first_lesson: "04-feedback-performance"
 
   - term: "SAFe"
-    definition: "Scaled Agile Framework. Provides structured approach to agile development at enterprise scale. AOMT leverages SAFe principles for continuous value delivery."
+    definition: "Scaled Agile Framework. Provides structured approach to agile development at enterprise scale. The methodology leverages SAFe principles for continuous value delivery."
     first_lesson: "04-safe-framework"
 
   - term: "Diagnostic Interviews"
     definition: "Early Phase 1 interviews asking 'What is broken? What frustrates you?' to generate qualitative data that combines with quantitative data to validate gaps."
-    first_lesson: "08-analysis-validation"
+    first_lesson: "09-analysis-validation"
 
   - term: "Validation Interviews"
     definition: "Post-solution interviews testing whether proposed solutions address described problems. Different from diagnostic interviews. If interviews contradict the solution, the solution is wrong."
-    first_lesson: "08-analysis-validation"
+    first_lesson: "09-analysis-validation"
 
   - term: "Confirmation Bias"
     definition: "Tendency to interpret evidence as confirmation of existing beliefs. Particularly dangerous during validation interviews. Defense: open-ended questions, treat contradictions as signal."
-    first_lesson: "08-analysis-validation"
+    first_lesson: "09-analysis-validation"
 
   - term: "T-Shirt Sizing"
     definition: "Rough effort estimation using S/M/L/XL. S=days, M=weeks, L=1-3 months, XL=3+ months. False precision is worse than acknowledged imprecision at Phase 1 stage."
-    first_lesson: "02-wsjf-scoring-method"
+    first_lesson: "03-wsjf-scoring-method"
 
   - term: "MECE"
     definition: "Mutually Exclusive, Collectively Exhaustive. A structuring principle for issues trees ensuring that categories don't overlap and together cover all possibilities."

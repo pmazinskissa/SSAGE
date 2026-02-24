@@ -1,58 +1,70 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Clock, TrendingUp, LayoutDashboard, ChevronDown, Search, CheckCircle2, Circle, Disc } from 'lucide-react';
+import { Users, Clock, TrendingUp, LayoutDashboard, Search, Brain, X } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { api } from '../../lib/api';
 import Card from '../../components/ui/Card';
 import { stagger, fadeInUp } from '../../lib/animations';
-import type { DashboardMetrics, CourseConfig, UserWithModuleAnalytics, UserDetail, CourseNavTree, LessonProgressEntry } from '@playbook/shared';
-
-type TabView = 'course' | 'users';
+import type { DashboardMetrics, UserWithProgress } from '@playbook/shared';
 
 export default function AdminDashboard() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [courses, setCourses] = useState<CourseConfig[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [activeTab, setActiveTab] = useState<TabView>('course');
 
-  // User Analytics state
-  const [userAnalytics, setUserAnalytics] = useState<UserWithModuleAnalytics[]>([]);
-  const [userAnalyticsLoading, setUserAnalyticsLoading] = useState(false);
-  const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
+  // User autocomplete state (multi-select)
+  const [allUsers, setAllUsers] = useState<UserWithProgress[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [userSearch, setUserSearch] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // User Analytics: expanded progress tree state
-  const [expandedUserDetail, setExpandedUserDetail] = useState<Record<string, UserDetail>>({});
-  const [expandedUserCourses, setExpandedUserCourses] = useState<Set<string>>(new Set());
-  const [expandedUserModules, setExpandedUserModules] = useState<Set<string>>(new Set());
-  const [userNavTrees, setUserNavTrees] = useState<Record<string, CourseNavTree>>({});
-  const [userDetailLoading, setUserDetailLoading] = useState<string | null>(null);
-
+  // Load all users on mount
   useEffect(() => {
-    api.getCourses().then(setCourses).catch(() => {});
+    api.getAdminUsers().then(setAllUsers).catch(() => {});
   }, []);
 
+  // Load dashboard metrics — re-fetch when selectedUserIds changes
   useEffect(() => {
     setLoading(true);
-    api.getAdminDashboard(selectedCourse || undefined)
+    api.getAdminDashboard(selectedUserIds.length > 0 ? selectedUserIds : undefined)
       .then(setMetrics)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [selectedCourse]);
+  }, [selectedUserIds]);
 
-  // Load user analytics when switching to users tab — auto-select first course if needed
+  // Click-outside to close dropdown
   useEffect(() => {
-    if (activeTab !== 'users') return;
-    const slug = selectedCourse || (courses.length > 0 ? courses[0].slug : '');
-    if (!slug) return;
-    setUserAnalyticsLoading(true);
-    api.getAdminUserAnalytics(slug)
-      .then(setUserAnalytics)
-      .catch(() => setUserAnalytics([]))
-      .finally(() => setUserAnalyticsLoading(false));
-  }, [activeTab, selectedCourse, courses]);
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // Filtered users for dropdown (exclude already-selected)
+  const lower = userSearch.toLowerCase();
+  const selectedSet = new Set(selectedUserIds);
+  const filteredUsers = (lower
+    ? allUsers.filter((u) => !selectedSet.has(u.id) && (u.name.toLowerCase().includes(lower) || u.email.toLowerCase().includes(lower)))
+    : allUsers.filter((u) => !selectedSet.has(u.id))
+  ).slice(0, 8);
+
+  const selectedUsers = selectedUserIds.map((id) => allUsers.find((u) => u.id === id)).filter(Boolean) as UserWithProgress[];
+
+  const addUser = (id: string) => {
+    setSelectedUserIds((prev) => [...prev, id]);
+    setUserSearch('');
+    setShowDropdown(false);
+    inputRef.current?.focus();
+  };
+
+  const removeUser = (id: string) => {
+    setSelectedUserIds((prev) => prev.filter((uid) => uid !== id));
+  };
 
   if (loading && !metrics) {
     return (
@@ -126,61 +138,6 @@ export default function AdminDashboard() {
     return `${h}h ${m}m`;
   };
 
-  const toggleUserExpand = async (userId: string) => {
-    if (expandedUserId === userId) {
-      setExpandedUserId(null);
-      return;
-    }
-    setExpandedUserId(userId);
-    setExpandedUserCourses(new Set());
-    setExpandedUserModules(new Set());
-    if (!expandedUserDetail[userId]) {
-      setUserDetailLoading(userId);
-      try {
-        const detail = await api.getAdminUserDetail(userId);
-        setExpandedUserDetail(prev => ({ ...prev, [userId]: detail }));
-      } catch { /* ignore */ }
-      setUserDetailLoading(null);
-    }
-  };
-
-  const toggleUserCourse = (key: string, courseSlug: string) => {
-    setExpandedUserCourses(prev => {
-      const next = new Set(prev);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
-        if (!userNavTrees[courseSlug]) {
-          api.getCourse(courseSlug).then(data => {
-            setUserNavTrees(prev => ({ ...prev, [courseSlug]: data.navTree }));
-          }).catch(() => {});
-        }
-      }
-      return next;
-    });
-  };
-
-  const toggleUserModule = (key: string) => {
-    setExpandedUserModules(prev => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-  };
-
-  const StatusIcon = ({ status, size = 14 }: { status: string; size?: number }) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle2 size={size} className="text-success flex-shrink-0" />;
-      case 'in_progress':
-        return <Disc size={size} className="text-primary flex-shrink-0" />;
-      default:
-        return <Circle size={size} className="text-primary/30 flex-shrink-0" />;
-    }
-  };
-
   const cards = [
     {
       label: 'Total Enrolled',
@@ -202,6 +159,13 @@ export default function AdminDashboard() {
       icon: Clock,
       color: 'text-secondary',
       bg: 'bg-blue-50',
+    },
+    {
+      label: 'Avg KC Score',
+      value: `${metrics.avg_kc_score}%`,
+      icon: Brain,
+      color: 'text-purple-600',
+      bg: 'bg-purple-50',
     },
   ];
 
@@ -238,154 +202,110 @@ export default function AdminDashboard() {
       <div className="absolute inset-0 -z-10 bg-surface/30" />
       <div className="absolute inset-0 -z-10 opacity-[0.07]" style={{ backgroundImage: 'repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px, transparent 41px, transparent 80px), repeating-radial-gradient(circle at 30% 70%, transparent 0, transparent 60px, var(--color-primary) 60px, var(--color-primary) 61px, transparent 61px, transparent 120px), repeating-radial-gradient(circle at 70% 30%, transparent 0, transparent 50px, var(--color-primary) 50px, var(--color-primary) 51px, transparent 51px, transparent 100px)' }} />
     <div className="p-6 max-w-6xl mx-auto">
-      {/* Tab Switcher + Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
-        <div className="flex gap-1 bg-surface rounded-lg p-1 w-fit">
-          <button
-            onClick={() => setActiveTab('course')}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              activeTab === 'course' ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
-            }`}
+      {/* User autocomplete filter (multi-select) */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="sm:ml-auto relative" ref={dropdownRef}>
+          <div
+            className="flex flex-wrap items-center gap-1.5 bg-white border border-border shadow-sm rounded-lg px-2 py-1.5 min-w-[16rem] max-w-md cursor-text focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all"
+            onClick={() => inputRef.current?.focus()}
           >
-            Course Analytics
-          </button>
-          <button
-            onClick={() => setActiveTab('users')}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              activeTab === 'users' ? 'bg-white text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
-            }`}
-          >
-            User Analytics
-          </button>
-        </div>
-
-        <div className="sm:ml-auto flex items-center gap-3">
-          {activeTab === 'users' ? (
-            <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-              <input
-                type="text"
-                value={userSearch}
-                onChange={(e) => setUserSearch(e.target.value)}
-                placeholder="Filter users..."
-                className="bg-white border border-border shadow-sm rounded-lg pl-8 pr-3 py-2 text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all w-64"
-              />
-            </div>
-          ) : courses.length > 0 ? (
-            <div className="relative">
-              <select
-                value={selectedCourse}
-                onChange={(e) => setSelectedCourse(e.target.value)}
-                className="appearance-none bg-white border border-border shadow-sm rounded-lg px-4 py-2 pr-9 text-sm font-medium text-text-primary hover:bg-surface/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer"
+            <Search size={14} className="text-text-secondary pointer-events-none shrink-0" />
+            {selectedUsers.map((u) => (
+              <span
+                key={u.id}
+                className="inline-flex items-center gap-1 bg-primary/10 text-primary rounded-full pl-2.5 pr-1 py-0.5 text-xs font-medium"
               >
-                <option value="">All Courses</option>
-                {courses.map((c) => (
-                  <option key={c.slug} value={c.slug}>{c.title}</option>
-                ))}
-              </select>
-              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+                {u.name || u.email}
+                <button
+                  onClick={(e) => { e.stopPropagation(); removeUser(u.id); }}
+                  className="p-0.5 rounded-full hover:bg-primary/20 transition-colors"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            ))}
+            <input
+              ref={inputRef}
+              type="text"
+              value={userSearch}
+              onChange={(e) => {
+                setUserSearch(e.target.value);
+                setShowDropdown(true);
+              }}
+              onFocus={() => setShowDropdown(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Backspace' && !userSearch && selectedUserIds.length > 0) {
+                  removeUser(selectedUserIds[selectedUserIds.length - 1]);
+                }
+              }}
+              placeholder={selectedUsers.length === 0 ? 'Filter by user...' : ''}
+              className="flex-1 min-w-[80px] bg-transparent text-sm text-text-primary placeholder:text-text-secondary/60 focus:outline-none py-0.5"
+            />
+            {selectedUserIds.length > 0 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setSelectedUserIds([]); setUserSearch(''); }}
+                className="p-0.5 rounded-full text-text-secondary hover:text-text-primary hover:bg-surface transition-colors shrink-0"
+                title="Clear all"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          {showDropdown && filteredUsers.length > 0 && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto">
+              {filteredUsers.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => addUser(u.id)}
+                  className="w-full text-left px-3 py-2 hover:bg-surface/50 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                >
+                  <p className="text-sm font-medium text-text-primary truncate">{u.name || '(unnamed)'}</p>
+                  <p className="text-xs text-text-secondary truncate">{u.email}</p>
+                </button>
+              ))}
             </div>
-          ) : null}
+          )}
         </div>
       </div>
 
-      {activeTab === 'course' ? (
-        <>
-          {/* Metric cards */}
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4"
-          >
-            {cards.map((card) => (
-              <motion.div key={card.label} variants={fadeInUp}>
-                <Card className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-text-secondary uppercase tracking-wide">
-                        {card.label}
-                      </p>
-                      <p className="text-2xl font-bold text-text-primary mt-1">{card.value}</p>
-                    </div>
-                    <div className={`p-2 rounded-lg ${card.bg}`}>
-                      <card.icon size={20} className={card.color} />
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Status breakdown bar */}
-          <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="mb-8">
+      {/* Metric cards */}
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4"
+      >
+        {cards.map((card) => (
+          <motion.div key={card.label} variants={fadeInUp}>
             <Card className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-medium text-text-secondary uppercase tracking-wide">Status Breakdown</p>
-                <div className="flex gap-3">
-                  {statusSegments.map((s) => (
-                    <span key={s.label} className="flex items-center gap-1.5 text-xs text-text-secondary">
-                      <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
-                      {s.label}: <strong className="text-text-primary">{s.count}</strong>
-                    </span>
-                  ))}
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs font-medium text-text-secondary uppercase tracking-wide">
+                    {card.label}
+                  </p>
+                  <p className="text-2xl font-bold text-text-primary mt-1">{card.value}</p>
                 </div>
-              </div>
-              <div className="flex h-6 rounded-full overflow-hidden bg-gray-100">
-                {statusSegments.map((s) => {
-                  const pct = statusTotal > 0 ? (s.count / statusTotal) * 100 : 0;
-                  if (pct === 0) return null;
-                  return (
-                    <div
-                      key={s.label}
-                      className={`${s.color} transition-all duration-500`}
-                      style={{ width: `${pct}%` }}
-                      title={`${s.label}: ${s.count} (${Math.round(pct)}%)`}
-                    />
-                  );
-                })}
+                <div className={`p-2 rounded-lg ${card.bg}`}>
+                  <card.icon size={20} className={card.color} />
+                </div>
               </div>
             </Card>
           </motion.div>
+        ))}
+      </motion.div>
 
-          {/* Module Completion Funnel */}
-          {metrics.module_funnel.length > 0 && (
-            <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-              <Card className="p-6">
-                <h3 className="text-sm font-semibold text-text-primary mb-4">Module Completion Funnel</h3>
-                <ResponsiveContainer width="100%" height={Math.max(200, metrics.module_funnel.length * 50)}>
-                  <BarChart
-                    data={metrics.module_funnel}
-                    layout="vertical"
-                    margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                    <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
-                    <YAxis
-                      type="category"
-                      dataKey="module_title"
-                      width={180}
-                      tick={{ fontSize: 12 }}
-                    />
-                    <Tooltip formatter={(value: number) => [`${value}%`, 'Completion']} />
-                    <Bar
-                      dataKey="completion_pct"
-                      fill="var(--color-primary, #2563eb)"
-                      radius={[0, 4, 4, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </Card>
-            </motion.div>
-          )}
-        </>
-      ) : (
-        /* User Analytics Tab */
-        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-          {userAnalyticsLoading ? (
-            <div className="animate-pulse space-y-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-14 bg-surface rounded" />
+      {/* Status breakdown bar */}
+      <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="mb-8">
+        <Card className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs font-medium text-text-secondary uppercase tracking-wide">Status Breakdown</p>
+            <div className="flex gap-3">
+              {statusSegments.map((s) => (
+                <span key={s.label} className="flex items-center gap-1.5 text-xs text-text-secondary">
+                  <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
+                  {s.label}: <strong className="text-text-primary">{s.count}</strong>
+                </span>
               ))}
             </div>
           ) : (() => {
@@ -591,6 +511,52 @@ export default function AdminDashboard() {
               </div>
             );
           })()}
+          </div>
+          <div className="flex h-6 rounded-full overflow-hidden bg-gray-100">
+            {statusSegments.map((s) => {
+              const pct = statusTotal > 0 ? (s.count / statusTotal) * 100 : 0;
+              if (pct === 0) return null;
+              return (
+                <div
+                  key={s.label}
+                  className={`${s.color} transition-all duration-500`}
+                  style={{ width: `${pct}%` }}
+                  title={`${s.label}: ${s.count} (${Math.round(pct)}%)`}
+                />
+              );
+            })}
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Module Completion Funnel */}
+      {metrics.module_funnel.length > 0 && (
+        <motion.div variants={fadeInUp} initial="hidden" animate="visible">
+          <Card className="p-6">
+            <h3 className="text-sm font-semibold text-text-primary mb-4">Module Completion Funnel</h3>
+            <ResponsiveContainer width="100%" height={Math.max(200, metrics.module_funnel.length * 50)}>
+              <BarChart
+                data={metrics.module_funnel}
+                layout="vertical"
+                margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                <YAxis
+                  type="category"
+                  dataKey="module_title"
+                  width={180}
+                  tick={{ fontSize: 12 }}
+                />
+                <Tooltip formatter={(value: number) => [`${value}%`, 'Completion']} />
+                <Bar
+                  dataKey="completion_pct"
+                  fill="var(--color-primary, #2563eb)"
+                  radius={[0, 4, 4, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
         </motion.div>
       )}
     </div>

@@ -6,6 +6,7 @@ import { useCourse } from '../../context/CourseContext';
 import { useAI } from '../../context/AIContext';
 import AIChatPanel from '../ai/AIChatPanel';
 import { NoiseOverlay } from '../ui/Backgrounds';
+import Footer from './Footer';
 
 export default function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,9 +46,7 @@ export default function AppShell() {
               <Outlet />
             )}
           </div>
-          <footer className="border-t border-border/50 py-3 px-6 text-center" data-print-hide>
-            <span className="text-xs text-text-secondary/60">© SSA 2026</span>
-          </footer>
+          <Footer />
         </main>
       </div>
       {aiAvailable && <AIChatPanel />}

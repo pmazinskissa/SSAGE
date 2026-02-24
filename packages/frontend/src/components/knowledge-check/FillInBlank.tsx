@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import {
   DndContext,
-  DragOverlay,
   PointerSensor,
   useSensor,
   useSensors,
   useDroppable,
   useDraggable,
+  closestCenter,
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
@@ -24,10 +24,21 @@ function DraggableChip({
   isSelected: boolean;
   onClick: () => void;
 }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `bank:${word}`,
     disabled,
   });
+
+  const style: React.CSSProperties = {
+    touchAction: 'none',
+    ...(transform
+      ? {
+          transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+          zIndex: 999,
+          position: 'relative' as const,
+        }
+      : {}),
+  };
 
   return (
     <button
@@ -36,11 +47,11 @@ function DraggableChip({
       {...listeners}
       type="button"
       onClick={onClick}
-      style={{ touchAction: 'none' }}
-      className={`px-3 py-1.5 text-sm rounded-full border-2 select-none transition-all ${
-        isDragging ? 'opacity-0' : ''
-      } ${
-        isSelected
+      style={style}
+      className={`px-3 py-1.5 text-sm rounded-full border-2 select-none ${
+        isDragging
+          ? 'border-primary bg-primary text-white shadow-lg cursor-grabbing'
+          : isSelected
           ? 'border-primary bg-primary text-white shadow-md'
           : 'border-border bg-white text-text-primary hover:border-primary/50'
       } ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-grab active:cursor-grabbing'}`}
@@ -115,7 +126,6 @@ interface Props {
 
 export default function FillInBlank({ question, answers, onAnswer, disabled }: Props) {
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
-  const [draggingWord, setDraggingWord] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
@@ -157,16 +167,12 @@ export default function FillInBlank({ question, answers, onAnswer, disabled }: P
     }
   };
 
-  const handleDragStart = (event: DragStartEvent) => {
-    const id = event.active.id as string;
-    const word = id.startsWith('bank:') ? id.slice(5) : id;
-    setDraggingWord(word);
+  const handleDragStart = (_event: DragStartEvent) => {
     setSelectedWord(null);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    setDraggingWord(null);
     if (!over) return;
 
     const activeId = active.id as string;
@@ -182,7 +188,12 @@ export default function FillInBlank({ question, answers, onAnswer, disabled }: P
   let blankIndex = 0;
 
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div className="space-y-4">
         {/* Word Bank */}
         {wordBank.length > 0 && (
@@ -233,17 +244,6 @@ export default function FillInBlank({ question, answers, onAnswer, disabled }: P
           </p>
         )}
       </div>
-
-      <DragOverlay dropAnimation={null}>
-        {draggingWord && (
-          <div
-            style={{ touchAction: 'none' }}
-            className="px-3 py-1.5 text-sm rounded-full border-2 border-primary bg-primary text-white shadow-lg cursor-grabbing select-none"
-          >
-            {draggingWord}
-          </div>
-        )}
-      </DragOverlay>
     </DndContext>
   );
 }

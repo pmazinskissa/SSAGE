@@ -10,6 +10,8 @@ services:
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
+    dockerArgs:
+      VITE_REVIEW_MODE: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:

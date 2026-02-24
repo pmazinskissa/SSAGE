@@ -15,7 +15,7 @@ questions:
         text: "Weighted Strategy for Joint Feasibility"
     correct_option: "b"
     explanation: "WSJF stands for Weighted Shortest Job First, a prioritization method that calculates the cost of delay divided by job duration to rank opportunities."
-    lesson_link: "02-wsjf-scoring-method"
+    lesson_link: "03-wsjf-scoring-method"
     lesson_link_label: "Review: WSJF Scoring Method"
 
   - id: "m3-q2"
@@ -23,7 +23,7 @@ questions:
     question: "In the Value vs. Complexity Matrix, opportunities in the 'High Value, Low Complexity' quadrant should be prioritized first."
     correct_answer: true
     explanation: "Correct. High Value, Low Complexity opportunities (often called 'Quick Wins') deliver the most impact with the least effort and should be prioritized to build momentum and demonstrate early value."
-    lesson_link: "03-value-complexity-matrix"
+    lesson_link: "04-value-complexity-matrix"
     lesson_link_label: "Review: Value vs. Complexity Matrix"
 
   - id: "m3-q3"
@@ -40,7 +40,7 @@ questions:
         text: "Team Velocity"
     correct_option: "d"
     explanation: "Cost of Delay in WSJF is calculated from User/Business Value + Time Criticality + Risk Reduction/Opportunity Enablement. Team Velocity is not a component of Cost of Delay."
-    lesson_link: "02-wsjf-scoring-method"
+    lesson_link: "03-wsjf-scoring-method"
     lesson_link_label: "Review: WSJF Scoring Method"
 
   - id: "m3-q4"
@@ -60,7 +60,7 @@ questions:
         left: "Low Value, High Complexity"
         right: "Deprioritize or eliminate"
     explanation: "The matrix guides decision-making: Quick Wins first, Strategic projects with careful planning, Low Priority when resources permit, and avoid High Complexity / Low Value work."
-    lesson_link: "03-value-complexity-matrix"
+    lesson_link: "04-value-complexity-matrix"
     lesson_link_label: "Review: Value vs. Complexity Matrix"
 
   - id: "m3-q5"

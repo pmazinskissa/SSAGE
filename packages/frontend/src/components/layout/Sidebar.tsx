@@ -246,7 +246,7 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                         <button
                           onClick={() => toggleModule(mod.slug)}
                           className="w-full flex items-center justify-center py-1 hover:opacity-80 transition-opacity"
-                          title={`Module ${mod.order}: ${mod.title}${mod.status === 'completed' ? ' (Completed)' : ''}`}
+                          title={`${mod.order}. ${mod.title}${mod.status === 'completed' ? ' (Completed)' : ''}`}
                         >
                           <span className="relative">
                             <span className={`w-7 h-7 flex items-center justify-center rounded-full text-[11px] font-bold ${
@@ -272,7 +272,7 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                               <NavLink
                                 key={lesson.slug}
                                 to={`/courses/${slug}/modules/${mod.slug}/lessons/${lesson.slug}`}
-                                title={lesson.title}
+                                title={`${mod.order}.${lesson.order} ${lesson.title}`}
                                 className={({ isActive }) =>
                                   `flex items-center justify-center w-8 h-7 rounded transition-colors ${
                                     isActive
@@ -314,19 +314,23 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                     Loading navigation...
                   </div>
                 ) : navTree ? (
-                  navTree.modules.map((mod) => {
-                    const isExpanded = expandedModules.has(mod.slug);
-                    return (
-                      <div key={mod.slug}>
-                        {/* Module header — clickable to expand/collapse */}
-                        <button
-                          onClick={() => toggleModule(mod.slug)}
-                          className="w-full flex items-center justify-between px-4 py-2 mt-3 first:mt-0 text-left hover:bg-indigo-50/50 rounded-md transition-colors"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                                Module {mod.order}
+                  <>
+                    <p className="px-4 pt-3 pb-1 text-xs font-bold uppercase tracking-widest text-slate-400">
+                      Modules
+                    </p>
+                    {navTree.modules.map((mod) => {
+                      const isExpanded = expandedModules.has(mod.slug);
+                      return (
+                        <div key={mod.slug}>
+                          {/* Module header — clickable to expand/collapse */}
+                          <button
+                            onClick={() => toggleModule(mod.slug)}
+                            className="w-full flex items-center justify-between px-4 py-2 mt-1 first:mt-0 text-left hover:bg-indigo-50/50 rounded-md transition-colors"
+                          >
+                            <div className="min-w-0 flex-1 flex items-center gap-2">
+                              <p className="text-sm font-semibold truncate">
+                                <span className="text-purple-600">{mod.order}.</span>{' '}
+                                <span className="text-slate-800">{mod.title}</span>
                               </p>
                               {mod.status === 'completed' && (
                                 <CheckCircle2 size={12} className="text-success flex-shrink-0" />
@@ -335,48 +339,45 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                                 <Disc size={12} className="text-primary flex-shrink-0" />
                               )}
                             </div>
-                            <p className="text-sm font-semibold text-slate-500 mt-0.5 truncate">
-                              {mod.title}
-                            </p>
-                          </div>
-                          <span className="flex-shrink-0 ml-2">
-                            {isExpanded ? (
-                              <ChevronDown size={16} className="text-primary/40" />
-                            ) : (
-                              <ChevronRight size={16} className="text-primary/40" />
-                            )}
-                          </span>
-                        </button>
+                            <span className="flex-shrink-0 ml-2">
+                              {isExpanded ? (
+                                <ChevronDown size={16} className="text-primary/40" />
+                              ) : (
+                                <ChevronRight size={16} className="text-primary/40" />
+                              )}
+                            </span>
+                          </button>
 
-                        {/* Collapsible lesson list */}
-                        <div
-                          className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
-                            isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                          }`}
-                        >
-                          {mod.lessons.map((lesson) => (
-                            <SidebarNavItem
-                              key={lesson.slug}
-                              to={`/courses/${slug}/modules/${mod.slug}/lessons/${lesson.slug}`}
-                              title={lesson.title}
-                              status={lesson.status}
-                              locked={lockedLessons.has(`${mod.slug}:${lesson.slug}`)}
-                            />
-                          ))}
-                          {mod.has_knowledge_check && (
-                            <SidebarNavItem
-                              key={`${mod.slug}-kc`}
-                              to={`/courses/${slug}/modules/${mod.slug}/knowledge-check`}
-                              title="Knowledge Check"
-                              status="not_started"
-                              isKnowledgeCheck
-                              locked={lockedKCs.has(mod.slug)}
-                            />
-                          )}
+                          {/* Collapsible lesson list */}
+                          <div
+                            className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                              isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                            }`}
+                          >
+                            {mod.lessons.map((lesson) => (
+                              <SidebarNavItem
+                                key={lesson.slug}
+                                to={`/courses/${slug}/modules/${mod.slug}/lessons/${lesson.slug}`}
+                                title={`${mod.order}.${lesson.order} ${lesson.title}`}
+                                status={lesson.status}
+                                locked={lockedLessons.has(`${mod.slug}:${lesson.slug}`)}
+                              />
+                            ))}
+                            {mod.has_knowledge_check && (
+                              <SidebarNavItem
+                                key={`${mod.slug}-kc`}
+                                to={`/courses/${slug}/modules/${mod.slug}/knowledge-check`}
+                                title="Knowledge Check"
+                                status="not_started"
+                                isKnowledgeCheck
+                                locked={lockedKCs.has(mod.slug)}
+                              />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })
+                      );
+                    })}
+                  </>
                 ) : (
                   <div className="px-4 py-8 text-sm text-slate-500">
                     No content available.

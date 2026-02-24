@@ -9,12 +9,13 @@ export function useAIChat() {
   const abortRef = useRef<AbortController | null>(null);
 
   const sendMessage = useCallback(
-    async (text: string, courseSlug: string, moduleSlug: string, lessonSlug: string) => {
+    async (text: string, courseSlug: string, moduleSlug: string, lessonSlug: string, displayText?: string) => {
       setError(null);
 
       const userMessage: ChatMessage = {
         role: 'user',
         content: text,
+        ...(displayText ? { displayContent: displayText } : {}),
         timestamp: new Date().toISOString(),
       };
 
@@ -35,11 +36,11 @@ export function useAIChat() {
         abortRef.current = new AbortController();
 
         const response = await api.streamChat({
-          messages: updatedMessages,
+          messages: updatedMessages.map(({ displayContent, ...rest }) => rest),
           course_slug: courseSlug,
           module_slug: moduleSlug,
           lesson_slug: lessonSlug,
-        });
+        }, abortRef.current.signal);
 
         if (!response.ok) {
           const err = await response.json().catch(() => ({ error: { message: 'AI request failed' } }));

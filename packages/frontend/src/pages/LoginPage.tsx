@@ -7,6 +7,7 @@ import { useTheme } from '../context/ThemeContext';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { NoiseOverlay, GradientMesh } from '../components/ui/Backgrounds';
+import Footer from '../components/layout/Footer';
 
 const PROVIDER_LABELS: Record<string, string> = {
   microsoft: 'Microsoft',
@@ -221,13 +222,7 @@ export default function LoginPage() {
         </motion.div>
       </div>
 
-      {/* Footer — matches CourseCatalog */}
-      <footer className="border-t border-border/50 bg-white/40 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-secondary">
-          <span>{theme?.organization_name || 'Protective Life'} &copy; {new Date().getFullYear()}</span>
-          <span>SSA &amp; Co Guided Education</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -19,14 +19,17 @@ export function useKnowledgeCheck(
   useEffect(() => {
     if (!courseSlug || !moduleSlug) return;
 
+    let stale = false;
     setLoading(true);
     setError(null);
     setData(null);
 
     api.getKnowledgeCheck(courseSlug, moduleSlug)
-      .then((result) => setData(result))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .then((result) => { if (!stale) setData(result); })
+      .catch((err) => { if (!stale) setError(err.message); })
+      .finally(() => { if (!stale) setLoading(false); });
+
+    return () => { stale = true; };
   }, [courseSlug, moduleSlug]);
 
   return { data, loading, error };
