@@ -19,6 +19,10 @@ entries:
     definition: "A structured MECE decomposition tool that breaks a problem into logical component parts. Depicted horizontally with trunk (main problem), branches, sub-branches, and twigs."
     first_lesson: "04-issues-tree-and-hypotheses"
 
+  - term: "System of Record"
+    definition: "The authoritative source for a given dataset. When multiple systems store the same data, the system of record is the agreed-upon single source of truth used in analysis. Establishing this agreement early prevents rework when presenting findings to stakeholders."
+    first_lesson: "05-data-request-and-ingestion"
+
   - term: "Hypothesis Testing"
     definition: "Scientific method applied to operational problems using Null Hypothesis (H0: no effect) and Alternative Hypothesis (Ha: no effect cannot be proven). Rejecting H0 means the factor warrants investigation, not that causation is proven."
     first_lesson: "04-issues-tree-and-hypotheses"
@@ -48,7 +52,7 @@ entries:
     first_lesson: "02-wsjf-scoring-method"
 
   - term: "Business Value"
-    definition: "A 1-10 rating of business value an option delivers. Scored by the cross-functional team. Common error: confusing effort required with value delivered."
+    definition: "A 1-10 rating of the business value that an option delivers. Scored by the cross-functional team. Common error: confusing effort required with value delivered."
     first_lesson: "02-wsjf-scoring-method"
 
   - term: "Time Criticality"
@@ -61,6 +65,10 @@ entries:
 
   - term: "Job Size"
     definition: "A 1-10 rating of implementation duration and complexity. The divisor in WSJF, so high-effort options need proportionally higher value to justify ranking."
+    first_lesson: "02-wsjf-scoring-method"
+
+  - term: "Fibonacci"
+    definition: "A numerical sequence (1, 2, 3, 5, 8, 13…) where each number is the sum of the two preceding ones, named for Leonardo of Pisa whose 1202 book Liber Abaci popularized it. Used in WSJF scoring as 'Fibonacci-like values' because the increasing gaps between numbers force relative trade-off judgments rather than false precision."
     first_lesson: "02-wsjf-scoring-method"
 
   - term: "Context + Task + Output"

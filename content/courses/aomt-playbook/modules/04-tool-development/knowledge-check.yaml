@@ -69,7 +69,7 @@ questions:
     question: "Complete the sentence about prototype validation."
     segments:
       - type: "text"
-        value: "Before investing significant time in prototype development, validate technical "
+        value: "Before investing significant time in prototype development, confirm the technical "
       - type: "blank"
         value: "feasibility"
         accept:
@@ -81,8 +81,8 @@ questions:
         accept:
           - "security"
       - type: "text"
-        value: " teams."
-    explanation: "Validating technical feasibility and security requirements early prevents wasted effort on prototypes that cannot be deployed due to technical or compliance constraints."
+        value: " teammates."
+    explanation: "Confirming technical feasibility and security requirements early prevents wasted effort on prototypes that cannot be deployed due to technical or compliance constraints."
     lesson_link: "02-design-and-prototype"
     lesson_link_label: "Review: Design & Prototype"
 
