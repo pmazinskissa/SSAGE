@@ -33,8 +33,8 @@ RUN apk add --no-cache postgresql-client
 
 WORKDIR /app
 
-# Copy built backend (flatten nested dist/backend/src/ to dist/)
-COPY --from=builder /app/packages/backend/dist/backend/src ./packages/backend/dist
+# Copy built backend
+COPY --from=builder /app/packages/backend/dist ./packages/backend/dist
 COPY --from=builder /app/packages/backend/package.json ./packages/backend/
 
 # Copy built frontend
