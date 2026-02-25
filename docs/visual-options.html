@@ -557,67 +557,61 @@ function Item3C() {
 /* --- Item #4: Circular Activity Flow --- */
 function Item4A() {
   const phases = [
-    { n:1, label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
-    { n:2, label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
-    { n:3, label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
-    { n:4, label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
-    { n:5, label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
-    { n:6, label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
+    { n:1, short:'Problem',    label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
+    { n:2, short:'Issues',     label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
+    { n:3, short:'Data',       label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
+    { n:4, short:'Hypotheses', label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
+    { n:5, short:'Analysis',   label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
+    { n:6, short:'Synthesis',  label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
   ];
-  const cx = 200, cy = 200, R = 130, ir = 68;
+  const cx = 130, cy = 130, R = 105, ir = 55;
   const toRad = deg => deg * Math.PI / 180;
   const arcPath = (i) => {
-    const startDeg = i * 60 - 90;
-    const endDeg = (i + 1) * 60 - 90;
-    const x1 = cx + R * Math.cos(toRad(startDeg));
-    const y1 = cy + R * Math.sin(toRad(startDeg));
-    const x2 = cx + R * Math.cos(toRad(endDeg));
-    const y2 = cy + R * Math.sin(toRad(endDeg));
-    const x3 = cx + ir * Math.cos(toRad(endDeg));
-    const y3 = cy + ir * Math.sin(toRad(endDeg));
-    const x4 = cx + ir * Math.cos(toRad(startDeg));
-    const y4 = cy + ir * Math.sin(toRad(startDeg));
+    const s = i * 60 - 90, e = (i+1) * 60 - 90;
+    const x1=cx+R*Math.cos(toRad(s)),y1=cy+R*Math.sin(toRad(s));
+    const x2=cx+R*Math.cos(toRad(e)),y2=cy+R*Math.sin(toRad(e));
+    const x3=cx+ir*Math.cos(toRad(e)),y3=cy+ir*Math.sin(toRad(e));
+    const x4=cx+ir*Math.cos(toRad(s)),y4=cy+ir*Math.sin(toRad(s));
     return `M ${x4} ${y4} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${ir} ${ir} 0 0 0 ${x4} ${y4} Z`;
   };
-  const labelPos = (i) => {
-    const midDeg = i * 60 - 90 + 30;
-    const rLabel = R + 55;
-    return { x: cx + rLabel * Math.cos(toRad(midDeg)), y: cy + rLabel * Math.sin(toRad(midDeg)) };
-  };
-  const lineEnd = (i) => {
-    const midDeg = i * 60 - 90 + 30;
-    return { x: cx + (R + 6) * Math.cos(toRad(midDeg)), y: cy + (R + 6) * Math.sin(toRad(midDeg)) };
-  };
   return (
-    <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Donut Ring — Phase 1: Diagnosis</h3>
-      <div style={{display:'flex',alignItems:'center',gap:'1.5rem',flexWrap:'wrap'}}>
-        <svg viewBox="0 0 400 400" style={{width:360,flexShrink:0}}>
-          {phases.map((p,i) => {
-            const midDeg = i * 60 - 90 + 30;
-            const numR = (R + ir) / 2;
-            const numX = cx + numR * Math.cos(toRad(midDeg));
-            const numY = cy + numR * Math.sin(toRad(midDeg));
-            const lp = labelPos(i);
-            const le = lineEnd(i);
-            return (
-              <g key={i}>
-                <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
-                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="14" fontWeight="800">{p.n}</text>
-                <line x1={le.x} y1={le.y} x2={lp.x} y2={lp.y} stroke={p.color} strokeWidth="1.5"/>
-                <text x={lp.x} y={lp.y - 6} textAnchor="middle" fill={p.color} fontSize="9" fontWeight="700">{p.label}</text>
-              </g>
-            );
-          })}
-          <circle cx={cx} cy={cy} r={ir - 2} fill="white"/>
-          <text x={cx} y={cy - 7} textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="800">Phase 1:</text>
-          <text x={cx} y={cy + 7} textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="800">Diagnosis</text>
-          <line x1={cx + R + 12} y1={cy} x2={cx + R + 36} y2={cy} stroke="#4F46E5" strokeWidth="2" markerEnd="url(#arr4a)"/>
-          <defs><marker id="arr4a" markerWidth="7" markerHeight="7" refX="3" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#4F46E5"/></marker></defs>
-          <text x={cx + R + 42} y={cy - 8} fill="#4F46E5" fontSize="8" fontWeight="700">Phase 2:</text>
-          <text x={cx + R + 42} y={cy + 5} fill="#4F46E5" fontSize="8" fontWeight="700">Prioritization</text>
-        </svg>
+    <div style={{display:'grid',gridTemplateColumns:'auto auto',gap:'1.25rem',alignItems:'stretch',justifyContent:'center'}}>
+      <div style={{gridColumn:'1/-1',textAlign:'center',marginBottom:'0.25rem'}}>
+        <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
       </div>
+      <div>
+        {phases.map((p,i) => (
+          <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+            <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
+              <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
+            </div>
+          </div>
+        ))}
+        <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+            <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+            PHASE 2: PRIORITIZATION
+          </div>
+        </div>
+      </div>
+      <svg viewBox="0 0 260 260" style={{height:'100%',width:'auto',minWidth:160,display:'block'}}>
+        {phases.map((p,i) => {
+          const midDeg = i * 60 - 90 + 30;
+          const numR = (R + ir) / 2;
+          const numX = cx + numR * Math.cos(toRad(midDeg));
+          const numY = cy + numR * Math.sin(toRad(midDeg));
+          return (
+            <g key={i}>
+              <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{p.short}</text>
+            </g>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+      </svg>
     </div>
   );
 }
@@ -684,16 +678,15 @@ function Item4B() {
 }
 
 function Item4C() {
-  const [selected, setSelected] = useState(null);
   const phases = [
-    { n:1, label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
-    { n:2, label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
-    { n:3, label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
-    { n:4, label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
-    { n:5, label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
-    { n:6, label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
+    { n:1, short:'Problem',    label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
+    { n:2, short:'Issues',     label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
+    { n:3, short:'Data',       label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
+    { n:4, short:'Hypotheses', label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
+    { n:5, short:'Analysis',   label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
+    { n:6, short:'Synthesis',  label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
   ];
-  const cx = 160, cy = 160, R = 130, ir = 68;
+  const cx = 130, cy = 130, R = 105, ir = 55;
   const toRad = deg => deg * Math.PI / 180;
   const arcPath = (i) => {
     const s = i * 60 - 90, e = (i+1) * 60 - 90;
@@ -703,44 +696,61 @@ function Item4C() {
     const x4=cx+ir*Math.cos(toRad(s)),y4=cy+ir*Math.sin(toRad(s));
     return `M ${x4} ${y4} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${ir} ${ir} 0 0 0 ${x4} ${y4} Z`;
   };
-  const sel = selected !== null ? phases[selected] : null;
   return (
-    <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Interactive Donut — click a segment</h3>
-      <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-        <svg viewBox="0 0 320 320" style={{width:280}}>
-          {phases.map((p,i) => {
-            const midDeg = i * 60 - 90 + 30;
-            const numR = (R + ir) / 2;
-            const numX = cx + numR * Math.cos(toRad(midDeg));
-            const numY = cy + numR * Math.sin(toRad(midDeg));
-            const isActive = selected === i;
-            return (
-              <g key={i} onClick={() => setSelected(selected === i ? null : i)} style={{cursor:'pointer'}}>
-                <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"
-                  opacity={selected === null || isActive ? 1 : 0.4}
-                  transform={isActive ? `translate(${4*Math.cos(toRad(midDeg))},${4*Math.sin(toRad(midDeg))})` : ''}
-                />
-                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="13" fontWeight="800">{p.n}</text>
-              </g>
-            );
-          })}
-          <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
-          <text x={cx} y={cy-6} textAnchor="middle" fill="#1E1B4B" fontSize="9" fontWeight="800">Phase 1:</text>
-          <text x={cx} y={cy+7} textAnchor="middle" fill="#1E1B4B" fontSize="9" fontWeight="800">Diagnosis</text>
-        </svg>
-        {sel ? (
-          <div style={{marginTop:'0.75rem',border:`2px solid ${sel.color}`,borderRadius:8,padding:'0.75rem 1rem',maxWidth:340,width:'100%',background:`${sel.color}08`}}>
-            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.3rem'}}>
-              <span style={{width:24,height:24,borderRadius:'50%',background:sel.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.75rem',fontWeight:800,flexShrink:0}}>{sel.n}</span>
-              <span style={{fontWeight:700,color:sel.color,fontSize:'0.9rem'}}>{sel.label}</span>
-            </div>
-            <p style={{fontSize:'0.83rem',color:'#374151',lineHeight:1.5}}>{sel.desc}</p>
-          </div>
-        ) : (
-          <p style={{fontSize:'0.78rem',color:'#9CA3AF',marginTop:'0.5rem'}}>Click a segment to see description</p>
-        )}
+    <div style={{display:'grid',gridTemplateColumns:'auto auto',gap:'1.25rem',alignItems:'stretch',justifyContent:'center'}}>
+      <div style={{gridColumn:'1/-1',textAlign:'center',marginBottom:'0.25rem'}}>
+        <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
       </div>
+      <div>
+        {phases.map((p,i) => (
+          <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+            <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
+              <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
+            </div>
+          </div>
+        ))}
+        <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+            <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+            PHASE 2: PRIORITIZATION
+          </div>
+        </div>
+      </div>
+      <svg viewBox="0 0 260 260" style={{height:'100%',width:'auto',minWidth:160,display:'block'}}>
+        {phases.map((p,i) => {
+          const midDeg = i * 60 - 90 + 30;
+          const numR = (R + ir) / 2;
+          const numX = cx + numR * Math.cos(toRad(midDeg));
+          const numY = cy + numR * Math.sin(toRad(midDeg));
+          return (
+            <g key={i}>
+              <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{p.short}</text>
+            </g>
+          );
+        })}
+        {/* Clockwise arrowheads at each section boundary, tangential to the ring */}
+        {Array.from({length:6}, (_,i) => {
+          const θ = toRad((i+1)*60 - 90);
+          const numR = (R + ir) / 2;
+          const px = cx + numR * Math.cos(θ);
+          const py = cy + numR * Math.sin(θ);
+          const dx = -Math.sin(θ); // clockwise tangential
+          const dy =  Math.cos(θ);
+          const rx =  Math.cos(θ); // radial — perpendicular to arrow
+          const ry =  Math.sin(θ);
+          const a = 7, w = 4;
+          return (
+            <polygon key={i}
+              points={`${px+a*dx},${py+a*dy} ${px-a*dx+w*rx},${py-a*dy+w*ry} ${px-a*dx-w*rx},${py-a*dy-w*ry}`}
+              fill="white" opacity="0.85"/>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+      </svg>
     </div>
   );
 }
