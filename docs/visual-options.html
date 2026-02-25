@@ -742,7 +742,7 @@ function Item4C() {
           const dy =  Math.cos(θ);
           const rx =  Math.cos(θ); // radial — perpendicular to arrow
           const ry =  Math.sin(θ);
-          const a = 7, w = 4;
+          const a = 7, w = 7;
           return (
             <polygon key={i}
               points={`${px+a*dx},${py+a*dy} ${px-a*dx+w*rx},${py-a*dy+w*ry} ${px-a*dx-w*rx},${py-a*dy-w*ry}`}
