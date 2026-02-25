@@ -648,7 +648,7 @@ function Item4B() {
         <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
       </div>
       <div style={{display:'flex',gap:'1.25rem',alignItems:'flex-start',flexWrap:'wrap'}}>
-        <div style={{flex:1,minWidth:200}}>
+        <div style={{minWidth:200}}>
           {phases.map((p,i) => (
             <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
               <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
@@ -2306,15 +2306,15 @@ function Item14bC() {
 function Item15A() {
   const opps = [
     {id:1,  name:'AI-powered dispatch routing',            x:8,  y:18, type:'high'},
-    {id:2,  name:'Technician certification tracker',       x:12, y:14, type:'other'},
-    {id:3,  name:'Customer satisfaction survey automation', x:14, y:8,  type:'other'},
-    {id:4,  name:'Predictive maintenance alerts',          x:10, y:16, type:'high'},
+    {id:2,  name:'Technician certification tracker',       x:12, y:14, type:'blue'},
+    {id:3,  name:'Customer satisfaction survey automation', x:14, y:8,  type:'blue'},
+    {id:4,  name:'Predictive maintenance alerts',          x:10, y:16, type:'blue'},
     {id:5,  name:'Knowledge base AI assistant',            x:2,  y:12, type:'quick'},
     {id:6,  name:'Real-time FCR dashboard',                x:6,  y:17, type:'high'},
-    {id:7,  name:'Automated reporting pipeline',           x:16, y:6,  type:'other'},
+    {id:7,  name:'Automated reporting pipeline',           x:16, y:6,  type:'low'},
     {id:8,  name:'Appointment scheduling bot',             x:3,  y:4,  type:'quick'},
     {id:9,  name:'Customer churn predictor',               x:4,  y:15, type:'high'},
-    {id:10, name:'Service quality heat map',               x:18, y:9,  type:'other'},
+    {id:10, name:'Service quality heat map',               x:18, y:9,  type:'low'},
   ];
   const margin = {left:44, top:20, right:10, bottom:36};
   const plotW = 360, plotH = 280;
@@ -2322,7 +2322,7 @@ function Item15A() {
   const svgH = plotH + margin.top + margin.bottom;
   const toSvgX = (dx) => margin.left + (dx/20)*plotW;
   const toSvgY = (dy) => margin.top + plotH - (dy/20)*plotH;
-  const dotColor = (type) => type==='quick'?'#22C55E':type==='high'?'#15803D':'#94A3B8';
+  const dotColor = (type) => type==='quick'?'#22C55E':type==='high'?'#15803D':type==='low'?'#94A3B8':'#93C5FD';
   const dotR = (type) => type==='high'?15:type==='quick'?14:12;
   return (
     <div>
@@ -2354,12 +2354,12 @@ function Item15A() {
           <text x={toSvgX(0)-6} y={toSvgY(10)+4} textAnchor="end" fill="#9CA3AF" fontSize="8">Medium</text>
           <text x={toSvgX(0)-6} y={toSvgY(20)+4} textAnchor="end" fill="#9CA3AF" fontSize="8">High</text>
           {/* Axis titles */}
-          <text x={toSvgX(10)} y={toSvgY(0)+28} textAnchor="middle" fill="#374151" fontSize="9" fontWeight="600">Complexity →</text>
-          <text x={margin.left-36} y={toSvgY(10)} textAnchor="middle" fill="#374151" fontSize="9" fontWeight="600" transform={`rotate(-90,${margin.left-36},${toSvgY(10)})`}>Value →</text>
+          <text x={toSvgX(10)} y={toSvgY(0)+28} textAnchor="middle" fill="#374151" fontSize="9" fontWeight="600">Complexity</text>
+          <text x={margin.left-40} y={toSvgY(10)} textAnchor="middle" fill="#374151" fontSize="9" fontWeight="600" transform={`rotate(-90,${margin.left-40},${toSvgY(10)})`}>Value</text>
           {/* Region labels */}
-          <text x={toSvgX(5)} y={toSvgY(16)} textAnchor="middle" fill="#4338CA" fontSize="8" fontWeight="700">High Priority</text>
-          <text x={toSvgX(14)} y={toSvgY(3)} textAnchor="middle" fill="#0F766E" fontSize="8" fontWeight="700">Low Priority</text>
-          <text x={toSvgX(1)} y={toSvgY(10)} textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="700" transform={`rotate(-90,${toSvgX(1)},${toSvgY(10)})`}>Quick wins</text>
+          <text x={toSvgX(4)} y={toSvgY(18.5)} textAnchor="middle" fill="#4338CA" fontSize="8" fontWeight="700">High Priority</text>
+          <text x={toSvgX(16)} y={toSvgY(1.5)} textAnchor="middle" fill="#4B5563" fontSize="8" fontWeight="700">Low Priority</text>
+          <text x={toSvgX(1.665)} y={toSvgY(20)+10} textAnchor="middle" fill="#FFFFFF" fontSize="6.5" fontWeight="700">Quick wins</text>
           {/* Dots */}
           {opps.map((o) => {
             const dotX = toSvgX(o.x), dotY = toSvgY(o.y);
