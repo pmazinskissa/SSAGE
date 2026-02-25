@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Reference — AI Enabled Problem-Solving Playbook</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --color-primary: #4F46E5;
+  --color-primary-dark: #1E1B4B;
+  --color-primary-light: #EEF2FF;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-border: #E5E7EB;
+  --color-surface: #F8F9FA;
+  --color-text: #1A1A2E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #f5f5f7; color: #1A1A2E; }
+.sidebar { position: fixed; left: 0; top: 0; width: 220px; height: 100vh; background: #1E1B4B; overflow-y: auto; padding: 1rem 0; z-index: 100; }
+.sidebar h2 { color: #EEF2FF; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem 1rem; margin-top: 0.5rem; }
+.sidebar a { display: block; color: rgba(238,242,255,0.7); font-size: 0.8rem; padding: 0.3rem 1rem; text-decoration: none; transition: color 0.15s; }
+.sidebar a:hover { color: #EEF2FF; background: rgba(255,255,255,0.06); }
+.main { margin-left: 220px; padding: 2rem; }
+.module-section { margin-bottom: 3rem; }
+.module-header { font-size: 1.4rem; font-weight: 700; color: #1E1B4B; border-bottom: 3px solid #4F46E5; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+.item-container { background: white; border-radius: 10px; border: 1px solid #E5E7EB; margin-bottom: 2rem; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.item-header { background: #F8F9FA; border-bottom: 1px solid #E5E7EB; padding: 0.9rem 1.2rem; display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
+.item-id { background: #4F46E5; color: white; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+.item-title { font-weight: 700; font-size: 0.95rem; color: #1A1A2E; }
+.item-meta { font-size: 0.75rem; color: #6B7280; }
+.option-panel { padding: 1.5rem; min-height: 200px; }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; } }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div style="padding:1rem;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:0.5rem;">
+    <div style="color:white;font-weight:700;font-size:0.85rem;line-height:1.3">Visual Reference</div>
+    <div style="color:rgba(238,242,255,0.5);font-size:0.7rem;margin-top:0.2rem">AI Enabled PS Playbook</div>
+  </div>
+  <h2>Module 1 — Overview</h2>
+  <a href="#item-1">#1 AI Enabled PS Concept Graphic</a>
+  <a href="#item-2">#2 Benefits Graphic</a>
+  <a href="#item-3">#3 Playbook Structure</a>
+  <a href="#item-4">#4 Circular Activity Flow</a>
+  <h2>Module 2 — AI Problem Solving</h2>
+  <a href="#item-5">#5 Problem Statement 7 Elements</a>
+  <a href="#item-6">#6 PS Evaluation Table</a>
+  <a href="#item-7">#7 Metro Cable Issues Tree</a>
+  <a href="#item-8">#8 AI Prompt + Issues Tree Output</a>
+  <a href="#item-9">#9 Metro Cable Initial Data Request List</a>
+  <a href="#item-10">#10 Data Request Risks & Considerations</a>
+  <a href="#item-11">#11 Refined Data Request Example</a>
+  <a href="#item-12">#12 Visualization Type Thumbnails</a>
+  <a href="#item-13">#13 LLM-Style AI Output Formatting</a>
+  <h2>Module 3 — Prioritization</h2>
+  <a href="#item-14">#14 WSJF Introduction Graphic</a>
+  <a href="#item-14b">#14b WSJF Formula Breakdown</a>
+  <a href="#item-15">#15 Value vs. Complexity Matrix Intro</a>
+  <a href="#item-16">#16 Four Quadrants Visual</a>
+  <h2>Module 4 — AI Tool Development</h2>
+  <a href="#item-17">#17 Chapter Intro Graphic</a>
+  <a href="#item-18">#18 Design & Prototype Stages</a>
+  <a href="#item-19">#19 Digital Data Request Tracker Prototype</a>
+  <a href="#item-20">#20 SAFe Stages and Key Roles</a>
+  <a href="#item-21">#21 SAFe Main Graphic</a>
+  <h2>Module 7 — Summary</h2>
+  <a href="#item-22">#22 Closing Graphic</a>
+</div>
+
+<div class="main" id="app-root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+const { useState } = React;
+/* ── Inline Lucide-style SVG icons (no CDN dependency) ── */
+const ICONS = {
+  Zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  Search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
+  Target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  Ruler:'<path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/><path d="m4.5 13.5 2 2"/>',
+  Pencil:'<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>',
+  Wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+  RefreshCw:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+  Users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  FileText:'<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/>',
+  Landmark:'<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+  AlertTriangle:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  BarChart3:'<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+  Clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  ClipboardList:'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>',
+  Map:'<polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/>',
+  Lock:'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  Settings:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+  TrendingUp:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  Circle:'<circle cx="12" cy="12" r="10"/>',
+  Thermometer:'<path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>',
+  LayoutGrid:'<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+  DollarSign:'<line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  Shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  Rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+  XCircle:'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
+  Bot:'<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>',
+  Handshake:'<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>',
+  Building:'<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>',
+  Award:'<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>',
+  CheckCircle2:'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+  Lightbulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+  Key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>',
+  User:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  Check:'<polyline points="20 6 9 17 4 12"/>',
+  X:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  CheckCircle:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
+};
+const LIcon = ({name, size=18, color='currentColor', strokeWidth=1.5, style}) => {
+  const d = ICONS[name];
+  if (!d) return null;
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
+      fill="none" stroke={color} strokeWidth={strokeWidth}
+      strokeLinecap="round" strokeLinejoin="round"
+      style={{display:'inline-block',verticalAlign:'middle',flexShrink:0,...(style||{})}}
+      dangerouslySetInnerHTML={{__html:d}}
+    />
+  );
+};
+const Check = (p) => <LIcon name="Check" {...p}/>;
+const X = (p) => <LIcon name="X" {...p}/>;
+const Bot = (p) => <LIcon name="Bot" {...p}/>;
+const RefreshCw = (p) => <LIcon name="RefreshCw" {...p}/>;
+
+/* ===================== SHARED UTILITIES ===================== */
+
+/* --- Item #1: AI Enabled PS Concept --- */
+function Item1A() {
+  const phases = [
+    { name:'Diagnose Data',        color:'#4F46E5', filled:new Set([2,6,8]) },
+    { name:'Prioritize Opps',      color:'#6366F1', filled:new Set([0,3,7,9,12]) },
+    { name:'Design & Prototype',   color:'#0D9488', filled:new Set([1,2,5,6,8,10,11,13]) },
+    { name:'Implement Solutions',  color:'#7C3AED', filled:new Set([0,2,3,4,6,7,9,10,12,13]) },
+    { name:'Sustain Improvements', color:'#3730A3', filled:new Set([0,1,2,4,5,6,7,9,10,11,12,13]) },
+    { name:'Change Management',    color:'#1E1B4B', filled:new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13]) },
+  ];
+  const COLS = 14, r = 12;
+  const sw = Math.sqrt(3);
+  const rowH = r * 2.1;
+  const svgW = COLS * r * sw + r * sw * 0.5;
+  const svgH = rowH;
+  const hexPoints = (cx, cy) =>
+    Array.from({length:6}, (_,i) => {
+      const a = (i * 60 + 30) * Math.PI / 180;
+      return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+    }).join(' ');
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Hexagonal Progression Grid</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Each row fills in more blocks as the methodology progresses — from initial diagnosis to organization-wide change.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:'3px'}}>
+        {phases.map((phase, row) => (
+          <div key={row} style={{display:'flex',alignItems:'center',gap:'0px'}}>
+            <div style={{width:164,flexShrink:0,textAlign:'right',paddingRight:'6px',fontSize:'0.88rem',fontWeight:row===5?700:500,color:phase.color,lineHeight:1.2}}>
+              {phase.name}
+            </div>
+            <svg viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="xMinYMid meet" style={{flex:1,height:rowH,display:'block'}}>
+              {Array.from({length:COLS}, (_,col) => {
+                const cx = col * r * sw + r * sw / 2;
+                const cy = rowH / 2;
+                const filled = phase.filled.has(col);
+                return (
+                  <polygon
+                    key={col}
+                    points={hexPoints(cx, cy)}
+                    fill={filled ? phase.color : 'none'}
+                    stroke={filled ? phase.color : '#D1D5DB'}
+                    strokeWidth="1"
+                    opacity={filled ? 0.9 : 0.35}
+                  />
+                );
+              })}
+            </svg>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Item1B() {
+  // Square block grid — same filling concept, cleaner/more minimal aesthetic
+  const phases = [
+    { name:'Diagnose Data',        fill:3,  color:'#4F46E5', bg:'#EEF2FF' },
+    { name:'Prioritize Opps',      fill:5,  color:'#6366F1', bg:'#EEF2FF' },
+    { name:'Design & Prototype',   fill:8,  color:'#0D9488', bg:'#F0FDFA' },
+    { name:'Implement Solutions',  fill:10, color:'#7C3AED', bg:'#F5F3FF' },
+    { name:'Sustain Improvements', fill:12, color:'#3730A3', bg:'#EEF2FF' },
+    { name:'Change Management',    fill:14, color:'#1E1B4B', bg:'#F1F5F9' },
+  ];
+  const COLS = 14;
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Block Fill Progression</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Blocks fill in left-to-right with each phase — by Change Management, all capacity is engaged.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+        {phases.map((p, ri) => (
+          <div key={ri} style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            <div style={{width:170,fontSize:'0.78rem',color:'#374151',textAlign:'right',flexShrink:0,fontWeight:ri===5?700:400,color:p.color}}>{p.name}</div>
+            <div style={{display:'flex',gap:'3px',flex:1}}>
+              {Array.from({length:COLS}, (_,ci) => (
+                <div key={ci} style={{
+                  flex:1,
+                  height:22,
+                  borderRadius:3,
+                  background: ci < p.fill ? p.color : '#F3F4F6',
+                  border: ci < p.fill ? 'none' : '1px solid #E5E7EB',
+                  transition:'background 0.2s',
+                  opacity: ci < p.fill ? (0.5 + (ci/p.fill)*0.5) : 1,
+                }}/>
+              ))}
+            </div>
+            <div style={{width:28,fontSize:'0.72rem',color:p.color,fontWeight:700,flexShrink:0}}>{p.fill}/{COLS}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'1rem',fontSize:'0.75rem',color:'#9CA3AF'}}>
+        <span style={{display:'flex',alignItems:'center',gap:'4px'}}><span style={{width:14,height:14,borderRadius:2,background:'#4F46E5',display:'inline-block'}}/> Activated</span>
+        <span style={{display:'flex',alignItems:'center',gap:'4px'}}><span style={{width:14,height:14,borderRadius:2,background:'#F3F4F6',border:'1px solid #E5E7EB',display:'inline-block'}}/> Pending</span>
+      </div>
+    </div>
+  );
+}
+
+function Item1C() {
+  // Stacked rows with cumulative fill — each row shows its own blocks PLUS
+  // a ghost of all prior phases, emphasizing the additive nature of progression
+  const phases = [
+    { name:'Diagnose Data',        own:3,  color:'#4F46E5' },
+    { name:'Prioritize Opps',      own:2,  color:'#6366F1' },
+    { name:'Design & Prototype',   own:3,  color:'#0D9488' },
+    { name:'Implement Solutions',  own:2,  color:'#7C3AED' },
+    { name:'Sustain Improvements', own:2,  color:'#3730A3' },
+    { name:'Change Management',    own:2,  color:'#1E1B4B' },
+  ];
+  const COLS = 14;
+  // Compute cumulative fill per row
+  const cumulative = phases.map((_, i) => phases.slice(0, i+1).reduce((sum, p) => sum + p.own, 0));
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Cumulative Fill — Each Phase Builds on the Last</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Each phase adds its blocks to those already filled. By Change Management, the full grid is active.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:'5px'}}>
+        {phases.map((p, ri) => {
+          const total = cumulative[ri];
+          return (
+            <div key={ri} style={{display:'flex',alignItems:'center',gap:'8px'}}>
+              <div style={{width:170,fontSize:'0.78rem',textAlign:'right',flexShrink:0,fontWeight:700,color:p.color}}>{p.name}</div>
+              <div style={{display:'flex',gap:'3px',flex:1}}>
+                {Array.from({length:COLS}, (_,ci) => {
+                  // Which phase filled this block?
+                  let fillColor = null;
+                  let cumSoFar = 0;
+                  for (let pi = 0; pi <= ri; pi++) {
+                    if (ci < cumSoFar + phases[pi].own) { fillColor = phases[pi].color; break; }
+                    cumSoFar += phases[pi].own;
+                  }
+                  const isNew = ci >= (cumulative[ri] - p.own) && ci < cumulative[ri];
+                  return (
+                    <div key={ci} style={{
+                      flex:1,
+                      height:22,
+                      borderRadius:3,
+                      background: fillColor || '#F3F4F6',
+                      border: fillColor ? 'none' : '1px solid #E5E7EB',
+                      outline: isNew ? `2px solid ${p.color}` : 'none',
+                      outlineOffset: isNew ? '1px' : '0',
+                    }}/>
+                  );
+                })}
+              </div>
+              <div style={{width:28,fontSize:'0.72rem',color:p.color,fontWeight:700,flexShrink:0}}>+{p.own}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{marginTop:'0.75rem',fontSize:'0.75rem',color:'#9CA3AF'}}>Outlined blocks = new blocks added in that phase</div>
+    </div>
+  );
+}
+
+/* --- Item #2: Benefits Graphic --- */
+function Item2A() {
+  const left = ['Weeks to months for insights','One question at a time','Assumption-based starting point','Consultant gut-check validation'];
+  const right = ['Days to meaningful insights','20+ hypotheses simultaneously','Data-validated from day one','AI-verified, evidence-backed'];
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Before / After Split Card</h3>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0',borderRadius:10,overflow:'hidden',border:'1px solid #E5E7EB'}}>
+        <div style={{background:'#F3F4F6',padding:'1.25rem'}}>
+          <div style={{fontWeight:700,color:'#6B7280',marginBottom:'0.75rem',textAlign:'center'}}>Traditional Consulting</div>
+          {left.map((t,i) => <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.85rem',color:'#374151'}}><X size={14} color="#EF4444" strokeWidth={2.5} style={{flexShrink:0}}/>{t}</div>)}
+        </div>
+        <div style={{background:'#EEF2FF',padding:'1.25rem',borderLeft:'2px solid #4F46E5'}}>
+          <div style={{fontWeight:700,color:'#4F46E5',marginBottom:'0.75rem',textAlign:'center'}}>AI-Enabled Approach</div>
+          {right.map((t,i) => <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.85rem',color:'#374151'}}><Check size={14} color="#22C55E" strokeWidth={2.5} style={{flexShrink:0}}/>{t}</div>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Item2B() {
+  const cards = [
+    { icon:'Zap', metric:'Days not months', label:'Speed', color:'#F59E0B', bg:'#FFFBEB', desc:'AI compresses the analysis cycle dramatically' },
+    { icon:'Ruler', metric:'20+ at once', label:'Scale', color:'#4F46E5', bg:'#EEF2FF', desc:'Explore many hypotheses simultaneously' },
+    { icon:'Target', metric:'Data-validated', label:'Precision', color:'#22C55E', bg:'#F0FDF4', desc:'Findings backed by evidence, not instinct' },
+  ];
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>KPI Benefit Cards</h3>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem'}}>
+        {cards.map((c,i) => (
+          <div key={i} style={{background:c.bg,border:`2px solid ${c.color}20`,borderRadius:10,padding:'1.25rem',textAlign:'center'}}>
+            <div style={{marginBottom:'0.5rem'}}><LIcon name={c.icon} size={28} color={c.color}/></div>
+            <div style={{fontWeight:800,fontSize:'1.1rem',color:c.color}}>{c.metric}</div>
+            <div style={{fontWeight:700,color:'#1A1A2E',margin:'0.25rem 0'}}>{c.label}</div>
+            <p style={{fontSize:'0.8rem',color:'#6B7280'}}>{c.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Item2C() {
+  const rows = [
+    ['Time to Insight','Weeks to months','Days'],
+    ['Questions per Session','1–3 hypotheses','20+ simultaneously'],
+    ['Starting Point','Consultant assumptions','Operational data'],
+    ['Validation Method','Expert opinion','AI + data evidence'],
+  ];
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Comparison Table</h3>
+      <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.875rem'}}>
+        <thead>
+          <tr style={{background:'#1E1B4B',color:'white'}}>
+            <th style={{padding:'0.6rem 1rem',textAlign:'left',fontWeight:600}}>Dimension</th>
+            <th style={{padding:'0.6rem 1rem',textAlign:'left',fontWeight:600}}>Traditional</th>
+            <th style={{padding:'0.6rem 1rem',textAlign:'left',fontWeight:600,color:'#A5B4FC'}}>AI-Enabled</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r,i) => (
+            <tr key={i} style={{background:i%2===0?'white':'#F8F9FA'}}>
+              <td style={{padding:'0.6rem 1rem',fontWeight:600,color:'#374151'}}>{r[0]}</td>
+              <td style={{padding:'0.6rem 1rem',color:'#6B7280'}}>{r[1]}</td>
+              <td style={{padding:'0.6rem 1rem',color:'#4F46E5',fontWeight:600}}>{r[2]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* --- Item #3: Playbook Structure --- */
+function Item3A() {
+  const sections = [
+    { title:'Section I', sub:'Practitioners Playbook', color:'#4F46E5', chapters:['AI Problem-Solving Process','Data Analysis Techniques','Prioritization Methods','AI Tool Development','Agile Delivery','Value Realization'] },
+    { title:'Section II', sub:'Sustainment', color:'#0D9488', chapters:['Embedding New Capabilities','Governance & Performance','Continuous Improvement','OCM Integration Points'] },
+    { title:'Section III', sub:'Org Change Mgmt', color:'#7C3AED', chapters:['Change Strategy','Stakeholder Engagement','Communication Planning','Training & Adoption'] },
+  ];
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Column Section Cards</h3>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem'}}>
+        {sections.map((s,i) => (
+          <div key={i} style={{border:'1px solid #E5E7EB',borderRadius:8,overflow:'hidden'}}>
+            <div style={{background:s.color,padding:'0.75rem 1rem',color:'white'}}>
+              <div style={{fontSize:'0.7rem',opacity:0.8,textTransform:'uppercase'}}>{s.title}</div>
+              <div style={{fontWeight:700,fontSize:'0.9rem'}}>{s.sub}</div>
+            </div>
+            <div style={{padding:'0.75rem'}}>
+              {s.chapters.map((c,ci) => (
+                <div key={ci} style={{display:'flex',alignItems:'center',gap:'0.4rem',padding:'0.25rem 0',fontSize:'0.8rem',color:'#374151',borderBottom:ci<s.chapters.length-1?'1px solid #F3F4F6':'none'}}>
+                  <span style={{color:s.color}}>›</span>{c}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Item3B() {
+  const sections = [
+    { title:'Section I — Practitioners Playbook', items:['AI Problem-Solving Process','Data Analysis & Visualization','Prioritization Methods','AI Tool Development','Agile Delivery & SAFe','Value Realization'] },
+    { title:'Section II — Sustainment', items:['Embedding New Capabilities','Governance & Performance Mgmt','Continuous Improvement Loop'] },
+    { title:'Section III — Organizational Change Management', items:['Change Strategy & Leadership','Stakeholder Engagement','Communication Planning','Training & Adoption'] },
+  ];
+  const [open, setOpen] = useState(null);
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Accordion Sections</h3>
+      {sections.map((s,i) => (
+        <div key={i} style={{border:'1px solid #E5E7EB',borderRadius:8,marginBottom:'0.5rem',overflow:'hidden'}}>
+          <button onClick={() => setOpen(open===i?null:i)} style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.75rem 1rem',background:open===i?'#EEF2FF':'white',border:'none',cursor:'pointer',fontWeight:600,color:open===i?'#4F46E5':'#1A1A2E',fontSize:'0.875rem',textAlign:'left'}}>
+            {s.title}
+            <span style={{transform:open===i?'rotate(180deg)':'none',transition:'transform 0.2s'}}>▼</span>
+          </button>
+          {open===i && (
+            <div style={{background:'#F8F9FA',padding:'0.75rem 1rem',borderTop:'1px solid #E5E7EB'}}>
+              {s.items.map((it,ii) => <div key={ii} style={{padding:'0.3rem 0',fontSize:'0.85rem',color:'#374151',display:'flex',gap:'0.5rem',alignItems:'center'}}><span style={{color:'#4F46E5'}}>•</span>{it}</div>)}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Item3C() {
+  const tree = {
+    label: 'AI Enabled Problem-Solving Playbook',
+    children: [
+      { label:'Section I: Practitioners Playbook', children:[{label:'AI Problem-Solving'},{label:'Data Analysis'},{label:'Prioritization'},{label:'AI Tool Dev'},{label:'Agile Delivery'},{label:'Value Realization'}] },
+      { label:'Section II: Sustainment', children:[{label:'Embedding Capabilities'},{label:'Governance'},{label:'Continuous Improvement'}] },
+      { label:'Section III: OCM', children:[{label:'Change Strategy'},{label:'Stakeholder Engagement'},{label:'Communication'},{label:'Training & Adoption'}] },
+    ]
+  };
+  const colors = ['#4F46E5','#0D9488','#7C3AED'];
+  return (
+    <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Hierarchy Tree</h3>
+      <div style={{background:'#1E1B4B',color:'white',borderRadius:8,padding:'0.75rem 1.25rem',fontWeight:700,textAlign:'center',marginBottom:'1rem',fontSize:'0.9rem'}}>{tree.label}</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.75rem'}}>
+        {tree.children.map((sec,si) => (
+          <div key={si} style={{border:`2px solid ${colors[si]}`,borderRadius:8,overflow:'hidden'}}>
+            <div style={{background:colors[si],color:'white',padding:'0.5rem 0.75rem',fontSize:'0.8rem',fontWeight:700}}>{sec.label}</div>
+            <div style={{padding:'0.5rem 0.75rem'}}>
+              {sec.children.map((ch,ci) => (
+                <div key={ci} style={{fontSize:'0.78rem',color:'#374151',padding:'0.2rem 0',borderBottom:ci<sec.children.length-1?'1px solid #F3F4F6':'none',paddingLeft:'0.5rem'}}>— {ch.label}</div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* --- Item #4: Circular Activity Flow --- */
+function Item4A() {
+  const phases = [
+    { n:1, short:'Problem',    label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
+    { n:2, short:'Issues',     label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
+    { n:3, short:'Data',       label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
+    { n:4, short:'Hypotheses', label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
+    { n:5, short:'Analysis',   label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
+    { n:6, short:'Synthesis',  label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
+  ];
+  const cx = 130, cy = 130, R = 105, ir = 55;
+  const toRad = deg => deg * Math.PI / 180;
+  const arcPath = (i) => {
+    const s = i * 60 - 90, e = (i+1) * 60 - 90;
+    const x1=cx+R*Math.cos(toRad(s)),y1=cy+R*Math.sin(toRad(s));
+    const x2=cx+R*Math.cos(toRad(e)),y2=cy+R*Math.sin(toRad(e));
+    const x3=cx+ir*Math.cos(toRad(e)),y3=cy+ir*Math.sin(toRad(e));
+    const x4=cx+ir*Math.cos(toRad(s)),y4=cy+ir*Math.sin(toRad(s));
+    return `M ${x4} ${y4} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${ir} ${ir} 0 0 0 ${x4} ${y4} Z`;
+  };
+  return (
+    <div style={{display:'grid',gridTemplateColumns:'auto auto',gap:'1.25rem',alignItems:'stretch',justifyContent:'center'}}>
+      <div style={{gridColumn:'1/-1',textAlign:'center',marginBottom:'0.25rem'}}>
+        <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
+      </div>
+      <div>
+        {phases.map((p,i) => (
+          <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+            <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
+              <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
+            </div>
+          </div>
+        ))}
+        <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+            <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+            PHASE 2: PRIORITIZATION
+          </div>
+        </div>
+      </div>
+      <svg viewBox="0 0 260 260" style={{height:'100%',width:'auto',minWidth:160,display:'block'}}>
+        {phases.map((p,i) => {
+          const midDeg = i * 60 - 90 + 30;
+          const numR = (R + ir) / 2;
+          const numX = cx + numR * Math.cos(toRad(midDeg));
+          const numY = cy + numR * Math.sin(toRad(midDeg));
+          return (
+            <g key={i}>
+              <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{p.short}</text>
+            </g>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+      </svg>
+    </div>
+  );
+}
+
+function Item4B() {
+  const phases = [
+    { n:1, short:'Problem',    label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
+    { n:2, short:'Issues',     label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
+    { n:3, short:'Data',       label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
+    { n:4, short:'Hypotheses', label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
+    { n:5, short:'Analysis',   label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
+    { n:6, short:'Synthesis',  label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
+  ];
+  const cx = 130, cy = 130, R = 105, ir = 55;
+  const toRad = deg => deg * Math.PI / 180;
+  const arcPath = (i) => {
+    const s = i * 60 - 90, e = (i+1) * 60 - 90;
+    const x1=cx+R*Math.cos(toRad(s)),y1=cy+R*Math.sin(toRad(s));
+    const x2=cx+R*Math.cos(toRad(e)),y2=cy+R*Math.sin(toRad(e));
+    const x3=cx+ir*Math.cos(toRad(e)),y3=cy+ir*Math.sin(toRad(e));
+    const x4=cx+ir*Math.cos(toRad(s)),y4=cy+ir*Math.sin(toRad(s));
+    return `M ${x4} ${y4} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${ir} ${ir} 0 0 0 ${x4} ${y4} Z`;
+  };
+  return (
+    <div style={{display:'grid',gridTemplateColumns:'auto auto',gap:'1.25rem',alignItems:'stretch',justifyContent:'center'}}>
+      <div style={{gridColumn:'1/-1',textAlign:'center',marginBottom:'0.25rem'}}>
+        <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
+      </div>
+      <div>
+        {phases.map((p,i) => (
+          <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+            <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
+              <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
+            </div>
+          </div>
+        ))}
+        <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+            <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+            PHASE 2: PRIORITIZATION
+          </div>
+        </div>
+      </div>
+      <svg viewBox="0 0 260 260" style={{height:'100%',width:'auto',minWidth:160,display:'block'}}>
+        {phases.map((p,i) => {
+          const midDeg = i * 60 - 90 + 30;
+          const numR = (R + ir) / 2;
+          const numX = cx + numR * Math.cos(toRad(midDeg));
+          const numY = cy + numR * Math.sin(toRad(midDeg));
+          return (
+            <g key={i}>
+              <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{p.short}</text>
+            </g>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+      </svg>
+    </div>
+  );
+}
+
+function Item4C() {
+  const phases = [
+    { n:1, short:'Problem',    label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
+    { n:2, short:'Issues',     label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
+    { n:3, short:'Data',       label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
+    { n:4, short:'Hypotheses', label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
+    { n:5, short:'Analysis',   label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
+    { n:6, short:'Synthesis',  label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
+  ];
+  const cx = 130, cy = 130, R = 105, ir = 55;
+  const toRad = deg => deg * Math.PI / 180;
+  const arcPath = (i) => {
+    const s = i * 60 - 90, e = (i+1) * 60 - 90;
+    const x1=cx+R*Math.cos(toRad(s)),y1=cy+R*Math.sin(toRad(s));
+    const x2=cx+R*Math.cos(toRad(e)),y2=cy+R*Math.sin(toRad(e));
+    const x3=cx+ir*Math.cos(toRad(e)),y3=cy+ir*Math.sin(toRad(e));
+    const x4=cx+ir*Math.cos(toRad(s)),y4=cy+ir*Math.sin(toRad(s));
+    return `M ${x4} ${y4} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${ir} ${ir} 0 0 0 ${x4} ${y4} Z`;
+  };
+  return (
+    <div style={{display:'grid',gridTemplateColumns:'auto auto',gap:'1.25rem',alignItems:'stretch',justifyContent:'center'}}>
+      <div style={{gridColumn:'1/-1',textAlign:'center',marginBottom:'0.25rem'}}>
+        <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
+      </div>
+      <div>
+        {phases.map((p,i) => (
+          <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+            <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
+              <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
+            </div>
+          </div>
+        ))}
+        <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+            <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+            PHASE 2: PRIORITIZATION
+          </div>
+        </div>
+      </div>
+      <svg viewBox="0 0 260 260" style={{height:'100%',width:'auto',minWidth:160,display:'block'}}>
+        {phases.map((p,i) => {
+          const midDeg = i * 60 - 90 + 30;
+          const numR = (R + ir) / 2;
+          const numX = cx + numR * Math.cos(toRad(midDeg));
+          const numY = cy + numR * Math.sin(toRad(midDeg));
+          return (
+            <g key={i}>
+              <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{p.short}</text>
+            </g>
+          );
+        })}
+        {/* Clockwise arrowheads at each section boundary, tangential to the ring */}
+        {Array.from({length:6}, (_,i) => {
+          const θ = toRad((i+1)*60 - 90);
+          const numR = (R + ir) / 2;
+          const px = cx + numR * Math.cos(θ);
+          const py = cy + numR * Math.sin(θ);
+          const dx = -Math.sin(θ); // clockwise tangential
+          const dy =  Math.cos(θ);
+          const rx =  Math.cos(θ); // radial — perpendicular to arrow
+          const ry =  Math.sin(θ);
+          const a = 7, w = 7;
+          return (
+            <polygon key={i}
+              points={`${px+a*dx},${py+a*dy} ${px-a*dx+w*rx},${py-a*dy+w*ry} ${px-a*dx-w*rx},${py-a*dy-w*ry}`}
+              fill="white" opacity="0.85"/>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+      </svg>
+    </div>
+  );
+}
+
+
+function ItemSection({ id, title, location, slide, children }) {
+  const meta = [location, slide].filter(Boolean).join(' · ');
+  return (
+    <div className="item-container" id={`item-${id}`}>
+      <div className="item-header">
+        <span className="item-id">#{id}</span>
+        <span className="item-title">{title}</span>
+        {meta && <span className="item-meta">{meta}</span>}
+      </div>
+      <div className="option-panel">{children}</div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <div style={{background:'linear-gradient(135deg,#1E1B4B,#4F46E5)',color:'white',padding:'1.5rem 2rem',marginBottom:'2rem',borderRadius:12}}>
+        <h1 style={{fontSize:'1.5rem',fontWeight:800,marginBottom:'0.3rem'}}>Visual Reference — Selected Options</h1>
+        <p style={{opacity:0.8,fontSize:'0.9rem'}}>AI Enabled Problem-Solving Playbook — final selected visualizations</p>
+      </div>
+
+      <div className="module-section">
+        <h2 className="module-header">Module 1 — Overview</h2>
+
+        <ItemSection id="1" title="AI Enabled PS Concept Graphic" location="04-introducing-aomt.mdx" slide="Slide 5">
+          <Item1A/>
+        </ItemSection>
+
+        <ItemSection id="2" title="Benefits Graphic" location="04-introducing-aomt.mdx" slide="">
+          <Item2B/>
+        </ItemSection>
+
+        <ItemSection id="3" title="Playbook Structure" location="05-playbook-structure.mdx" slide="Slide 6">
+          <Item3A/>
+        </ItemSection>
+
+        <ItemSection id="4" title="Circular Activity Flow" location="04-introducing-aomt.mdx" slide="Slide 10">
+          <Item4B/>
+        </ItemSection>
+
+      </div>
+
+      <div className="module-section">
+        <h2 className="module-header">Module 2 — AI Problem Solving</h2>
+
+        <ItemSection id="5" title="Problem Statement 7 Elements" location="03-problem-statement.mdx" slide="Slide 11">
+          <Item5A/>
+        </ItemSection>
+
+        <ItemSection id="6" title="PS Evaluation Table" location="03-problem-statement.mdx" slide="Slide 12">
+          <Item6A/>
+        </ItemSection>
+
+        <ItemSection id="7" title="Metro Cable Issues Tree" location="04-issues-tree-and-hypotheses.mdx" slide="Slide 15">
+          <Item7C/>
+        </ItemSection>
+
+        <ItemSection id="8" title="AI Prompt + Issues Tree Output" location="" slide="">
+          <Item8B/>
+        </ItemSection>
+
+        <ItemSection id="9" title="Metro Cable Initial Data Request List" location="05-data-request-and-ingestion.mdx" slide="Slide 18">
+          <Item9A/>
+        </ItemSection>
+
+        <ItemSection id="10" title="Data Request Risks & Considerations" location="05-data-request-and-ingestion.mdx" slide="Slide 19">
+          <Item10A/>
+        </ItemSection>
+
+        <ItemSection id="11" title="Refined Data Request Example" location="05-data-request-and-ingestion.mdx" slide="">
+          <Item11C/>
+        </ItemSection>
+
+        <ItemSection id="12" title="Visualization Type Thumbnails" location="06-data-visualization.mdx" slide="">
+          <Item12A/>
+        </ItemSection>
+
+        <ItemSection id="13" title="LLM-Style AI Output Formatting" location="10-ai-enabled-research.mdx" slide="">
+          <Item13B/>
+        </ItemSection>
+
+      </div>
+
+      <div className="module-section">
+        <h2 className="module-header">Module 3 — Prioritization</h2>
+
+        <ItemSection id="14" title="WSJF Introduction Graphic" location="02-wsjf-scoring-method.mdx" slide="Slides 44/45">
+          <Item14C/>
+        </ItemSection>
+
+        <ItemSection id="14b" title="WSJF Formula Breakdown" location="02-wsjf-scoring-method.mdx" slide="">
+          <Item14bA/>
+        </ItemSection>
+
+        <ItemSection id="15" title="Value vs. Complexity Matrix Intro" location="03-value-complexity-matrix.mdx" slide="Slide 47">
+          <Item15A/>
+        </ItemSection>
+
+        <ItemSection id="16" title="Four Quadrants Visual" location="03-value-complexity-matrix.mdx" slide="Slide 47">
+          <Item16A/>
+        </ItemSection>
+
+      </div>
+
+      <div className="module-section">
+        <h2 className="module-header">Module 4 — AI Tool Development</h2>
+
+        <ItemSection id="17" title="Chapter Intro Graphic" location="01-ai-tool-development.mdx" slide="Slide 49">
+          <Item17A/>
+        </ItemSection>
+
+        <ItemSection id="18" title="Design & Prototype Stages" location="02-design-and-prototype.mdx" slide="Slide 50">
+          <Item18A/>
+        </ItemSection>
+
+        <ItemSection id="19" title="Digital Data Request Tracker Prototype" location="02-design-and-prototype.mdx" slide="Slides 51/52">
+          <Item19A/>
+        </ItemSection>
+
+        <ItemSection id="20" title="SAFe Stages and Key Roles" location="04-safe-framework.mdx" slide="Slide 54">
+          <Item20A/>
+        </ItemSection>
+
+        <ItemSection id="21" title="SAFe Main Graphic" location="04-safe-framework.mdx" slide="Slide 56">
+          <Item21C/>
+        </ItemSection>
+
+      </div>
+
+      <div className="module-section">
+        <h2 className="module-header">Module 7 — Summary</h2>
+
+        <ItemSection id="22" title="Closing Graphic" location="01-playbook-summary.mdx" slide="">
+          <Item22A/>
+        </ItemSection>
+
+      </div>
+
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('app-root'));
+root.render(<App/>);
+</script>
+</body>
+</html>
