@@ -238,12 +238,12 @@ function ItemWrapper({ id, title, location, slide, children }) {
 /* --- Item #1: AI Enabled PS Concept --- */
 function Item1A() {
   const phases = [
-    { name:'Diagnose Data',        fill:3,  color:'#4F46E5' },
-    { name:'Prioritize Opps',      fill:5,  color:'#6366F1' },
-    { name:'Design & Prototype',   fill:8,  color:'#0D9488' },
-    { name:'Implement Solutions',  fill:10, color:'#7C3AED' },
-    { name:'Sustain Improvements', fill:12, color:'#3730A3' },
-    { name:'Change Management',    fill:14, color:'#1E1B4B' },
+    { name:'Diagnose Data',        color:'#4F46E5', filled:new Set([2,6,8]) },
+    { name:'Prioritize Opps',      color:'#6366F1', filled:new Set([0,3,7,9,12]) },
+    { name:'Design & Prototype',   color:'#0D9488', filled:new Set([1,2,5,6,8,10,11,13]) },
+    { name:'Implement Solutions',  color:'#7C3AED', filled:new Set([0,2,3,4,6,7,9,10,12,13]) },
+    { name:'Sustain Improvements', color:'#3730A3', filled:new Set([0,1,2,4,5,6,7,9,10,11,12,13]) },
+    { name:'Change Management',    color:'#1E1B4B', filled:new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13]) },
   ];
   const COLS = 14, r = 12;
   const sw = Math.sqrt(3);
@@ -269,7 +269,7 @@ function Item1A() {
               {Array.from({length:COLS}, (_,col) => {
                 const cx = col * r * sw + r * sw / 2;
                 const cy = rowH / 2;
-                const filled = col < phase.fill;
+                const filled = phase.filled.has(col);
                 return (
                   <polygon
                     key={col}
@@ -647,23 +647,7 @@ function Item4B() {
       <div style={{textAlign:'center',marginBottom:'0.75rem'}}>
         <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
       </div>
-      <div style={{display:'flex',gap:'1.25rem',alignItems:'flex-end',flexWrap:'wrap'}}>
-        <svg viewBox="0 0 260 260" style={{width:220,flexShrink:0}}>
-          {phases.map((p,i) => {
-            const midDeg = i * 60 - 90 + 30;
-            const numR = (R + ir) / 2;
-            const numX = cx + numR * Math.cos(toRad(midDeg));
-            const numY = cy + numR * Math.sin(toRad(midDeg));
-            return (
-              <g key={i}>
-                <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
-                <circle cx={numX} cy={numY} r="11" fill="rgba(0,0,0,0.25)"/>
-                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800">{p.n}</text>
-              </g>
-            );
-          })}
-          <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
-        </svg>
+      <div style={{display:'flex',gap:'1.25rem',alignItems:'flex-start',flexWrap:'wrap'}}>
         <div style={{flex:1,minWidth:200}}>
           {phases.map((p,i) => (
             <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
@@ -682,6 +666,22 @@ function Item4B() {
             </div>
           </div>
         </div>
+        <svg viewBox="0 0 260 260" style={{width:200,flexShrink:0,marginTop:'1.5rem'}}>
+          {phases.map((p,i) => {
+            const midDeg = i * 60 - 90 + 30;
+            const numR = (R + ir) / 2;
+            const numX = cx + numR * Math.cos(toRad(midDeg));
+            const numY = cy + numR * Math.sin(toRad(midDeg));
+            return (
+              <g key={i}>
+                <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+                <circle cx={numX} cy={numY} r="11" fill="rgba(0,0,0,0.25)"/>
+                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800">{p.n}</text>
+              </g>
+            );
+          })}
+          <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+        </svg>
       </div>
     </div>
   );
@@ -2322,7 +2322,6 @@ function Item15A() {
   const svgH = plotH + margin.top + margin.bottom;
   const toSvgX = (dx) => margin.left + (dx/20)*plotW;
   const toSvgY = (dy) => margin.top + plotH - (dy/20)*plotH;
-  const qwPts = `${toSvgX(0)},${toSvgY(0)} ${toSvgX(0)},${toSvgY(3.33)} ${toSvgX(3.33)},${toSvgY(20)} ${toSvgX(0)},${toSvgY(20)}`;
   const dotColor = (type) => type==='quick'?'#22C55E':type==='high'?'#15803D':'#94A3B8';
   const dotR = (type) => type==='high'?15:type==='quick'?14:12;
   return (
@@ -2330,12 +2329,12 @@ function Item15A() {
       <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Value vs. Complexity Scatter</h3>
       <div style={{display:'flex',gap:'1rem',alignItems:'flex-start',flexWrap:'wrap'}}>
         <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{flex:'1',minWidth:320,maxWidth:480}}>
-          {/* High priority region: left half (complexity 0-10, value 0-20) */}
-          <rect x={toSvgX(0)} y={toSvgY(20)} width={toSvgX(10)-toSvgX(0)} height={toSvgY(0)-toSvgY(20)} fill="#818CF8" opacity="0.15"/>
-          {/* Low priority region: bottom half (complexity 0-20, value 0-10) */}
-          <rect x={toSvgX(0)} y={toSvgY(10)} width={toSvgX(20)-toSvgX(0)} height={toSvgY(0)-toSvgY(10)} fill="#5EEAD4" opacity="0.15"/>
-          {/* Quick wins polygon — opaque grey, rendered on top */}
-          <polygon points={qwPts} fill="#9CA3AF"/>
+          {/* High priority triangle: upper-left (0,0)→(0,20)→(10,20) in data coords */}
+          <polygon points={`${toSvgX(0)},${toSvgY(0)} ${toSvgX(0)},${toSvgY(20)} ${toSvgX(10)},${toSvgY(20)}`} fill="#818CF8" opacity="0.2"/>
+          {/* Low priority triangle: lower-right (0,0)→(20,0)→(20,10) in data coords */}
+          <polygon points={`${toSvgX(0)},${toSvgY(0)} ${toSvgX(20)},${toSvgY(0)} ${toSvgX(20)},${toSvgY(10)}`} fill="#5EEAD4" opacity="0.2"/>
+          {/* Quick wins rectangle: left strip complexity 0-3.33, full height — opaque grey, rendered on top */}
+          <rect x={toSvgX(0)} y={toSvgY(20)} width={toSvgX(3.33)-toSvgX(0)} height={toSvgY(0)-toSvgY(20)} fill="#9CA3AF"/>
           {/* Grid lines */}
           {[10].map(v => (
             <g key={v}>
@@ -2795,17 +2794,14 @@ function Item18A() {
   return (
     <div style={{paddingBottom:'1rem'}}>
       <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Phase Horizontal Stepper</h3>
-      <div style={{overflowX:'auto'}}><div style={{display:'flex',gap:'0',alignItems:'stretch',minWidth:'540px'}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)'}}>
         {phases.map((p,i) => (
-          <React.Fragment key={i}>
-            <div style={{flex:1,background:p.bg,border:`2px solid ${p.color}40`,borderRadius:i===0?'8px 0 0 8px':i===2?'0 8px 8px 0':'0',padding:'1rem',borderRight:i<2?'none':''}}>
-              <div style={{fontWeight:800,color:p.color,marginBottom:'0.5rem',fontSize:'0.9rem'}}>{p.name}</div>
-              {p.activities.map((a,ai) => <div key={ai} style={{fontSize:'0.8rem',color:'#374151',padding:'0.2rem 0',display:'flex',gap:'0.4rem'}}><Check size={13} color={p.color} strokeWidth={2.5}/>{a}</div>)}
-            </div>
-            {i<2 && <div style={{width:0,height:'auto',borderTop:'40px solid transparent',borderBottom:'40px solid transparent',alignSelf:'center'}}/>}
-          </React.Fragment>
+          <div key={i} style={{background:p.bg,border:`2px solid ${p.color}40`,borderRadius:i===0?'8px 0 0 8px':i===2?'0 8px 8px 0':'0',padding:'1rem',borderRight:i<2?'none':''}}>
+            <div style={{fontWeight:800,color:p.color,marginBottom:'0.5rem',fontSize:'0.9rem'}}>{p.name}</div>
+            {p.activities.map((a,ai) => <div key={ai} style={{fontSize:'0.8rem',color:'#374151',padding:'0.2rem 0',display:'flex',gap:'0.4rem'}}><Check size={13} color={p.color} strokeWidth={2.5}/>{a}</div>)}
+          </div>
         ))}
-      </div></div>
+      </div>
     </div>
   );
 }
