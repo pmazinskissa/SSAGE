@@ -114,12 +114,12 @@ export function getCourseNavTree(courseSlug: string): CourseNavTree | null {
       };
     }
 
-    const lessons: NavLesson[] = mod.lessons.map((lessonSlug, lessonIndex) => {
+    const lessons: NavLesson[] = mod.lessons.map((lessonSlug: string, lessonIndex: number) => {
       // Read frontmatter title from MDX file
       let title = lessonSlug
         .replace(/^\d+-/, '')
         .replace(/-/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+        .replace(/\b\w/g, (c: string) => c.toUpperCase());
       let duration = 5;
 
       const mdxPath = path.join(coursesDir(), courseSlug, 'modules', moduleSlug, 'lessons', `${lessonSlug}.mdx`);

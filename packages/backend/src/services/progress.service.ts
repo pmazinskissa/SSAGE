@@ -215,7 +215,7 @@ export async function saveKnowledgeCheckResults(
   // Advance current_module_slug to next module's first lesson
   const navTree = getCourseNavTree(courseSlug);
   if (navTree) {
-    const idx = navTree.modules.findIndex((m) => m.slug === moduleSlug);
+    const idx = navTree.modules.findIndex((m: { slug: string }) => m.slug === moduleSlug);
     if (idx >= 0 && idx < navTree.modules.length - 1) {
       const nextMod = navTree.modules[idx + 1];
       const firstLesson = nextMod.lessons[0]?.slug;
