@@ -624,12 +624,12 @@ function Item4A() {
 
 function Item4B() {
   const phases = [
-    { n:1, label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
-    { n:2, label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
-    { n:3, label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
-    { n:4, label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
-    { n:5, label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
-    { n:6, label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
+    { n:1, short:'Problem',    label:'Problem Statement', desc:'Create an initial problem statement and refine as needed', color:'#4F46E5' },
+    { n:2, short:'Issues',     label:'Issues Tree', desc:'Develop an issues tree and prune branches to identify focus areas', color:'#0D9488' },
+    { n:3, short:'Data',       label:'Data Request & Ingestion', desc:'Start data ingestion and collection; track requests', color:'#2563EB' },
+    { n:4, short:'Hypotheses', label:'Hypotheses', desc:'Develop initial hypotheses to test and iterate based on findings', color:'#16A34A' },
+    { n:5, short:'Analysis',   label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
+    { n:6, short:'Synthesis',  label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
   ];
   const cx = 130, cy = 130, R = 105, ir = 55;
   const toRad = deg => deg * Math.PI / 180;
@@ -673,8 +673,7 @@ function Item4B() {
           return (
             <g key={i}>
               <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
-              <circle cx={numX} cy={numY} r="11" fill="rgba(0,0,0,0.25)"/>
-              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800">{p.n}</text>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{p.short}</text>
             </g>
           );
         })}
