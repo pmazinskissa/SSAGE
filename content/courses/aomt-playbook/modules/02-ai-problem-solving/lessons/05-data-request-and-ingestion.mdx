@@ -24,6 +24,8 @@ A data request should be specific, structured, and traceable back to the Issues 
 For the Metro Cable engagement, the initial data request included 14 months of dispatch records (350,000+ rows), customer satisfaction survey results, technician certification databases, and geographic service area maps. This broad initial request was intentional — casting a wide net in the first iteration enables AI to surface unexpected patterns.
 </Callout>
 
+<DataRequestList />
+
 ## Data Ingestion Best Practices
 
 Once data is received, ingestion involves loading it into the AI analysis environment and performing initial quality checks:
@@ -33,6 +35,8 @@ Once data is received, ingestion involves loading it into the AI analysis enviro
 3. **Establish a baseline** — Create initial descriptive statistics that serve as reference points for analysis
 4. **Document limitations** — Record known data quality issues, gaps, or caveats
 
+<DataRequestRisks />
+
 <Callout type="tip" title="More Data Is Better">
 In AOMT, the bias should always be toward requesting more data rather than less. AI tools can process large volumes efficiently, and datasets that seem peripheral often contain unexpected insights. The cost of ingesting extra data is minimal compared to the cost of missing a critical pattern because the data was never requested.
 </Callout>
@@ -40,6 +44,8 @@ In AOMT, the bias should always be toward requesting more data rather than less.
 <Callout type="warning" title="Data Governance">
 Always follow your organization's data governance policies when requesting and handling data. Ensure appropriate access permissions, anonymization requirements, and retention policies are observed throughout the engagement.
 </Callout>
+
+<RefinedDataRequest />
 
 <DecisionPoint
   scenario="You're starting a new AOMT engagement. The client offers two data options: (A) a clean, curated dataset covering 3 months of operations, or (B) a raw, uncleaned dataset covering 18 months with known quality issues. Which do you choose?"
