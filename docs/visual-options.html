@@ -173,8 +173,6 @@ function ReviewProvider({ children }) {
     save(next);
   };
   const setFeedback = (id, text) => {
-    const next = {...state, [id]: {...(next[id]||{}), feedback: text}};
-    // merge properly
     save({...state, [id]: {...(state[id]||{}), feedback: text}});
   };
   return <ReviewCtx.Provider value={{state, setSelection, setFeedback}}>{children}</ReviewCtx.Provider>;
