@@ -631,7 +631,7 @@ function Item4B() {
     { n:5, label:'Data Analysis Plan', desc:'Plan for data analysis approach and methodology; refine as needed', color:'#15803D' },
     { n:6, label:'Data Analysis & Synthesis', desc:'Analyze the data, review, validate, refine, and identify opportunities', color:'#94A3B8' },
   ];
-  const cx = 140, cy = 140, R = 110, ir = 58;
+  const cx = 130, cy = 130, R = 105, ir = 55;
   const toRad = deg => deg * Math.PI / 180;
   const arcPath = (i) => {
     const s = i * 60 - 90, e = (i+1) * 60 - 90;
@@ -644,8 +644,11 @@ function Item4B() {
   return (
     <div>
       <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Donut + Side List</h3>
+      <div style={{textAlign:'center',marginBottom:'0.75rem'}}>
+        <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
+      </div>
       <div style={{display:'flex',gap:'1.5rem',alignItems:'center',flexWrap:'wrap'}}>
-        <svg viewBox="0 0 280 280" style={{width:220,flexShrink:0}}>
+        <svg viewBox="0 0 260 260" style={{width:220,flexShrink:0}}>
           {phases.map((p,i) => {
             const midDeg = i * 60 - 90 + 30;
             const numR = (R + ir) / 2;
@@ -654,13 +657,12 @@ function Item4B() {
             return (
               <g key={i}>
                 <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
-                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="13" fontWeight="800">{p.n}</text>
+                <circle cx={numX} cy={numY} r="11" fill="rgba(0,0,0,0.25)"/>
+                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800">{p.n}</text>
               </g>
             );
           })}
           <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
-          <text x={cx} y={cy-6} textAnchor="middle" fill="#1E1B4B" fontSize="9" fontWeight="800">Phase 1:</text>
-          <text x={cx} y={cy+7} textAnchor="middle" fill="#1E1B4B" fontSize="9" fontWeight="800">Diagnosis</text>
         </svg>
         <div style={{flex:1,minWidth:200}}>
           {phases.map((p,i) => (
@@ -672,8 +674,12 @@ function Item4B() {
               </div>
             </div>
           ))}
-          <div style={{marginTop:'0.5rem',display:'flex',alignItems:'center',gap:'0.4rem',color:'#4F46E5',fontSize:'0.8rem',fontWeight:700}}>
-            <span>→</span><span>Phase 2: Prioritization</span>
+          <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+            <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+            <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+              <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+              PHASE 2: PRIORITIZATION
+            </div>
           </div>
         </div>
       </div>
@@ -917,21 +923,24 @@ function Item5C() {
 /* --- Item #6: Problem Statement Evaluation Table --- */
 function Item6A() {
   const data = {
-    description: { color:'#4F46E5', text:'Metro Cable has comparatively low customer satisfaction and is looking to improve customer satisfaction ratings.' },
+    description: { color:'#4F46E5', icon:'AlertTriangle', text:'Metro Cable has comparatively low customer satisfaction and is looking to improve customer satisfaction ratings.' },
     grid: [
-      { key:'Customers', color:'#0891B2', bullets:['Business and Residential Cable Customers','Public Service Commission'] },
-      { key:'Boundaries', color:'#16A34A', bullets:['Basic Service Pricing','Contracts with Content Providers','Current Customers'] },
-      { key:'Decision Makers', color:'#2563EB', bullets:['Metro Cable Executive Committee'] },
-      { key:'Success Measures', color:'#64748B', bullets:['Customer Satisfaction Ratings','Rate Case Approval'] },
-      { key:'Decision Drivers', color:'#1E1B4B', bullets:['Capital Investment Constraints','Regulations'] },
-      { key:'Time Frame', color:'#1E1B4B', bullets:['12 months until next PSC Rate Case hearing'] },
+      { key:'Customers', color:'#0891B2', icon:'Users', bullets:['Business and Residential Cable Customers','Public Service Commission'] },
+      { key:'Boundaries', color:'#16A34A', icon:'Shield', bullets:['Basic Service Pricing','Contracts with Content Providers','Current Customers'] },
+      { key:'Decision Makers', color:'#2563EB', icon:'User', bullets:['Metro Cable Executive Committee'] },
+      { key:'Success Measures', color:'#64748B', icon:'BarChart3', bullets:['Customer Satisfaction Ratings','Rate Case Approval'] },
+      { key:'Decision Drivers', color:'#1E1B4B', icon:'Zap', bullets:['Capital Investment Constraints','Regulations'] },
+      { key:'Time Frame', color:'#1E1B4B', icon:'Clock', bullets:['12 months until next PSC Rate Case hearing'] },
     ]
   };
+  const IconCircle = ({icon, color}) => (
+    <div style={{width:28,height:28,borderRadius:'50%',background:`${color}20`,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
+      <LIcon name={icon} size={14} color={color}/>
+    </div>
+  );
   const Cell = ({item}) => (
     <div style={{background:'#F8F9FA',border:'1px solid #E5E7EB',borderRadius:6,padding:'0.65rem 0.85rem',display:'flex',gap:'0.6rem',alignItems:'flex-start',height:'100%'}}>
-      <div style={{width:28,height:28,borderRadius:'50%',background:item.color,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <span style={{color:'white',fontSize:'0.6rem',fontWeight:800}}>{item.key.charAt(0)}</span>
-      </div>
+      <IconCircle icon={item.icon} color={item.color}/>
       <div>
         <div style={{fontWeight:700,fontSize:'0.82rem',color:item.color,marginBottom:'0.2rem'}}>{item.key}</div>
         {item.bullets.map((b,bi) => <div key={bi} style={{fontSize:'0.78rem',color:'#374151',display:'flex',gap:'0.3rem'}}><span style={{color:item.color,flexShrink:0}}>•</span>{b}</div>)}
@@ -942,8 +951,8 @@ function Item6A() {
     <div>
       <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Metro Cable Grid Layout</h3>
       <div style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',background:'#F8F9FA',border:'1px solid #E5E7EB',borderRadius:6,padding:'0.65rem 0.85rem',marginBottom:'0.5rem'}}>
-        <div style={{width:28,height:28,borderRadius:'50%',background:data.description.color,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <span style={{color:'white',fontSize:'0.6rem',fontWeight:800}}>D</span>
+        <div style={{width:28,height:28,borderRadius:'50%',background:`${data.description.color}20`,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <LIcon name={data.description.icon} size={14} color={data.description.color}/>
         </div>
         <div>
           <div style={{fontWeight:700,fontSize:'0.82rem',color:data.description.color,marginBottom:'0.15rem'}}>Description:</div>
@@ -1216,62 +1225,93 @@ function Item7B() {
 }
 
 function Item7C() {
-  const [expanded, setExpanded] = useState(new Set());
+  const [open, setOpen] = useState(new Set());
   const toggle = (k) => {
-    const n = new Set(expanded);
+    const n = new Set(open);
     n.has(k) ? n.delete(k) : n.add(k);
-    setExpanded(n);
+    setOpen(n);
   };
   const branches = [
     {
-      key:'product', label:'Product/Service Offerings', color:'#4F46E5',
+      key:'1', label:'Product/Service Offerings', color:'#4F46E5',
       subs:[
-        { label:'Cable TV', leaves:['Channel Availability','Video Quality'] },
-        { label:'Internet', leaves:['Speed','Reliability/Uptime'] },
-        { label:'Phone Service', leaves:['Audio Quality','Emergency Calls'] },
+        { key:'1-Cable TV', label:'Cable TV', leaves:['Channel Availability','Video Quality'] },
+        { key:'1-Internet', label:'Internet', leaves:['Speed','Reliability / Uptime'] },
+        { key:'1-Phone Service', label:'Phone Service', leaves:['Audio Quality','Emergency Calls'] },
       ]
     },
     {
-      key:'pricing', label:'Pricing', color:'#0D9488',
+      key:'2', label:'Pricing', color:'#0D9488',
       subs:[
-        { label:'Basic Service', pruned:true, leaves:[] },
-        { label:'Packages', leaves:['Entertainment','Digital'] },
+        { key:'2-Basic Service', label:'Basic Service', pruned:true, leaves:[] },
+        { key:'2-Packages', label:'Packages', leaves:['Entertainment','Digital'] },
       ]
     },
     {
-      key:'support', label:'Customer Support', color:'#7C3AED',
+      key:'3', label:'Customer Support', color:'#7C3AED',
       subs:[
-        { label:'Web-page', leaves:['Account Log-in','Search Function','Confirmation'] },
-        { label:'Telephone', leaves:['Automated Prompts','Representative → Appt Availability, Install Call Length'] },
-        { label:'On-Site', leaves:['New Service Install','Repair Service Calls → Scheduling, Wait Times, Resolution','Disconnections (pruned)'] },
+        { key:'3-Web-page', label:'Web-page', leaves:['Account Log-in','Search Function','Confirmation'] },
+        {
+          key:'3-Telephone', label:'Telephone',
+          leaves:['Automated Prompts'],
+          subSubs:[{ key:'3-Telephone-Rep', label:'Representative', leaves:['Appointment Availability','Length of Installation Call'] }]
+        },
+        {
+          key:'3-On-Site', label:'On-Site',
+          subSubs:[
+            { key:'3-On-Site-Install', label:'New Service Installation', leaves:['Service Scheduling','At-home Wait Times','Issue Resolution'] },
+            { key:'3-On-Site-Repair', label:'Repair Service Calls', leaves:['Service Scheduling','At-home Wait Times','Issue Resolution'] },
+            { key:'3-On-Site-Disc', label:'Disconnections', pruned:true, leaves:[] },
+          ]
+        },
       ]
     },
   ];
+  const Leaf = ({text, color, pruned}) => (
+    <div style={{display:'flex',alignItems:'center',gap:'0.35rem',fontSize:'0.76rem',color:pruned?'#9CA3AF':'#374151',paddingLeft:'0.5rem',marginBottom:'0.15rem',textDecoration:pruned?'line-through':'none'}}>
+      {pruned ? <LIcon name="XCircle" size={12} color="#EF4444"/> : <span style={{color,fontSize:'0.6rem'}}>◆</span>}
+      {text}
+    </div>
+  );
+  const SubBranch = ({sub, color}) => {
+    const isOpen = open.has(sub.key);
+    return (
+      <div style={{marginBottom:'0.3rem',marginLeft:'0.75rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'0.35rem'}}>
+          <div style={{width:8,height:1,background:`${color}50`}}/>
+          {(sub.leaves && sub.leaves.length > 0) || (sub.subSubs && sub.subSubs.length > 0) ? (
+            <button onClick={() => toggle(sub.key)} style={{display:'flex',alignItems:'center',gap:'0.3rem',background:'none',border:'none',cursor:'pointer',padding:'0.1rem 0',fontWeight:600,fontSize:'0.8rem',color:sub.pruned?'#9CA3AF':color,textDecoration:sub.pruned?'line-through':'none'}}>
+              {sub.pruned && <LIcon name="XCircle" size={13} color="#EF4444"/>}
+              {sub.label}
+              <span style={{fontSize:'0.65rem',color:'#9CA3AF'}}>{isOpen?'▲':'▼'}</span>
+            </button>
+          ) : (
+            <span style={{fontWeight:600,fontSize:'0.8rem',color:sub.pruned?'#9CA3AF':color,textDecoration:sub.pruned?'line-through':'none',display:'flex',alignItems:'center',gap:'0.3rem'}}>
+              {sub.pruned && <LIcon name="XCircle" size={13} color="#EF4444"/>}
+              {sub.label}
+            </span>
+          )}
+        </div>
+        {isOpen && sub.leaves && sub.leaves.map((l,li) => <Leaf key={li} text={l} color={color}/>)}
+        {isOpen && sub.subSubs && sub.subSubs.map((ss) => <SubBranch key={ss.key} sub={ss} color={color}/>)}
+      </div>
+    );
+  };
   return (
     <div>
       <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Collapsible Issues Tree</h3>
       <div style={{background:'#1E1B4B',color:'white',borderRadius:6,padding:'0.6rem 1rem',fontWeight:700,fontSize:'0.875rem',marginBottom:'0.75rem',textAlign:'center'}}>Root: Low Customer Satisfaction Rating</div>
       {branches.map((b) => {
-        const isOpen = expanded.has(b.key);
+        const isOpen = open.has(b.key);
         return (
           <div key={b.key} style={{marginBottom:'0.5rem',border:`1px solid ${b.color}40`,borderRadius:6,overflow:'hidden'}}>
             <button onClick={() => toggle(b.key)} style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.6rem 0.9rem',background:`${b.color}10`,border:'none',cursor:'pointer',fontWeight:700,color:b.color,fontSize:'0.875rem',textAlign:'left'}}>
               {b.label}
-              <span>{isOpen?'▲':'▼'}</span>
+              <span style={{fontSize:'0.7rem'}}>{isOpen?'▲':'▼'}</span>
             </button>
             {isOpen && (
-              <div style={{padding:'0.5rem 0.9rem',background:'white'}}>
-                {b.subs.map((s,si) => (
-                  <div key={si} style={{marginBottom:'0.4rem'}}>
-                    <div style={{display:'flex',alignItems:'center',gap:'0.4rem',fontWeight:700,fontSize:'0.82rem',color:b.color,marginBottom:'0.15rem'}}>
-                      {s.pruned && <span style={{fontSize:'0.65rem',background:b.color,color:'white',borderRadius:20,padding:'0.05rem 0.35rem'}}>pruned</span>}
-                      {s.label}
-                    </div>
-                    {s.leaves.map((l,li) => (
-                      <div key={li} style={{fontSize:'0.78rem',color:'#374151',paddingLeft:'0.75rem',borderLeft:`2px solid ${b.color}30`,marginBottom:'0.1rem'}}>→ {l}</div>
-                    ))}
-                  </div>
-                ))}
+              <div style={{padding:'0.5rem 0.75rem 0.6rem',background:'white'}}>
+                {b.subs.map((s) => <SubBranch key={s.key} sub={s} color={b.color}/>)}
               </div>
             )}
           </div>
@@ -2017,93 +2057,72 @@ function Item14B() {
 }
 
 function Item14C() {
-  const [selected, setSelected] = useState(null);
   const factors = [
     {
-      pos:'N', label:'Business Value', color:'#1E1B4B', icon:'DollarSign',
-      rubrics:[
-        {score:'9–10',desc:'Transformational impact on customer experience, revenue, or competitive position'},
-        {score:'7–8',desc:'Significant measurable impact on KPIs, cost reduction 25%+'},
-        {score:'5–6',desc:'Moderate impact on existing KPIs'},
-        {score:'3–4',desc:'Small incremental improvement'},
-        {score:'1–2',desc:'Minimal impact'},
+      label:'Business Value', color:'#1E1B4B', icon:'BarChart3',
+      tiers:[
+        {score:'9-10',desc:'Transformational impact'},
+        {score:'7-8',desc:'Significant KPI impact'},
+        {score:'5-6',desc:'Moderate efficiency gain'},
+        {score:'3-4',desc:'Small improvement'},
+        {score:'1-2',desc:'Minimal impact'},
       ]
     },
     {
-      pos:'E', label:'Time Criticality', color:'#0891B2', icon:'Clock',
-      rubrics:[
-        {score:'9–10',desc:'Regulatory deadline, critical competitive disadvantage'},
-        {score:'7–8',desc:'Significant opportunity cost if delayed'},
-        {score:'5–6',desc:'Moderate urgency, aligned with annual planning cycle'},
-        {score:'3–4',desc:'Low urgency, flexible timeline'},
-        {score:'1–2',desc:'No time pressure'},
+      label:'Time Criticality', color:'#0891B2', icon:'Clock',
+      tiers:[
+        {score:'9-10',desc:'Regulatory/competitive deadline'},
+        {score:'7-8',desc:'Significant opp cost if delayed'},
+        {score:'5-6',desc:'Moderate urgency'},
+        {score:'3-4',desc:'Low urgency'},
+        {score:'1-2',desc:'No time pressure'},
       ]
     },
     {
-      pos:'S', label:'Risk Reduction & OE', color:'#16A34A', icon:'Shield',
-      rubrics:[
-        {score:'9–10',desc:'Eliminates major regulatory/compliance risk OR enables multiple future use cases'},
-        {score:'7–8',desc:'Reduces operational risk OR unlocks new business models'},
-        {score:'5–6',desc:'Moderate risk mitigation'},
-        {score:'3–4',desc:'Minor risk reduction'},
-        {score:'1–2',desc:'Minimal risk impact'},
+      label:'Risk Reduction & OE', color:'#16A34A', icon:'Shield',
+      tiers:[
+        {score:'9-10',desc:'Eliminates major risk'},
+        {score:'7-8',desc:'Reduces operational risk'},
+        {score:'5-6',desc:'Moderate mitigation'},
+        {score:'3-4',desc:'Minor risk reduction'},
+        {score:'1-2',desc:'Minimal risk'},
       ]
     },
     {
-      pos:'W', label:'Job Size', color:'#2563EB', icon:'Ruler',
-      rubrics:[
-        {score:'9–10',desc:'>12 months, major platform changes'},
-        {score:'7–8',desc:'6–12 months, significant technical challenges'},
-        {score:'5–6',desc:'3–6 months, moderate complexity'},
-        {score:'3–4',desc:'1–3 months, low complexity'},
-        {score:'1–2',desc:'<1 month, simple implementation'},
+      label:'Job Size', color:'#2563EB', icon:'Settings',
+      tiers:[
+        {score:'9-10',desc:'>12mo major changes'},
+        {score:'7-8',desc:'6-12mo significant tech'},
+        {score:'5-6',desc:'3-6mo moderate'},
+        {score:'3-4',desc:'1-3mo low complexity'},
+        {score:'1-2',desc:'<1mo simple'},
       ]
     },
   ];
-  const cx = 160, cy = 160, ringR = 80, nodeR = 26;
-  const nodeAngles = {N: -90, E: 0, S: 90, W: 180};
-  const dist = 140;
-  const np = (pos) => ({
-    x: cx + dist * Math.cos(nodeAngles[pos] * Math.PI/180),
-    y: cy + dist * Math.sin(nodeAngles[pos] * Math.PI/180),
-  });
-  const sel = selected !== null ? factors[selected] : null;
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Interactive Ring — click a factor</h3>
-      <div style={{display:'flex',gap:'1.5rem',flexWrap:'wrap',alignItems:'flex-start'}}>
-        <svg viewBox="0 0 320 320" style={{width:240,flexShrink:0}}>
-          <circle cx={cx} cy={cy} r={ringR} fill="none" stroke={selected === null ? '#E5E7EB' : '#C7D2FE'} strokeWidth="24"/>
-          {factors.map((f,i) => {
-            const p = np(f.pos);
-            const isActive = selected === i;
-            return (
-              <g key={i} onClick={() => setSelected(selected === i ? null : i)} style={{cursor:'pointer'}}>
-                <line x1={p.x} y1={p.y} x2={cx + (p.x-cx)*0.6} y2={cy + (p.y-cy)*0.6} stroke="#E5E7EB" strokeWidth="1.5" strokeDasharray="4,3"/>
-                <circle cx={p.x} cy={p.y} r={nodeR + (isActive ? 5 : 0)} fill={f.color} opacity={selected === null || isActive ? 1 : 0.35}/>
-                <text x={p.x} y={p.y+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="7.5" fontWeight="700">{f.label.split(' ')[0]}</text>
-              </g>
-            );
-          })}
-          <circle cx={cx} cy={cy} r={42} fill="#1E1B4B"/>
-          <text x={cx} y={cy-7} textAnchor="middle" fill="white" fontSize="11" fontWeight="800">WSJF</text>
-          <text x={cx} y={cy+7} textAnchor="middle" fill="#A5B4FC" fontSize="8">CoD ÷ Size</text>
-        </svg>
-        <div style={{flex:1,minWidth:200}}>
-          {sel ? (
-            <div style={{border:`2px solid ${sel.color}`,borderRadius:8,padding:'0.75rem',background:`${sel.color}06`}}>
-              <div style={{fontWeight:700,color:sel.color,fontSize:'0.9rem',marginBottom:'0.5rem'}}>{sel.label}</div>
-              {sel.rubrics.map((r,ri) => (
-                <div key={ri} style={{display:'flex',gap:'0.4rem',marginBottom:'0.3rem',fontSize:'0.78rem'}}>
-                  <span style={{background:`${sel.color}20`,color:sel.color,padding:'0.1rem 0.35rem',borderRadius:3,fontWeight:700,flexShrink:0}}>{r.score}</span>
-                  <span style={{color:'#374151',lineHeight:1.4}}>{r.desc}</span>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>WSJF Factor Cards</h3>
+      <div style={{background:'linear-gradient(135deg,#1E1B4B,#4F46E5)',borderRadius:12,padding:'1.25rem',textAlign:'center',marginBottom:'0.75rem'}}>
+        <div style={{color:'white',fontSize:'2.5rem',fontWeight:800,lineHeight:1}}>WSJF</div>
+        <div style={{color:'rgba(255,255,255,0.6)',fontSize:'0.85rem',marginTop:'0.3rem'}}>Weighted Shortest Job First</div>
+      </div>
+      <div style={{display:'flex',gap:'0.6rem',flexWrap:'wrap'}}>
+        {factors.map((f,i) => (
+          <div key={i} style={{flex:'1 1 120px',border:'1px solid #E5E7EB',borderRadius:10,padding:'0.85rem 0.75rem',background:'white',display:'flex',flexDirection:'column',alignItems:'center',gap:'0.35rem'}}>
+            <div style={{width:40,height:40,borderRadius:'50%',background:`${f.color}15`,display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <LIcon name={f.icon} size={20} color={f.color}/>
+            </div>
+            <div style={{fontWeight:700,fontSize:'0.8rem',color:f.color,textAlign:'center',marginBottom:'0.2rem'}}>{f.label}</div>
+            <div style={{overflowY:'auto',maxHeight:140,width:'100%'}}>
+              {f.tiers.map((t,ti) => (
+                <div key={ti} style={{display:'flex',gap:'0.3rem',alignItems:'flex-start',marginBottom:'0.2rem',fontSize:'0.7rem'}}>
+                  <span style={{background:`${f.color}15`,color:f.color,padding:'0.05rem 0.3rem',borderRadius:3,fontWeight:700,flexShrink:0,whiteSpace:'nowrap'}}>{t.score}</span>
+                  <span style={{color:'#6B7280',lineHeight:1.35}}>{t.desc}</span>
                 </div>
               ))}
             </div>
-          ) : (
-            <div style={{color:'#9CA3AF',fontSize:'0.82rem',paddingTop:'3rem',textAlign:'center'}}>Click a circle to see the scoring rubric</div>
-          )}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -2111,72 +2130,81 @@ function Item14C() {
 
 /* --- Item #14b: WSJF Formula Breakdown --- */
 function Item14bA() {
-  const cx = 80, cy = 80, ringR = 44, nodeR = 14;
-  const nodeAngles = {N:-90, E:0, S:90, W:180};
-  const dist = 66;
-  const factors = [
-    {pos:'N',label:'BV',color:'#1E1B4B'},
-    {pos:'E',label:'TC',color:'#0891B2'},
-    {pos:'S',label:'RR',color:'#16A34A'},
-    {pos:'W',label:'JS',color:'#2563EB'},
-  ];
-  const np = (pos) => ({
-    x: cx + dist * Math.cos(nodeAngles[pos] * Math.PI/180),
-    y: cy + dist * Math.sin(nodeAngles[pos] * Math.PI/180),
-  });
   const eqFactors = [
     {abbr:'BV',label:'Business Value',color:'#1E1B4B'},
     {abbr:'TC',label:'Time Criticality',color:'#0891B2'},
     {abbr:'RR',label:'Risk Reduction & OE',color:'#16A34A'},
   ];
   const jsF = {abbr:'JS',label:'Job Size',color:'#2563EB'};
-  const Badge = ({f}) => (
-    <span style={{display:'inline-flex',alignItems:'center',gap:'0.25rem',background:`${f.color}15`,border:`1px solid ${f.color}40`,borderRadius:6,padding:'0.25rem 0.55rem',fontSize:'0.78rem',fontWeight:700,color:f.color}}>
-      <span style={{width:20,height:20,borderRadius:'50%',background:f.color,display:'inline-flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:'0.6rem',fontWeight:800,flexShrink:0}}>{f.abbr}</span>
+  const Badge = ({f,large}) => (
+    <span style={{display:'inline-flex',alignItems:'center',gap:'0.3rem',background:`${f.color}15`,border:`1.5px solid ${f.color}50`,borderRadius:8,padding:large?'0.35rem 0.8rem':'0.25rem 0.6rem',fontSize:large?'0.88rem':'0.78rem',fontWeight:700,color:f.color}}>
+      <span style={{width:large?26:20,height:large?26:20,borderRadius:'50%',background:f.color,display:'inline-flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:large?'0.72rem':'0.6rem',fontWeight:800,flexShrink:0}}>{f.abbr}</span>
       {f.label}
     </span>
   );
+  const opps = [
+    {name:'Real-time FCR Dashboard',bv:9,tc:9,rr:7,js:3},
+    {name:'AI Dispatch Routing',bv:8,tc:7,rr:9,js:5},
+    {name:'Customer Survey Automation',bv:6,tc:5,rr:4,js:2},
+  ];
+  const scored = opps.map(o => ({...o, cod:o.bv+o.tc+o.rr, wsjf:((o.bv+o.tc+o.rr)/o.js).toFixed(1)}));
+  const maxWsjf = Math.max(...scored.map(s => parseFloat(s.wsjf)));
+  const fColors = ['#1E1B4B','#0891B2','#16A34A','#2563EB'];
+  const fLabels = ['BV','TC','RR','JS'];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Formula Breakdown — Ring + Equation</h3>
-      <div style={{display:'flex',gap:'1.5rem',alignItems:'flex-start',flexWrap:'wrap'}}>
-        <svg viewBox="0 0 160 160" style={{width:160,flexShrink:0}}>
-          <circle cx={cx} cy={cy} r={ringR} fill="none" stroke="#E5E7EB" strokeWidth="16"/>
-          {factors.map((f,i) => {
-            const p = np(f.pos);
-            return (
-              <g key={i}>
-                <line x1={p.x} y1={p.y} x2={cx+(p.x-cx)*0.62} y2={cy+(p.y-cy)*0.62} stroke="#E5E7EB" strokeWidth="1.2" strokeDasharray="3,2"/>
-                <circle cx={p.x} cy={p.y} r={nodeR} fill={f.color}/>
-                <text x={p.x} y={p.y+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="800">{f.label}</text>
-              </g>
-            );
-          })}
-          <circle cx={cx} cy={cy} r={26} fill="#1E1B4B"/>
-          <text x={cx} y={cx-6} textAnchor="middle" fill="white" fontSize="9" fontWeight="800">WSJF</text>
-          <text x={cx} y={cx+6} textAnchor="middle" fill="#A5B4FC" fontSize="7">Score</text>
-        </svg>
-        <div style={{flex:1,minWidth:240}}>
-          <div style={{background:'#EEF2FF',border:'2px solid #4F46E5',borderRadius:8,padding:'0.75rem 1rem',marginBottom:'0.75rem'}}>
-            <div style={{fontSize:'0.72rem',color:'#6B7280',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:'0.2rem'}}>WSJF Score</div>
-            <div style={{fontWeight:800,fontSize:'1.05rem',color:'#4F46E5'}}>= Cost of Delay (CoD) ÷ Job Size</div>
-          </div>
-          <div style={{background:'#F8F9FA',border:'1px solid #E5E7EB',borderRadius:8,padding:'0.75rem 1rem',marginBottom:'0.75rem'}}>
-            <div style={{fontSize:'0.72rem',color:'#6B7280',textTransform:'uppercase',letterSpacing:'0.05em',marginBottom:'0.2rem'}}>Cost of Delay (CoD)</div>
-            <div style={{fontWeight:700,fontSize:'0.88rem',color:'#374151'}}>= Business Value + Time Criticality + Risk Reduction &amp; OE</div>
-          </div>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>WSJF Formula + Worked Example</h3>
+      <div style={{background:'white',border:'2px solid #4F46E5',borderRadius:12,padding:'1.25rem',marginBottom:'0.85rem'}}>
+        <div style={{textAlign:'center',marginBottom:'0.85rem'}}>
+          <div style={{fontSize:'0.7rem',color:'#6B7280',textTransform:'uppercase',letterSpacing:'0.07em',marginBottom:'0.25rem'}}>WSJF Formula</div>
+          <div style={{fontWeight:800,fontSize:'1.15rem',color:'#4F46E5'}}>WSJF Score = Cost of Delay (CoD) ÷ Job Size</div>
+        </div>
+        <div style={{background:'#F8F9FA',borderRadius:8,padding:'0.85rem 1rem',marginBottom:'0.85rem'}}>
+          <div style={{fontSize:'0.72rem',color:'#6B7280',marginBottom:'0.4rem',fontWeight:600}}>COST OF DELAY (CoD)</div>
           <div style={{display:'flex',alignItems:'center',gap:'0.4rem',flexWrap:'wrap'}}>
-            {eqFactors.map((f,i) => (
-              <React.Fragment key={i}>
-                <Badge f={f}/>
-                {i < eqFactors.length - 1 && <span style={{fontWeight:800,color:'#374151',fontSize:'1rem'}}>+</span>}
-              </React.Fragment>
-            ))}
-            <span style={{fontWeight:800,color:'#374151',fontSize:'1rem'}}>=</span>
-            <span style={{fontWeight:800,fontSize:'0.85rem',color:'#4F46E5',padding:'0.25rem 0.55rem',background:'#EEF2FF',borderRadius:6}}>WSJF ÷</span>
-            <Badge f={jsF}/>
+            <Badge f={eqFactors[0]} large/><span style={{fontWeight:800,color:'#374151',fontSize:'1.1rem'}}>+</span>
+            <Badge f={eqFactors[1]} large/><span style={{fontWeight:800,color:'#374151',fontSize:'1.1rem'}}>+</span>
+            <Badge f={eqFactors[2]} large/>
           </div>
         </div>
+        <div style={{display:'flex',alignItems:'center',gap:'0.5rem',flexWrap:'wrap',justifyContent:'center',fontSize:'0.88rem'}}>
+          <span style={{fontWeight:700,color:'#374151'}}>WSJF =</span>
+          <span style={{fontWeight:800,color:'#1E1B4B',background:'#F3F4F6',padding:'0.2rem 0.6rem',borderRadius:6}}>BV + TC + RR</span>
+          <span style={{fontWeight:800,fontSize:'1.2rem',color:'#374151'}}>÷</span>
+          <Badge f={jsF}/>
+        </div>
+      </div>
+      <div style={{fontWeight:700,fontSize:'0.875rem',color:'#1E1B4B',marginBottom:'0.5rem'}}>Metro Cable Scoring Example</div>
+      <div style={{overflowX:'auto'}}>
+        <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.8rem',minWidth:460}}>
+          <thead>
+            <tr>
+              <th style={{background:'#1E1B4B',color:'white',padding:'0.5rem 0.7rem',textAlign:'left',fontWeight:700}}>Opportunity</th>
+              {fLabels.map((l,i) => <th key={i} style={{background:fColors[i],color:'white',padding:'0.5rem 0.7rem',textAlign:'center',fontWeight:700}}>{l}</th>)}
+              <th style={{background:'#4F46E5',color:'white',padding:'0.5rem 0.7rem',textAlign:'center',fontWeight:700}}>CoD</th>
+              <th style={{background:'#4F46E5',color:'white',padding:'0.5rem 0.7rem',textAlign:'center',fontWeight:700}}>WSJF</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scored.map((r,i) => {
+              const isWinner = parseFloat(r.wsjf) === maxWsjf;
+              return (
+                <tr key={i} style={{background:isWinner?'#EEF2FF':i%2===0?'white':'#F8F9FA',outline:isWinner?'2px solid #4F46E5':'none',outlineOffset:isWinner?'-1px':'0'}}>
+                  <td style={{padding:'0.5rem 0.7rem',fontWeight:isWinner?700:500,color:isWinner?'#4F46E5':'#374151'}}>
+                    {isWinner && <span style={{fontSize:'0.7rem',background:'#4F46E5',color:'white',padding:'0.05rem 0.3rem',borderRadius:3,marginRight:'0.3rem'}}>top</span>}
+                    {r.name}
+                  </td>
+                  {[r.bv,r.tc,r.rr,r.js].map((v,vi) => <td key={vi} style={{padding:'0.5rem 0.7rem',textAlign:'center',color:'#374151'}}>{v}</td>)}
+                  <td style={{padding:'0.5rem 0.7rem',textAlign:'center',fontWeight:600,color:'#374151'}}>{r.cod}</td>
+                  <td style={{padding:'0.5rem 0.7rem',textAlign:'center',fontWeight:800,color:isWinner?'#4F46E5':'#374151',fontSize:isWinner?'0.95rem':'0.8rem'}}>{r.wsjf}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div style={{marginTop:'0.6rem',background:'#EEF2FF',borderRadius:6,padding:'0.5rem 0.75rem',fontSize:'0.78rem',color:'#4F46E5'}}>
+        <strong>Real-time FCR Dashboard</strong> wins with WSJF {maxWsjf} — high urgency (TC=9) + low job size (JS=3).
       </div>
     </div>
   );
@@ -2272,71 +2300,102 @@ function Item14bC() {
 
 /* --- Item #15: Value vs. Complexity Scatter Plot --- */
 function Item15A() {
+  // Data coords: x=complexity 0-20, y=value 0-20
   const opps = [
-    {id:1,name:'AI-powered dispatch routing',x:72,y:88},
-    {id:2,name:'Technician certification tracker',x:38,y:55},
-    {id:3,name:'Customer satisfaction survey automation',x:28,y:70},
-    {id:4,name:'Predictive maintenance alerts',x:80,y:82},
-    {id:5,name:'Knowledge base AI assistant',x:25,y:85},
-    {id:6,name:'Real-time FCR dashboard',x:32,y:90},
-    {id:7,name:'Automated reporting pipeline',x:22,y:60},
-    {id:8,name:'Appointment scheduling bot',x:42,y:75},
-    {id:9,name:'Customer churn predictor',x:62,y:88},
-    {id:10,name:'Service quality heat map',x:50,y:72},
+    {id:1, name:'AI-powered dispatch routing',           x:8,  y:18, type:'high'},
+    {id:2, name:'Technician certification tracker',      x:12, y:14, type:'other'},
+    {id:3, name:'Customer satisfaction survey automation',x:14, y:8,  type:'other'},
+    {id:4, name:'Predictive maintenance alerts',         x:10, y:16, type:'high'},
+    {id:5, name:'Knowledge base AI assistant',           x:2,  y:12, type:'quick'},
+    {id:6, name:'Real-time FCR dashboard',               x:6,  y:17, type:'high'},
+    {id:7, name:'Automated reporting pipeline',          x:16, y:6,  type:'other'},
+    {id:8, name:'Appointment scheduling bot',            x:3,  y:4,  type:'quick'},
+    {id:9, name:'Customer churn predictor',              x:4,  y:15, type:'high'},
+    {id:10,name:'Service quality heat map',              x:18, y:9,  type:'other'},
   ];
-  // SVG plot area
-  const px = 60, py = 20, pw = 380, ph = 280;
-  const toSvgX = (x) => px + (x/100)*pw;
-  const toSvgY = (y) => py + ph - (y/100)*ph;
-  // Diagonal region polygon coords (approximate matching reference)
-  // Quick wins: bottom-left
-  // High priority: top-left
-  // Potential candidates: top-right
-  // Low priority: bottom-right
-  const svgW = pw + px + 10, svgH = ph + py + 30;
+  const margin = {left:44, top:20, right:10, bottom:36};
+  const plotW = 360, plotH = 280;
+  const svgW = plotW + margin.left + margin.right;
+  const svgH = plotH + margin.top + margin.bottom;
+  const toSvgX = (dx) => margin.left + (dx/20)*plotW;
+  const toSvgY = (dy) => margin.top + plotH - (dy/20)*plotH;
+  // Grid positions for Low/Med/High at 0,10,20
+  const gridXs = [0,10,20].map(v => toSvgX(v));
+  const gridYs = [0,10,20].map(v => toSvgY(v));
+  // Region polygons in SVG coords
+  // High priority: upper-left triangle (high value, low complexity)
+  const hpPts = [
+    toSvgX(0), toSvgY(20),
+    toSvgX(10), toSvgY(20),
+    toSvgX(0), toSvgY(10),
+  ].join(' ');
+  // Low priority: lower-right triangle (low value, high complexity)
+  const lpPts = [
+    toSvgX(10), toSvgY(0),
+    toSvgX(20), toSvgY(0),
+    toSvgX(20), toSvgY(10),
+  ].join(' ');
+  // Quick wins: left strip x<3.33
+  const qwX = toSvgX(20/6);
+  const qwPts = `${toSvgX(0)},${toSvgY(20)} ${qwX},${toSvgY(20)} ${qwX},${toSvgY(0)} ${toSvgX(0)},${toSvgY(0)}`;
+  const dotColor = (type) => type==='high'?'#4F46E5':type==='quick'?'#64748B':'#94A3B8';
+  const dotR = (type) => type==='high'?15:type==='quick'?14:12;
+  const badgeColor = (type) => type==='high'?'#4F46E5':type==='quick'?'#64748B':'#94A3B8';
   return (
     <div>
       <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Value vs. Complexity Scatter</h3>
       <div style={{display:'flex',gap:'1rem',alignItems:'flex-start',flexWrap:'wrap'}}>
-        <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{flex:'1',minWidth:340,maxWidth:520}}>
-          {/* Regions — diagonal layout */}
-          <polygon points={`${px},${py+ph} ${px},${py+ph*0.35} ${px+pw*0.45},${py} ${px+pw*0.45},${py+ph}`} fill="#EEF2FF" opacity="0.7"/>
-          <polygon points={`${px},${py+ph*0.35} ${px},${py} ${px+pw*0.45},${py}`} fill="#E0E7FF" opacity="0.8"/>
-          <polygon points={`${px+pw*0.45},${py} ${px+pw},${py} ${px+pw},${py+ph} ${px+pw*0.45},${py+ph}`} fill="#F1F5F9" opacity="0.8"/>
-          <polygon points={`${px},${py+ph} ${px+pw*0.45},${py+ph} ${px+pw},${py+ph} ${px+pw},${py+ph*0.7}`} fill="#CCFBF1" opacity="0.5"/>
-          {/* Region labels */}
-          <text x={px+pw*0.15} y={py+ph*0.45} textAnchor="middle" fill="#4F46E5" fontSize="9" fontWeight="700" opacity="0.8">High priority</text>
-          <text x={px+pw*0.15} y={py+ph*0.55} textAnchor="middle" fill="#4F46E5" fontSize="8" opacity="0.7">targets</text>
-          <text x={px+pw*0.18} y={py+ph*0.82} textAnchor="middle" fill="#0891B2" fontSize="9" fontWeight="700" opacity="0.8">Quick wins</text>
-          <text x={px+pw*0.7} y={py+ph*0.35} textAnchor="middle" fill="#64748B" fontSize="9" fontWeight="700" opacity="0.8">Potential</text>
-          <text x={px+pw*0.7} y={py+ph*0.45} textAnchor="middle" fill="#64748B" fontSize="8" opacity="0.7">candidates</text>
-          <text x={px+pw*0.7} y={py+ph*0.88} textAnchor="middle" fill="#0D9488" fontSize="9" fontWeight="700" opacity="0.8">Low priority</text>
+        <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{flex:'1',minWidth:320,maxWidth:480}}>
+          {/* Colored regions */}
+          <polygon points={`${toSvgX(0)},${toSvgY(20)} ${toSvgX(10)},${toSvgY(20)} ${toSvgX(20)},${toSvgY(10)} ${toSvgX(20)},${toSvgY(20)}`} fill="#F1F5F9" opacity="0.6"/>
+          <polygon points={`${toSvgX(0)},${toSvgY(10)} ${toSvgX(10)},${toSvgY(20)} ${toSvgX(0)},${toSvgY(20)}`} fill="#4F46E5" opacity="0.18"/>
+          <polygon points={`${toSvgX(10)},${toSvgY(0)} ${toSvgX(20)},${toSvgY(0)} ${toSvgX(20)},${toSvgY(10)}`} fill="#0D9488" opacity="0.18"/>
+          {/* Quick wins strip — rendered last so it's in front */}
+          <polygon points={qwPts} fill="#94A3B8" opacity="0.28"/>
+          {/* Grid lines */}
+          {[10].map(v => (
+            <g key={v}>
+              <line x1={toSvgX(v)} y1={toSvgY(0)} x2={toSvgX(v)} y2={toSvgY(20)} stroke="#E5E7EB" strokeWidth="1" strokeDasharray="4,3"/>
+              <line x1={toSvgX(0)} y1={toSvgY(v)} x2={toSvgX(20)} y2={toSvgY(v)} stroke="#E5E7EB" strokeWidth="1" strokeDasharray="4,3"/>
+            </g>
+          ))}
           {/* Axes */}
-          <line x1={px} y1={py} x2={px} y2={py+ph+8} stroke="#1E1B4B" strokeWidth="1.5"/>
-          <line x1={px-8} y1={py+ph} x2={px+pw} y2={py+ph} stroke="#1E1B4B" strokeWidth="1.5"/>
-          {/* Axis labels */}
-          <text x={px-8} y={py+ph*0.1} textAnchor="middle" fill="#6B7280" fontSize="8" transform={`rotate(-90,${px-20},${py+ph*0.5})`}>High</text>
-          <text x={px-8} y={py+ph*0.9} textAnchor="middle" fill="#6B7280" fontSize="8" transform={`rotate(-90,${px-20},${py+ph*0.5})`}>Low</text>
-          <text x={px+8} y={py+ph+18} fill="#6B7280" fontSize="8">Low</text>
-          <text x={px+pw-16} y={py+ph+18} fill="#6B7280" fontSize="8">High</text>
-          <text x={px-30} y={py+ph*0.5+4} textAnchor="middle" fill="#374151" fontSize="8.5" fontWeight="600" transform={`rotate(-90,${px-30},${py+ph*0.5})`}>Value</text>
-          <text x={px+pw*0.5} y={py+ph+28} textAnchor="middle" fill="#374151" fontSize="8.5" fontWeight="600">Complexity</text>
+          <line x1={toSvgX(0)} y1={toSvgY(0)} x2={toSvgX(0)} y2={toSvgY(20)+4} stroke="#E5E7EB" strokeWidth="1"/>
+          <line x1={toSvgX(0)-4} y1={toSvgY(0)} x2={toSvgX(20)} y2={toSvgY(0)} stroke="#E5E7EB" strokeWidth="1"/>
+          {/* Axis tick labels */}
+          <text x={toSvgX(0)}  y={toSvgY(0)+14} textAnchor="middle" fill="#9CA3AF" fontSize="8">Low</text>
+          <text x={toSvgX(10)} y={toSvgY(0)+14} textAnchor="middle" fill="#9CA3AF" fontSize="8">Medium</text>
+          <text x={toSvgX(20)} y={toSvgY(0)+14} textAnchor="middle" fill="#9CA3AF" fontSize="8">High</text>
+          <text x={toSvgX(0)-6} y={toSvgY(0)+4}  textAnchor="end" fill="#9CA3AF" fontSize="8">Low</text>
+          <text x={toSvgX(0)-6} y={toSvgY(10)+4} textAnchor="end" fill="#9CA3AF" fontSize="8">Med</text>
+          <text x={toSvgX(0)-6} y={toSvgY(20)+4} textAnchor="end" fill="#9CA3AF" fontSize="8">High</text>
+          {/* Axis titles */}
+          <text x={toSvgX(10)} y={toSvgY(0)+28} textAnchor="middle" fill="#374151" fontSize="9" fontWeight="600">Complexity →</text>
+          <text x={margin.left-36} y={toSvgY(10)} textAnchor="middle" fill="#374151" fontSize="9" fontWeight="600" transform={`rotate(-90,${margin.left-36},${toSvgY(10)})`}>Value →</text>
+          {/* Region labels */}
+          <text x={toSvgX(3.5)} y={toSvgY(17.5)} textAnchor="middle" fill="#4F46E5" fontSize="8" fontWeight="700">High priority</text>
+          <text x={toSvgX(3.5)} y={toSvgY(16.5)} textAnchor="middle" fill="#4F46E5" fontSize="7">targets</text>
+          <text x={toSvgX(16)} y={toSvgY(2.5)} textAnchor="middle" fill="#0D9488" fontSize="8" fontWeight="700">Low priority</text>
+          <text x={toSvgX(16)} y={toSvgY(1.5)} textAnchor="middle" fill="#0D9488" fontSize="7">targets</text>
+          <text x={toSvgX(1)} y={toSvgY(7)} textAnchor="middle" fill="#64748B" fontSize="7.5" fontWeight="700" transform={`rotate(-90,${toSvgX(1)},${toSvgY(7)})`}>Quick wins</text>
           {/* Dots */}
           {opps.map((o) => {
             const dotX = toSvgX(o.x), dotY = toSvgY(o.y);
+            const r = dotR(o.type);
+            const fc = dotColor(o.type);
             return (
               <g key={o.id}>
-                <circle cx={dotX} cy={dotY} r="10" fill="#4F46E5" opacity="0.85"/>
-                <text x={dotX} y={dotY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontWeight="700">{o.id}</text>
+                <circle cx={dotX} cy={dotY} r={r} fill={fc}/>
+                <text x={dotX} y={dotY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize={r>13?'9':'8'} fontWeight="700">{o.id}</text>
               </g>
             );
           })}
         </svg>
-        <div style={{minWidth:200,flex:'0 0 auto'}}>
-          <div style={{fontSize:'0.72rem',fontWeight:700,color:'#6B7280',textTransform:'uppercase',marginBottom:'0.4rem'}}>Legend</div>
+        <div style={{minWidth:190,flex:'0 0 auto'}}>
+          <div style={{fontWeight:700,fontSize:'0.85rem',color:'#1E1B4B',marginBottom:'0.5rem'}}>Potential Candidates</div>
           {opps.map(o => (
-            <div key={o.id} style={{display:'flex',gap:'0.35rem',alignItems:'center',marginBottom:'0.25rem',fontSize:'0.75rem',color:'#374151'}}>
-              <span style={{background:'#4F46E5',color:'white',borderRadius:'50%',width:18,height:18,display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:'0.65rem',fontWeight:700,flexShrink:0}}>{o.id}</span>
+            <div key={o.id} style={{display:'flex',gap:'0.35rem',alignItems:'flex-start',marginBottom:'0.28rem',fontSize:'0.73rem',color:'#374151',lineHeight:1.3}}>
+              <span style={{background:badgeColor(o.type),color:'white',borderRadius:'50%',width:18,height:18,display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:'0.62rem',fontWeight:700,flexShrink:0,marginTop:1}}>{o.id}</span>
               {o.name}
             </div>
           ))}
@@ -2579,7 +2638,7 @@ function Module3() {
         <Item14A/><Item14B/><Item14C/>
       </ItemWrapper>
       <ItemWrapper id="14b" title="WSJF Formula Breakdown" location="02-wsjf-scoring-method.mdx" slide="Slide 45b">
-        <Item14bA/><Item14bB/><Item14bC/>
+        <Item14bA/>
       </ItemWrapper>
       <ItemWrapper id="15" title="Value vs. Complexity Matrix Introduction" location="03-value-complexity-matrix.mdx" slide="Slide 47">
         <Item15A/><Item15B/><Item15C/>
@@ -2751,7 +2810,7 @@ function Item18A() {
     {name:'Prototype',color:'#0D9488',bg:'#F0FDFA',activities:['Build working demo','Integrate data feed','User acceptance test','Iterate on feedback']},
   ];
   return (
-    <div>
+    <div style={{paddingBottom:'1rem'}}>
       <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Phase Horizontal Stepper</h3>
       <div style={{display:'flex',gap:'0',alignItems:'stretch'}}>
         {phases.map((p,i) => (
@@ -3096,12 +3155,12 @@ function Item21C() {
     <div>
       <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Vertical Feedback Loop with Metrics</h3>
       {stages.map((s,i) => (
-        <div key={i} style={{display:'flex',gap:'0.75rem',marginBottom:'0.1rem'}}>
+        <div key={i} style={{display:'flex',gap:'0.75rem',marginBottom:'0'}}>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center',width:40,flexShrink:0}}>
             <div style={{width:40,height:40,background:s.color,borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><LIcon name={s.icon} size={20} color="white"/></div>
-            {i<stages.length-1 && <div style={{width:2,height:32,background:`${s.color}40`,marginTop:2,position:'relative'}}><div style={{position:'absolute',bottom:-4,left:-3,width:8,height:8,borderLeft:`2px solid ${stages[i+1].color}`,borderBottom:`2px solid ${stages[i+1].color}`,transform:'rotate(-45deg)'}}/></div>}
+            {i<stages.length-1 && <div style={{width:2,height:24,background:`${s.color}40`,margin:'4px 0',position:'relative'}}><div style={{position:'absolute',bottom:-4,left:-3,width:8,height:8,borderLeft:`2px solid ${stages[i+1].color}`,borderBottom:`2px solid ${stages[i+1].color}`,transform:'rotate(-45deg)'}}/></div>}
           </div>
-          <div style={{paddingTop:'0.3rem',flex:1,paddingBottom:'0.6rem'}}>
+          <div style={{paddingTop:'0.3rem',flex:1,paddingBottom:'0.5rem'}}>
             <div style={{fontWeight:700,color:s.color}}>{s.name}</div>
             <div style={{display:'flex',gap:'0.5rem',alignItems:'center',marginTop:'0.2rem'}}>
               <span style={{fontSize:'0.75rem',color:'#6B7280'}}>{s.metric}:</span>
