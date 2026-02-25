@@ -8,6 +8,7 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide-react@0.469.0/dist/umd/lucide-react.js"></script>
 <style>
 :root {
   --color-primary: #4F46E5;
@@ -82,6 +83,11 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #f5f5f7; color: 
 
 <script type="text/babel">
 const { useState } = React;
+const LIcon = ({name, size=18, color='currentColor', strokeWidth=1.5, style}) => {
+  const C = LucideReact[name];
+  return C ? React.createElement(C, {size, color, strokeWidth, style}) : null;
+};
+const { Check, X, Bot, RefreshCw } = LucideReact;
 
 /* ===================== SHARED UTILITIES ===================== */
 function ItemWrapper({ id, title, location, slide, children }) {
@@ -114,78 +120,159 @@ function ItemWrapper({ id, title, location, slide, children }) {
 
 /* --- Item #1: AI Enabled PS Concept --- */
 function Item1A() {
-  const activities = ['Diagnose','Prioritize','Design & Prototype','Implement','Sustain','Change Mgmt'];
-  const colors = ['#4F46E5','#6366F1','#818CF8','#3730A3','#4338CA','#5B4BFF'];
+  // Honeycomb grid: each row = a phase, filled hex count grows row by row
+  const phases = [
+    { name:'Diagnose Data',       fill:3,  color:'#4F46E5' },
+    { name:'Prioritize Opps',     fill:5,  color:'#6366F1' },
+    { name:'Design & Prototype',  fill:8,  color:'#0D9488' },
+    { name:'Implement Solutions', fill:10, color:'#7C3AED' },
+    { name:'Sustain Improvements',fill:12, color:'#3730A3' },
+    { name:'Change Management',   fill:14, color:'#1E1B4B' },
+  ];
+  const COLS = 14, r = 13;
+  const sw = Math.sqrt(3);
+  const hexPoints = (cx, cy) => {
+    return Array.from({length:6}, (_,i) => {
+      const a = (i * 60 + 30) * Math.PI / 180;
+      return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+    }).join(' ');
+  };
+  const W = COLS * r * sw + r * sw;
+  const H = phases.length * r * 1.5 + r;
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Hub-and-Spoke: Core Activities</h3>
-      <div style={{position:'relative',width:'100%',maxWidth:500,margin:'0 auto',height:320}}>
-        <svg width="100%" height="320" viewBox="0 0 500 320">
-          {activities.map((act, i) => {
-            const angle = (i * 60 - 90) * Math.PI / 180;
-            const cx = 250 + 130 * Math.cos(angle);
-            const cy = 160 + 130 * Math.sin(angle);
-            return (
-              <g key={i}>
-                <line x1="250" y1="160" x2={cx} y2={cy} stroke="#E5E7EB" strokeWidth="2"/>
-                <circle cx={cx} cy={cy} r="38" fill={colors[i]} opacity="0.9"/>
-                <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="10" fontWeight="600">
-                  {act.split(' ').map((w,wi) => <tspan key={wi} x={cx} dy={wi===0?-6:12}>{w}</tspan>)}
-                </text>
-              </g>
-            );
-          })}
-          <circle cx="250" cy="160" r="55" fill="#1E1B4B"/>
-          <text x="250" y="154" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">AI Enabled</text>
-          <text x="250" y="166" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">Problem-</text>
-          <text x="250" y="178" textAnchor="middle" fill="white" fontSize="9" fontWeight="700">Solving</text>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Hexagonal Progression Grid</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Each row fills in more blocks as the methodology progresses — from initial diagnosis to organization-wide change.</p>
+      <div style={{display:'flex',gap:'1rem',alignItems:'flex-start'}}>
+        <svg viewBox={`0 0 ${W} ${H}`} style={{flex:'1',minWidth:0}}>
+          {phases.map((phase, row) => (
+            Array.from({length: COLS}, (_, col) => {
+              const cx = col * r * sw + (row % 2 === 1 ? r * sw / 2 : 0) + r * sw / 2;
+              const cy = row * r * 1.5 + r;
+              const filled = col < phase.fill;
+              return (
+                <polygon
+                  key={`${row}-${col}`}
+                  points={hexPoints(cx, cy)}
+                  fill={filled ? phase.color : 'none'}
+                  stroke={filled ? phase.color : '#D1D5DB'}
+                  strokeWidth="1"
+                  opacity={filled ? 0.9 : 0.4}
+                />
+              );
+            })
+          ))}
         </svg>
+        <div style={{display:'flex',flexDirection:'column',justifyContent:'space-around',height:H,flexShrink:0,paddingTop:4}}>
+          {phases.map((p, i) => (
+            <div key={i} style={{display:'flex',alignItems:'center',gap:'0.4rem',height: r * 1.5}}>
+              <span style={{width:10,height:10,borderRadius:2,background:p.color,display:'inline-block',flexShrink:0}}/>
+              <span style={{fontSize:'0.75rem',color:'#374151',whiteSpace:'nowrap',fontWeight:i===5?700:400}}>{p.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 function Item1B() {
-  const cols = [
-    { title:'Data First', color:'#0D9488', bg:'#F0FDFA', icon:'📊', tagline:'Evidence over assumptions', desc:'Start every engagement with structured data collection. Let the numbers reveal the real problems before proposing solutions.' },
-    { title:'AI First', color:'#4F46E5', bg:'#EEF2FF', icon:'🤖', tagline:'Augment human judgment', desc:'Use AI to process complex data, generate hypotheses, and identify patterns at a scale impossible for traditional consulting.' },
+  // Square block grid — same filling concept, cleaner/more minimal aesthetic
+  const phases = [
+    { name:'Diagnose Data',        fill:3,  color:'#4F46E5', bg:'#EEF2FF' },
+    { name:'Prioritize Opps',      fill:5,  color:'#6366F1', bg:'#EEF2FF' },
+    { name:'Design & Prototype',   fill:8,  color:'#0D9488', bg:'#F0FDFA' },
+    { name:'Implement Solutions',  fill:10, color:'#7C3AED', bg:'#F5F3FF' },
+    { name:'Sustain Improvements', fill:12, color:'#3730A3', bg:'#EEF2FF' },
+    { name:'Change Management',    fill:14, color:'#1E1B4B', bg:'#F1F5F9' },
   ];
+  const COLS = 14;
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Two-Column Principle Cards</h3>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
-        {cols.map((c,i) => (
-          <div key={i} style={{background:c.bg,border:`2px solid ${c.color}`,borderRadius:10,padding:'1.5rem'}}>
-            <div style={{fontSize:'2rem',marginBottom:'0.5rem'}}>{c.icon}</div>
-            <div style={{fontWeight:800,fontSize:'1.1rem',color:c.color,marginBottom:'0.25rem'}}>{c.title}</div>
-            <div style={{fontStyle:'italic',color:'#6B7280',fontSize:'0.85rem',marginBottom:'0.75rem'}}>{c.tagline}</div>
-            <p style={{fontSize:'0.875rem',color:'#374151',lineHeight:1.6}}>{c.desc}</p>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Block Fill Progression</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Blocks fill in left-to-right with each phase — by Change Management, all capacity is engaged.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+        {phases.map((p, ri) => (
+          <div key={ri} style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            <div style={{width:170,fontSize:'0.78rem',color:'#374151',textAlign:'right',flexShrink:0,fontWeight:ri===5?700:400,color:p.color}}>{p.name}</div>
+            <div style={{display:'flex',gap:'3px',flex:1}}>
+              {Array.from({length:COLS}, (_,ci) => (
+                <div key={ci} style={{
+                  flex:1,
+                  height:22,
+                  borderRadius:3,
+                  background: ci < p.fill ? p.color : '#F3F4F6',
+                  border: ci < p.fill ? 'none' : '1px solid #E5E7EB',
+                  transition:'background 0.2s',
+                  opacity: ci < p.fill ? (0.5 + (ci/p.fill)*0.5) : 1,
+                }}/>
+              ))}
+            </div>
+            <div style={{width:28,fontSize:'0.72rem',color:p.color,fontWeight:700,flexShrink:0}}>{p.fill}/{COLS}</div>
           </div>
         ))}
+      </div>
+      <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'1rem',fontSize:'0.75rem',color:'#9CA3AF'}}>
+        <span style={{display:'flex',alignItems:'center',gap:'4px'}}><span style={{width:14,height:14,borderRadius:2,background:'#4F46E5',display:'inline-block'}}/> Activated</span>
+        <span style={{display:'flex',alignItems:'center',gap:'4px'}}><span style={{width:14,height:14,borderRadius:2,background:'#F3F4F6',border:'1px solid #E5E7EB',display:'inline-block'}}/> Pending</span>
       </div>
     </div>
   );
 }
 
 function Item1C() {
+  // Stacked rows with cumulative fill — each row shows its own blocks PLUS
+  // a ghost of all prior phases, emphasizing the additive nature of progression
   const phases = [
-    { label:'Phase 1', name:'Diagnose Data', icon:'🔍', bg:'linear-gradient(135deg,#4F46E5,#6366F1)', desc:'Collect & analyze operational data to surface root causes' },
-    { label:'Phase 2', name:'Prioritize', icon:'⚡', bg:'linear-gradient(135deg,#0D9488,#14B8A6)', desc:'Score and rank opportunities by value and feasibility' },
-    { label:'Phase 3', name:'Implement & Sustain', icon:'🚀', bg:'linear-gradient(135deg,#3730A3,#4F46E5)', desc:'Build AI-enabled solutions and embed lasting change' },
+    { name:'Diagnose Data',        own:3,  color:'#4F46E5' },
+    { name:'Prioritize Opps',      own:2,  color:'#6366F1' },
+    { name:'Design & Prototype',   own:3,  color:'#0D9488' },
+    { name:'Implement Solutions',  own:2,  color:'#7C3AED' },
+    { name:'Sustain Improvements', own:2,  color:'#3730A3' },
+    { name:'Change Management',    own:2,  color:'#1E1B4B' },
   ];
+  const COLS = 14;
+  // Compute cumulative fill per row
+  const cumulative = phases.map((_, i) => phases.slice(0, i+1).reduce((sum, p) => sum + p.own, 0));
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Phase Horizontal Banner</h3>
-      <div style={{display:'flex',gap:'0.75rem'}}>
-        {phases.map((p,i) => (
-          <div key={i} style={{flex:1,background:p.bg,borderRadius:10,padding:'1.25rem',color:'white'}}>
-            <div style={{fontSize:'1.5rem',marginBottom:'0.5rem'}}>{p.icon}</div>
-            <div style={{fontSize:'0.7rem',opacity:0.8,textTransform:'uppercase',letterSpacing:'0.08em'}}>{p.label}</div>
-            <div style={{fontWeight:700,fontSize:'1rem',margin:'0.25rem 0'}}>{p.name}</div>
-            <p style={{fontSize:'0.8rem',opacity:0.85,lineHeight:1.5}}>{p.desc}</p>
-          </div>
-        ))}
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Cumulative Fill — Each Phase Builds on the Last</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Each phase adds its blocks to those already filled. By Change Management, the full grid is active.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:'5px'}}>
+        {phases.map((p, ri) => {
+          const total = cumulative[ri];
+          return (
+            <div key={ri} style={{display:'flex',alignItems:'center',gap:'8px'}}>
+              <div style={{width:170,fontSize:'0.78rem',textAlign:'right',flexShrink:0,fontWeight:700,color:p.color}}>{p.name}</div>
+              <div style={{display:'flex',gap:'3px',flex:1}}>
+                {Array.from({length:COLS}, (_,ci) => {
+                  // Which phase filled this block?
+                  let fillColor = null;
+                  let cumSoFar = 0;
+                  for (let pi = 0; pi <= ri; pi++) {
+                    if (ci < cumSoFar + phases[pi].own) { fillColor = phases[pi].color; break; }
+                    cumSoFar += phases[pi].own;
+                  }
+                  const isNew = ci >= (cumulative[ri] - p.own) && ci < cumulative[ri];
+                  return (
+                    <div key={ci} style={{
+                      flex:1,
+                      height:22,
+                      borderRadius:3,
+                      background: fillColor || '#F3F4F6',
+                      border: fillColor ? 'none' : '1px solid #E5E7EB',
+                      outline: isNew ? `2px solid ${p.color}` : 'none',
+                      outlineOffset: isNew ? '1px' : '0',
+                    }}/>
+                  );
+                })}
+              </div>
+              <div style={{width:28,fontSize:'0.72rem',color:p.color,fontWeight:700,flexShrink:0}}>+{p.own}</div>
+            </div>
+          );
+        })}
       </div>
+      <div style={{marginTop:'0.75rem',fontSize:'0.75rem',color:'#9CA3AF'}}>Outlined blocks = new blocks added in that phase</div>
     </div>
   );
 }
@@ -200,11 +287,11 @@ function Item2A() {
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0',borderRadius:10,overflow:'hidden',border:'1px solid #E5E7EB'}}>
         <div style={{background:'#F3F4F6',padding:'1.25rem'}}>
           <div style={{fontWeight:700,color:'#6B7280',marginBottom:'0.75rem',textAlign:'center'}}>Traditional Consulting</div>
-          {left.map((t,i) => <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.85rem',color:'#374151'}}><span style={{color:'#EF4444',flexShrink:0}}>✗</span>{t}</div>)}
+          {left.map((t,i) => <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.85rem',color:'#374151'}}><X size={14} color="#EF4444" strokeWidth={2.5} style={{flexShrink:0}}/>{t}</div>)}
         </div>
         <div style={{background:'#EEF2FF',padding:'1.25rem',borderLeft:'2px solid #4F46E5'}}>
           <div style={{fontWeight:700,color:'#4F46E5',marginBottom:'0.75rem',textAlign:'center'}}>AI-Enabled Approach</div>
-          {right.map((t,i) => <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.85rem',color:'#374151'}}><span style={{color:'#22C55E',flexShrink:0}}>✓</span>{t}</div>)}
+          {right.map((t,i) => <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.85rem',color:'#374151'}}><Check size={14} color="#22C55E" strokeWidth={2.5} style={{flexShrink:0}}/>{t}</div>)}
         </div>
       </div>
     </div>
@@ -213,9 +300,9 @@ function Item2A() {
 
 function Item2B() {
   const cards = [
-    { icon:'⚡', metric:'Days not months', label:'Speed', color:'#F59E0B', bg:'#FFFBEB', desc:'AI compresses the analysis cycle dramatically' },
-    { icon:'📐', metric:'20+ at once', label:'Scale', color:'#4F46E5', bg:'#EEF2FF', desc:'Explore many hypotheses simultaneously' },
-    { icon:'🎯', metric:'Data-validated', label:'Precision', color:'#22C55E', bg:'#F0FDF4', desc:'Findings backed by evidence, not instinct' },
+    { icon:'Zap', metric:'Days not months', label:'Speed', color:'#F59E0B', bg:'#FFFBEB', desc:'AI compresses the analysis cycle dramatically' },
+    { icon:'Ruler', metric:'20+ at once', label:'Scale', color:'#4F46E5', bg:'#EEF2FF', desc:'Explore many hypotheses simultaneously' },
+    { icon:'Target', metric:'Data-validated', label:'Precision', color:'#22C55E', bg:'#F0FDF4', desc:'Findings backed by evidence, not instinct' },
   ];
   return (
     <div>
@@ -223,7 +310,7 @@ function Item2B() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem'}}>
         {cards.map((c,i) => (
           <div key={i} style={{background:c.bg,border:`2px solid ${c.color}20`,borderRadius:10,padding:'1.25rem',textAlign:'center'}}>
-            <div style={{fontSize:'2rem',marginBottom:'0.5rem'}}>{c.icon}</div>
+            <div style={{marginBottom:'0.5rem'}}><LIcon name={c.icon} size={28}/></div>
             <div style={{fontWeight:800,fontSize:'1.1rem',color:c.color}}>{c.metric}</div>
             <div style={{fontWeight:700,color:'#1A1A2E',margin:'0.25rem 0'}}>{c.label}</div>
             <p style={{fontSize:'0.8rem',color:'#6B7280'}}>{c.desc}</p>
@@ -357,12 +444,12 @@ function Item3C() {
 /* --- Item #4: Circular Activity Flow --- */
 function Item4A() {
   const hexes = [
-    { label:'Diagnose', icon:'🔍', active:true },
-    { label:'Prioritize', icon:'⚡', active:true },
-    { label:'Design', icon:'✏️', active:true },
-    { label:'Implement', icon:'🔧', active:true },
-    { label:'Sustain', icon:'🔄', active:false },
-    { label:'Change Mgmt', icon:'👥', active:false },
+    { label:'Diagnose', icon:'Search', active:true },
+    { label:'Prioritize', icon:'Zap', active:true },
+    { label:'Design', icon:'Pencil', active:true },
+    { label:'Implement', icon:'Wrench', active:true },
+    { label:'Sustain', icon:'RefreshCw', active:false },
+    { label:'Change Mgmt', icon:'Users', active:false },
   ];
   const positions = [{cx:150,cy:70},{cx:250,cy:70},{cx:300,cy:160},{cx:250,cy:250},{cx:150,cy:250},{cx:100,cy:160}];
   return (
@@ -380,8 +467,7 @@ function Item4A() {
             return (
               <g key={i}>
                 <polygon points={points} fill={fill} opacity="0.9"/>
-                <text x={p.cx} y={p.cy-6} textAnchor="middle" fill="white" fontSize="16">{h.icon}</text>
-                <text x={p.cx} y={p.cy+10} textAnchor="middle" fill="white" fontSize="9" fontWeight="700">{h.label}</text>
+                <text x={p.cx} y={p.cy+4} textAnchor="middle" fill="white" fontSize="9" fontWeight="700">{h.label}</text>
               </g>
             );
           })}
@@ -502,13 +588,13 @@ function Module1() {
 /* --- Item #5: Problem Statement 7 Elements --- */
 function Item5A() {
   const elements = [
-    {icon:'📝',name:'Description',desc:'What problem are we solving?',color:'#4F46E5'},
-    {icon:'👥',name:'Customers',desc:'Who is affected?',color:'#0D9488'},
-    {icon:'🏛️',name:'Decision Makers',desc:'Who has authority?',color:'#7C3AED'},
-    {icon:'🎯',name:'Decision Drivers',desc:'What criteria matter most?',color:'#DC2626'},
-    {icon:'🚧',name:'Boundaries',desc:'What is in/out of scope?',color:'#F59E0B'},
-    {icon:'📊',name:'Success Measures',desc:'How will we know it worked?',color:'#22C55E'},
-    {icon:'⏱️',name:'Timeframe',desc:'When must this be resolved?',color:'#6366F1'},
+    {icon:'FileText',name:'Description',desc:'What problem are we solving?',color:'#4F46E5'},
+    {icon:'Users',name:'Customers',desc:'Who is affected?',color:'#0D9488'},
+    {icon:'Landmark',name:'Decision Makers',desc:'Who has authority?',color:'#7C3AED'},
+    {icon:'Target',name:'Decision Drivers',desc:'What criteria matter most?',color:'#DC2626'},
+    {icon:'AlertTriangle',name:'Boundaries',desc:'What is in/out of scope?',color:'#F59E0B'},
+    {icon:'BarChart3',name:'Success Measures',desc:'How will we know it worked?',color:'#22C55E'},
+    {icon:'Clock',name:'Timeframe',desc:'When must this be resolved?',color:'#6366F1'},
   ];
   return (
     <div>
@@ -516,7 +602,7 @@ function Item5A() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.75rem'}}>
         {elements.map((el,i) => (
           <div key={i} style={{background:'white',border:`1px solid ${el.color}30`,borderRadius:8,padding:'0.85rem',display:'flex',gap:'0.75rem',alignItems:'flex-start'}}>
-            <div style={{width:36,height:36,background:`${el.color}15`,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem',flexShrink:0}}>{el.icon}</div>
+            <div style={{width:36,height:36,background:`${el.color}15`,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><LIcon name={el.icon} size={18} color={el.color}/></div>
             <div>
               <div style={{fontWeight:700,fontSize:'0.85rem',color:el.color}}>{el.name}</div>
               <div style={{fontSize:'0.78rem',color:'#6B7280',marginTop:'0.15rem'}}>{el.desc}</div>
@@ -757,7 +843,7 @@ function Item7C() {
   return (
     <div>
       <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Collapsible Issues Tree</h3>
-      <div style={{background:'#1E1B4B',color:'white',borderRadius:6,padding:'0.6rem 1rem',fontWeight:700,fontSize:'0.875rem',marginBottom:'0.75rem',textAlign:'center'}}>🔑 Root Issue: Low First-Visit Resolution Rate</div>
+      <div style={{background:'#1E1B4B',color:'white',borderRadius:6,padding:'0.6rem 1rem',fontWeight:700,fontSize:'0.875rem',marginBottom:'0.75rem',textAlign:'center'}}>Root Issue: Low First-Visit Resolution Rate</div>
       {tree.map((b,i) => (
         <div key={i} style={{marginBottom:'0.5rem',border:`1px solid ${b.color}40`,borderRadius:6,overflow:'hidden'}}>
           <button onClick={() => toggle(i)} style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.6rem 0.9rem',background:`${b.color}10`,border:'none',cursor:'pointer',fontWeight:700,color:b.color,fontSize:'0.875rem',textAlign:'left'}}>
@@ -783,13 +869,13 @@ function Item8A() {
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem'}}>
         <div style={{border:'2px solid #4F46E5',borderRadius:8,padding:'1rem'}}>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.75rem'}}>
-            <span style={{background:'#4F46E5',color:'white',borderRadius:4,padding:'0.2rem 0.5rem',fontSize:'0.75rem',fontWeight:700}}>👤 Your Prompt</span>
+            <span style={{background:'#4F46E5',color:'white',borderRadius:4,padding:'0.2rem 0.5rem',fontSize:'0.75rem',fontWeight:700}}>Your Prompt</span>
           </div>
           <p style={{fontSize:'0.83rem',color:'#374151',lineHeight:1.6,fontStyle:'italic'}}>"Generate a structured issues tree for a cable company with low first-visit resolution. Include 3 main branches with 3 sub-causes each. Format as a nested list."</p>
         </div>
         <div style={{border:'2px solid #0D9488',borderRadius:8,padding:'1rem',background:'#F0FDFA'}}>
           <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.75rem'}}>
-            <span style={{background:'#0D9488',color:'white',borderRadius:4,padding:'0.2rem 0.5rem',fontSize:'0.75rem',fontWeight:700}}>🤖 AI Output</span>
+            <span style={{background:'#0D9488',color:'white',borderRadius:4,padding:'0.2rem 0.5rem',fontSize:'0.75rem',fontWeight:700}}>AI Output</span>
           </div>
           <div style={{fontSize:'0.8rem',color:'#374151',lineHeight:1.7}}>
             <div style={{fontWeight:700}}>• Technician Skill</div>
@@ -817,7 +903,7 @@ function Item8B() {
         </div>
         <div style={{display:'flex',justifyContent:'flex-start',marginBottom:'0.75rem'}}>
           <div style={{background:'white',border:'1px solid #E5E7EB',borderRadius:'12px 12px 12px 2px',padding:'0.75rem 1rem',maxWidth:'90%',fontSize:'0.83rem',lineHeight:1.7,boxShadow:'0 1px 3px rgba(0,0,0,0.06)'}}>
-            <div style={{color:'#0D9488',fontWeight:700,marginBottom:'0.5rem',fontSize:'0.8rem'}}>🤖 Issues Tree — Metro Cable</div>
+            <div style={{color:'#0D9488',fontWeight:700,marginBottom:'0.5rem',fontSize:'0.8rem'}}>Issues Tree — Metro Cable</div>
             <div><strong>1. Technician Skill</strong></div>
             <div style={{paddingLeft:'1rem',color:'#6B7280'}}>a. Certification gaps in fiber optics<br/>b. No real-time diagnostic tools<br/>c. Inconsistent training curriculum</div>
             <div style={{marginTop:'0.4rem'}}><strong>2. Dispatch Routing</strong></div>
@@ -884,10 +970,10 @@ function Item9A() {
 
 function Item9B() {
   const cats = [
-    {name:'Dispatch Data',color:'#4F46E5',icon:'📋',items:['Work order records (18 mo)','Job type classifications','Repeat dispatch flags','Resolution codes']},
-    {name:'Customer Data',color:'#0D9488',icon:'👥',items:['NPS and CSAT surveys','Call center transcripts','Complaint categories','Satisfaction by region']},
-    {name:'Technician Data',color:'#7C3AED',icon:'🔧',items:['Certification records','Skill assessments','FVR rates by tech','Training completion']},
-    {name:'Geo/Market Data',color:'#F59E0B',icon:'🗺️',items:['Service zone shapefiles','Demand density maps','Infrastructure age','Coverage gaps']},
+    {name:'Dispatch Data',color:'#4F46E5',icon:'ClipboardList',items:['Work order records (18 mo)','Job type classifications','Repeat dispatch flags','Resolution codes']},
+    {name:'Customer Data',color:'#0D9488',icon:'Users',items:['NPS and CSAT surveys','Call center transcripts','Complaint categories','Satisfaction by region']},
+    {name:'Technician Data',color:'#7C3AED',icon:'Wrench',items:['Certification records','Skill assessments','FVR rates by tech','Training completion']},
+    {name:'Geo/Market Data',color:'#F59E0B',icon:'Map',items:['Service zone shapefiles','Demand density maps','Infrastructure age','Coverage gaps']},
   ];
   return (
     <div>
@@ -896,7 +982,7 @@ function Item9B() {
         {cats.map((c,i) => (
           <div key={i} style={{border:`1px solid ${c.color}30`,borderRadius:8,overflow:'hidden'}}>
             <div style={{background:`${c.color}15`,padding:'0.6rem 0.9rem',display:'flex',alignItems:'center',gap:'0.5rem',borderBottom:`2px solid ${c.color}`}}>
-              <span>{c.icon}</span>
+              <LIcon name={c.icon} size={16} color={c.color}/>
               <span style={{fontWeight:700,color:c.color,fontSize:'0.875rem'}}>{c.name}</span>
             </div>
             <div style={{padding:'0.6rem 0.9rem'}}>
@@ -940,9 +1026,9 @@ function Item9C() {
 /* --- Item #10: Data Request Risks --- */
 function Item10A() {
   const cols = [
-    {title:'Data Quality Risks',color:'#EF4444',bg:'#FEF2F2',icon:'⚠️',items:['Missing values in dispatch history','Inconsistent resolution code taxonomy','Survey response bias by region']},
-    {title:'Access & Governance',color:'#F59E0B',bg:'#FFFBEB',icon:'🔒',items:['PII in customer call logs requires masking','HR data needs CISO approval','Cross-system joins require data steward sign-off']},
-    {title:'Technical Considerations',color:'#3B82F6',bg:'#EFF6FF',icon:'⚙️',items:['API rate limits on ServiceNow export','Shapefile format compatibility','Volume: 1.2M call logs need staged ingestion']},
+    {title:'Data Quality Risks',color:'#EF4444',bg:'#FEF2F2',icon:'AlertTriangle',items:['Missing values in dispatch history','Inconsistent resolution code taxonomy','Survey response bias by region']},
+    {title:'Access & Governance',color:'#F59E0B',bg:'#FFFBEB',icon:'Lock',items:['PII in customer call logs requires masking','HR data needs CISO approval','Cross-system joins require data steward sign-off']},
+    {title:'Technical Considerations',color:'#3B82F6',bg:'#EFF6FF',icon:'Settings',items:['API rate limits on ServiceNow export','Shapefile format compatibility','Volume: 1.2M call logs need staged ingestion']},
   ];
   return (
     <div>
@@ -951,7 +1037,7 @@ function Item10A() {
         {cols.map((c,i) => (
           <div key={i} style={{background:c.bg,border:`1px solid ${c.color}30`,borderRadius:8,padding:'1rem'}}>
             <div style={{display:'flex',alignItems:'center',gap:'0.4rem',marginBottom:'0.75rem'}}>
-              <span>{c.icon}</span>
+              <LIcon name={c.icon} size={16} color={c.color}/>
               <span style={{fontWeight:700,color:c.color,fontSize:'0.85rem'}}>{c.title}</span>
             </div>
             {c.items.map((it,ii) => <div key={ii} style={{fontSize:'0.8rem',color:'#374151',marginBottom:'0.4rem',display:'flex',gap:'0.4rem',lineHeight:1.4}}><span style={{color:c.color,flexShrink:0}}>•</span>{it}</div>)}
@@ -1040,7 +1126,7 @@ function Item11A() {
             <div style={{padding:'0.5rem 0.75rem',background:'#F9FAFB',borderRight:'1px solid #E5E7EB',fontSize:'0.82rem',color:'#6B7280'}}>{c.initial}</div>
             <div style={{padding:'0.5rem 0.75rem',background:'#EEF2FF',fontSize:'0.82rem',color:'#374151',fontWeight:500}}>{c.refined}</div>
           </div>
-          <div style={{padding:'0.3rem 0.75rem',background:'#FFF7ED',fontSize:'0.75rem',color:'#92400E',borderTop:'1px solid #FED7AA'}}>💡 {c.reason}</div>
+          <div style={{padding:'0.3rem 0.75rem',background:'#FFF7ED',fontSize:'0.75rem',color:'#92400E',borderTop:'1px solid #FED7AA'}}><LIcon name='Lightbulb' size={12} color='#92400E'/> {c.reason}</div>
         </div>
       ))}
     </div>
@@ -1128,11 +1214,11 @@ function Item12A() {
 function Item12B() {
   const [tooltip, setTooltip] = useState(null);
   const charts = [
-    {icon:'📊',name:'Bar Chart',when:'Comparing discrete categories or ranked items'},
-    {icon:'📈',name:'Line Chart',when:'Tracking changes or trends over a continuous time period'},
-    {icon:'⚬',name:'Scatter Plot',when:'Examining correlations between two continuous variables'},
-    {icon:'🌡️',name:'Heat Map',when:'Showing intensity or density across a two-dimensional grid'},
-    {icon:'🟩',name:'Treemap',when:'Visualizing hierarchical data with proportional area encoding'},
+    {icon:'BarChart3',name:'Bar Chart',when:'Comparing discrete categories or ranked items'},
+    {icon:'TrendingUp',name:'Line Chart',when:'Tracking changes or trends over a continuous time period'},
+    {icon:'Circle',name:'Scatter Plot',when:'Examining correlations between two continuous variables'},
+    {icon:'Thermometer',name:'Heat Map',when:'Showing intensity or density across a two-dimensional grid'},
+    {icon:'LayoutGrid',name:'Treemap',when:'Visualizing hierarchical data with proportional area encoding'},
   ];
   return (
     <div>
@@ -1141,7 +1227,7 @@ function Item12B() {
         {charts.map((c,i) => (
           <div key={i} style={{position:'relative'}} onMouseEnter={() => setTooltip(i)} onMouseLeave={() => setTooltip(null)}>
             <div style={{border:'1px solid #E5E7EB',borderRadius:8,padding:'0.75rem 1rem',background:tooltip===i?'#EEF2FF':'white',cursor:'default',display:'flex',alignItems:'center',gap:'0.5rem',fontSize:'0.875rem',fontWeight:600,color:tooltip===i?'#4F46E5':'#374151',transition:'all 0.15s'}}>
-              <span style={{fontSize:'1.1rem'}}>{c.icon}</span>{c.name}
+              <LIcon name={c.icon} size={16}/>{c.name}
             </div>
             {tooltip===i && (
               <div style={{position:'absolute',bottom:'calc(100% + 6px)',left:'50%',transform:'translateX(-50%)',background:'#1E1B4B',color:'white',padding:'0.5rem 0.75rem',borderRadius:6,fontSize:'0.78rem',whiteSpace:'nowrap',zIndex:10,boxShadow:'0 4px 12px rgba(0,0,0,0.2)',lineHeight:1.5}}>
@@ -1199,7 +1285,7 @@ function Item13A() {
           <span style={{width:10,height:10,borderRadius:'50%',background:'#EF4444',display:'inline-block'}}></span>
           <span style={{width:10,height:10,borderRadius:'50%',background:'#F59E0B',display:'inline-block'}}></span>
           <span style={{width:10,height:10,borderRadius:'50%',background:'#22C55E',display:'inline-block'}}></span>
-          <span style={{color:'rgba(255,255,255,0.5)',fontSize:'0.75rem',marginLeft:'0.5rem'}}>🤖 AI Response</span>
+          <span style={{color:'rgba(255,255,255,0.5)',fontSize:'0.75rem',marginLeft:'0.5rem'}}>AI Response</span>
         </div>
         <div style={{padding:'1rem',fontSize:'0.83rem',lineHeight:1.8,color:'#E2E8F0'}}>
           <span style={{color:'#A5B4FC'}}>## FCR Benchmark Research Results</span><br/>
@@ -1226,7 +1312,7 @@ function Item13B() {
       <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Styled AI Response Card</h3>
       <div style={{background:'white',border:'1px solid #E5E7EB',borderRadius:12,boxShadow:'0 2px 8px rgba(0,0,0,0.08)',overflow:'hidden',maxWidth:560,margin:'0 auto'}}>
         <div style={{background:'linear-gradient(135deg,#4F46E5,#6366F1)',padding:'0.75rem 1rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
-          <span style={{fontSize:'1.1rem'}}>🤖</span>
+          <Bot size={18} color='white' strokeWidth={1.5}/>
           <span style={{color:'white',fontWeight:700,fontSize:'0.875rem'}}>AI Research Results</span>
           <span style={{marginLeft:'auto',background:'rgba(255,255,255,0.2)',color:'white',padding:'0.15rem 0.5rem',borderRadius:20,fontSize:'0.7rem'}}>FCR Benchmarks</span>
         </div>
@@ -1264,7 +1350,7 @@ function Item13C() {
         </div>
         <div style={{background:'white',border:'1px solid #E5E7EB',borderRadius:8,overflow:'hidden',boxShadow:'0 1px 4px rgba(0,0,0,0.06)'}}>
           <div style={{background:'#4F46E5',padding:'0.4rem 0.75rem',display:'flex',gap:'0.4rem',alignItems:'center'}}>
-            <span style={{fontSize:'0.9rem'}}>🤖</span>
+            <Bot size={16} color='white' strokeWidth={1.5}/>
             <span style={{color:'white',fontSize:'0.78rem',fontWeight:700}}>AI Response</span>
           </div>
           <div style={{padding:'0.75rem',fontSize:'0.8rem',lineHeight:1.7}}>
@@ -1325,10 +1411,10 @@ function Module2() {
 /* --- Item #14: WSJF Introduction Graphic --- */
 function Item14A() {
   const factors = [
-    {label:'Business Value',abbr:'BV',color:'#4F46E5',icon:'💰',desc:'Revenue impact, strategic alignment'},
-    {label:'Time Criticality',abbr:'TC',color:'#0D9488',icon:'⏱️',desc:'Urgency, deadline pressure'},
-    {label:'Risk Reduction',abbr:'RR/OE',color:'#7C3AED',icon:'🛡️',desc:'Risk mitigation, opportunity enablement'},
-    {label:'Job Size',abbr:'JS',color:'#6B7280',icon:'📏',desc:'Effort estimate (denominator)'},
+    {label:'Business Value',abbr:'BV',color:'#4F46E5',icon:'DollarSign',desc:'Revenue impact, strategic alignment'},
+    {label:'Time Criticality',abbr:'TC',color:'#0D9488',icon:'Clock',desc:'Urgency, deadline pressure'},
+    {label:'Risk Reduction',abbr:'RR/OE',color:'#7C3AED',icon:'Shield',desc:'Risk mitigation, opportunity enablement'},
+    {label:'Job Size',abbr:'JS',color:'#6B7280',icon:'Ruler',desc:'Effort estimate (denominator)'},
   ];
   return (
     <div>
@@ -1341,7 +1427,7 @@ function Item14A() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'0.6rem'}}>
         {factors.map((f,i) => (
           <div key={i} style={{border:`1px solid ${f.color}30`,borderLeft:`4px solid ${f.color}`,borderRadius:6,padding:'0.65rem 0.9rem',display:'flex',gap:'0.6rem',alignItems:'flex-start',background:i===3?'#F3F4F6':'white'}}>
-            <span style={{fontSize:'1.2rem'}}>{f.icon}</span>
+            <LIcon name={f.icon} size={20}/>
             <div>
               <div style={{fontWeight:700,color:f.color,fontSize:'0.875rem'}}>{f.abbr} — {f.label}</div>
               <div style={{fontSize:'0.78rem',color:'#6B7280',marginTop:'0.1rem'}}>{f.desc}</div>
@@ -1356,10 +1442,10 @@ function Item14A() {
 
 function Item14B() {
   const quadrants = [
-    {label:'Business Value',pos:'NW',cx:100,cy:80,color:'#4F46E5',icon:'💰'},
-    {label:'Time Criticality',pos:'NE',cx:300,cy:80,color:'#0D9488',icon:'⏱️'},
-    {label:'Risk Reduction',pos:'SW',cx:100,cy:220,color:'#7C3AED',icon:'🛡️'},
-    {label:'Job Size',pos:'SE',cx:300,cy:220,color:'#6B7280',icon:'📏'},
+    {label:'Business Value',pos:'NW',cx:100,cy:80,color:'#4F46E5',icon:'DollarSign'},
+    {label:'Time Criticality',pos:'NE',cx:300,cy:80,color:'#0D9488',icon:'Clock'},
+    {label:'Risk Reduction',pos:'SW',cx:100,cy:220,color:'#7C3AED',icon:'Shield'},
+    {label:'Job Size',pos:'SE',cx:300,cy:220,color:'#6B7280',icon:'Ruler'},
   ];
   return (
     <div>
@@ -1370,9 +1456,8 @@ function Item14B() {
             <g key={i}>
               <line x1={q.cx} y1={q.cy} x2="200" y2="150" stroke="#C7D2FE" strokeWidth="2" strokeDasharray="4,3"/>
               <circle cx={q.cx} cy={q.cy} r="45" fill={q.color} opacity="0.15" stroke={q.color} strokeWidth="2"/>
-              <text x={q.cx} y={q.cy-6} textAnchor="middle" fontSize="18">{q.icon}</text>
-              <text x={q.cx} y={q.cy+12} textAnchor="middle" fill={q.color} fontSize="9" fontWeight="700">{q.label.split(' ')[0]}</text>
-              <text x={q.cx} y={q.cy+23} textAnchor="middle" fill={q.color} fontSize="9" fontWeight="700">{q.label.split(' ').slice(1).join(' ')}</text>
+              <text x={q.cx} y={q.cy+3} textAnchor="middle" fill={q.color} fontSize="9" fontWeight="700">{q.label.split(' ')[0]}</text>
+              <text x={q.cx} y={q.cy+14} textAnchor="middle" fill={q.color} fontSize="9" fontWeight="700">{q.label.split(' ').slice(1).join(' ')}</text>
             </g>
           ))}
           <circle cx="200" cy="150" r="50" fill="#1E1B4B"/>
@@ -1407,7 +1492,7 @@ function Item14C() {
             const isTop = parseFloat(r.wsjf) === maxWsjf;
             return (
               <tr key={i} style={{background:isTop?'#EEF2FF':'i%2===0?white:#F8F9FA',border:isTop?'2px solid #4F46E5':'none'}}>
-                <td style={{padding:'0.5rem 0.75rem',fontWeight:isTop?700:400,color:isTop?'#4F46E5':'#374151'}}>{isTop?'⭐ ':''}{r.name}</td>
+                <td style={{padding:'0.5rem 0.75rem',fontWeight:isTop?700:400,color:isTop?'#4F46E5':'#374151'}}>{isTop?'':''}{r.name}</td>
                 {[r.bv,r.tc,r.rr,r.js].map((v,vi) => <td key={vi} style={{padding:'0.5rem 0.75rem',textAlign:'center',color:'#374151'}}>{v}</td>)}
                 <td style={{padding:'0.5rem 0.75rem',textAlign:'center',fontWeight:800,color:isTop?'#4F46E5':'#374151',fontSize:isTop?'1rem':'0.83rem'}}>{r.wsjf}</td>
               </tr>
@@ -1492,10 +1577,10 @@ function Item15B() {
 
 function Item15C() {
   const cards = [
-    {label:'Implement Now',action:'Prioritize immediately — high return, low effort',icon:'🚀',color:'#4F46E5',bg:'#EEF2FF',v:'High',c:'Low'},
-    {label:'Plan Carefully',action:'Worth doing — invest in proper planning & resourcing',icon:'📋',color:'#0D9488',bg:'#F0FDFA',v:'High',c:'High'},
-    {label:'Fill-In Work',action:'Do when capacity allows — quick wins, modest return',icon:'⚡',color:'#F59E0B',bg:'#FFFBEB',v:'Low',c:'Low'},
-    {label:'Avoid',action:'Deprioritize — high cost for minimal return',icon:'⛔',color:'#EF4444',bg:'#FEF2F2',v:'Low',c:'High'},
+    {label:'Implement Now',action:'Prioritize immediately — high return, low effort',icon:'Rocket',color:'#4F46E5',bg:'#EEF2FF',v:'High',c:'Low'},
+    {label:'Plan Carefully',action:'Worth doing — invest in proper planning & resourcing',icon:'ClipboardList',color:'#0D9488',bg:'#F0FDFA',v:'High',c:'High'},
+    {label:'Fill-In Work',action:'Do when capacity allows — quick wins, modest return',icon:'Zap',color:'#F59E0B',bg:'#FFFBEB',v:'Low',c:'Low'},
+    {label:'Avoid',action:'Deprioritize — high cost for minimal return',icon:'XCircle',color:'#EF4444',bg:'#FEF2F2',v:'Low',c:'High'},
   ];
   return (
     <div>
@@ -1504,7 +1589,7 @@ function Item15C() {
         {cards.map((c,i) => (
           <div key={i} style={{background:c.bg,border:`2px solid ${c.color}40`,borderRadius:8,padding:'1rem'}}>
             <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.4rem'}}>
-              <span style={{fontSize:'1.3rem'}}>{c.icon}</span>
+              <LIcon name={c.icon} size={20}/>
               <span style={{fontWeight:800,color:c.color,fontSize:'0.9rem'}}>{c.label}</span>
             </div>
             <div style={{display:'flex',gap:'0.4rem',marginBottom:'0.5rem'}}>
@@ -1522,10 +1607,10 @@ function Item15C() {
 /* --- Item #16: Four Quadrants Visual --- */
 function Item16A() {
   const quads = [
-    {label:'Implement Now',desc:'Low complexity, high value. Execute immediately with minimal planning overhead.',icon:'🚀',color:'#4F46E5',bg:'#EEF2FF'},
-    {label:'Plan Carefully',desc:'High value but complex. Requires dedicated planning, resourcing, and phased delivery.',icon:'📋',color:'#0D9488',bg:'#F0FDFA'},
-    {label:'Fill-In Work',desc:'Low value, low complexity. Good for filling capacity gaps between major initiatives.',icon:'⚡',color:'#F59E0B',bg:'#FFFBEB'},
-    {label:'Avoid',desc:'High complexity, low return. Consumes resources without proportional value delivery.',icon:'⛔',color:'#EF4444',bg:'#FEF2F2'},
+    {label:'Implement Now',desc:'Low complexity, high value. Execute immediately with minimal planning overhead.',icon:'Rocket',color:'#4F46E5',bg:'#EEF2FF'},
+    {label:'Plan Carefully',desc:'High value but complex. Requires dedicated planning, resourcing, and phased delivery.',icon:'ClipboardList',color:'#0D9488',bg:'#F0FDFA'},
+    {label:'Fill-In Work',desc:'Low value, low complexity. Good for filling capacity gaps between major initiatives.',icon:'Zap',color:'#F59E0B',bg:'#FFFBEB'},
+    {label:'Avoid',desc:'High complexity, low return. Consumes resources without proportional value delivery.',icon:'XCircle',color:'#EF4444',bg:'#FEF2F2'},
   ];
   return (
     <div>
@@ -1533,7 +1618,7 @@ function Item16A() {
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'3px',background:'#E5E7EB',borderRadius:10,overflow:'hidden'}}>
         {quads.map((q,i) => (
           <div key={i} style={{background:q.bg,padding:'1.25rem',minHeight:120}}>
-            <div style={{fontSize:'1.6rem',marginBottom:'0.4rem'}}>{q.icon}</div>
+            <div style={{marginBottom:'0.4rem'}}><LIcon name={q.icon} size={24}/></div>
             <div style={{fontWeight:800,color:q.color,fontSize:'1rem',marginBottom:'0.3rem'}}>{q.label}</div>
             <p style={{fontSize:'0.82rem',color:'#374151',lineHeight:1.5}}>{q.desc}</p>
           </div>
@@ -1639,9 +1724,9 @@ function Module3() {
 /* --- Item #17: Chapter Intro Graphic --- */
 function Item17A() {
   const types = [
-    {type:'Agentic',color:'#4F46E5',bg:'#EEF2FF',icon:'🤖',desc:'Fully autonomous decision-making',example:'Metro Cable: AI auto-routes technicians'},
-    {type:'Assistive',color:'#0D9488',bg:'#F0FDFA',icon:'🤝',desc:'AI + human collaboration',example:'Metro Cable: AI suggests, dispatcher confirms'},
-    {type:'Automation',color:'#6B7280',bg:'#F3F4F6',icon:'⚙️',desc:'Rule-based workflow execution',example:'Metro Cable: Auto-schedule routine maintenance'},
+    {type:'Agentic',color:'#4F46E5',bg:'#EEF2FF',icon:'Bot',desc:'Fully autonomous decision-making',example:'Metro Cable: AI auto-routes technicians'},
+    {type:'Assistive',color:'#0D9488',bg:'#F0FDFA',icon:'Handshake',desc:'AI + human collaboration',example:'Metro Cable: AI suggests, dispatcher confirms'},
+    {type:'Automation',color:'#6B7280',bg:'#F3F4F6',icon:'Settings',desc:'Rule-based workflow execution',example:'Metro Cable: Auto-schedule routine maintenance'},
   ];
   return (
     <div>
@@ -1649,7 +1734,7 @@ function Item17A() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.75rem'}}>
         {types.map((t,i) => (
           <div key={i} style={{background:t.bg,border:`2px solid ${t.color}40`,borderRadius:8,padding:'1rem'}}>
-            <div style={{fontSize:'1.8rem',marginBottom:'0.4rem'}}>{t.icon}</div>
+            <div style={{marginBottom:'0.4rem'}}><LIcon name={t.icon} size={24}/></div>
             <div style={{fontWeight:800,color:t.color,fontSize:'0.95rem',marginBottom:'0.3rem'}}>{t.type}</div>
             <p style={{fontSize:'0.82rem',color:'#374151',lineHeight:1.5,marginBottom:'0.5rem'}}>{t.desc}</p>
             <div style={{background:'white',borderRadius:4,padding:'0.4rem',fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>
@@ -1744,7 +1829,7 @@ function Item18A() {
           <React.Fragment key={i}>
             <div style={{flex:1,background:p.bg,border:`2px solid ${p.color}40`,borderRadius:i===0?'8px 0 0 8px':i===2?'0 8px 8px 0':'0',padding:'1rem',borderRight:i<2?'none':''}}>
               <div style={{fontWeight:800,color:p.color,marginBottom:'0.5rem',fontSize:'0.9rem'}}>{p.name}</div>
-              {p.activities.map((a,ai) => <div key={ai} style={{fontSize:'0.8rem',color:'#374151',padding:'0.2rem 0',display:'flex',gap:'0.4rem'}}><span style={{color:p.color}}>✓</span>{a}</div>)}
+              {p.activities.map((a,ai) => <div key={ai} style={{fontSize:'0.8rem',color:'#374151',padding:'0.2rem 0',display:'flex',gap:'0.4rem'}}><Check size={13} color={p.color} strokeWidth={2.5}/>{a}</div>)}
             </div>
             {i<2 && <div style={{width:0,height:'auto',borderTop:'40px solid transparent',borderBottom:'40px solid transparent',alignSelf:'center'}}/>}
           </React.Fragment>
@@ -1791,10 +1876,10 @@ function Item18B() {
 
 function Item18C() {
   const stages = [
-    {name:'Pre-Development',icon:'📋',color:'#6B7280',deliverables:['Requirements doc','Process map','Stakeholder sign-off']},
-    {name:'Design',icon:'✏️',color:'#4F46E5',deliverables:['Wireframes','Data schema','AI model spec']},
-    {name:'Prototype',icon:'🔧',color:'#0D9488',deliverables:['Working demo','Integration test','UAT results']},
-    {name:'Validation',icon:'✅',color:'#22C55E',deliverables:['Business sign-off','Performance metrics','Deployment plan']},
+    {name:'Pre-Development',icon:'ClipboardList',color:'#6B7280',deliverables:['Requirements doc','Process map','Stakeholder sign-off']},
+    {name:'Design',icon:'Pencil',color:'#4F46E5',deliverables:['Wireframes','Data schema','AI model spec']},
+    {name:'Prototype',icon:'Wrench',color:'#0D9488',deliverables:['Working demo','Integration test','UAT results']},
+    {name:'Validation',icon:'CheckCircle2',color:'#22C55E',deliverables:['Business sign-off','Performance metrics','Deployment plan']},
   ];
   return (
     <div>
@@ -1802,7 +1887,7 @@ function Item18C() {
       {stages.map((s,i) => (
         <div key={i} style={{display:'flex',gap:'0.75rem',marginBottom:'0.6rem'}}>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center',flexShrink:0}}>
-            <div style={{width:36,height:36,background:s.color,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1rem',color:'white'}}>{s.icon}</div>
+            <div style={{width:36,height:36,background:s.color,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center'}}><LIcon name={s.icon} size={18} color="white"/></div>
             {i<stages.length-1 && <div style={{width:2,height:40,background:'#E5E7EB',marginTop:2}}/>}
           </div>
           <div style={{paddingTop:'0.25rem',flex:1}}>
@@ -2073,10 +2158,10 @@ function Item21B() {
 
 function Item21C() {
   const stages = [
-    {name:'Backlog',icon:'📋',metric:'Story count',metricVal:'24 items',color:'#4F46E5'},
-    {name:'Sprint',icon:'⚡',metric:'Velocity',metricVal:'18 pts/sprint',color:'#0D9488'},
-    {name:'Demo',icon:'🎯',metric:'Acceptance rate',metricVal:'94%',color:'#7C3AED'},
-    {name:'Feedback',icon:'🔄',metric:'Action items',metricVal:'3 retro items',color:'#F59E0B'},
+    {name:'Backlog',icon:'ClipboardList',metric:'Story count',metricVal:'24 items',color:'#4F46E5'},
+    {name:'Sprint',icon:'Zap',metric:'Velocity',metricVal:'18 pts/sprint',color:'#0D9488'},
+    {name:'Demo',icon:'Target',metric:'Acceptance rate',metricVal:'94%',color:'#7C3AED'},
+    {name:'Feedback',icon:'RefreshCw',metric:'Action items',metricVal:'3 retro items',color:'#F59E0B'},
   ];
   return (
     <div>
@@ -2084,7 +2169,7 @@ function Item21C() {
       {stages.map((s,i) => (
         <div key={i} style={{display:'flex',gap:'0.75rem',marginBottom:'0.1rem'}}>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center',width:40,flexShrink:0}}>
-            <div style={{width:40,height:40,background:s.color,borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem'}}>{s.icon}</div>
+            <div style={{width:40,height:40,background:s.color,borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><LIcon name={s.icon} size={20} color="white"/></div>
             {i<stages.length-1 && <div style={{width:2,height:32,background:`${s.color}40`,marginTop:2,position:'relative'}}><div style={{position:'absolute',bottom:-4,left:-3,width:8,height:8,borderLeft:`2px solid ${stages[i+1].color}`,borderBottom:`2px solid ${stages[i+1].color}`,transform:'rotate(-45deg)'}}/></div>}
           </div>
           <div style={{paddingTop:'0.3rem',flex:1,paddingBottom:'0.6rem'}}>
@@ -2097,7 +2182,7 @@ function Item21C() {
         </div>
       ))}
       <div style={{marginTop:'0.5rem',padding:'0.5rem 0.75rem',background:'#EEF2FF',borderRadius:6,fontSize:'0.8rem',color:'#4F46E5',display:'flex',gap:'0.5rem',alignItems:'center'}}>
-        <span>🔁</span> Loop repeats: Feedback feeds back into Backlog refinement
+        <RefreshCw size={14} strokeWidth={1.5}/> Loop repeats: Feedback feeds back into Backlog refinement
       </div>
     </div>
   );
@@ -2132,10 +2217,10 @@ function Module4() {
 /* --- Item #22: Closing Graphic --- */
 function Item22A() {
   const bullets = [
-    {icon:'📊',text:'Start with data'},
-    {icon:'🤖',text:'Lead with AI'},
-    {icon:'👥',text:'Sustain through people'},
-    {icon:'🎯',text:'Adopt with intention'},
+    {icon:'BarChart3',text:'Start with data'},
+    {icon:'Bot',text:'Lead with AI'},
+    {icon:'Users',text:'Sustain through people'},
+    {icon:'Target',text:'Adopt with intention'},
   ];
   return (
     <div>
@@ -2148,7 +2233,7 @@ function Item22A() {
         <div style={{display:'flex',justifyContent:'center',gap:'2rem',flexWrap:'wrap'}}>
           {bullets.map((b,i) => (
             <div key={i} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.25rem'}}>
-              <span style={{fontSize:'1.5rem'}}>{b.icon}</span>
+              <LIcon name={b.icon} size={24}/>
               <span style={{fontSize:'0.8rem',opacity:0.85}}>{b.text}</span>
             </div>
           ))}
@@ -2160,9 +2245,9 @@ function Item22A() {
 
 function Item22B() {
   const pillars = [
-    {name:'Structure',icon:'🏗️',color:'#4F46E5',items:['Reporting lines aligned to AI goals','Incentives tied to adoption','Governance forums established']},
-    {name:'Support',icon:'🤝',color:'#0D9488',items:['Learning & development programs','Cross-team collaboration channels','AI Center of Excellence']},
-    {name:'Feedback',icon:'📈',color:'#7C3AED',items:['Performance scorecards','AI outcome metrics','Continuous improvement loops']},
+    {name:'Structure',icon:'Building',color:'#4F46E5',items:['Reporting lines aligned to AI goals','Incentives tied to adoption','Governance forums established']},
+    {name:'Support',icon:'Handshake',color:'#0D9488',items:['Learning & development programs','Cross-team collaboration channels','AI Center of Excellence']},
+    {name:'Feedback',icon:'TrendingUp',color:'#7C3AED',items:['Performance scorecards','AI outcome metrics','Continuous improvement loops']},
   ];
   return (
     <div>
@@ -2170,7 +2255,7 @@ function Item22B() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0'}}>
         {pillars.map((p,i) => (
           <div key={i} style={{background:i===1?'#F8F9FA':'white',border:'1px solid #E5E7EB',padding:'1.25rem',textAlign:'center',borderRadius:i===0?'8px 0 0 8px':i===2?'0 8px 8px 0':'0',borderLeft:i===0?`3px solid ${p.color}`:'',borderRight:i===2?`3px solid ${p.color}`:''}}>
-            <div style={{fontSize:'2rem',marginBottom:'0.4rem'}}>{p.icon}</div>
+            <div style={{marginBottom:'0.4rem'}}><LIcon name={p.icon} size={28}/></div>
             <div style={{fontWeight:800,color:p.color,fontSize:'1rem',marginBottom:'0.75rem'}}>{p.name}</div>
             {p.items.map((item,ii) => <div key={ii} style={{fontSize:'0.8rem',color:'#374151',marginBottom:'0.3rem',lineHeight:1.4}}>{item}</div>)}
           </div>
@@ -2185,10 +2270,10 @@ function Item22B() {
 
 function Item22C() {
   const phases = [
-    {name:'Phase 1\nDiagnose',icon:'🔍',color:'#4F46E5',metric:'Root causes identified',metricVal:'3 branches'},
-    {name:'Phase 2\nPrioritize',icon:'⚡',color:'#0D9488',metric:'Opportunities ranked',metricVal:'8 scored'},
-    {name:'Phase 3\nImplement',icon:'🔧',color:'#7C3AED',metric:'Solutions deployed',metricVal:'2 AI tools'},
-    {name:'Sustained\nExcellence',icon:'🏆',color:'#22C55E',metric:'FVR improvement',metricVal:'+17 pts'},
+    {name:'Phase 1\nDiagnose',icon:'Search',color:'#4F46E5',metric:'Root causes identified',metricVal:'3 branches'},
+    {name:'Phase 2\nPrioritize',icon:'Zap',color:'#0D9488',metric:'Opportunities ranked',metricVal:'8 scored'},
+    {name:'Phase 3\nImplement',icon:'Wrench',color:'#7C3AED',metric:'Solutions deployed',metricVal:'2 AI tools'},
+    {name:'Sustained\nExcellence',icon:'Award',color:'#22C55E',metric:'FVR improvement',metricVal:'+17 pts'},
   ];
   return (
     <div>
@@ -2198,8 +2283,8 @@ function Item22C() {
         <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.5rem',position:'relative',zIndex:1}}>
           {phases.map((p,i) => (
             <div key={i} style={{textAlign:'center'}}>
-              <div style={{width:60,height:60,background:p.color,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.3rem',margin:'0 auto',border:'3px solid white',boxShadow:`0 0 0 2px ${p.color}`}}>
-                {p.icon}
+              <div style={{width:60,height:60,background:p.color,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto',border:'3px solid white',boxShadow:`0 0 0 2px ${p.color}`}}>
+                <LIcon name={p.icon} size={24} color="white"/>
               </div>
               <div style={{fontWeight:700,color:p.color,fontSize:'0.8rem',margin:'0.4rem 0 0.25rem',lineHeight:1.3}}>{p.name.replace('\n',' ')}</div>
               <div style={{background:`${p.color}10`,border:`1px solid ${p.color}30`,borderRadius:6,padding:'0.3rem 0.4rem'}}>
