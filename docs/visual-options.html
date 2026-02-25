@@ -642,46 +642,44 @@ function Item4B() {
     return `M ${x4} ${y4} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${ir} ${ir} 0 0 0 ${x4} ${y4} Z`;
   };
   return (
-    <div>
-      <div style={{textAlign:'center',marginBottom:'0.75rem'}}>
+    <div style={{display:'grid',gridTemplateColumns:'1fr auto',gap:'1.25rem',alignItems:'stretch'}}>
+      <div style={{gridColumn:'1/-1',textAlign:'center',marginBottom:'0.25rem'}}>
         <span style={{fontWeight:800,fontSize:'1.1rem',color:'#4F46E5',letterSpacing:'0.04em',textTransform:'uppercase'}}>Phase 1: Diagnosis</span>
       </div>
-      <div style={{display:'flex',gap:'1.25rem',alignItems:'stretch',flexWrap:'wrap'}}>
-        <div style={{minWidth:200}}>
-          {phases.map((p,i) => (
-            <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
-              <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
-              <div>
-                <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
-                <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
-              </div>
-            </div>
-          ))}
-          <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
-            <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
-            <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
-              <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
-              PHASE 2: PRIORITIZATION
+      <div>
+        {phases.map((p,i) => (
+          <div key={i} style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',marginBottom:'0.5rem'}}>
+            <span style={{width:22,height:22,borderRadius:'50%',background:p.color,color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.72rem',fontWeight:800,flexShrink:0}}>{p.n}</span>
+            <div>
+              <div style={{fontWeight:700,fontSize:'0.83rem',color:p.color}}>{p.label}</div>
+              <div style={{fontSize:'0.75rem',color:'#6B7280',lineHeight:1.4}}>{p.desc}</div>
             </div>
           </div>
+        ))}
+        <div style={{marginTop:'0.75rem',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+          <div style={{flex:1,height:3,background:'linear-gradient(90deg,#4F46E5,#6366F1)',borderRadius:2}}/>
+          <div style={{display:'flex',alignItems:'center',gap:'0.35rem',background:'#4F46E5',color:'white',padding:'0.4rem 0.9rem',borderRadius:6,fontSize:'0.88rem',fontWeight:800,whiteSpace:'nowrap'}}>
+            <svg width="18" height="14" viewBox="0 0 18 14"><polygon points="11,0 18,7 11,14 11,10 0,10 0,4 11,4" fill="white"/></svg>
+            PHASE 2: PRIORITIZATION
+          </div>
         </div>
-        <svg viewBox="0 0 260 260" style={{width:'auto',minWidth:180,maxWidth:240,flexShrink:0}}>
-          {phases.map((p,i) => {
-            const midDeg = i * 60 - 90 + 30;
-            const numR = (R + ir) / 2;
-            const numX = cx + numR * Math.cos(toRad(midDeg));
-            const numY = cy + numR * Math.sin(toRad(midDeg));
-            return (
-              <g key={i}>
-                <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
-                <circle cx={numX} cy={numY} r="11" fill="rgba(0,0,0,0.25)"/>
-                <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800">{p.n}</text>
-              </g>
-            );
-          })}
-          <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
-        </svg>
       </div>
+      <svg viewBox="0 0 260 260" style={{height:'100%',width:'auto',minWidth:160,display:'block'}}>
+        {phases.map((p,i) => {
+          const midDeg = i * 60 - 90 + 30;
+          const numR = (R + ir) / 2;
+          const numX = cx + numR * Math.cos(toRad(midDeg));
+          const numY = cy + numR * Math.sin(toRad(midDeg));
+          return (
+            <g key={i}>
+              <path d={arcPath(i)} fill={p.color} stroke="white" strokeWidth="3"/>
+              <circle cx={numX} cy={numY} r="11" fill="rgba(0,0,0,0.25)"/>
+              <text x={numX} y={numY+1} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800">{p.n}</text>
+            </g>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={ir-2} fill="white"/>
+      </svg>
     </div>
   );
 }
