@@ -48,7 +48,7 @@ questions:
     question: "Rank the three major sections of the playbook in the order they appear:"
     items:
       - id: "practitioners"
-        text: "Practitioners Guide (AI-Empowered Problem Solving & Tool Development)"
+        text: "Practitioners Playbook (AI-Empowered Problem Solving & Tool Development)"
       - id: "sustainment"
         text: "Performance Management & Sustainment"
       - id: "change"
@@ -57,7 +57,7 @@ questions:
       - "practitioners"
       - "sustainment"
       - "change"
-    explanation: "The playbook follows a logical progression: first diagnose and build (Practitioners Guide), then sustain (Performance Management), then manage the human side of change (Change Management)."
+    explanation: "The playbook follows a logical progression: first diagnose and build (Practitioners Playbook), then sustain (Performance Management), then manage the human side of change (Change Management)."
     lesson_link: "05-playbook-structure"
     lesson_link_label: "Review: Playbook Structure"
 

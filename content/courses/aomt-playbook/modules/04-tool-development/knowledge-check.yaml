@@ -74,7 +74,7 @@ questions:
       - "cost"
     segments:
       - type: "text"
-        value: "Before investing significant time in prototype development, validate technical "
+        value: "Before investing significant time in prototype development, confirm technical "
       - type: "blank"
         value: "feasibility"
         accept:

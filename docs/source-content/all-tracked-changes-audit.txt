@@ -1,0 +1,1600 @@
+====================================================================================================
+TRACKED CHANGES AUDIT REPORT
+Source: HTML REVIEW COPY _ AOMT-Playbook.docx
+Extracted: 2026-02-25 00:32:59
+====================================================================================================
+
+SUMMARY
+--------------------------------------------------
+Total tracked changes found: 194
+
+By type:
+  DELETION: 84
+  FORMAT CHANGE: 6
+  INSERTION: 104
+
+By author:
+  Deniz Oker: 10
+  Paul Giessler: 184
+
+====================================================================================================
+
+--- Change #1 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    76
+  Text:      '[empty]'
+  Paragraph: '[no context]'
+
+--- Change #2 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:39:00Z
+  Rev ID:    3
+  Text:      'AI Enabled Problem'
+  Paragraph: 'AOMT Playbook: Agentic Operating Model TransformationAI Enabled Problem-Solving Playbook'
+
+--- Change #3 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:39:00Z
+  Rev ID:    4
+  Text:      'So'
+  Paragraph: 'AOMT Playbook: Agentic Operating Model TransformationAI Enabled Problem-Solving Playbook'
+
+--- Change #4 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:40:00Z
+  Rev ID:    5
+  Text:      'lving'
+  Paragraph: 'AOMT Playbook: Agentic Operating Model TransformationAI Enabled Problem-Solving Playbook'
+
+--- Change #5 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:39:00Z
+  Rev ID:    2
+  Text:      'AOMT Playbook: Agentic Operating Model Transformation'
+  Paragraph: 'AOMT Playbook: Agentic Operating Model TransformationAI Enabled Problem-Solving Playbook'
+
+--- Change #6 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:43:00Z
+  Rev ID:    6
+  Text:      'playbook '
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #7 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:40:00Z
+  Rev ID:    9
+  Text:      'for'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #8 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:40:00Z
+  Rev ID:    11
+  Text:      ' to solve business and'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #9 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:41:00Z
+  Rev ID:    13
+  Text:      'issues'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #10 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:41:00Z
+  Rev ID:    16
+  Text:      ' AI Enabled '
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #11 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:41:00Z
+  Rev ID:    17
+  Text:      ' is'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #12 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:41:00Z
+  Rev ID:    18
+  Text:      'by a'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #13 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    19
+  Text:      'pplying '
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #14 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    21
+  Text:      ' and'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #15 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    23
+  Text:      ' within proven problem solving'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #16 ---
+  Type:      INSERTION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:12:00Z
+  Rev ID:    25
+  Text:      'problem-solving'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #17 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    26
+  Text:      ' structures'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #18 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:12:00Z
+  Rev ID:    7
+  Text:      ' '
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #19 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:43:00Z
+  Rev ID:    8
+  Text:      'guide'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #20 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:40:00Z
+  Rev ID:    10
+  Text:      'to'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #21 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:40:00Z
+  Rev ID:    12
+  Text:      ' for'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #22 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:40:00Z
+  Rev ID:    14
+  Text:      'transformations'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #23 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:41:00Z
+  Rev ID:    15
+  Text:      'Learn the AOMT methodology —'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #24 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    20
+  Text:      'through '
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #25 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    22
+  Text:      ','
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #26 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:12:00Z
+  Rev ID:    24
+  Text:      'problem solving'
+  Paragraph: "A comprehensive practitioner's playbook guide forto leveraging AI capabilities to solve business and for operational issuestransformations. Learn the AOMT methodology — AI Enabled Problem-Solving is a non-linear approach that moves farther and faster in achieving organizational objectives by applying through data-first and, AI-first principles within proven problem solvingproblem-solving structures."
+
+--- Change #27 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:42:00Z
+  Rev ID:    27
+  Text:      'and consultants '
+  Paragraph: 'Audience: Non-technical professionals and consultants involved in process improvement and AI-enabled problem-solving.'
+
+--- Change #28 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:43:00Z
+  Rev ID:    30
+  Text:      ' Practitiioners'
+  Paragraph: 'Welcome to the AOMT Practitiioners Playbook6'
+
+--- Change #29 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:43:00Z
+  Rev ID:    29
+  Text:      'AOMT'
+  Paragraph: 'Welcome to the AOMT Practitiioners Playbook6'
+
+--- Change #30 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:14:00Z
+  Rev ID:    31
+  Text:      ' Practitiioners'
+  Paragraph: 'Welcome to the AOMT Practitiioners Playbook6'
+
+--- Change #31 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:14:00Z
+  Rev ID:    32
+  Text:      ' '
+  Paragraph: 'Welcome to the AOMT Practitiioners Playbook6'
+
+--- Change #32 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:44:00Z
+  Rev ID:    33
+  Text:      'I Enabled '
+  Paragraph: 'Introducing AI Enabled Problem-Solving OMT7'
+
+--- Change #33 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:44:00Z
+  Rev ID:    34
+  Text:      ' '
+  Paragraph: 'Introducing AI Enabled Problem-Solving OMT7'
+
+--- Change #34 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:43:00Z
+  Rev ID:    35
+  Text:      'OMT'
+  Paragraph: 'Introducing AI Enabled Problem-Solving OMT7'
+
+--- Change #35 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T11:22:00Z
+  Rev ID:    36
+  Text:      'Plya'
+  Paragraph: 'Section I: Practitioners Plyaybook Guide7'
+
+--- Change #36 ---
+  Type:      INSERTION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:13:00Z
+  Rev ID:    38
+  Text:      'y'
+  Paragraph: 'Section I: Practitioners Plyaybook Guide7'
+
+--- Change #37 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T11:22:00Z
+  Rev ID:    39
+  Text:      'book '
+  Paragraph: 'Section I: Practitioners Plyaybook Guide7'
+
+--- Change #38 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:13:00Z
+  Rev ID:    37
+  Text:      'y'
+  Paragraph: 'Section I: Practitioners Plyaybook Guide7'
+
+--- Change #39 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T11:22:00Z
+  Rev ID:    40
+  Text:      'Guide'
+  Paragraph: 'Section I: Practitioners Plyaybook Guide7'
+
+--- Change #40 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:45:00Z
+  Rev ID:    41
+  Text:      'in AOMT'
+  Paragraph: 'Common Visualization Types in AOMT14'
+
+--- Change #41 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:45:00Z
+  Rev ID:    42
+  Text:      ' in AOMT'
+  Paragraph: 'Research Applications in AOMT18'
+
+--- Change #42 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:45:00Z
+  Rev ID:    43
+  Text:      'AI Enabled '
+  Paragraph: 'The 5-Step SAFe Process for AI Enabled Problem-Solving AOMT31'
+
+--- Change #43 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:46:00Z
+  Rev ID:    44
+  Text:      ' '
+  Paragraph: 'The 5-Step SAFe Process for AI Enabled Problem-Solving AOMT31'
+
+--- Change #44 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:45:00Z
+  Rev ID:    45
+  Text:      'AOMT'
+  Paragraph: 'The 5-Step SAFe Process for AI Enabled Problem-Solving AOMT31'
+
+--- Change #45 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:46:00Z
+  Rev ID:    46
+  Text:      'for AOMT'
+  Paragraph: 'Key SAFe Artifacts for AOMT31'
+
+--- Change #46 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:55:00Z
+  Rev ID:    48
+  Text:      'I Enabled '
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving OMT framework, its principles, and the playbook structure.'
+
+--- Change #47 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:55:00Z
+  Rev ID:    49
+  Text:      ' '
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving OMT framework, its principles, and the playbook structure.'
+
+--- Change #48 ---
+  Type:      INSERTION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:14:00Z
+  Rev ID:    51
+  Text:      'the '
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving OMT framework, its principles, and the playbook structure.'
+
+--- Change #49 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:55:00Z
+  Rev ID:    50
+  Text:      'OMT'
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving OMT framework, its principles, and the playbook structure.'
+
+--- Change #50 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:56:00Z
+  Rev ID:    52
+  Text:      'Practitioners '
+  Paragraph: 'Understand the purpose and scope of the Practitioners AOMT Playbook'
+
+--- Change #51 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:56:00Z
+  Rev ID:    53
+  Text:      'AOM'
+  Paragraph: 'Understand the purpose and scope of the Practitioners AOMT Playbook'
+
+--- Change #52 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:55:00Z
+  Rev ID:    54
+  Text:      'T'
+  Paragraph: 'Understand the purpose and scope of the Practitioners AOMT Playbook'
+
+--- Change #53 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-23T14:14:00Z
+  Rev ID:    55
+  Text:      ' '
+  Paragraph: 'Understand the purpose and scope of the Practitioners AOMT Playbook'
+
+--- Change #54 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:56:00Z
+  Rev ID:    56
+  Text:      'the AOMT'
+  Paragraph: 'Familiarize withthe AOMT core activities and playbook structure'
+
+--- Change #55 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:56:00Z
+  Rev ID:    58
+  Text:      'Practitioners '
+  Paragraph: 'Welcome to the Practitioners AOMT Playbook'
+
+--- Change #56 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:56:00Z
+  Rev ID:    59
+  Text:      'AOMT '
+  Paragraph: 'Welcome to the Practitioners AOMT Playbook'
+
+--- Change #57 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:56:00Z
+  Rev ID:    61
+  Text:      'I Enabled '
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #58 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    62
+  Text:      ' '
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #59 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    64
+  Text:      'is '
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #60 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    66
+  Text:      ' business and'
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #61 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    67
+  Text:      'impro'
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #62 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    68
+  Text:      'vement work '
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #63 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    60
+  Text:      'The'
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #64 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    63
+  Text:      'gentic Operating Model Transformation (AOMT)'
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #65 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:57:00Z
+  Rev ID:    65
+  Text:      'provides'
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #66 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    69
+  Text:      'transformations'
+  Paragraph: "This playbook is a comprehensive guide for practitioners leveraging AI capabilities to facilitate new ways of working. The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is provides a non-linear approach to business and operational improvement work transformations that moves farther and faster in achieving an organization's objectives."
+
+--- Change #67 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    73
+  Text:      'AI Enabled '
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving AOMT Framework'
+
+--- Change #68 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    74
+  Text:      ' '
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving AOMT Framework'
+
+--- Change #69 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    75
+  Text:      'AOMT'
+  Paragraph: 'Introduction to the AI Enabled Problem-Solving AOMT Framework'
+
+--- Change #70 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T08:58:00Z
+  Rev ID:    78
+  Text:      '[empty]'
+  Paragraph: ''
+
+--- Change #71 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    85
+  Text:      'se '
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #72 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    87
+  Text:      's'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #73 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    90
+  Text:      'executing improvements '
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #74 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    92
+  Text:      ' w'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #75 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:04:00Z
+  Rev ID:    93
+  Text:      'ithin'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #76 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    86
+  Text:      ' AOM'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #77 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    88
+  Text:      'ology'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #78 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    89
+  Text:      's'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #79 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:03:00Z
+  Rev ID:    91
+  Text:      'transforming'
+  Paragraph: "Principles apply across industries, company sizes, and business contexts. These  AOMmethodsology works whether you're executing improvements transforming within a telecommunications company or a financial services firm."
+
+--- Change #80 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:04:00Z
+  Rev ID:    94
+  Text:      'improvement '
+  Paragraph: "The playbook is guidance-driven without prioritizing any specific improvement methodology over another. It provides exemplary approaches and techniques that can be adapted to your organization's existing practices and maturity level."
+
+--- Change #81 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:05:00Z
+  Rev ID:    98
+  Text:      'I Enabled Problem'
+  Paragraph: 'Introducing AI Enabled Problem-Solving OMT'
+
+--- Change #82 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:05:00Z
+  Rev ID:    99
+  Text:      'Solving '
+  Paragraph: 'Introducing AI Enabled Problem-Solving OMT'
+
+--- Change #83 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T09:05:00Z
+  Rev ID:    100
+  Text:      'OMT'
+  Paragraph: 'Introducing AI Enabled Problem-Solving OMT'
+
+--- Change #84 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T10:00:00Z
+  Rev ID:    101
+  Text:      'I Enabled Problem'
+  Paragraph: "The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is a non-linear approach that leverages Artificial Intelligence and emerging technologies to move much farther and faster in achieving an organization's objectives."
+
+--- Change #85 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T10:00:00Z
+  Rev ID:    102
+  Text:      'gentic Operating Model Transformation (AOMT) '
+  Paragraph: "The AI Enabled Problem-Solving gentic Operating Model Transformation (AOMT) is a non-linear approach that leverages Artificial Intelligence and emerging technologies to move much farther and faster in achieving an organization's objectives."
+
+--- Change #86 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:43:00Z
+  Rev ID:    120
+  Text:      'reveal '
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #87 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    121
+  Text:      'using '
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #88 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    124
+  Text:      'The discovery process '
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #89 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    126
+  Text:      'with '
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #90 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:45:00Z
+  Rev ID:    129
+  Text:      ' solid'
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #91 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:43:00Z
+  Rev ID:    119
+  Text:      'surface '
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #92 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    122
+  Text:      'through'
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #93 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    123
+  Text:      'This '
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #94 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    125
+  Text:      'an'
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #95 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:44:00Z
+  Rev ID:    127
+  Text:      'and'
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #96 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:45:00Z
+  Rev ID:    128
+  Text:      'concrete'
+  Paragraph: 'Phase 1 is an iterative process that begins by connecting data sources to surface reveal hidden operational patterns and anomalies using through AI-driven discovery. This The discovery process is followed by an AI-assisted diagnosis to validate hypotheses and reveal evidence-based insights. Finally, these findings are synthesized and translated into a coherent set of actionable opportunities with and concrete solid value levers for the organization.'
+
+--- Change #97 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:46:00Z
+  Rev ID:    130
+  Text:      ' review and'
+  Paragraph: 'Once opportunities are identified and documented, Phase 2 applies structured scoring methods to rank them by impact, feasibility, time criticality, and strategic alignment. This transforms a list of possibilities into a sequenced roadmap that stakeholders can review and act on.'
+
+--- Change #98 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:46:00Z
+  Rev ID:    131
+  Text:      'ose '
+  Paragraph: 'Traditional problem-solving can take weeks of interviews and workshops before a single insight emerges. With AI-empowered diagnosis, practitioners can surface data-driven insights within hours, then validate those insights em with stakeholders — reversing the traditional sequence and dramatically accelerating time to action.'
+
+--- Change #99 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:47:00Z
+  Rev ID:    132
+  Text:      'insights '
+  Paragraph: 'Traditional problem-solving can take weeks of interviews and workshops before a single insight emerges. With AI-empowered diagnosis, practitioners can surface data-driven insights within hours, then validate those insights em with stakeholders — reversing the traditional sequence and dramatically accelerating time to action.'
+
+--- Change #100 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:46:00Z
+  Rev ID:    133
+  Text:      'em'
+  Paragraph: 'Traditional problem-solving can take weeks of interviews and workshops before a single insight emerges. With AI-empowered diagnosis, practitioners can surface data-driven insights within hours, then validate those insights em with stakeholders — reversing the traditional sequence and dramatically accelerating time to action.'
+
+--- Change #101 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:47:00Z
+  Rev ID:    134
+  Text:      'reversing the traditional sequence and'
+  Paragraph: 'Traditional problem-solving can take weeks of interviews and workshops before a single insight emerges. With AI-empowered diagnosis, practitioners can surface data-driven insights within hours, then validate those insights em with stakeholders — reversing the traditional sequence and dramatically accelerating time to action.'
+
+--- Change #102 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:48:00Z
+  Rev ID:    135
+  Text:      'part '
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #103 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:48:00Z
+  Rev ID:    137
+  Text:      'based on a '
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #104 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:49:00Z
+  Rev ID:    138
+  Text:      'fictional'
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #105 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:48:00Z
+  Rev ID:    139
+  Text:      ' case study '
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #106 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:49:00Z
+  Rev ID:    142
+  Text:      'involving '
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #107 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:49:00Z
+  Rev ID:    143
+  Text:      '.'
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #108 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:48:00Z
+  Rev ID:    136
+  Text:      'step'
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #109 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:48:00Z
+  Rev ID:    140
+  Text:      'drawn'
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #110 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:49:00Z
+  Rev ID:    141
+  Text:      'from the'
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #111 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:49:00Z
+  Rev ID:    144
+  Text:      ' case study'
+  Paragraph: 'The lessons that follow walk through each part step of this process in detail, with practical examples based on a fictional case study drawn from the involving Metro Cable. case study.'
+
+--- Change #112 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:50:00Z
+  Rev ID:    147
+  Text:      'practitioners '
+  Paragraph: 'The diagnostic process is a 6-step iterative cycle. Unlike traditional linear methodologies, these steps are revisited as new data emerges and hypotheses are tested. Each iteration refines the understanding of the problem space and moves practitioners closer to actionable, evidence-based opportunities.'
+
+--- Change #113 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:50:00Z
+  Rev ID:    146
+  Text:      'space '
+  Paragraph: 'The diagnostic process is a 6-step iterative cycle. Unlike traditional linear methodologies, these steps are revisited as new data emerges and hypotheses are tested. Each iteration refines the understanding of the problem space and moves practitioners closer to actionable, evidence-based opportunities.'
+
+--- Change #114 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:55:00Z
+  Rev ID:    151
+  Text:      'Activities '
+  Paragraph: 'Activities Steps are not completed once and abandoned. As analysis reveals new patterns, you will return to earlier steps activities — refining the problem statement, adding branches to the issues tree, or requesting additional data. Each pass deepens diagnostic accuracy.'
+
+--- Change #115 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:55:00Z
+  Rev ID:    154
+  Text:      'activities '
+  Paragraph: 'Activities Steps are not completed once and abandoned. As analysis reveals new patterns, you will return to earlier steps activities — refining the problem statement, adding branches to the issues tree, or requesting additional data. Each pass deepens diagnostic accuracy.'
+
+--- Change #116 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:55:00Z
+  Rev ID:    152
+  Text:      'Steps'
+  Paragraph: 'Activities Steps are not completed once and abandoned. As analysis reveals new patterns, you will return to earlier steps activities — refining the problem statement, adding branches to the issues tree, or requesting additional data. Each pass deepens diagnostic accuracy.'
+
+--- Change #117 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T18:55:00Z
+  Rev ID:    153
+  Text:      'steps '
+  Paragraph: 'Activities Steps are not completed once and abandoned. As analysis reveals new patterns, you will return to earlier steps activities — refining the problem statement, adding branches to the issues tree, or requesting additional data. Each pass deepens diagnostic accuracy.'
+
+--- Change #118 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-23T19:00:00Z
+  Rev ID:    165
+  Text:      ' Treat it as version-controlled, not carved in stone'
+  Paragraph: 'The Problem Statement is drafted initially to be refined throughout the diagnostic process. As data reveals unexpected patterns or stakeholders provide new context, the Problem Statement should be updated to reflect the evolving understanding. Treat it as version-controlled, not carved in stone.'
+
+--- Change #119 ---
+  Type:      FORMAT CHANGE
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:08:00Z
+  Rev ID:    196
+  Text:      'BI '
+  Format details:
+      New property: highlight = yellow
+  Paragraph: 'AI-enabled data visualization transforms raw data into interpretable visual patterns far faster than traditional BI tools. By describing what you want to see in natural language, practitioners can generate complex visualizations in seconds, iterate on them rapidly, and uncover patterns that might take hours to find through manual exploration.'
+
+--- Change #120 ---
+  Type:      FORMAT CHANGE
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:08:00Z
+  Rev ID:    198
+  Text:      'tools'
+  Format details:
+      New property: highlight = yellow
+  Paragraph: 'AI-enabled data visualization transforms raw data into interpretable visual patterns far faster than traditional BI tools. By describing what you want to see in natural language, practitioners can generate complex visualizations in seconds, iterate on them rapidly, and uncover patterns that might take hours to find through manual exploration.'
+
+--- Change #121 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:18:00Z
+  Rev ID:    205
+  Text:      'es'
+  Paragraph: 'One of the most important aspects of AI-powered analysis is the removal of the cost barrier to curiosity. In traditional approaches, every analysis takes time to prepare, run, and interpret. Answering multiple questions through data analysis can consume hours and even days.  tical question has a time cost measured in hours or days. With AI, the marginal cost of asking one more question is nearly zero — enabling a style of analysis driven by genuine curiosity rather than budget constraints.'
+
+--- Change #122 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:18:00Z
+  Rev ID:    206
+  Text:      'sis takes time to prepare, run, and interpret'
+  Paragraph: 'One of the most important aspects of AI-powered analysis is the removal of the cost barrier to curiosity. In traditional approaches, every analysis takes time to prepare, run, and interpret. Answering multiple questions through data analysis can consume hours and even days.  tical question has a time cost measured in hours or days. With AI, the marginal cost of asking one more question is nearly zero — enabling a style of analysis driven by genuine curiosity rather than budget constraints.'
+
+--- Change #123 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:19:00Z
+  Rev ID:    207
+  Text:      '. Answering multiple questions through data analysis can consume hours and even days'
+  Paragraph: 'One of the most important aspects of AI-powered analysis is the removal of the cost barrier to curiosity. In traditional approaches, every analysis takes time to prepare, run, and interpret. Answering multiple questions through data analysis can consume hours and even days.  tical question has a time cost measured in hours or days. With AI, the marginal cost of asking one more question is nearly zero — enabling a style of analysis driven by genuine curiosity rather than budget constraints.'
+
+--- Change #124 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:20:00Z
+  Rev ID:    208
+  Text:      '. '
+  Paragraph: 'One of the most important aspects of AI-powered analysis is the removal of the cost barrier to curiosity. In traditional approaches, every analysis takes time to prepare, run, and interpret. Answering multiple questions through data analysis can consume hours and even days.  tical question has a time cost measured in hours or days. With AI, the marginal cost of asking one more question is nearly zero — enabling a style of analysis driven by genuine curiosity rather than budget constraints.'
+
+--- Change #125 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:18:00Z
+  Rev ID:    209
+  Text:      ' '
+  Paragraph: 'One of the most important aspects of AI-powered analysis is the removal of the cost barrier to curiosity. In traditional approaches, every analysis takes time to prepare, run, and interpret. Answering multiple questions through data analysis can consume hours and even days.  tical question has a time cost measured in hours or days. With AI, the marginal cost of asking one more question is nearly zero — enabling a style of analysis driven by genuine curiosity rather than budget constraints.'
+
+--- Change #126 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:17:00Z
+  Rev ID:    210
+  Text:      'tical question has a time cost measured in hours or days'
+  Paragraph: 'One of the most important aspects of AI-powered analysis is the removal of the cost barrier to curiosity. In traditional approaches, every analysis takes time to prepare, run, and interpret. Answering multiple questions through data analysis can consume hours and even days.  tical question has a time cost measured in hours or days. With AI, the marginal cost of asking one more question is nearly zero — enabling a style of analysis driven by genuine curiosity rather than budget constraints.'
+
+--- Change #127 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:21:00Z
+  Rev ID:    211
+  Text:      ' may'
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #128 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:21:00Z
+  Rev ID:    214
+  Text:      'any '
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #129 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:21:00Z
+  Rev ID:    216
+  Text:      ' may'
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #130 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:21:00Z
+  Rev ID:    217
+  Text:      ' timeline and'
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #131 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:21:00Z
+  Rev ID:    212
+  Text:      's'
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #132 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:20:00Z
+  Rev ID:    213
+  Text:      ' to a manager'
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #133 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:21:00Z
+  Rev ID:    215
+  Text:      'ost'
+  Paragraph: "Analysis is planned weeks in advance. Each question requires a formal work request. Analysts build one chart at a time. Exploring a hunch may takes days and must be justified to a manager. Many ost interesting questions may go unasked because the timeline and budget doesn't allow it."
+
+--- Change #134 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:58:00Z
+  Rev ID:    239
+  Text:      'A '
+  Paragraph: 'A The Data Analysis Plan is the tactical document that connects hypotheses to analytical methods. It ensures that analysis is systematic, reproducible, and traceable back to the Issues Tree. Without a plan, analysis can become unfocused exploration that consumes time without generating actionable findings.'
+
+--- Change #135 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T10:58:00Z
+  Rev ID:    240
+  Text:      'The '
+  Paragraph: 'A The Data Analysis Plan is the tactical document that connects hypotheses to analytical methods. It ensures that analysis is systematic, reproducible, and traceable back to the Issues Tree. Without a plan, analysis can become unfocused exploration that consumes time without generating actionable findings.'
+
+--- Change #136 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:16:00Z
+  Rev ID:    244
+  Text:      'hypotheses and then prompt'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #137 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:19:00Z
+  Rev ID:    246
+  Text:      'As the '
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #138 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:19:00Z
+  Rev ID:    248
+  Text:      ' you will'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #139 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:19:00Z
+  Rev ID:    250
+  Text:      'need to '
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #140 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:20:00Z
+  Rev ID:    252
+  Text:      ' and make adjustments'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #141 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:20:00Z
+  Rev ID:    254
+  Text:      'y'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #142 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:21:00Z
+  Rev ID:    255
+  Text:      'our '
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #143 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:21:00Z
+  Rev ID:    257
+  Text:      'to'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #144 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:16:00Z
+  Rev ID:    243
+  Text:      'hypotheses, and'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #145 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:16:00Z
+  Rev ID:    245
+  Text:      ' ask'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #146 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:19:00Z
+  Rev ID:    247
+  Text:      'The '
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #147 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:19:00Z
+  Rev ID:    249
+  Text:      ' '
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #148 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:19:00Z
+  Rev ID:    251
+  Text:      's'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #149 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:20:00Z
+  Rev ID:    253
+  Text:      ', adjusts'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #150 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:21:00Z
+  Rev ID:    256
+  Text:      ','
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #151 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:21:00Z
+  Rev ID:    258
+  Text:      'and'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #152 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:21:00Z
+  Rev ID:    259
+  Text:      's'
+  Paragraph: 'AI can assist in drafting the analysis plan itself. Provide the Issues Tree and hypotheses, andhypotheses and then prompt ask the AI to suggest appropriate analytical methods for each hypothesis. As the The practitioner you will then need to reviews and make adjustments, adjusts based on data availability and your domain knowledge, toand finalizes the plan.'
+
+--- Change #153 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:23:00Z
+  Rev ID:    263
+  Text:      'as '
+  Paragraph: "Synthesis is the bridge between analysis and action. It transforms validated findings into clearly articulated opportunities, each with quantified impact and a range of potential solutions. This is where as the practitioner, your's judgment becomes most critical — connecting data patterns to operational improvements."
+
+--- Change #154 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:23:00Z
+  Rev ID:    264
+  Text:      ', your'
+  Paragraph: "Synthesis is the bridge between analysis and action. It transforms validated findings into clearly articulated opportunities, each with quantified impact and a range of potential solutions. This is where as the practitioner, your's judgment becomes most critical — connecting data patterns to operational improvements."
+
+--- Change #155 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:23:00Z
+  Rev ID:    265
+  Text:      "'s "
+  Paragraph: "Synthesis is the bridge between analysis and action. It transforms validated findings into clearly articulated opportunities, each with quantified impact and a range of potential solutions. This is where as the practitioner, your's judgment becomes most critical — connecting data patterns to operational improvements."
+
+--- Change #156 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:30:00Z
+  Rev ID:    268
+  Text:      'Operational Excellence '
+  Paragraph: 'Verify Operational Excellence Options'
+
+--- Change #157 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:31:00Z
+  Rev ID:    270
+  Text:      'O'
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #158 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:29:00Z
+  Rev ID:    272
+  Text:      ' not '
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #159 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:30:00Z
+  Rev ID:    274
+  Text:      ' will'
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #160 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:30:00Z
+  Rev ID:    269
+  Text:      'Operational excellence '
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #161 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:31:00Z
+  Rev ID:    271
+  Text:      'o'
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #162 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:29:00Z
+  Rev ID:    273
+  Text:      'in'
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #163 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:30:00Z
+  Rev ID:    275
+  Text:      's'
+  Paragraph: 'Operational excellence Ooptions must be grounded in realistic capability assessments. Before presenting a goal, verify with IT, operations, and finance that the required technology, talent, and budget are plausibly attainable. An aspirational option that is clearly  not infeasible will damages practitioner credibility.'
+
+--- Change #164 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T11:31:00Z
+  Rev ID:    277
+  Text:      '[empty]'
+  Paragraph: ''
+
+--- Change #165 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:27:00Z
+  Rev ID:    300
+  Text:      'where early '
+  Paragraph: "Place opportunities independently — Have each stakeholder place opportunities on the matrix before revealing others' placements. This prevents anchoring bias where early placements influence later selections."
+
+--- Change #166 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:28:00Z
+  Rev ID:    301
+  Text:      'placements '
+  Paragraph: "Place opportunities independently — Have each stakeholder place opportunities on the matrix before revealing others' placements. This prevents anchoring bias where early placements influence later selections."
+
+--- Change #167 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:29:00Z
+  Rev ID:    302
+  Text:      'influence later selections'
+  Paragraph: "Place opportunities independently — Have each stakeholder place opportunities on the matrix before revealing others' placements. This prevents anchoring bias where early placements influence later selections."
+
+--- Change #168 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:43:00Z
+  Rev ID:    303
+  Text:      'on the matrix, '
+  Paragraph: 'Document rationale — Record why each opportunity was placed on the matrix, in its quadrant, not just the  whquadrant where ere it landed.'
+
+--- Change #169 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:43:00Z
+  Rev ID:    305
+  Text:      ' the '
+  Paragraph: 'Document rationale — Record why each opportunity was placed on the matrix, in its quadrant, not just the  whquadrant where ere it landed.'
+
+--- Change #170 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:43:00Z
+  Rev ID:    307
+  Text:      'quadrant where '
+  Paragraph: 'Document rationale — Record why each opportunity was placed on the matrix, in its quadrant, not just the  whquadrant where ere it landed.'
+
+--- Change #171 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:43:00Z
+  Rev ID:    304
+  Text:      'in its quadrant'
+  Paragraph: 'Document rationale — Record why each opportunity was placed on the matrix, in its quadrant, not just the  whquadrant where ere it landed.'
+
+--- Change #172 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:43:00Z
+  Rev ID:    306
+  Text:      ' wh'
+  Paragraph: 'Document rationale — Record why each opportunity was placed on the matrix, in its quadrant, not just the  whquadrant where ere it landed.'
+
+--- Change #173 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:43:00Z
+  Rev ID:    308
+  Text:      'ere'
+  Paragraph: 'Document rationale — Record why each opportunity was placed on the matrix, in its quadrant, not just the  whquadrant where ere it landed.'
+
+--- Change #174 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:44:00Z
+  Rev ID:    309
+  Text:      'image'
+  Paragraph: 'The Value vs. Complexity Matrix is one of the most effective presentation tools in the toolkit. Executives can absorb the prioritization logic in seconds. Use color-coded dots for each opportunity, size them by estimated financial impact, and present the matrix as a single image slide that tells the entire prioritization story at a glance.'
+
+--- Change #175 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:45:00Z
+  Rev ID:    310
+  Text:      ' '
+  Paragraph: 'The Value vs. Complexity Matrix is one of the most effective presentation tools in the toolkit. Executives can absorb the prioritization logic in seconds. Use color-coded dots for each opportunity, size them by estimated financial impact, and present the matrix as a single image slide that tells the entire prioritization story at a glance.'
+
+--- Change #176 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:44:00Z
+  Rev ID:    311
+  Text:      'slide'
+  Paragraph: 'The Value vs. Complexity Matrix is one of the most effective presentation tools in the toolkit. Executives can absorb the prioritization logic in seconds. Use color-coded dots for each opportunity, size them by estimated financial impact, and present the matrix as a single image slide that tells the entire prioritization story at a glance.'
+
+--- Change #177 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:48:00Z
+  Rev ID:    321
+  Text:      's'
+  Paragraph: 'Start with the User — Every prototype begins with a clear understanding of who will use it and what tasks they need to accomplish. Observe current workflows before designing new ones.'
+
+--- Change #178 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:48:00Z
+  Rev ID:    322
+  Text:      'review of '
+  Paragraph: "Show, Don't Tell — A working prototype communicates more effectively than any review of documented requirements document. Build the simplest version that demonstrates the core value proposition."
+
+--- Change #179 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:49:00Z
+  Rev ID:    323
+  Text:      'documented '
+  Paragraph: "Show, Don't Tell — A working prototype communicates more effectively than any review of documented requirements document. Build the simplest version that demonstrates the core value proposition."
+
+--- Change #180 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:49:00Z
+  Rev ID:    324
+  Text:      ' document'
+  Paragraph: "Show, Don't Tell — A working prototype communicates more effectively than any review of documented requirements document. Build the simplest version that demonstrates the core value proposition."
+
+--- Change #181 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:50:00Z
+  Rev ID:    325
+  Text:      'Getting attached '
+  Paragraph: 'Fail Fast, Learn Faster — Prototypes are designed to be disposable. Build them quickly, test them with real users, and iterate or pivot based on feedback. Getting attached Attachment to a prototype is the enemy of good design.'
+
+--- Change #182 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T14:50:00Z
+  Rev ID:    326
+  Text:      'Attachment'
+  Paragraph: 'Fail Fast, Learn Faster — Prototypes are designed to be disposable. Build them quickly, test them with real users, and iterate or pivot based on feedback. Getting attached Attachment to a prototype is the enemy of good design.'
+
+--- Change #183 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:12:00Z
+  Rev ID:    328
+  Text:      'confirm the'
+  Paragraph: "Before investing significant time in prototype development, confirm thevalidate technical feasibility with IT and security teamatess. Confirm data access permissions, integration requirements, deployment infrastructure, and compliance constraints. A technically infeasible prototype wastes everyone's time and erodes stakeholder trust."
+
+--- Change #184 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:12:00Z
+  Rev ID:    331
+  Text:      'ates'
+  Paragraph: "Before investing significant time in prototype development, confirm thevalidate technical feasibility with IT and security teamatess. Confirm data access permissions, integration requirements, deployment infrastructure, and compliance constraints. A technically infeasible prototype wastes everyone's time and erodes stakeholder trust."
+
+--- Change #185 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:12:00Z
+  Rev ID:    329
+  Text:      'validate'
+  Paragraph: "Before investing significant time in prototype development, confirm thevalidate technical feasibility with IT and security teamatess. Confirm data access permissions, integration requirements, deployment infrastructure, and compliance constraints. A technically infeasible prototype wastes everyone's time and erodes stakeholder trust."
+
+--- Change #186 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:12:00Z
+  Rev ID:    332
+  Text:      's'
+  Paragraph: "Before investing significant time in prototype development, confirm thevalidate technical feasibility with IT and security teamatess. Confirm data access permissions, integration requirements, deployment infrastructure, and compliance constraints. A technically infeasible prototype wastes everyone's time and erodes stakeholder trust."
+
+--- Change #187 ---
+  Type:      FORMAT CHANGE
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:35:00Z
+  Rev ID:    339
+  Text:      'The Product Owner '
+  Format details:
+      Old property: sz = 22
+      Old property: szCs = 22
+      New property: sz = 22
+      New property: szCs = 22
+      New property: highlight = yellow
+  Paragraph: 'The Product Owner Role'
+
+--- Change #188 ---
+  Type:      FORMAT CHANGE
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:35:00Z
+  Rev ID:    341
+  Text:      'Role'
+  Format details:
+      Old property: sz = 22
+      Old property: szCs = 22
+      New property: sz = 22
+      New property: szCs = 22
+      New property: highlight = yellow
+  Paragraph: 'The Product Owner Role'
+
+--- Change #189 ---
+  Type:      FORMAT CHANGE
+  Author:    Paul Giessler
+  Date:      2026-02-24T15:35:00Z
+  Rev ID:    342
+  Text:      'Product Owner'
+  Format details:
+      Old property: b
+      Old property: bCs
+      New property: b
+      New property: bCs
+      New property: highlight = yellow
+  Paragraph: 'Product Owner as Bridge'
+
+--- Change #190 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T16:01:00Z
+  Rev ID:    350
+  Text:      'confirm'
+  Paragraph: '5. Before investing significant time in prototype development, confirmvalidate technical _________ with IT and _________ teamatess.'
+
+--- Change #191 ---
+  Type:      INSERTION
+  Author:    Paul Giessler
+  Date:      2026-02-24T16:01:00Z
+  Rev ID:    352
+  Text:      'ates'
+  Paragraph: '5. Before investing significant time in prototype development, confirmvalidate technical _________ with IT and _________ teamatess.'
+
+--- Change #192 ---
+  Type:      DELETION
+  Author:    Paul Giessler
+  Date:      2026-02-24T16:01:00Z
+  Rev ID:    351
+  Text:      'validate'
+  Paragraph: '5. Before investing significant time in prototype development, confirmvalidate technical _________ with IT and _________ teamatess.'
+
+--- Change #193 ---
+  Type:      FORMAT CHANGE
+  Author:    Paul Giessler
+  Date:      2026-02-23T11:19:00Z
+  Rev ID:    384
+  Text:      'Survey fatigue degrades response quality. '
+  Format details:
+      New property: lang = fr-CA
+  Paragraph: 'Keep it short — Target 15-20 questions maximum. Survey fatigue degrades response quality. Every question should map to a specific readiness dimension and inform a specific decision.'
+
+--- Change #194 ---
+  Type:      DELETION
+  Author:    Deniz Oker
+  Date:      2026-02-24T15:08:00Z
+  Rev ID:    398
+  Text:      ' Adopt with intention. Start with data. Lead with AI. Sustain through people.'
+  Paragraph: 'Adopt with intention. Start with data. Lead with AI. Sustain through people.'
+
+====================================================================================================
+END OF REPORT -- 194 changes total
+====================================================================================================

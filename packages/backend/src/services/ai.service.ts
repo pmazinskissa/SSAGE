@@ -194,7 +194,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 function stripMdxComponents(source: string): string {
   // Remove frontmatter
-  let text = source.replace(/^---\n[\s\S]*?\n---\n?/, '');
+  let text = source.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
 
   // Extract meaningful text from self-closing component props before stripping.
   // Handles components like <ProcessFlow steps={[{title:"...", description:"..."}]} />
@@ -281,7 +281,7 @@ function loadFullCourseContent(courseSlug: string): CourseContent {
     for (const file of lessonFiles) {
       const lessonSlug = file.replace('.mdx', '');
       const raw = fs.readFileSync(path.join(lessonsDir, file), 'utf-8');
-      const titleMatch = raw.match(/^---\n[\s\S]*?title:\s*"?([^"\n]+)"?[\s\S]*?\n---/);
+      const titleMatch = raw.match(/^---\r?\n[\s\S]*?title:\s*"?([^"\n]+)"?[\s\S]*?\r?\n---/);
       const title = titleMatch?.[1] || file.replace('.mdx', '');
       const cleanContent = stripMdxComponents(raw);
       moduleLessons.push(`### ${title}\n[Link: /courses/${courseSlug}/modules/${modSlug}/lessons/${lessonSlug}]\n${cleanContent}`);

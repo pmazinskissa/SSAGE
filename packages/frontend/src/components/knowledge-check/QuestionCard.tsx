@@ -24,6 +24,7 @@ interface QuestionCardProps {
   isFirst: boolean;
   isLast: boolean;
   moduleSlug: string;
+  readOnly?: boolean;
 }
 
 export default function QuestionCard({
@@ -39,10 +40,11 @@ export default function QuestionCard({
   isFirst,
   isLast,
   moduleSlug,
+  readOnly = false,
 }: QuestionCardProps) {
   const { slug } = useParams<{ slug: string }>();
   const { available: aiAvailable, setChatOpen, setPendingMessage } = useAI();
-  const checked = feedback !== null;
+  const checked = feedback !== null || readOnly;
 
   const buildAIPrompt = (): { displayText: string; fullText: string } => {
     const displayText = question.question;
@@ -240,7 +242,7 @@ export default function QuestionCard({
               onClick={onNext}
               className="px-6 py-2.5 text-sm font-medium text-white bg-primary rounded-button hover:bg-primary-hover transition-colors"
             >
-              {isLast ? 'See Results' : 'Next Question'}
+              {isLast ? (readOnly ? 'Back to Summary' : 'See Results') : 'Next Question'}
             </button>
           )}
         </div>

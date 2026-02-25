@@ -9,6 +9,10 @@ order: 4
 
 The <GlossaryTerm term="SAFe">Scaled Agile Framework (SAFe)</GlossaryTerm> provides a structured approach to agile delivery at enterprise scale. For engagements that involve multiple teams, complex integrations, or organization-wide deployment, SAFe offers the coordination mechanisms needed to maintain agility without chaos.
 
+<Callout type="info" title="A Note on Terminology">
+Organizations often adapt SAFe terminology to fit their context. Role titles, ceremony names, and artifact labels may differ from what is described here. The underlying principles — iterative delivery, cross-team coordination, and continuous feedback — remain consistent regardless of naming conventions.
+</Callout>
+
 ## The 5-Step SAFe Process
 
 <ProcessFlow steps={[
@@ -19,10 +23,10 @@ The <GlossaryTerm term="SAFe">Scaled Agile Framework (SAFe)</GlossaryTerm> provi
   { title: "5. Continuous Delivery", description: "Establish a continuous delivery pipeline that enables frequent, reliable releases to production. AI models are versioned and deployed through the same pipeline as application code." }
 ]} />
 
-## The Product Owner Role
+## The Product Owner / Product Manager Role
 
-<Callout type="concept" title="Product Owner as Bridge">
-The Product Owner is the critical link between the practitioner team and the development teams. They translate validated opportunities and prioritized requirements into actionable backlog items, make scope trade-off decisions within sprints, and ensure that what gets built aligns with what the diagnostic data recommends. The Product Owner should have deep familiarity with the diagnostic findings.
+<Callout type="concept" title="Product Owner / Product Manager as Bridge">
+The Product Owner / Product Manager is the critical link between the practitioner team and the development teams. They translate validated opportunities and prioritized requirements into actionable backlog items, make scope trade-off decisions within sprints, and ensure that what gets built aligns with what the diagnostic data recommends. The Product Owner / Product Manager should have deep familiarity with the diagnostic findings.
 </Callout>
 
 ## Key SAFe Artifacts
@@ -42,6 +46,308 @@ In SAFe, user feedback from sprint demos and production usage is systematically 
 
 The SAFe lifecycle flows through three stages, each with distinct roles and responsibilities:
 
+<VariantPicker labels={["Stage Cards", "Mermaid with Feedback", "Pillar Diagram", "Chevron Pipeline", "PPTX SAFe Pipeline"]}>
+
+<div className="rounded-xl border border-border overflow-hidden shadow-elevation-1">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">SAFe Lifecycle — 3 Stages</p>
+    <p className="text-[10px] opacity-75 mt-0.5">With continuous feedback flowing from deployment back to planning</p>
+  </div>
+  <div className="p-4 space-y-3">
+    <div className="flex gap-3">
+      <div className="flex flex-col items-center flex-shrink-0">
+        <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold border-2 border-indigo-200">1</span>
+        <div className="w-0.5 flex-1 bg-gradient-to-b from-indigo-200 to-violet-200 mt-1" />
+      </div>
+      <div className="pb-4 flex-1">
+        <p className="text-sm font-bold text-indigo-700 mb-1">Assess & Plan</p>
+        <p className="text-[10px] text-indigo-500 font-medium uppercase tracking-wider mb-2">Vision & Roadmap</p>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="p-2 rounded-lg bg-indigo-50 border border-indigo-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">Leaders</span> — vision & direction</div>
+          <div className="p-2 rounded-lg bg-indigo-50 border border-indigo-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">Program Office</span> — roadmaps & ROI</div>
+          <div className="p-2 rounded-lg bg-indigo-50 border border-indigo-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">ARB</span> — architecture approval</div>
+          <div className="p-2 rounded-lg bg-indigo-50 border border-indigo-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">VOC/VOM</span> — requirements input</div>
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-3">
+      <div className="flex flex-col items-center flex-shrink-0">
+        <span className="w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center text-xs font-bold border-2 border-violet-200">2</span>
+        <div className="w-0.5 flex-1 bg-gradient-to-b from-violet-200 to-emerald-200 mt-1" />
+      </div>
+      <div className="pb-4 flex-1">
+        <p className="text-sm font-bold text-violet-700 mb-1">Agile Design, Build, Test</p>
+        <p className="text-[10px] text-violet-500 font-medium uppercase tracking-wider mb-2">Agile Delivery</p>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="p-2 rounded-lg bg-violet-50 border border-violet-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">Product Owners</span> — backlog & roadmap</div>
+          <div className="p-2 rounded-lg bg-violet-50 border border-violet-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">Scrum Masters</span> — team facilitation</div>
+          <div className="p-2 rounded-lg bg-violet-50 border border-violet-100 text-[11px] text-text-secondary col-span-2"><span className="font-semibold text-text-primary">Agile Teams</span> — sprint delivery · develop on cadence, deliver on demand</div>
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-3">
+      <div className="flex flex-col items-center flex-shrink-0">
+        <span className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold border-2 border-emerald-200">3</span>
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-bold text-emerald-700 mb-1">Deploy & Adopt Users</p>
+        <p className="text-[10px] text-emerald-500 font-medium uppercase tracking-wider mb-2">Release & Adoption</p>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">Business Leaders</span> — sign-off</div>
+          <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 text-[11px] text-text-secondary"><span className="font-semibold text-text-primary">Release Mgmt</span> — deployment</div>
+          <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 text-[11px] text-text-secondary col-span-2"><span className="font-semibold text-text-primary">Change Mgmt</span> — user readiness · feedback flows back to Stage 1</div>
+        </div>
+      </div>
+    </div>
+    <div className="mt-2 pt-3 border-t border-dashed border-indigo-200 text-center">
+      <p className="text-[10px] text-indigo-500 italic font-medium">↻ Continuous feedback from Stage 3 flows back to Stage 1</p>
+    </div>
+  </div>
+</div>
+
+<Diagram code={`flowchart LR
+  S1["Stage 1:\nAssess & Plan"] --> S2["Stage 2:\nAgile Design,\nBuild, Test"]
+  S2 --> S3["Stage 3:\nDeploy &\nAdopt Users"]
+  S3 -.->|"Continuous Feedback"| S1
+  S1 --- R1["Leaders, Program Office,\nARB, VOC/VOM"]
+  S2 --- R2["Product Owners,\nScrum Masters,\nAgile Teams"]
+  S3 --- R3["Business Leaders,\nRelease Mgmt,\nChange Mgmt"]
+`} title="SAFe Stages with Feedback Loop" />
+
+<PillarDiagram
+  title="SAFe Lifecycle Stages"
+  base="Continuous Feedback Loop"
+  pillars={[
+    {
+      title: "Stage 1: Assess & Plan",
+      subtitle: "Vision & Roadmap",
+      items: ["Organization Leaders: vision & direction", "Program Office: roadmaps & ROI", "ARB: architecture approval", "VOC/VOM: requirements input"]
+    },
+    {
+      title: "Stage 2: Build & Test",
+      subtitle: "Agile Delivery",
+      items: ["Product Owners: backlog & roadmap", "Scrum Masters: team facilitation", "Agile Teams: sprint delivery", "Develop on cadence, deliver on demand"]
+    },
+    {
+      title: "Stage 3: Deploy & Adopt",
+      subtitle: "Release & Adoption",
+      items: ["Business Leaders: sign-off", "Release Management: deployment", "Change Management: user readiness", "Feedback flows back to Stage 1"]
+    }
+  ]}
+/>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">SAFe Lifecycle Pipeline</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Three stages with continuous feedback flowing back from deployment to planning</p>
+  </div>
+  <svg viewBox="0 0 700 250" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="chevGradIndigo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#818CF8" />
+        <stop offset="100%" stopColor="#4F46E5" />
+      </linearGradient>
+      <linearGradient id="chevGradViolet" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#A78BFA" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+      <linearGradient id="chevGradEmerald" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#34D399" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+      <filter id="chevShadow" x="-5%" y="-10%" width="110%" height="120%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.15" />
+      </filter>
+    </defs>
+
+    {/* Feedback arrow — curved dashed arc above chevrons */}
+    <path
+      d="M 620,90 C 620,25 350,10 80,90"
+      fill="none"
+      stroke="#4F46E5"
+      strokeWidth="2"
+      strokeDasharray="6 4"
+      strokeOpacity="0.6"
+    />
+    <polygon points="80,90 88,80 88,95" fill="#4F46E5" fillOpacity="0.6" />
+    <text x="350" y="30" textAnchor="middle" fontSize="9" fontWeight="600" fill="#4F46E5" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Continuous Feedback</text>
+
+    {/* Chevron 1: Assess & Plan (indigo) */}
+    <path
+      d="M 50,90 L 230,90 L 270,145 L 230,200 L 50,200 Z"
+      fill="url(#chevGradIndigo)"
+      filter="url(#chevShadow)"
+    />
+    <text x="150" y="128" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Stage 1</text>
+    <text x="150" y="143" textAnchor="middle" fontSize="9" fontWeight="600" fill="white" fillOpacity="0.9" style={{ fontFamily: 'system-ui' }}>Assess & Plan</text>
+    <text x="150" y="162" textAnchor="middle" fontSize="7.5" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Leaders · Program Office</text>
+    <text x="150" y="174" textAnchor="middle" fontSize="7.5" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>ARB · VOC/VOM</text>
+
+    {/* Chevron 2: Build & Test (violet) */}
+    <path
+      d="M 250,90 L 440,90 L 480,145 L 440,200 L 250,200 L 290,145 Z"
+      fill="url(#chevGradViolet)"
+      filter="url(#chevShadow)"
+    />
+    <text x="360" y="128" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Stage 2</text>
+    <text x="360" y="143" textAnchor="middle" fontSize="9" fontWeight="600" fill="white" fillOpacity="0.9" style={{ fontFamily: 'system-ui' }}>Build & Test</text>
+    <text x="360" y="162" textAnchor="middle" fontSize="7.5" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Product Owners · Scrum Masters</text>
+    <text x="360" y="174" textAnchor="middle" fontSize="7.5" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Agile Teams</text>
+
+    {/* Chevron 3: Deploy & Adopt (emerald) */}
+    <path
+      d="M 460,90 L 640,90 L 680,145 L 640,200 L 460,200 L 500,145 Z"
+      fill="url(#chevGradEmerald)"
+      filter="url(#chevShadow)"
+    />
+    <text x="565" y="128" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Stage 3</text>
+    <text x="565" y="143" textAnchor="middle" fontSize="9" fontWeight="600" fill="white" fillOpacity="0.9" style={{ fontFamily: 'system-ui' }}>Deploy & Adopt</text>
+    <text x="565" y="162" textAnchor="middle" fontSize="7.5" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Business Leaders · Release Mgmt</text>
+    <text x="565" y="174" textAnchor="middle" fontSize="7.5" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Change Mgmt</text>
+
+    {/* Bottom labels */}
+    <text x="150" y="222" textAnchor="middle" fontSize="8" fill="#4F46E5" fillOpacity="0.7" style={{ fontFamily: 'system-ui' }}>Vision & Roadmap</text>
+    <text x="360" y="222" textAnchor="middle" fontSize="8" fill="#7C3AED" fillOpacity="0.7" style={{ fontFamily: 'system-ui' }}>Agile Delivery</text>
+    <text x="565" y="222" textAnchor="middle" fontSize="8" fill="#059669" fillOpacity="0.7" style={{ fontFamily: 'system-ui' }}>Release & Adoption</text>
+  </svg>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">SAFe Pipeline — Detailed Stages & Roles</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Three stages with key roles and continuous feedback loop</p>
+  </div>
+  <svg viewBox="0 0 700 340" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="spHdrIndigo" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#6366F1" />
+      </linearGradient>
+      <linearGradient id="spHdrViolet" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#8B5CF6" />
+      </linearGradient>
+      <linearGradient id="spHdrEmerald" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#059669" />
+        <stop offset="100%" stopColor="#10B981" />
+      </linearGradient>
+      <linearGradient id="spArrow1" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+      <linearGradient id="spArrow2" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+      <linearGradient id="spBaseGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="50%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+      <filter id="spShadow" x="-3%" y="-3%" width="106%" height="106%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.12" />
+      </filter>
+    </defs>
+
+    {/* Feedback loop arrow above stages */}
+    <path
+      d="M 600,60 C 600,15 350,5 100,60"
+      fill="none"
+      stroke="#4F46E5"
+      strokeWidth="2.5"
+      strokeDasharray="6 4"
+      strokeOpacity="0.6"
+    />
+    <polygon points="100,60 108,50 108,65" fill="#4F46E5" fillOpacity="0.7" />
+    <text x="350" y="28" textAnchor="middle" fontSize="9" fontWeight="600" fill="#4F46E5" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Continuous Feedback</text>
+
+    {/* Stage 1: Assess & Plan */}
+    <rect x="30" y="55" width="200" height="230" rx="12" fill="white" stroke="#E0E7FF" strokeWidth="1" filter="url(#spShadow)" />
+    <rect x="30" y="55" width="200" height="32" rx="12" fill="url(#spHdrIndigo)" />
+    <rect x="30" y="75" width="200" height="12" fill="url(#spHdrIndigo)" />
+    <text x="130" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>STAGE 1: ASSESS & PLAN</text>
+
+    {/* Stage 1 role items */}
+    <circle cx="52" cy="110" r="8" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1" />
+    <text x="52" y="113" textAnchor="middle" fontSize="7" fontWeight="700" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>L</text>
+    <text x="66" y="108" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Organization Leaders</text>
+    <text x="66" y="119" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Vision & direction</text>
+
+    <circle cx="52" cy="145" r="8" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1" />
+    <text x="52" y="148" textAnchor="middle" fontSize="7" fontWeight="700" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>P</text>
+    <text x="66" y="143" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Program Office</text>
+    <text x="66" y="154" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Roadmaps & ROI</text>
+
+    <circle cx="52" cy="180" r="8" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1" />
+    <text x="52" y="183" textAnchor="middle" fontSize="7" fontWeight="700" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>A</text>
+    <text x="66" y="178" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Architecture Review Board</text>
+    <text x="66" y="189" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Architecture approval</text>
+
+    <circle cx="52" cy="215" r="8" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1" />
+    <text x="52" y="218" textAnchor="middle" fontSize="7" fontWeight="700" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>V</text>
+    <text x="66" y="213" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Voice of Customer/Market</text>
+    <text x="66" y="224" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Requirements input</text>
+
+    {/* Arrow 1→2 */}
+    <rect x="235" y="155" width="30" height="20" rx="4" fill="url(#spArrow1)" />
+    <polygon points="270,165 260,157 260,173" fill="url(#spArrow1)" />
+
+    {/* Stage 2: Build & Test */}
+    <rect x="270" y="55" width="180" height="230" rx="12" fill="white" stroke="#F3E8FF" strokeWidth="1" filter="url(#spShadow)" />
+    <rect x="270" y="55" width="180" height="32" rx="12" fill="url(#spHdrViolet)" />
+    <rect x="270" y="75" width="180" height="12" fill="url(#spHdrViolet)" />
+    <text x="360" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>STAGE 2: BUILD & TEST</text>
+
+    {/* Stage 2 role items */}
+    <circle cx="292" cy="110" r="8" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" />
+    <text x="292" y="113" textAnchor="middle" fontSize="7" fontWeight="700" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>PO</text>
+    <text x="306" y="108" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Product Owners</text>
+    <text x="306" y="119" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Backlog & roadmap</text>
+
+    <circle cx="292" cy="145" r="8" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" />
+    <text x="292" y="148" textAnchor="middle" fontSize="7" fontWeight="700" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>SM</text>
+    <text x="306" y="143" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Scrum Masters</text>
+    <text x="306" y="154" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Team facilitation</text>
+
+    <circle cx="292" cy="180" r="8" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" />
+    <text x="292" y="183" textAnchor="middle" fontSize="7" fontWeight="700" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>AT</text>
+    <text x="306" y="178" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Agile Teams</text>
+    <text x="306" y="189" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Sprint delivery</text>
+
+    {/* Arrow 2→3 */}
+    <rect x="455" y="155" width="30" height="20" rx="4" fill="url(#spArrow2)" />
+    <polygon points="490,165 480,157 480,173" fill="url(#spArrow2)" />
+
+    {/* Stage 3: Deploy & Adopt */}
+    <rect x="490" y="55" width="180" height="230" rx="12" fill="white" stroke="#D1FAE5" strokeWidth="1" filter="url(#spShadow)" />
+    <rect x="490" y="55" width="180" height="32" rx="12" fill="url(#spHdrEmerald)" />
+    <rect x="490" y="75" width="180" height="12" fill="url(#spHdrEmerald)" />
+    <text x="580" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>STAGE 3: DEPLOY & ADOPT</text>
+
+    {/* Stage 3 role items */}
+    <circle cx="512" cy="110" r="8" fill="#ECFDF5" stroke="#059669" strokeWidth="1" />
+    <text x="512" y="113" textAnchor="middle" fontSize="7" fontWeight="700" fill="#059669" style={{ fontFamily: 'system-ui' }}>BL</text>
+    <text x="526" y="108" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Business Leaders</text>
+    <text x="526" y="119" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Sign-off on delivery</text>
+
+    <circle cx="512" cy="145" r="8" fill="#ECFDF5" stroke="#059669" strokeWidth="1" />
+    <text x="512" y="148" textAnchor="middle" fontSize="7" fontWeight="700" fill="#059669" style={{ fontFamily: 'system-ui' }}>RM</text>
+    <text x="526" y="143" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Release Management</text>
+    <text x="526" y="154" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Deployment logistics</text>
+
+    <circle cx="512" cy="180" r="8" fill="#ECFDF5" stroke="#059669" strokeWidth="1" />
+    <text x="512" y="183" textAnchor="middle" fontSize="7" fontWeight="700" fill="#059669" style={{ fontFamily: 'system-ui' }}>CM</text>
+    <text x="526" y="178" fontSize="8" fontWeight="600" fill="#1E293B" style={{ fontFamily: 'system-ui' }}>Change Management</text>
+    <text x="526" y="189" fontSize="7" fill="#64748B" style={{ fontFamily: 'system-ui' }}>User readiness</text>
+
+    {/* Base bar */}
+    <rect x="30" y="300" width="640" height="28" rx="14" fill="url(#spBaseGrad)" fillOpacity="0.15" stroke="url(#spBaseGrad)" strokeWidth="1" strokeOpacity="0.3" />
+    <text x="350" y="318" textAnchor="middle" fontSize="9" fontWeight="600" fill="#475569" style={{ fontFamily: 'system-ui' }}>Develop on Cadence  ·  Deliver on Demand</text>
+  </svg>
+</div>
+
+</VariantPicker>
+
 ### Stage 1: Assess & Plan
 
 - **Organization Leaders** provide vision and direction based on diagnostic findings
@@ -51,7 +357,7 @@ The SAFe lifecycle flows through three stages, each with distinct roles and resp
 
 ### Stage 2: Agile Design, Build, Test
 
-- **Product Owners** drive adherence to the roadmap and manage the product backlog
+- **Product Owners / Product Managers** drive adherence to the roadmap and manage the product backlog
 - **Scrum Masters** manage build teams and remove roadblocks
 - **Agile Build Teams** develop incremental features in sprint cycles
 

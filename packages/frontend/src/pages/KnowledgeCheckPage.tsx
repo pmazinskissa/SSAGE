@@ -47,24 +47,83 @@ function checkAnswer(question: KnowledgeCheckQuestion, answer: any): boolean {
   }
 }
 
+type PageMode = 'loading' | 'active' | 'summary' | 'review';
+
 export default function KnowledgeCheckPage() {
   const { slug, moduleSlug } = useParams<{ slug: string; moduleSlug: string }>();
   const { data, loading, error } = useKnowledgeCheck(slug, moduleSlug);
-  const { navTree } = useCourse();
+  const { navTree, refreshNavTree } = useCourse();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, any>>({});
   const [feedbacks, setFeedbacks] = useState<Record<number, { correct: boolean; explanation: string }>>({});
-  const [showSummary, setShowSummary] = useState(false);
+  const [mode, setMode] = useState<PageMode>('loading');
   const [courseCompleted, setCourseCompleted] = useState(false);
   const submittedRef = useRef(false);
-
-  // Scroll to top on question change
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentIndex, showSummary]);
+  const savedAnswersLoadedRef = useRef(false);
 
   const questions = data?.questions || [];
+
+  // Load saved answers on mount (once questions are available)
+  useEffect(() => {
+    if (!slug || !moduleSlug || questions.length === 0 || savedAnswersLoadedRef.current) return;
+    savedAnswersLoadedRef.current = true;
+
+    api.getKnowledgeCheckAnswers(slug, moduleSlug)
+      .then((response) => {
+        if (response.status === 'completed') {
+          // Restore answers and feedbacks from saved data, then show summary
+          const restoredAnswers: Record<number, any> = {};
+          const restoredFeedbacks: Record<number, { correct: boolean; explanation: string }> = {};
+
+          for (const saved of response.answers) {
+            const qIdx = questions.findIndex((q) => q.id === saved.question_id);
+            if (qIdx >= 0) {
+              try { restoredAnswers[qIdx] = JSON.parse(saved.selected_answer); } catch { restoredAnswers[qIdx] = saved.selected_answer; }
+              restoredFeedbacks[qIdx] = { correct: saved.is_correct, explanation: questions[qIdx].explanation };
+            }
+          }
+
+          setAnswers(restoredAnswers);
+          setFeedbacks(restoredFeedbacks);
+          submittedRef.current = true; // Already submitted
+          setMode('summary');
+        } else if (response.status === 'in_progress') {
+          // Restore draft answers and feedbacks, resume at first unanswered question
+          const restoredAnswers: Record<number, any> = {};
+          const restoredFeedbacks: Record<number, { correct: boolean; explanation: string }> = {};
+
+          for (const saved of response.answers) {
+            const qIdx = questions.findIndex((q) => q.id === saved.question_id);
+            if (qIdx >= 0) {
+              try { restoredAnswers[qIdx] = JSON.parse(saved.selected_answer); } catch { restoredAnswers[qIdx] = saved.selected_answer; }
+              restoredFeedbacks[qIdx] = { correct: saved.is_correct, explanation: questions[qIdx].explanation };
+            }
+          }
+
+          setAnswers(restoredAnswers);
+          setFeedbacks(restoredFeedbacks);
+
+          // Find first unanswered question
+          const firstUnanswered = questions.findIndex((_, i) => restoredFeedbacks[i] === undefined);
+          setCurrentIndex(firstUnanswered >= 0 ? firstUnanswered : 0);
+          setMode('active');
+        } else {
+          // Not started — fresh KC
+          setMode('active');
+        }
+      })
+      .catch(() => {
+        // On error, just start fresh
+        setMode('active');
+      });
+  }, [slug, moduleSlug, questions]);
+
+  // Scroll to top on question change or mode change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentIndex, mode]);
+
   const currentQuestion = questions[currentIndex];
 
   const handleAnswer = useCallback((answer: any) => {
@@ -72,13 +131,20 @@ export default function KnowledgeCheckPage() {
   }, [currentIndex]);
 
   const handleCheck = useCallback(() => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || !slug || !moduleSlug) return;
     const correct = checkAnswer(currentQuestion, answers[currentIndex]);
     setFeedbacks((prev) => ({
       ...prev,
       [currentIndex]: { correct, explanation: currentQuestion.explanation },
     }));
-  }, [currentQuestion, answers, currentIndex]);
+
+    // Save draft answer to backend
+    api.saveKnowledgeCheckDraft(slug, moduleSlug, {
+      question_id: currentQuestion.id,
+      selected_answer: JSON.stringify(answers[currentIndex]),
+      is_correct: correct,
+    }).catch(() => {}); // Fire-and-forget
+  }, [currentQuestion, answers, currentIndex, slug, moduleSlug]);
 
   const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
@@ -87,16 +153,27 @@ export default function KnowledgeCheckPage() {
   }, [currentIndex]);
 
   const handleNext = useCallback(() => {
+    if (mode === 'review') {
+      if (currentIndex < questions.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else {
+        // Back to summary from review
+        setMode('summary');
+      }
+      return;
+    }
+
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      setShowSummary(true);
+      // All questions answered → show summary and submit
+      setMode('summary');
     }
-  }, [currentIndex, questions.length]);
+  }, [currentIndex, questions.length, mode]);
 
   // Compute results for summary
   const result: KnowledgeCheckResult | null = useMemo(() => {
-    if (!showSummary || questions.length === 0) return null;
+    if ((mode !== 'summary' && mode !== 'review') || questions.length === 0) return null;
     const results: QuestionResult[] = questions.map((q, i) => ({
       questionId: q.id,
       correct: feedbacks[i]?.correct || false,
@@ -110,11 +187,11 @@ export default function KnowledgeCheckPage() {
       score: (correct / questions.length) * 100,
       results,
     };
-  }, [showSummary, questions, feedbacks]);
+  }, [mode, questions, feedbacks]);
 
-  // Submit KC results to backend when summary is shown
+  // Submit KC results when summary is first shown (not for already-completed KCs)
   useEffect(() => {
-    if (!showSummary || !slug || !moduleSlug || !result || submittedRef.current) return;
+    if (mode !== 'summary' || !slug || !moduleSlug || !result || submittedRef.current) return;
     submittedRef.current = true;
 
     const submission = {
@@ -126,9 +203,20 @@ export default function KnowledgeCheckPage() {
     };
 
     api.submitKnowledgeCheck(slug, moduleSlug, submission)
-      .then((res) => setCourseCompleted(res.courseCompleted))
+      .then((res) => {
+        if (!res.alreadyCompleted) {
+          setCourseCompleted(res.courseCompleted);
+          refreshNavTree();
+        }
+      })
       .catch(() => {});
-  }, [showSummary, slug, moduleSlug, result, questions, answers, feedbacks]);
+  }, [mode, slug, moduleSlug, result, questions, answers, feedbacks, refreshNavTree]);
+
+  // Handle "Review Answers" from summary
+  const handleReviewAnswers = useCallback(() => {
+    setCurrentIndex(0);
+    setMode('review');
+  }, []);
 
   // Find next module info
   const nextModule = useMemo(() => {
@@ -144,7 +232,7 @@ export default function KnowledgeCheckPage() {
     return undefined;
   }, [navTree, moduleSlug]);
 
-  if (loading) {
+  if (loading || mode === 'loading') {
     return (
       <div className="max-w-prose mx-auto px-6 py-12">
         <div className="animate-pulse space-y-4">
@@ -165,9 +253,12 @@ export default function KnowledgeCheckPage() {
     );
   }
 
+  const showQuestionView = mode === 'active' || mode === 'review';
+  const isReviewMode = mode === 'review';
+
   return (
     <motion.div
-      key={showSummary ? 'summary' : `q-${currentIndex}`}
+      key={showQuestionView ? `q-${currentIndex}-${isReviewMode ? 'ro' : ''}` : 'summary'}
       variants={pageTransition}
       initial="initial"
       animate="animate"
@@ -180,7 +271,7 @@ export default function KnowledgeCheckPage() {
           <div className="flex items-center gap-2 mb-2">
             <ClipboardCheck size={18} className="text-primary" />
             <p className="text-xs font-bold uppercase tracking-wider text-primary">
-              Knowledge Check
+              Knowledge Check{isReviewMode ? ' — Review' : ''}
             </p>
           </div>
           <h1
@@ -204,7 +295,7 @@ export default function KnowledgeCheckPage() {
                 className="h-full bg-primary rounded-full"
                 initial={{ width: 0 }}
                 animate={{
-                  width: `${showSummary ? 100 : ((currentIndex + (feedbacks[currentIndex] ? 1 : 0)) / questions.length) * 100}%`
+                  width: `${!showQuestionView ? 100 : ((currentIndex + (feedbacks[currentIndex] ? 1 : 0)) / questions.length) * 100}%`
                 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
               />
@@ -212,7 +303,7 @@ export default function KnowledgeCheckPage() {
           </div>
 
           {/* Content */}
-          {showSummary && result ? (
+          {!showQuestionView && result ? (
             <KnowledgeCheckSummary
               result={result}
               moduleSlug={moduleSlug || ''}
@@ -225,6 +316,7 @@ export default function KnowledgeCheckPage() {
                 lessonLinkLabel: q.lesson_link_label,
                 questionText: q.question,
               }))}
+              onReviewAnswers={handleReviewAnswers}
             />
           ) : currentQuestion ? (
             <QuestionCard
@@ -240,6 +332,7 @@ export default function KnowledgeCheckPage() {
               isFirst={currentIndex === 0}
               isLast={currentIndex === questions.length - 1}
               moduleSlug={moduleSlug || ''}
+              readOnly={isReviewMode}
             />
           ) : null}
         </div>

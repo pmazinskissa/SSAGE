@@ -66,8 +66,8 @@ export async function getLesson(
 
   const source = fs.readFileSync(mdxPath, 'utf-8');
 
-  // Extract frontmatter (simple YAML between --- delimiters)
-  const frontmatterMatch = source.match(/^---\n([\s\S]*?)\n---/);
+  // Extract frontmatter (simple YAML between --- delimiters, tolerates CRLF)
+  const frontmatterMatch = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   let meta: LessonMeta = {
     title: lessonSlug.replace(/^\d+-/, '').replace(/-/g, ' '),
     slug: lessonSlug,
@@ -126,7 +126,7 @@ export function getCourseNavTree(courseSlug: string): CourseNavTree | null {
       if (fs.existsSync(mdxPath)) {
         try {
           const source = fs.readFileSync(mdxPath, 'utf-8');
-          const fmMatch = source.match(/^---\n([\s\S]*?)\n---/);
+          const fmMatch = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
           if (fmMatch) {
             const titleMatch = fmMatch[1].match(/^title:\s*"?([^"\n]+)"?/m);
             if (titleMatch) title = titleMatch[1].trim();
