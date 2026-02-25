@@ -9,6 +9,8 @@ import type {
   CourseProgress,
   HeartbeatPayload,
   KnowledgeCheckSubmission,
+  KnowledgeCheckDraftPayload,
+  KnowledgeCheckAnswersResponse,
   DashboardMetrics,
   UserWithProgress,
   UserDetail,
@@ -87,10 +89,17 @@ export const api = {
       body: JSON.stringify({ module_slug: moduleSlug }),
     }),
   submitKnowledgeCheck: (courseSlug: string, moduleSlug: string, submission: KnowledgeCheckSubmission) =>
-    fetchApi<{ courseCompleted: boolean }>(`/progress/${courseSlug}/modules/${moduleSlug}/check`, {
+    fetchApi<{ courseCompleted: boolean; alreadyCompleted?: boolean }>(`/progress/${courseSlug}/modules/${moduleSlug}/check`, {
       method: 'POST',
       body: JSON.stringify(submission),
     }),
+  saveKnowledgeCheckDraft: (courseSlug: string, moduleSlug: string, draft: KnowledgeCheckDraftPayload) =>
+    fetchApi<{ ok: boolean }>(`/progress/${courseSlug}/modules/${moduleSlug}/check/draft`, {
+      method: 'POST',
+      body: JSON.stringify(draft),
+    }),
+  getKnowledgeCheckAnswers: (courseSlug: string, moduleSlug: string) =>
+    fetchApi<KnowledgeCheckAnswersResponse>(`/progress/${courseSlug}/modules/${moduleSlug}/check/answers`),
 
   // Admin — Dashboard
   getAdminDashboard: (userIds?: string[]) => {

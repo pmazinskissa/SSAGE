@@ -48,3 +48,18 @@ export interface KnowledgeCheckSubmission {
     is_correct: boolean;
   }[];
 }
+
+export interface KnowledgeCheckDraftPayload {
+  question_id: string;
+  selected_answer: string;
+  is_correct: boolean;
+}
+
+export interface KnowledgeCheckAnswersResponse {
+  status: 'not_started' | 'in_progress' | 'completed';
+  answers: {
+    question_id: string;
+    selected_answer: string;
+    is_correct: boolean;
+  }[];
+}

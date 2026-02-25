@@ -21,7 +21,7 @@ Where **Cost of Delay** is the sum of three value components:
 
 ## Scoring Components
 
-Each component is scored on a relative scale. The recommended approach uses Fibonacci-like values (1, 2, 3, 5, 8, 13) to force meaningful differentiation between items.
+Each component is scored on a relative scale. The recommended approach uses <GlossaryTerm term="Fibonacci Sequence">Fibonacci-like values (1, 2, 3, 5, 8, 13)</GlossaryTerm> to force meaningful differentiation between items.
 
 | Component | Score 1 (Low) | Score 5 (Medium) | Score 13 (High) |
 |-----------|--------------|-------------------|-----------------|
@@ -36,6 +36,18 @@ Job Size divides the Cost of Delay, so a higher Job Size score results in a lowe
 
 <Callout type="tip" title="T-Shirt Sizing for Speed">
 When scoring a large number of opportunities, start with T-shirt sizing (S, M, L, XL) for each component, then convert to numeric scores. This approach is faster for initial triage and can be refined with more precise scoring for the top-ranked items.
+</Callout>
+
+<Callout type="concept" title="Metro Cable WSJF Scoring Example">
+For Metro Cable, the team scored three top opportunities:
+
+| Opportunity | Business Value | Time Criticality | Risk Reduction | Cost of Delay | Job Size | WSJF |
+|------------|---------------|-----------------|----------------|--------------|----------|------|
+| AI Dispatch Routing Pilot | 13 | 8 | 5 | 26 | 2 | **13.0** |
+| Technician Skill-Match Algorithm | 8 | 8 | 5 | 21 | 2 | **10.5** |
+| Predictive Maintenance Alerting | 8 | 5 | 13 | 26 | 5 | **5.2** |
+
+The dispatch routing pilot scored highest because it combined strong business value with high time criticality (customer churn was accelerating) and a small job size (existing data, proven algorithm patterns). Predictive maintenance scored lower despite equal Cost of Delay because its job size was significantly larger.
 </Callout>
 
 ## Generating the Prioritized Roadmap

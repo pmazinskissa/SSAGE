@@ -95,12 +95,12 @@ entries:
     definition: "A fixed-duration work cycle, typically two weeks. During Phase 3, feedback becomes backlog items prioritized and committed to sprints."
     first_lesson: "04-safe-framework"
 
-  - term: "Product Owner"
+  - term: "Product Owner / Product Manager"
     definition: "Person who owns the product backlog and prioritization decisions. Reviews AI feedback analysis weekly and creates backlog items for sprint planning."
     first_lesson: "04-safe-framework"
 
   - term: "Product Backlog"
-    definition: "The ordered list of all work items for a solution, maintained by the Product Owner. Grows from tech feedback, metric signals, and stakeholder observations."
+    definition: "The ordered list of all work items for a solution, maintained by the Product Owner / Product Manager. Grows from tech feedback, metric signals, and stakeholder observations."
     first_lesson: "04-safe-framework"
 
   - term: "Option Set"
@@ -170,3 +170,15 @@ entries:
   - term: "MECE"
     definition: "Mutually Exclusive, Collectively Exhaustive. A structuring principle for issues trees ensuring that categories don't overlap and together cover all possibilities."
     first_lesson: "04-issues-tree-and-hypotheses"
+
+  - term: "System of Record"
+    definition: "The authoritative data source for a given dataset. When requesting data, identifying the system of record ensures you receive the most accurate and current version of the data."
+    first_lesson: "05-data-request-and-ingestion"
+
+  - term: "BI Tools"
+    definition: "Business Intelligence tools used for data visualization and reporting. Traditional BI tools require manual data preparation and configuration; AI-enabled approaches can generate equivalent visualizations in seconds through natural language prompting."
+    first_lesson: "06-data-visualization"
+
+  - term: "Fibonacci Sequence"
+    definition: "A number sequence (1, 2, 3, 5, 8, 13...) used in agile estimation and WSJF scoring to force meaningful differentiation between items. The increasing gaps between values prevent false precision in relative sizing."
+    first_lesson: "03-wsjf-scoring-method"

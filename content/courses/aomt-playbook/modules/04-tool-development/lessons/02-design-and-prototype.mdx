@@ -11,13 +11,274 @@ Prototyping moves fast. AI tools enable practitioners to build functional protot
 
 ## 4 Prototyping Principles
 
-1. **Start with the User** — Every prototype begins with a clear understanding of who will use it and what task they need to accomplish. Observe current workflows before designing new ones.
+1. **Start with the Users** — Every prototype begins with a clear understanding of who will use it and what task they need to accomplish. Observe current workflows before designing new ones.
 
-2. **Show, Don't Tell** — A working prototype communicates more effectively than any requirements document. Build the simplest version that demonstrates the core value proposition.
+2. **Show, Don't Tell** — A working prototype communicates more effectively than any review of documented requirements. Build the simplest version that demonstrates the core value proposition.
 
-3. **Fail Fast, Learn Faster** — Prototypes are designed to be disposable. Build them quickly, test them with real users, and iterate or pivot based on feedback. Attachment to a prototype is the enemy of good design.
+3. **Fail Fast, Learn Faster** — Prototypes are designed to be disposable. Build them quickly, test them with real users, and iterate or pivot based on feedback. Getting attached to a prototype is the enemy of good design.
 
 4. **Data In, Decision Out** — Every AI tool prototype should demonstrate the complete flow from data input to actionable output. Stakeholders need to see the end-to-end value, not just a technology demo.
+
+<VariantPicker labels={["Design Cycle", "Prototyping Stages", "Mermaid Flow", "Infinity Loop", "PPTX Design Flow"]}>
+
+<CycleFlow
+  title="Iterative Design & Prototype Cycle"
+  centerLabel="Rapid Iteration"
+  steps={[
+    { title: "Design", description: "Define user needs and solution architecture", icon: "✏" },
+    { title: "Prototype", description: "Build simplest version demonstrating core value", icon: "🔧" },
+    { title: "Test", description: "Observe real users performing real tasks", icon: "🧪" },
+    { title: "Iterate", description: "Refine based on feedback, pivot if needed", icon: "🔄" }
+  ]}
+/>
+
+<div className="rounded-xl border border-border overflow-hidden shadow-elevation-1">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Prototyping Stages</p>
+    <p className="text-[10px] opacity-75 mt-0.5">From user understanding to iterative refinement</p>
+  </div>
+  <div className="p-4">
+    <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex-1 relative">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-7 h-7 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-bold">1</span>
+          <p className="text-sm font-bold text-indigo-700">Understand the User</p>
+        </div>
+        <p className="text-xs text-text-secondary ml-9">Observe current workflows, identify pain points, define the core task</p>
+        <div className="hidden md:block absolute right-0 top-3 text-indigo-300 text-lg">→</div>
+      </div>
+      <div className="flex-1 relative">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-7 h-7 rounded-full bg-violet-500 text-white flex items-center justify-center text-xs font-bold">2</span>
+          <p className="text-sm font-bold text-violet-700">Build the MVP</p>
+        </div>
+        <p className="text-xs text-text-secondary ml-9">Simplest working version showing the complete data-in, decision-out flow</p>
+        <div className="hidden md:block absolute right-0 top-3 text-violet-300 text-lg">→</div>
+      </div>
+      <div className="flex-1 relative">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">3</span>
+          <p className="text-sm font-bold text-blue-700">Test with Real Users</p>
+        </div>
+        <p className="text-xs text-text-secondary ml-9">Watch where they struggle, what they ignore, what questions they ask</p>
+        <div className="hidden md:block absolute right-0 top-3 text-blue-300 text-lg">→</div>
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">4</span>
+          <p className="text-sm font-bold text-emerald-700">Iterate or Pivot</p>
+        </div>
+        <p className="text-xs text-text-secondary ml-9">Refine based on feedback — prototypes are disposable</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<Diagram code={`flowchart LR
+  D["Design\n(User needs)"] --> P["Prototype\n(Build MVP)"]
+  P --> T["Test\n(Real users)"]
+  T --> I["Iterate\n(Refine / Pivot)"]
+  I -.->|"Cycle back"| D
+`} title="Iterative Design & Prototype Cycle" />
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Iterative Design & Prototype Cycle</p>
+    <p className="text-[10px] opacity-75 mt-0.5">A continuous figure-eight loop of design, prototyping, testing, and iteration</p>
+  </div>
+  <svg viewBox="0 0 600 300" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="loopGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="33%" stopColor="#7C3AED" />
+        <stop offset="66%" stopColor="#2563EB" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+      <filter id="loopNodeShadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.18" />
+      </filter>
+    </defs>
+
+    {/* Infinity path (figure-eight) — thick soft stroke */}
+    <path
+      d="M 300,150 C 300,70 180,40 150,100 C 120,160 180,230 210,200 C 240,170 260,150 300,150 C 340,150 360,170 390,200 C 420,230 480,160 450,100 C 420,40 300,70 300,150"
+      fill="none"
+      stroke="url(#loopGrad)"
+      strokeWidth="24"
+      strokeOpacity="0.18"
+      strokeLinecap="round"
+    />
+    <path
+      d="M 300,150 C 300,70 180,40 150,100 C 120,160 180,230 210,200 C 240,170 260,150 300,150 C 340,150 360,170 390,200 C 420,230 480,160 450,100 C 420,40 300,70 300,150"
+      fill="none"
+      stroke="url(#loopGrad)"
+      strokeWidth="4"
+      strokeOpacity="0.5"
+      strokeLinecap="round"
+    />
+
+    {/* Directional arrows — left loop clockwise */}
+    <polygon points="185,68 195,62 190,75" fill="#4F46E5" fillOpacity="0.6" />
+    <polygon points="165,185 155,192 168,192" fill="#059669" fillOpacity="0.6" />
+    {/* Right loop clockwise */}
+    <polygon points="415,68 425,62 420,75" fill="#7C3AED" fillOpacity="0.6" />
+    <polygon points="435,185 445,192 432,192" fill="#2563EB" fillOpacity="0.6" />
+
+    {/* Node: Design — left loop top */}
+    <circle cx="155" cy="82" r="32" fill="#4F46E5" filter="url(#loopNodeShadow)" />
+    <text x="155" y="79" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Design</text>
+    <text x="155" y="92" textAnchor="middle" fontSize="7" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>User needs</text>
+    <text x="155" y="128" textAnchor="middle" fontSize="8" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>Define requirements</text>
+
+    {/* Node: Iterate — left loop bottom */}
+    <circle cx="195" cy="210" r="32" fill="#059669" filter="url(#loopNodeShadow)" />
+    <text x="195" y="207" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Iterate</text>
+    <text x="195" y="220" textAnchor="middle" fontSize="7" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Refine / Pivot</text>
+    <text x="195" y="256" textAnchor="middle" fontSize="8" fill="#059669" style={{ fontFamily: 'system-ui' }}>Incorporate feedback</text>
+
+    {/* Node: Prototype — right loop top */}
+    <circle cx="445" cy="82" r="32" fill="#7C3AED" filter="url(#loopNodeShadow)" />
+    <text x="445" y="79" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Prototype</text>
+    <text x="445" y="92" textAnchor="middle" fontSize="7" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Build MVP</text>
+    <text x="445" y="128" textAnchor="middle" fontSize="8" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>Working solution</text>
+
+    {/* Node: Test — right loop bottom */}
+    <circle cx="405" cy="210" r="32" fill="#2563EB" filter="url(#loopNodeShadow)" />
+    <text x="405" y="207" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Test</text>
+    <text x="405" y="220" textAnchor="middle" fontSize="7" fill="white" fillOpacity="0.8" style={{ fontFamily: 'system-ui' }}>Real users</text>
+    <text x="405" y="256" textAnchor="middle" fontSize="8" fill="#2563EB" style={{ fontFamily: 'system-ui' }}>Observe and measure</text>
+
+    {/* Center label */}
+    <rect x="255" y="138" width="90" height="24" rx="12" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" />
+    <text x="300" y="154" textAnchor="middle" fontSize="8" fontWeight="600" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>Rapid Iteration</text>
+  </svg>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-emerald-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Design & Prototype Flow</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Four stages with continuous feedback cycling back to the beginning</p>
+  </div>
+  <svg viewBox="0 0 700 300" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="dfBlue" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#EFF6FF" />
+        <stop offset="100%" stopColor="#DBEAFE" />
+      </linearGradient>
+      <linearGradient id="dfIndigo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#EEF2FF" />
+        <stop offset="100%" stopColor="#E0E7FF" />
+      </linearGradient>
+      <linearGradient id="dfViolet" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#F5F3FF" />
+        <stop offset="100%" stopColor="#EDE9FE" />
+      </linearGradient>
+      <linearGradient id="dfEmerald" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#ECFDF5" />
+        <stop offset="100%" stopColor="#D1FAE5" />
+      </linearGradient>
+      <filter id="dfShadow" x="-5%" y="-5%" width="110%" height="110%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.12" />
+      </filter>
+    </defs>
+
+    {/* Feedback arrow curving from Stage 4 back to Stage 1 */}
+    <path
+      d="M 610,65 C 610,15 350,5 90,65"
+      fill="none"
+      stroke="#059669"
+      strokeWidth="2.5"
+      strokeDasharray="6 4"
+      strokeOpacity="0.6"
+    />
+    <polygon points="90,65 98,55 98,70" fill="#059669" fillOpacity="0.7" />
+    <text x="350" y="25" textAnchor="middle" fontSize="9" fontWeight="600" fill="#059669" style={{ fontFamily: 'system-ui' }}>Continuous Cycle</text>
+
+    {/* Stage 1: Understand User */}
+    <rect x="30" y="55" width="140" height="70" rx="12" fill="url(#dfBlue)" stroke="#2563EB" strokeWidth="1.5" filter="url(#dfShadow)" />
+    <circle cx="55" cy="72" r="11" fill="#2563EB" />
+    <text x="55" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>1</text>
+    {/* Eye icon */}
+    <ellipse cx="100" cy="72" rx="10" ry="6" fill="none" stroke="#2563EB" strokeWidth="1.2" />
+    <circle cx="100" cy="72" r="3" fill="#2563EB" />
+    <text x="100" y="92" textAnchor="middle" fontSize="10" fontWeight="700" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Understand User</text>
+    <text x="100" y="105" textAnchor="middle" fontSize="7.5" fill="#3B82F6" style={{ fontFamily: 'system-ui' }}>Observe workflows</text>
+    <text x="100" y="115" textAnchor="middle" fontSize="7.5" fill="#3B82F6" style={{ fontFamily: 'system-ui' }}>Identify pain points</text>
+
+    {/* Chevron arrow 1→2 */}
+    <polygon points="175,82 195,90 175,98" fill="#4F46E5" fillOpacity="0.5" />
+
+    {/* Stage 2: Build MVP */}
+    <rect x="200" y="55" width="140" height="70" rx="12" fill="url(#dfIndigo)" stroke="#4F46E5" strokeWidth="1.5" filter="url(#dfShadow)" />
+    <circle cx="225" cy="72" r="11" fill="#4F46E5" />
+    <text x="225" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>2</text>
+    {/* Wrench icon */}
+    <line x1="265" y1="65" x2="275" y2="80" stroke="#4F46E5" strokeWidth="2" strokeLinecap="round" />
+    <circle cx="263" cy="63" r="3" fill="none" stroke="#4F46E5" strokeWidth="1.2" />
+    <text x="270" y="92" textAnchor="middle" fontSize="10" fontWeight="700" fill="#3730A3" style={{ fontFamily: 'system-ui' }}>Build MVP</text>
+    <text x="270" y="105" textAnchor="middle" fontSize="7.5" fill="#6366F1" style={{ fontFamily: 'system-ui' }}>Data in, decision out</text>
+    <text x="270" y="115" textAnchor="middle" fontSize="7.5" fill="#6366F1" style={{ fontFamily: 'system-ui' }}>Simplest demo of value</text>
+
+    {/* Chevron arrow 2→3 */}
+    <polygon points="345,82 365,90 345,98" fill="#7C3AED" fillOpacity="0.5" />
+
+    {/* Stage 3: Test with Users */}
+    <rect x="370" y="55" width="140" height="70" rx="12" fill="url(#dfViolet)" stroke="#7C3AED" strokeWidth="1.5" filter="url(#dfShadow)" />
+    <circle cx="395" cy="72" r="11" fill="#7C3AED" />
+    <text x="395" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>3</text>
+    {/* Beaker icon */}
+    <path d="M 432,63 L 432,72 L 426,82 L 438,82 Z" fill="none" stroke="#7C3AED" strokeWidth="1.2" strokeLinejoin="round" />
+    <line x1="428" y1="63" x2="436" y2="63" stroke="#7C3AED" strokeWidth="1.2" />
+    <text x="440" y="92" textAnchor="middle" fontSize="10" fontWeight="700" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>Test with Users</text>
+    <text x="440" y="105" textAnchor="middle" fontSize="7.5" fill="#8B5CF6" style={{ fontFamily: 'system-ui' }}>Real users, real tasks</text>
+    <text x="440" y="115" textAnchor="middle" fontSize="7.5" fill="#8B5CF6" style={{ fontFamily: 'system-ui' }}>Watch where they struggle</text>
+
+    {/* Chevron arrow 3→4 */}
+    <polygon points="515,82 535,90 515,98" fill="#059669" fillOpacity="0.5" />
+
+    {/* Stage 4: Iterate / Pivot */}
+    <rect x="540" y="55" width="140" height="70" rx="12" fill="url(#dfEmerald)" stroke="#059669" strokeWidth="1.5" filter="url(#dfShadow)" />
+    <circle cx="565" cy="72" r="11" fill="#059669" />
+    <text x="565" y="76" textAnchor="middle" fontSize="9" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>4</text>
+    {/* Circular arrow icon */}
+    <path d="M 605,67 A 7,7 0 1,1 598,74" fill="none" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" />
+    <polygon points="605,65 608,70 602,70" fill="#059669" />
+    <text x="610" y="92" textAnchor="middle" fontSize="10" fontWeight="700" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Iterate / Pivot</text>
+    <text x="610" y="105" textAnchor="middle" fontSize="7.5" fill="#059669" style={{ fontFamily: 'system-ui' }}>Refine or start over</text>
+    <text x="610" y="115" textAnchor="middle" fontSize="7.5" fill="#059669" style={{ fontFamily: 'system-ui' }}>Prototypes are disposable</text>
+
+    {/* Bullet points below each stage */}
+    {/* Stage 1 bullets */}
+    <rect x="35" y="140" width="130" height="48" rx="8" fill="#EFF6FF" stroke="#BFDBFE" strokeWidth="0.5" />
+    <circle cx="47" cy="153" r="2" fill="#2563EB" />
+    <text x="53" y="156" fontSize="7" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Observe workflows</text>
+    <circle cx="47" cy="167" r="2" fill="#2563EB" />
+    <text x="53" y="170" fontSize="7" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Identify pain points</text>
+
+    {/* Stage 2 bullets */}
+    <rect x="205" y="140" width="130" height="48" rx="8" fill="#EEF2FF" stroke="#C7D2FE" strokeWidth="0.5" />
+    <circle cx="217" cy="153" r="2" fill="#4F46E5" />
+    <text x="223" y="156" fontSize="7" fill="#3730A3" style={{ fontFamily: 'system-ui' }}>Data in, decision out</text>
+    <circle cx="217" cy="167" r="2" fill="#4F46E5" />
+    <text x="223" y="170" fontSize="7" fill="#3730A3" style={{ fontFamily: 'system-ui' }}>Simplest demo of value</text>
+
+    {/* Stage 3 bullets */}
+    <rect x="375" y="140" width="130" height="48" rx="8" fill="#F5F3FF" stroke="#DDD6FE" strokeWidth="0.5" />
+    <circle cx="387" cy="153" r="2" fill="#7C3AED" />
+    <text x="393" y="156" fontSize="7" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>Real users, real tasks</text>
+    <circle cx="387" cy="167" r="2" fill="#7C3AED" />
+    <text x="393" y="170" fontSize="7" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>Watch where they struggle</text>
+
+    {/* Stage 4 bullets */}
+    <rect x="545" y="140" width="130" height="48" rx="8" fill="#ECFDF5" stroke="#A7F3D0" strokeWidth="0.5" />
+    <circle cx="557" cy="153" r="2" fill="#059669" />
+    <text x="563" y="156" fontSize="7" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Refine or start over</text>
+    <circle cx="557" cy="167" r="2" fill="#059669" />
+    <text x="563" y="170" fontSize="7" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Prototypes are disposable</text>
+  </svg>
+</div>
+
+</VariantPicker>
 
 ## Epic and User Story Structure
 
@@ -33,7 +294,7 @@ An **Epic** represents the overall solution (e.g., "AI-Optimized Dispatch Routin
 />
 
 <Callout type="warning" title="Verify with IT Early">
-Before investing significant time in prototype development, validate technical feasibility with IT and security teams. Confirm data access permissions, integration requirements, deployment infrastructure, and compliance constraints. A technically infeasible prototype wastes everyone's time and erodes stakeholder trust.
+Before investing significant time in prototype development, confirm the technical feasibility with IT and security teams. Confirm data access permissions, integration requirements, deployment infrastructure, and compliance constraints. A technically infeasible prototype wastes everyone's time and erodes stakeholder trust.
 </Callout>
 
 ## Prototype Testing
