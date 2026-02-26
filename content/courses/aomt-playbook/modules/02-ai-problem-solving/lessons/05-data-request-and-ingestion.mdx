@@ -13,6 +13,8 @@ Once the Issues Tree and initial hypotheses are established, the practitioner mu
 
 Before drafting a detailed request, send a preliminary data request to understand what data exists, where it lives, and how accessible it is. This prevents wasted effort on formally requesting data that turns out to be unavailable or in an unusable format.
 
+<DataRequestRefinement />
+
 A preliminary request should cover:
 
 - **Data Landscape** — What systems and datasets relate to the problem area?
@@ -37,7 +39,7 @@ Once the data landscape is understood, the formal data request should be specifi
 - **Granularity** — The level of detail needed (e.g., daily vs. monthly, individual vs. aggregated)
 - **Issues Tree Mapping** — Which branch or hypothesis does this data support?
 
-
+<FormalDataRequest />
 
 ## Data Ingestion Best Practices
 
@@ -47,6 +49,8 @@ Once data is received, ingestion involves loading it into the AI analysis enviro
 2. **Validate schema** — Confirm that field names, data types, and formats match expectations
 3. **Establish a baseline** — Create initial descriptive statistics that serve as reference points for analysis
 4. **Document limitations** — Record known data quality issues, gaps, or caveats
+
+<DataRequestRisks />
 
 <Callout type="tip" title="More Data Is Better">
 In AI-Enabled Problem Solving, the bias should always be toward requesting more data rather than less. AI tools can process large volumes efficiently, and datasets that seem peripheral often contain unexpected insights. The cost of ingesting extra data is minimal compared to the cost of missing a critical pattern because the data was never requested.
