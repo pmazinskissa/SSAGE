@@ -9,7 +9,7 @@ export default function DataRequestRisks() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Data Request Risks & Mitigation Strategies</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Column Risk Cards</h3>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.75rem'}}>
         {cols.map((c,i) => (
           <div key={i} style={{background:c.bg,border:`1px solid ${c.color}30`,borderRadius:8,padding:'1rem'}}>

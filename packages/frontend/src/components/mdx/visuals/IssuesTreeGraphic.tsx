@@ -77,7 +77,7 @@ export default function IssuesTreeGraphic() {
   };
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Issues Tree with Supporting Hypotheses</h3>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Collapsible Issues Tree</h3>
       <div style={{background:'#1E1B4B',color:'white',borderRadius:6,padding:'0.6rem 1rem',fontWeight:700,fontSize:'0.875rem',marginBottom:'0.75rem',textAlign:'center'}}>Root: Low Customer Satisfaction Rating</div>
       {branches.map((b) => {
         const isOpen = open.has(b.key);

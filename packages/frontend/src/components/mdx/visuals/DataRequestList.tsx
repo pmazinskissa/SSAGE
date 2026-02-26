@@ -9,7 +9,7 @@ export default function DataRequestList() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Metro Cable — Initial Data Request</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Data Request Table</h3>
       <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.8rem'}}>
         <thead>
           <tr style={{background:'#4F46E5',color:'white'}}>

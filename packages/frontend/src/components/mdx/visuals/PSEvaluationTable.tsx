@@ -29,7 +29,7 @@ export default function PSEvaluationTable() {
   );
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Metro Cable Problem Statement Evaluation</h3>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Metro Cable Grid Layout</h3>
       <div style={{display:'flex',gap:'0.6rem',alignItems:'flex-start',background:'#F8F9FA',border:'1px solid #E5E7EB',borderRadius:6,padding:'0.65rem 0.85rem',marginBottom:'0.5rem'}}>
         <div style={{width:28,height:28,borderRadius:'50%',background:`${data.description.color}20`,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <LIcon name={data.description.icon} size={14} color={data.description.color}/>

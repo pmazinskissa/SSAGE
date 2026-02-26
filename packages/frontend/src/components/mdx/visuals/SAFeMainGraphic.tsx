@@ -10,7 +10,7 @@ export default function SAFeMainGraphic() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>SAFe Implementation with Performance Metrics</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Vertical Feedback Loop with Metrics</h3>
       {stages.map((s,i) => (
         <div key={i} style={{display:'flex',gap:'0.75rem',marginBottom:'0'}}>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center',width:40,flexShrink:0}}>

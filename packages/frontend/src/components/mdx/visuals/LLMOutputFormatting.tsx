@@ -16,7 +16,7 @@ export default function LLMOutputFormatting() {
   );
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Multi-Turn Prompt: FCR Analysis with Visualization</h3>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Multi-turn Chat — FCR + Visualization Ask</h3>
       <div style={{background:'#F3F4F6',borderRadius:12,padding:'1rem',maxWidth:560,margin:'0 auto'}}>
         <UserBubble text="What are the FCR industry benchmarks for telecom/cable companies?"/>
         <AIBubble>

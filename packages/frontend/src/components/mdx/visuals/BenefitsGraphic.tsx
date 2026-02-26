@@ -9,7 +9,7 @@ export default function BenefitsGraphic() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Why AI-Enabled Problem Solving Works</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>KPI Benefit Cards</h3>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem'}}>
         {cards.map((c,i) => (
           <div key={i} style={{background:c.bg,border:`2px solid ${c.color}20`,borderRadius:10,padding:'1.25rem',textAlign:'center'}}>

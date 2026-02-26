@@ -8,7 +8,7 @@ export default function PlaybookStructureGraphic() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Playbook Structure: Three Sections</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Column Section Cards</h3>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem'}}>
         {sections.map((s,i) => (
           <div key={i} style={{border:'1px solid #E5E7EB',borderRadius:8,overflow:'hidden'}}>

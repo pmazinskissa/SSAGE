@@ -15,7 +15,7 @@ export default function ProblemStatement7Elements() {
   const lineLen = 65;
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>The 7 Elements of a Problem Statement</h3>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>7 Elements — Horizontal Row</h3>
       <div style={{overflowX:'auto'}}>
         <svg viewBox={`0 0 ${W} 320`} style={{width:'100%',minWidth:600}}>
           <line x1="40" y1={midY} x2={W-40} y2={midY} stroke="#E5E7EB" strokeWidth="2"/>

@@ -10,6 +10,7 @@ export default function ClosingGraphic() {
   ];
   return (
     <div>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Closing Quote Card</h3>
       <div style={{background:'linear-gradient(135deg,#1E1B4B,#4F46E5)',borderRadius:12,padding:'2rem',textAlign:'center',color:'white'}}>
         <div style={{fontSize:'1rem',opacity:0.7,marginBottom:'0.75rem',textTransform:'uppercase',letterSpacing:'0.1em'}}>The AI Enabled Problem-Solving Mandate</div>
         <blockquote style={{fontSize:'1.1rem',fontWeight:700,lineHeight:1.7,marginBottom:'1.5rem',fontStyle:'italic',maxWidth:500,margin:'0 auto 1.5rem'}}>

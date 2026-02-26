@@ -2,7 +2,7 @@
 export default function RefinedDataRequest() {
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Data Request Refinement: Initial vs. Targeted</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Two-Phase Timeline Card</h3>
       <div style={{display:'grid',gridTemplateColumns:'1fr auto 1fr',gap:'0.75rem',alignItems:'center'}}>
         <div style={{background:'#F3F4F6',border:'1px solid #E5E7EB',borderRadius:8,padding:'1rem'}}>
           <div style={{fontWeight:700,color:'#6B7280',fontSize:'0.75rem',textTransform:'uppercase',marginBottom:'0.5rem'}}>Phase 1 — Initial Request</div>

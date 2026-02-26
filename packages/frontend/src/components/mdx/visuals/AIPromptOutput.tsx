@@ -3,7 +3,7 @@
 export default function AIPromptOutput() {
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Sample AI Conversation: Issues Tree Generation</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Chat UI Style</h3>
       <div style={{background:'#F3F4F6',borderRadius:12,padding:'1rem',maxWidth:560,margin:'0 auto'}}>
         <div style={{display:'flex',justifyContent:'flex-end',marginBottom:'0.75rem'}}>
           <div style={{background:'#4F46E5',color:'white',borderRadius:'12px 12px 2px 12px',padding:'0.75rem 1rem',maxWidth:'80%',fontSize:'0.85rem',lineHeight:1.5}}>
