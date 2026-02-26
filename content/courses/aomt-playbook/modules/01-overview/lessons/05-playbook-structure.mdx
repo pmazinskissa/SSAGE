@@ -9,8 +9,6 @@ order: 5
 
 Each section showcases exemplary methodologies, approaches, and techniques tied to key topics.
 
-<PlaybookStructureGraphic />
-
 ## Section I: Practitioners Playbook
 
 **Chapter I: AI-Empowered Problem Solving**
@@ -34,6 +32,226 @@ Each section showcases exemplary methodologies, approaches, and techniques tied 
 - Communications Management
 - Governance Framework
 
+<VariantPicker labels={["Section Cards", "Mermaid Hierarchy", "Pillar View", "Structure Tree", "Three Sections"]}>
+
+<PillarDiagram
+  title="Playbook Structure"
+  base="Practitioners Playbook"
+  pillars={[
+    {
+      title: "Section I",
+      subtitle: "Practitioners Playbook",
+      icon: "I",
+      items: ["Ch I: AI-Empowered Problem Solving", "  \u2022 Diagnose Data with AI", "  \u2022 Prioritize Opportunities", "Ch II: Tool Development & Delivery", "  \u2022 Design / Prototype AI Tools", "  \u2022 Agile Delivery Approach"]
+    },
+    {
+      title: "Section II",
+      subtitle: "Performance & Sustainment",
+      icon: "II",
+      items: ["Structure, Support & Feedback", "Sustain Improvements", "Performance Scorecards", "Continuous Monitoring"]
+    },
+    {
+      title: "Section III",
+      subtitle: "Change Management",
+      icon: "III",
+      items: ["Change Readiness Assessment", "Influence Network Mapping", "Communications Management", "Governance Framework"]
+    }
+  ]}
+/>
+
+<Diagram code={`flowchart TD
+  PB["Practitioners Playbook"] --> S1["Section I\nPractitioners Playbook"]
+  PB --> S2["Section II\nPerformance & Sustainment"]
+  PB --> S3["Section III\nChange Management"]
+  S1 --> C1["Ch I: AI Problem Solving"]
+  S1 --> C2["Ch II: Tool Development"]
+  C1 --> L1["Diagnose Data"]
+  C1 --> L2["Prioritize Opportunities"]
+  C2 --> L3["Design & Prototype"]
+  C2 --> L4["Agile Delivery"]
+  S2 --> L5["Structure, Support & Feedback"]
+  S2 --> L6["Sustain & Monitor"]
+  S3 --> L8["Readiness & Influence"]
+  S3 --> L9["Communications & Governance"]
+`} title="Playbook Structure" />
+
+<ElementGrid
+  layout="grid"
+  title="The Three Sections"
+  elements={[
+    { title: "Practitioners Playbook", description: "AI-Empowered Problem Solving (diagnose data, prioritize opportunities) and AI Tool Development & Agile Delivery (design, prototype, implement)", icon: "I" },
+    { title: "Performance & Sustainment", description: "Structure, Support, and Feedback framework for sustaining improvements through continuous monitoring and performance scorecards", icon: "II" },
+    { title: "Change Management", description: "Change Readiness Assessment, Influence Network Mapping, Communications Management, and Governance Framework", icon: "III" }
+  ]}
+/>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-center">
+    <p className="text-white text-sm font-semibold tracking-wide">Playbook Structure</p>
+  </div>
+  <svg viewBox="0 0 700 400" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <filter id="st-shadow" x="-4%" y="-4%" width="108%" height="116%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.1" />
+      </filter>
+      <linearGradient id="st-root-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+    </defs>
+    {/* ROOT NODE */}
+    <rect x="230" y="12" width="240" height="44" rx="10" fill="url(#st-root-grad)" filter="url(#st-shadow)" />
+    <text x="350" y="39" textAnchor="middle" fill="#fff" fontSize="14" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Practitioners Playbook</text>
+    {/* Vertical line from root */}
+    <line x1="350" y1="56" x2="350" y2="80" stroke="#A5B4FC" strokeWidth="2" />
+    {/* Horizontal connector bar */}
+    <line x1="110" y1="80" x2="590" y2="80" stroke="#A5B4FC" strokeWidth="2" />
+    {/* Vertical drops to sections */}
+    <line x1="110" y1="80" x2="110" y2="100" stroke="#A5B4FC" strokeWidth="2" />
+    <line x1="350" y1="80" x2="350" y2="100" stroke="#A5B4FC" strokeWidth="2" />
+    <line x1="590" y1="80" x2="590" y2="100" stroke="#A5B4FC" strokeWidth="2" />
+    {/* SECTION I */}
+    <rect x="15" y="100" width="190" height="50" rx="8" fill="#4F46E5" filter="url(#st-shadow)" />
+    <text x="110" y="120" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Section I</text>
+    <text x="110" y="137" textAnchor="middle" fill="#E0E7FF" fontSize="10" style={{ fontFamily: 'system-ui' }}>Practitioners Playbook</text>
+    {/* SECTION II */}
+    <rect x="255" y="100" width="190" height="50" rx="8" fill="#7C3AED" filter="url(#st-shadow)" />
+    <text x="350" y="120" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Section II</text>
+    <text x="350" y="137" textAnchor="middle" fill="#EDE9FE" fontSize="10" style={{ fontFamily: 'system-ui' }}>Performance &amp; Sustainment</text>
+    {/* SECTION III */}
+    <rect x="495" y="100" width="190" height="50" rx="8" fill="#2563EB" filter="url(#st-shadow)" />
+    <text x="590" y="120" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Section III</text>
+    <text x="590" y="137" textAnchor="middle" fill="#DBEAFE" fontSize="10" style={{ fontFamily: 'system-ui' }}>Change Management</text>
+    {/* Section I leaf connectors */}
+    <line x1="110" y1="150" x2="110" y2="170" stroke="#A5B4FC" strokeWidth="1.5" />
+    <line x1="60" y1="170" x2="160" y2="170" stroke="#A5B4FC" strokeWidth="1.5" />
+    <line x1="60" y1="170" x2="60" y2="185" stroke="#A5B4FC" strokeWidth="1.5" />
+    <line x1="160" y1="170" x2="160" y2="185" stroke="#A5B4FC" strokeWidth="1.5" />
+    {/* Section I leaves */}
+    <rect x="10" y="185" width="100" height="38" rx="6" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1" filter="url(#st-shadow)" />
+    <text x="60" y="200" textAnchor="middle" fill="#4F46E5" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>AI Problem</text>
+    <text x="60" y="213" textAnchor="middle" fill="#4F46E5" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Solving</text>
+    <rect x="115" y="185" width="100" height="38" rx="6" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1" filter="url(#st-shadow)" />
+    <text x="165" y="200" textAnchor="middle" fill="#4F46E5" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Tool</text>
+    <text x="165" y="213" textAnchor="middle" fill="#4F46E5" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Development</text>
+    {/* Section II leaf connectors */}
+    <line x1="350" y1="150" x2="350" y2="170" stroke="#C4B5FD" strokeWidth="1.5" />
+    <line x1="300" y1="170" x2="400" y2="170" stroke="#C4B5FD" strokeWidth="1.5" />
+    <line x1="300" y1="170" x2="300" y2="185" stroke="#C4B5FD" strokeWidth="1.5" />
+    <line x1="400" y1="170" x2="400" y2="185" stroke="#C4B5FD" strokeWidth="1.5" />
+    {/* Section II leaves */}
+    <rect x="245" y="185" width="110" height="38" rx="6" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" filter="url(#st-shadow)" />
+    <text x="300" y="200" textAnchor="middle" fill="#7C3AED" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Structure/Support</text>
+    <text x="300" y="213" textAnchor="middle" fill="#7C3AED" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>/Feedback</text>
+    <rect x="360" y="185" width="110" height="38" rx="6" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" filter="url(#st-shadow)" />
+    <text x="415" y="200" textAnchor="middle" fill="#7C3AED" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Continuous</text>
+    <text x="415" y="213" textAnchor="middle" fill="#7C3AED" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Monitoring</text>
+    {/* Section III leaf connectors */}
+    <line x1="590" y1="150" x2="590" y2="170" stroke="#93C5FD" strokeWidth="1.5" />
+    <line x1="540" y1="170" x2="640" y2="170" stroke="#93C5FD" strokeWidth="1.5" />
+    <line x1="540" y1="170" x2="540" y2="185" stroke="#93C5FD" strokeWidth="1.5" />
+    <line x1="640" y1="170" x2="640" y2="185" stroke="#93C5FD" strokeWidth="1.5" />
+    {/* Section III leaves */}
+    <rect x="490" y="185" width="100" height="38" rx="6" fill="#EFF6FF" stroke="#2563EB" strokeWidth="1" filter="url(#st-shadow)" />
+    <text x="540" y="200" textAnchor="middle" fill="#2563EB" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Change</text>
+    <text x="540" y="213" textAnchor="middle" fill="#2563EB" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Readiness</text>
+    <rect x="595" y="185" width="100" height="38" rx="6" fill="#EFF6FF" stroke="#2563EB" strokeWidth="1" filter="url(#st-shadow)" />
+    <text x="645" y="200" textAnchor="middle" fill="#2563EB" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Communications</text>
+    <text x="645" y="213" textAnchor="middle" fill="#2563EB" fontSize="9" fontWeight="600" style={{ fontFamily: 'system-ui' }}>&amp; Governance</text>
+  </svg>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-center">
+    <p className="text-white text-sm font-semibold tracking-wide">Playbook Structure — Three Sections</p>
+  </div>
+  <svg viewBox="0 0 700 320" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <filter id="ts-shadow" x="-4%" y="-4%" width="108%" height="116%">
+        <feDropShadow dx="0" dy="2" stdDeviation="6" floodOpacity="0.12" />
+      </filter>
+      <linearGradient id="ts-indigo-hdr" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4338CA" />
+        <stop offset="100%" stopColor="#4F46E5" />
+      </linearGradient>
+      <linearGradient id="ts-violet-hdr" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#6D28D9" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+      <linearGradient id="ts-blue-hdr" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#1D4ED8" />
+        <stop offset="100%" stopColor="#2563EB" />
+      </linearGradient>
+      <linearGradient id="ts-base-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="50%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#2563EB" />
+      </linearGradient>
+    </defs>
+    {/* SECTION I — 45% width */}
+    <g filter="url(#ts-shadow)">
+      <rect x="15" y="12" width="295" height="256" rx="12" fill="#EEF2FF" stroke="#C7D2FE" strokeWidth="1" />
+      <rect x="15" y="12" width="295" height="36" rx="12" fill="url(#ts-indigo-hdr)" />
+      <rect x="15" y="36" width="295" height="12" fill="url(#ts-indigo-hdr)" />
+    </g>
+    <text x="162" y="37" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="700" style={{ fontFamily: 'system-ui' }}>SECTION I: PRACTITIONERS GUIDE</text>
+    {/* Chapter I */}
+    <rect x="28" y="58" width="269" height="16" rx="4" fill="#C7D2FE" opacity="0.4" />
+    <text x="36" y="70" fill="#4338CA" fontSize="9.5" fontWeight="700" style={{ fontFamily: 'system-ui' }}>CHAPTER I: AI-Empowered Problem Solving</text>
+    <foreignObject x="36" y="78" width="260" height="50">
+      <div xmlns="http://www.w3.org/1999/xhtml" style={{ fontFamily: 'system-ui', fontSize: '9px', color: '#4B5563', lineHeight: '1.6' }}>
+        <div>&#8226; Diagnose Data with AI</div>
+        <div>&#8226; Prioritize Opportunities</div>
+      </div>
+    </foreignObject>
+    {/* Chapter II */}
+    <rect x="28" y="132" width="269" height="16" rx="4" fill="#C7D2FE" opacity="0.4" />
+    <text x="36" y="144" fill="#4338CA" fontSize="9.5" fontWeight="700" style={{ fontFamily: 'system-ui' }}>CHAPTER II: Tool Development &amp; Agile Delivery</text>
+    <foreignObject x="36" y="152" width="260" height="50">
+      <div xmlns="http://www.w3.org/1999/xhtml" style={{ fontFamily: 'system-ui', fontSize: '9px', color: '#4B5563', lineHeight: '1.6' }}>
+        <div>&#8226; Design / Prototype</div>
+        <div>&#8226; Agile Delivery</div>
+      </div>
+    </foreignObject>
+    {/* SECTION II — 27.5% width */}
+    <g filter="url(#ts-shadow)">
+      <rect x="320" y="12" width="175" height="256" rx="12" fill="#F5F3FF" stroke="#DDD6FE" strokeWidth="1" />
+      <rect x="320" y="12" width="175" height="36" rx="12" fill="url(#ts-violet-hdr)" />
+      <rect x="320" y="36" width="175" height="12" fill="url(#ts-violet-hdr)" />
+    </g>
+    <text x="407" y="37" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>SECTION II: SUSTAINMENT</text>
+    <foreignObject x="332" y="58" width="155" height="180">
+      <div xmlns="http://www.w3.org/1999/xhtml" style={{ fontFamily: 'system-ui', fontSize: '9px', color: '#4B5563', lineHeight: '1.8' }}>
+        <div>&#8226; Structure, Support &amp; Feedback</div>
+        <div>&#8226; Manage Performance</div>
+        <div>&#8226; Continuous Monitoring</div>
+        <div>&#8226; Performance Scorecards</div>
+      </div>
+    </foreignObject>
+    {/* SECTION III — 27.5% width */}
+    <g filter="url(#ts-shadow)">
+      <rect x="505" y="12" width="180" height="256" rx="12" fill="#EFF6FF" stroke="#BFDBFE" strokeWidth="1" />
+      <rect x="505" y="12" width="180" height="36" rx="12" fill="url(#ts-blue-hdr)" />
+      <rect x="505" y="36" width="180" height="12" fill="url(#ts-blue-hdr)" />
+    </g>
+    <text x="595" y="31" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>SECTION III:</text>
+    <text x="595" y="43" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>CHANGE MANAGEMENT</text>
+    <foreignObject x="517" y="58" width="160" height="180">
+      <div xmlns="http://www.w3.org/1999/xhtml" style={{ fontFamily: 'system-ui', fontSize: '9px', color: '#4B5563', lineHeight: '1.8' }}>
+        <div>&#8226; Enable Readiness</div>
+        <div>&#8226; Plan Communications</div>
+        <div>&#8226; Influence Network</div>
+        <div>&#8226; Governance Framework</div>
+      </div>
+    </foreignObject>
+    {/* Bottom base bar */}
+    <rect x="15" y="280" width="670" height="28" rx="12" fill="url(#ts-base-grad)" filter="url(#ts-shadow)" />
+    <text x="350" y="299" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Practitioners Playbook</text>
+  </svg>
+</div>
+
+</VariantPicker>
+
 <Callout type="tip" title="How to Use This Playbook">
-Each section builds on the previous, but AOMT is inherently non-linear. You may find yourself revisiting earlier sections as new data and insights emerge. The playbook is designed to support this iterative approach.
+Each section builds on the previous, but the methodology is inherently non-linear. You may find yourself revisiting earlier sections as new data and insights emerge. The playbook is designed to support this iterative approach.
 </Callout>

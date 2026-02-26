@@ -403,8 +403,6 @@ Once the data landscape is understood, the formal data request should be specifi
 
 </VariantPicker>
 
-<DataRequestList />
-
 ## Data Ingestion Best Practices
 
 Once data is received, ingestion involves loading it into the AI analysis environment and performing initial quality checks:
@@ -413,8 +411,6 @@ Once data is received, ingestion involves loading it into the AI analysis enviro
 2. **Validate schema** — Confirm that field names, data types, and formats match expectations
 3. **Establish a baseline** — Create initial descriptive statistics that serve as reference points for analysis
 4. **Document limitations** — Record known data quality issues, gaps, or caveats
-
-<DataRequestRisks />
 
 <Callout type="tip" title="More Data Is Better">
 In AI-Enabled Problem Solving, the bias should always be toward requesting more data rather than less. AI tools can process large volumes efficiently, and datasets that seem peripheral often contain unexpected insights. The cost of ingesting extra data is minimal compared to the cost of missing a critical pattern because the data was never requested.
@@ -429,8 +425,6 @@ Data governance is not a checkbox — it must be woven into every stage of the d
 - **Retention and Disposal** — Agree on how long the data will be retained for the engagement and what happens to it afterward. Define clear disposal procedures — delete working copies, purge temporary files, and confirm deletion with the data owner.
 - **Regulatory Compliance** — Determine which regulations apply (e.g., GDPR, HIPAA, SOX, industry-specific standards). Ensure your data handling, storage, and processing practices meet these requirements. When in doubt, consult your organization's legal or compliance team.
 - **Audit Trail** — Maintain a log of what data was requested, when it was received, who accessed it, and any transformations applied. This trail supports reproducibility and demonstrates compliance if the engagement is ever reviewed.
-
-<RefinedDataRequest />
 
 <DecisionPoint
   scenario="You're starting a new engagement. The client offers two data options: (A) a clean, curated dataset covering 3 months of operations, or (B) a raw, uncleaned dataset covering 18 months with known quality issues. Which do you choose?"
