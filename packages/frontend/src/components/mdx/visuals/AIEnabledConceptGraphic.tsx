@@ -21,8 +21,8 @@ export default function AIEnabledConceptGraphic() {
     }).join(' ');
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Hexagonal Progression Grid</h3>
-      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Each row fills in more blocks as the methodology progresses — from initial diagnosis to organization-wide change.</p>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>AI-Enabled Problem Solving — Phase Progression</h3>
+      <p style={{fontSize:'0.82rem',color:'#6B7280',marginBottom:'1rem'}}>Effective AI-enabled problem solving requires progressively broader engagement — from targeted data diagnosis to organization-wide change management.</p>
       <div style={{display:'flex',flexDirection:'column',gap:'3px'}}>
         {phases.map((phase, row) => (
           <div key={row} style={{display:'flex',alignItems:'center',gap:'0px'}}>

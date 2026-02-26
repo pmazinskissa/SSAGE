@@ -10,7 +10,7 @@ export default function FourQuadrantsVisual() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Large 2×2 Quadrant Grid</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Value vs. Complexity Prioritization Matrix</h3>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'3px',background:'#E5E7EB',borderRadius:10,overflow:'hidden'}}>
         {quads.map((q,i) => (
           <div key={i} style={{background:q.bg,padding:'1.25rem',minHeight:120}}>

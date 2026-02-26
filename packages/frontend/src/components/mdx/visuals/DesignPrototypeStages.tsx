@@ -9,7 +9,7 @@ export default function DesignPrototypeStages() {
   ];
   return (
     <div style={{paddingBottom:'1rem'}}>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Phase Horizontal Stepper</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Design & Prototype: Three Stages</h3>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)'}}>
         {phases.map((p,i) => (
           <div key={i} style={{background:p.bg,border:`2px solid ${p.color}40`,borderRadius:i===0?'8px 0 0 8px':i===2?'0 8px 8px 0':'0',padding:'1rem',borderRight:i<2?'none':''}}>

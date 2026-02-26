@@ -45,7 +45,7 @@ export default function AIToolDevelopmentIntro() {
         <Arrow dir="w"/>
         {card(stages[2])}
       </div>
-      <p style={{textAlign:'center',fontSize:'0.72rem',color:'#9CA3AF',marginTop:'0.6rem'}}>Design → Prototype → Deployment → Iteration</p>
+      <p style={{textAlign:'center',fontSize:'0.72rem',color:'#9CA3AF',marginTop:'0.6rem'}}>A continuous loop — each iteration improves tool performance and user adoption.</p>
     </div>
   );
 }
