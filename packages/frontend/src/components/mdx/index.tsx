@@ -23,6 +23,31 @@ import QuadrantMatrix from './QuadrantMatrix';
 import PillarDiagram from './PillarDiagram';
 import ElementGrid from './ElementGrid';
 
+// Visual components (one selected option per tracker item)
+import AIEnabledConceptGraphic from './visuals/AIEnabledConceptGraphic';
+import BenefitsGraphic from './visuals/BenefitsGraphic';
+import PlaybookStructureGraphic from './visuals/PlaybookStructureGraphic';
+import CircularActivityFlow from './visuals/CircularActivityFlow';
+import ProblemStatement7Elements from './visuals/ProblemStatement7Elements';
+import PSEvaluationTable from './visuals/PSEvaluationTable';
+import IssuesTreeGraphic from './visuals/IssuesTreeGraphic';
+import AIPromptOutput from './visuals/AIPromptOutput';
+import DataRequestList from './visuals/DataRequestList';
+import DataRequestRisks from './visuals/DataRequestRisks';
+import RefinedDataRequest from './visuals/RefinedDataRequest';
+import VisualizationThumbnails from './visuals/VisualizationThumbnails';
+import LLMOutputFormatting from './visuals/LLMOutputFormatting';
+import WSJFIntroGraphic from './visuals/WSJFIntroGraphic';
+import WSJFFormulaBreakdown from './visuals/WSJFFormulaBreakdown';
+import ValueComplexityMatrix from './visuals/ValueComplexityMatrix';
+import FourQuadrantsVisual from './visuals/FourQuadrantsVisual';
+import AIToolDevelopmentIntro from './visuals/AIToolDevelopmentIntro';
+import DesignPrototypeStages from './visuals/DesignPrototypeStages';
+import DataTrackerPrototype from './visuals/DataTrackerPrototype';
+import SAFeStagesRoles from './visuals/SAFeStagesRoles';
+import SAFeMainGraphic from './visuals/SAFeMainGraphic';
+import ClosingGraphic from './visuals/ClosingGraphic';
+
 // HTML element overrides for MDX content
 function createHeading(level: 1 | 2 | 3) {
   const Tag = `h${level}` as const;
@@ -113,6 +138,31 @@ export const mdxComponents: Record<string, ComponentType<any>> = {
   QuadrantMatrix,
   PillarDiagram,
   ElementGrid,
+
+  // Visual components
+  AIEnabledConceptGraphic,
+  BenefitsGraphic,
+  PlaybookStructureGraphic,
+  CircularActivityFlow,
+  ProblemStatement7Elements,
+  PSEvaluationTable,
+  IssuesTreeGraphic,
+  AIPromptOutput,
+  DataRequestList,
+  DataRequestRisks,
+  RefinedDataRequest,
+  VisualizationThumbnails,
+  LLMOutputFormatting,
+  WSJFIntroGraphic,
+  WSJFFormulaBreakdown,
+  ValueComplexityMatrix,
+  FourQuadrantsVisual,
+  AIToolDevelopmentIntro,
+  DesignPrototypeStages,
+  DataTrackerPrototype,
+  SAFeStagesRoles,
+  SAFeMainGraphic,
+  ClosingGraphic,
 
   // HTML overrides
   h1: createHeading(1),
