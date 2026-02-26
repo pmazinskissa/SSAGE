@@ -9,7 +9,7 @@ export default function SAFeStagesRoles() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Three-Column SAFe Stage Cards</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>SAFe Delivery Stages & Team Roles</h3>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'0.75rem'}}>
         {stages.map((s,i) => (
           <div key={i} style={{border:`1px solid ${s.color}30`,borderRadius:8,overflow:'hidden'}}>

@@ -46,7 +46,7 @@ export default function WSJFIntroGraphic() {
   ];
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>WSJF Factor Cards</h3>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>WSJF Scoring Factors</h3>
       <div style={{background:'linear-gradient(135deg,#1E1B4B,#4F46E5)',borderRadius:12,padding:'1.25rem',textAlign:'center',marginBottom:'0.75rem'}}>
         <div style={{color:'white',fontSize:'2.5rem',fontWeight:800,lineHeight:1}}>WSJF</div>
         <div style={{color:'rgba(255,255,255,0.6)',fontSize:'0.85rem',marginTop:'0.3rem'}}>Weighted Shortest Job First</div>

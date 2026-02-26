@@ -23,7 +23,7 @@ export default function ValueComplexityMatrix() {
   const dotR = (type) => type==='high'?15:type==='quick'?14:12;
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Value vs. Complexity Scatter</h3>
+      <h3 style={{fontWeight:700,marginBottom:'0.75rem',color:'#1E1B4B'}}>Value vs. Complexity Scatter Plot</h3>
       <div style={{display:'flex',gap:'1rem',alignItems:'flex-start',flexWrap:'wrap'}}>
         <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{flex:'1',minWidth:280,maxWidth:440,overflow:'visible'}}>
           {/* High priority triangle: upper-left (0,0)→(0,20)→(10,20) in data coords */}

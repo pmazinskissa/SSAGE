@@ -11,7 +11,7 @@ export default function DataTrackerPrototype() {
   const statusColors = {'Validated':'#22C55E','Received':'#3B82F6','In Progress':'#F59E0B','Requested':'#9CA3AF'};
   return (
     <div>
-      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Spreadsheet-Style Tracker</h3>
+      <h3 style={{fontWeight:700,marginBottom:'1rem',color:'#1E1B4B'}}>Data Ingestion Validation Tracker</h3>
       <div style={{overflowX:'auto'}}>
         <table style={{width:'100%',borderCollapse:'collapse',fontSize:'0.78rem',minWidth:600}}>
           <thead>
