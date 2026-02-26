@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, Clock, Award, ArrowLeft, MessageSquare } from 'lucide-react';
+import { Trophy, Clock, Award, ArrowLeft, MessageSquare, BookOpen, CheckCircle2, GraduationCap, Target } from 'lucide-react';
 import { api } from '../lib/api';
 import { useCourse } from '../context/CourseContext';
 import Card from '../components/ui/Card';
@@ -13,7 +13,7 @@ import type { CourseProgress } from '@playbook/shared';
 
 export default function CompletionPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { course } = useCourse();
+  const { course, navTree } = useCourse();
   const [progress, setProgress] = useState<CourseProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -42,12 +42,18 @@ export default function CompletionPage() {
   const mins = totalTimeMinutes % 60;
   const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
-  const completedDate = progress?.completed_at
-    ? new Date(progress.completed_at).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+  const completedDate = new Date(progress?.completed_at || Date.now()).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const totalLessons = navTree?.modules.reduce((sum, mod) => sum + mod.lessons.length, 0) || 0;
+  const completedLessons = progress?.lessons.filter((l) => l.status === 'completed').length || 0;
+
+  const kcScores = progress?.knowledge_checks || [];
+  const avgKcScore = kcScores.length > 0
+    ? Math.round(kcScores.reduce((sum, kc) => sum + kc.score, 0) / kcScores.length)
     : null;
 
   return (
@@ -112,15 +118,13 @@ export default function CompletionPage() {
             initial="hidden"
             animate="visible"
           >
-            {completedDate && (
-              <motion.div variants={fadeInUp}>
-                <Card elevation={1} className="p-4 text-center">
-                  <Award size={20} className="text-primary mx-auto mb-2" />
-                  <p className="text-xs text-text-secondary">Completed</p>
-                  <p className="text-sm font-semibold text-text-primary">{completedDate}</p>
-                </Card>
-              </motion.div>
-            )}
+            <motion.div variants={fadeInUp}>
+              <Card elevation={1} className="p-4 text-center">
+                <Award size={20} className="text-primary mx-auto mb-2" />
+                <p className="text-xs text-text-secondary">Completed</p>
+                <p className="text-sm font-semibold text-text-primary">{completedDate}</p>
+              </Card>
+            </motion.div>
             <motion.div variants={fadeInUp}>
               <Card elevation={1} className="p-4 text-center">
                 <Clock size={20} className="text-primary mx-auto mb-2" />
@@ -128,37 +132,74 @@ export default function CompletionPage() {
                 <p className="text-sm font-semibold text-text-primary">{timeStr}</p>
               </Card>
             </motion.div>
+            <motion.div variants={fadeInUp}>
+              <Card elevation={1} className="p-4 text-center">
+                <GraduationCap size={20} className="text-primary mx-auto mb-2" />
+                <p className="text-xs text-text-secondary">Lessons Completed</p>
+                <p className="text-sm font-semibold text-text-primary">{completedLessons}/{totalLessons}</p>
+              </Card>
+            </motion.div>
+            {avgKcScore !== null && (
+              <motion.div variants={fadeInUp}>
+                <Card elevation={1} className="p-4 text-center">
+                  <Target size={20} className="text-primary mx-auto mb-2" />
+                  <p className="text-xs text-text-secondary">Avg Quiz Score</p>
+                  <p className={`text-sm font-semibold ${avgKcScore >= 80 ? 'text-success' : avgKcScore >= 60 ? 'text-warning' : 'text-error'}`}>{avgKcScore}%</p>
+                </Card>
+              </motion.div>
+            )}
           </motion.div>
 
-          {/* Per-module KC scores */}
-          {progress?.knowledge_checks && progress.knowledge_checks.length > 0 && (
+          {/* Course summary — what you learned */}
+          {navTree && navTree.modules.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.3 }}
               className="mb-10"
             >
-              <h2
-                className="text-lg font-semibold text-text-primary mb-4"
-                style={{ fontFamily: 'var(--font-heading)' }}
-              >
-                Knowledge Check Scores
-              </h2>
-              <div className="space-y-3">
-                {progress.knowledge_checks.map((kc) => (
-                  <Card key={kc.module_slug} elevation={0} className="p-4 flex items-center justify-between">
-                    <span className="text-sm text-text-primary capitalize">
-                      {kc.module_slug.replace(/-/g, ' ')}
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${
-                        kc.score >= 80 ? 'text-success' : kc.score >= 60 ? 'text-warning' : 'text-error'
-                      }`}
-                    >
-                      {kc.score}% ({kc.correct_answers}/{kc.total_questions})
-                    </span>
-                  </Card>
-                ))}
+              <div className="flex items-center gap-2 mb-4">
+                <BookOpen size={20} className="text-primary" />
+                <h2
+                  className="text-lg font-semibold text-text-primary"
+                  style={{ fontFamily: 'var(--font-heading)' }}
+                >
+                  What You Learned
+                </h2>
+              </div>
+              {course?.description && (
+                <p className="text-sm text-text-secondary mb-5 leading-relaxed">
+                  {course.description}
+                </p>
+              )}
+              <div className="relative">
+                {/* Vertical timeline line */}
+                <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-primary/20" />
+
+                <div className="space-y-4">
+                  {navTree.modules.map((mod, idx) => (
+                    <div key={mod.slug} className="relative flex gap-4">
+                      {/* Numbered circle on the line */}
+                      <div className="relative z-10 flex-shrink-0 w-[31px] h-[31px] rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shadow-sm shadow-primary/25">
+                        {idx + 1}
+                      </div>
+                      {/* Module card */}
+                      <Card elevation={0} className="flex-1 p-4">
+                        <h3 className="text-sm font-semibold text-text-primary mb-2">{mod.title}</h3>
+                        {mod.objectives.length > 0 && (
+                          <ul className="space-y-1.5">
+                            {mod.objectives.map((obj, i) => (
+                              <li key={i} className="flex items-start gap-2 text-xs text-text-secondary">
+                                <CheckCircle2 size={13} className="text-success mt-0.5 flex-shrink-0" />
+                                <span>{obj}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </Card>
+                    </div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}

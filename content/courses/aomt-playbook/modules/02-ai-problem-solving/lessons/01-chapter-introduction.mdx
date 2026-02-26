@@ -7,11 +7,219 @@ order: 1
 
 # AI-Empowered Problem Solving
 
-This chapter introduces the core diagnostic and prioritization methodology that sets AOMT apart from traditional consulting approaches. Rather than relying on stakeholder interviews and assumptions, AOMT starts with data and uses AI to accelerate every stage of analysis.
+This chapter introduces the core diagnostic and prioritization methodology that sets AI-Enabled Problem Solving apart from traditional consulting approaches. Rather than relying on stakeholder interviews and assumptions, this approach starts with data and uses AI to accelerate every stage of analysis.
 
 <Callout type="concept" title="Two-Phase Approach">
 AI-Empowered Problem Solving operates in two distinct phases. Phase 1 focuses on iterative diagnosis — ingesting data, surfacing patterns, and synthesizing findings. Phase 2 focuses on prioritizing the opportunities uncovered during diagnosis into an actionable roadmap.
 </Callout>
+
+<VariantPicker labels={["Phase Cards", "Mermaid Flow", "Phase Bridge", "Phase Diagram"]}>
+
+<div className="rounded-xl border border-border overflow-hidden shadow-elevation-1">
+  <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="p-5 bg-indigo-50/50 border-b md:border-b-0 md:border-r border-border">
+      <div className="flex items-center gap-2.5 mb-4">
+        <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-500 text-white flex items-center justify-center text-sm font-bold shadow-sm">1</span>
+        <div>
+          <p className="text-sm font-bold text-indigo-700">Phase 1: Iterative Diagnosis</p>
+          <p className="text-[10px] text-indigo-500 font-medium">Data-driven discovery</p>
+        </div>
+      </div>
+      <div className="space-y-2.5">
+        <div className="flex items-start gap-2.5 text-sm text-text-secondary"><span className="mt-0.5 w-5 h-5 rounded-md bg-indigo-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">1</span><div><span className="font-semibold text-text-primary">Data Ingestion</span> — Connect to sources, load structured and unstructured data</div></div>
+        <div className="flex items-start gap-2.5 text-sm text-text-secondary"><span className="mt-0.5 w-5 h-5 rounded-md bg-indigo-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">2</span><div><span className="font-semibold text-text-primary">AI-Assisted Diagnosis</span> — Decompose, hypothesize, analyze, validate</div></div>
+        <div className="flex items-start gap-2.5 text-sm text-text-secondary"><span className="mt-0.5 w-5 h-5 rounded-md bg-indigo-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">3</span><div><span className="font-semibold text-text-primary">Synthesis</span> — Convert validated findings into documented opportunities</div></div>
+      </div>
+      <div className="mt-3 pt-2.5 border-t border-indigo-200/60">
+        <p className="text-[11px] text-indigo-600 font-semibold flex items-center gap-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 12 12 12"/></svg>
+          Activities feed back iteratively
+        </p>
+      </div>
+    </div>
+    <div className="p-5 bg-violet-50/50">
+      <div className="flex items-center gap-2.5 mb-4">
+        <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-violet-500 text-white flex items-center justify-center text-sm font-bold shadow-sm">2</span>
+        <div>
+          <p className="text-sm font-bold text-violet-700">Phase 2: Prioritization</p>
+          <p className="text-[10px] text-violet-500 font-medium">From opportunities to roadmap</p>
+        </div>
+      </div>
+      <div className="space-y-2.5">
+        <div className="flex items-start gap-2.5 text-sm text-text-secondary"><span className="mt-0.5 w-5 h-5 rounded-md bg-violet-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">1</span><div><span className="font-semibold text-text-primary">Score Opportunities</span> — Apply WSJF and value/complexity criteria</div></div>
+        <div className="flex items-start gap-2.5 text-sm text-text-secondary"><span className="mt-0.5 w-5 h-5 rounded-md bg-violet-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">2</span><div><span className="font-semibold text-text-primary">Rank & Sequence</span> — Order by impact, feasibility, strategic alignment</div></div>
+        <div className="flex items-start gap-2.5 text-sm text-text-secondary"><span className="mt-0.5 w-5 h-5 rounded-md bg-violet-500 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">3</span><div><span className="font-semibold text-text-primary">Actionable Roadmap</span> — Sequenced plan stakeholders can act on</div></div>
+      </div>
+    </div>
+  </div>
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-center py-2 text-xs font-semibold tracking-wide">
+    Phase 1 Validated Opportunities → Phase 2 Prioritized Roadmap
+  </div>
+</div>
+
+<Diagram code={`flowchart LR
+  subgraph P1["Phase 1: Iterative Diagnosis"]
+    direction TB
+    D1[Data Ingestion] --> D2[AI-Assisted Diagnosis]
+    D2 --> D3[Synthesis]
+    D3 -.->|Refine| D1
+  end
+  subgraph P2["Phase 2: Prioritization"]
+    direction TB
+    P2A[Score Opportunities] --> P2B[Rank & Sequence]
+    P2B --> P2C[Actionable Roadmap]
+  end
+  P1 -->|Validated Opportunities| P2
+`} title="Two-Phase Problem Solving Overview" />
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-center">
+    <p className="text-white text-sm font-semibold tracking-wide">Two-Phase Problem Solving Approach</p>
+  </div>
+  <svg viewBox="0 0 700 300" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <filter id="pb-shadow" x="-4%" y="-4%" width="108%" height="116%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.1" />
+      </filter>
+      <linearGradient id="pb-indigo-head" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#4338CA" />
+      </linearGradient>
+      <linearGradient id="pb-violet-head" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#6D28D9" />
+      </linearGradient>
+      <linearGradient id="pb-bridge-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+    </defs>
+    {/* LEFT BLOCK — Phase 1 */}
+    <g filter="url(#pb-shadow)">
+      <rect x="30" y="20" width="200" height="250" rx="10" fill="#fff" stroke="#E0E7FF" strokeWidth="1" />
+      <rect x="30" y="20" width="200" height="42" rx="10" fill="url(#pb-indigo-head)" />
+      <rect x="30" y="50" width="200" height="12" fill="url(#pb-indigo-head)" />
+      <text x="130" y="36" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Phase 1:</text>
+      <text x="130" y="50" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Iterative Diagnosis</text>
+    </g>
+    <text x="55" y="92" fill="#374151" fontSize="11" fontWeight="600" style={{ fontFamily: 'system-ui' }}>1. Data Ingestion</text>
+    <text x="55" y="128" fill="#374151" fontSize="11" fontWeight="600" style={{ fontFamily: 'system-ui' }}>2. AI-Assisted Diagnosis</text>
+    <text x="55" y="164" fill="#374151" fontSize="11" fontWeight="600" style={{ fontFamily: 'system-ui' }}>3. Synthesis</text>
+    {/* Iteration arrow icon */}
+    <path d="M 110 200 C 90 200, 80 215, 95 225 C 110 235, 120 222, 115 212" fill="none" stroke="#4F46E5" strokeWidth="1.5" strokeLinecap="round" />
+    <polygon points="117,215 112,210 112,218" fill="#4F46E5" />
+    <text x="130" y="222" fill="#4F46E5" fontSize="9" fontWeight="500" style={{ fontFamily: 'system-ui' }}>Iterative</text>
+    {/* RIGHT BLOCK — Phase 2 */}
+    <g filter="url(#pb-shadow)">
+      <rect x="470" y="20" width="200" height="250" rx="10" fill="#fff" stroke="#EDE9FE" strokeWidth="1" />
+      <rect x="470" y="20" width="200" height="42" rx="10" fill="url(#pb-violet-head)" />
+      <rect x="470" y="50" width="200" height="12" fill="url(#pb-violet-head)" />
+      <text x="570" y="36" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Phase 2:</text>
+      <text x="570" y="50" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Prioritization</text>
+    </g>
+    <text x="495" y="92" fill="#374151" fontSize="11" fontWeight="600" style={{ fontFamily: 'system-ui' }}>1. Score Opportunities</text>
+    <text x="495" y="128" fill="#374151" fontSize="11" fontWeight="600" style={{ fontFamily: 'system-ui' }}>2. Rank &amp; Sequence</text>
+    <text x="495" y="164" fill="#374151" fontSize="11" fontWeight="600" style={{ fontFamily: 'system-ui' }}>3. Actionable Roadmap</text>
+    {/* BRIDGE — chevron/ribbon arrow */}
+    <polygon points="235,110 310,110 330,145 310,180 235,180 255,145" fill="url(#pb-bridge-grad)" filter="url(#pb-shadow)" />
+    <polygon points="330,110 465,110 465,180 330,180 350,145" fill="url(#pb-bridge-grad)" filter="url(#pb-shadow)" />
+    <text x="350" y="141" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Validated</text>
+    <text x="350" y="156" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Opportunities</text>
+  </svg>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-center">
+    <p className="text-white text-sm font-semibold tracking-wide">Phase Diagram — Diagnosis &amp; Prioritization</p>
+  </div>
+  <svg viewBox="0 0 700 320" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <filter id="pd-shadow" x="-4%" y="-4%" width="108%" height="116%">
+        <feDropShadow dx="0" dy="2" stdDeviation="6" floodOpacity="0.12" />
+      </filter>
+      <linearGradient id="pd-indigo-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4338CA" />
+        <stop offset="50%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#6366F1" />
+      </linearGradient>
+      <linearGradient id="pd-violet-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#6D28D9" />
+        <stop offset="50%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#8B5CF6" />
+      </linearGradient>
+      <marker id="pd-arrow-indigo" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#4F46E5" />
+      </marker>
+      <marker id="pd-arrow-violet" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#7C3AED" />
+      </marker>
+      <marker id="pd-arrow-bridge" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="10" markerHeight="8" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#6D28D9" />
+      </marker>
+    </defs>
+    {/* Phase 1 Pentagon Arrow */}
+    <polygon points="20,8 420,8 445,30 420,52 20,52" fill="url(#pd-indigo-grad)" filter="url(#pd-shadow)" />
+    <text x="225" y="35" textAnchor="middle" fill="#FFFFFF" fontSize="13" fontWeight="700" style={{ fontFamily: 'system-ui' }}>PHASE 1: DIAGNOSIS</text>
+    {/* Phase 2 Pentagon Arrow */}
+    <polygon points="455,8 660,8 680,30 660,52 455,52 475,30" fill="url(#pd-violet-grad)" filter="url(#pd-shadow)" />
+    <text x="570" y="35" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="700" style={{ fontFamily: 'system-ui' }}>PHASE 2: PRIORITIZATION</text>
+    {/* Container for activities */}
+    <rect x="20" y="64" width="660" height="210" rx="12" fill="#FAFAFE" stroke="#E0E7FF" strokeWidth="1" filter="url(#pd-shadow)" />
+    {/* Vertical divider */}
+    <line x1="440" y1="74" x2="440" y2="264" stroke="#E0E7FF" strokeWidth="1" strokeDasharray="6 3" />
+    {/* PHASE 1 Activities */}
+    {/* Activity 1 */}
+    <rect x="45" y="80" width="180" height="42" rx="10" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.2" />
+    <circle cx="60" cy="101" r="11" fill="#4F46E5" />
+    <text x="60" y="105" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>1</text>
+    <text x="140" y="106" textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Data Ingestion</text>
+    {/* Arrow 1→2 */}
+    <line x1="135" y1="122" x2="135" y2="140" stroke="#4F46E5" strokeWidth="1.5" markerEnd="url(#pd-arrow-indigo)" />
+    {/* Activity 2 */}
+    <rect x="45" y="145" width="180" height="42" rx="10" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.2" />
+    <circle cx="60" cy="166" r="11" fill="#4F46E5" />
+    <text x="60" y="170" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>2</text>
+    <text x="145" y="171" textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>AI-Assisted Diagnosis</text>
+    {/* Arrow 2→3 */}
+    <line x1="135" y1="187" x2="135" y2="205" stroke="#4F46E5" strokeWidth="1.5" markerEnd="url(#pd-arrow-indigo)" />
+    {/* Activity 3 */}
+    <rect x="45" y="210" width="180" height="42" rx="10" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.2" />
+    <circle cx="60" cy="231" r="11" fill="#4F46E5" />
+    <text x="60" y="235" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>3</text>
+    <text x="140" y="236" textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Synthesis</text>
+    {/* Iteration arrow: 3 back to 1 */}
+    <path d="M 45 231 C 15 231, 15 101, 45 101" fill="none" stroke="#818CF8" strokeWidth="1.5" strokeDasharray="5 3" markerEnd="url(#pd-arrow-indigo)" />
+    <text x="8" y="168" fill="#818CF8" fontSize="8" fontWeight="500" style={{ fontFamily: 'system-ui' }} transform="rotate(-90 8 168)">Iterate</text>
+    {/* Bold bridge arrow: Phase 1 → Phase 2 */}
+    <line x1="260" y1="168" x2="448" y2="168" stroke="#6D28D9" strokeWidth="3" markerEnd="url(#pd-arrow-bridge)" />
+    <rect x="310" y="153" width="100" height="16" rx="8" fill="#F5F3FF" stroke="#C4B5FD" strokeWidth="0.5" />
+    <text x="360" y="164" textAnchor="middle" fill="#7C3AED" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Validated Opps</text>
+    {/* PHASE 2 Activities */}
+    {/* Activity 1 */}
+    <rect x="465" y="80" width="190" height="42" rx="10" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1.2" />
+    <circle cx="480" cy="101" r="11" fill="#7C3AED" />
+    <text x="480" y="105" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>1</text>
+    <text x="567" y="106" textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Score Opportunities</text>
+    {/* Arrow 1→2 */}
+    <line x1="560" y1="122" x2="560" y2="140" stroke="#7C3AED" strokeWidth="1.5" markerEnd="url(#pd-arrow-violet)" />
+    {/* Activity 2 */}
+    <rect x="465" y="145" width="190" height="42" rx="10" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1.2" />
+    <circle cx="480" cy="166" r="11" fill="#7C3AED" />
+    <text x="480" y="170" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>2</text>
+    <text x="567" y="171" textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Rank &amp; Sequence</text>
+    {/* Arrow 2→3 */}
+    <line x1="560" y1="187" x2="560" y2="205" stroke="#7C3AED" strokeWidth="1.5" markerEnd="url(#pd-arrow-violet)" />
+    {/* Activity 3 */}
+    <rect x="465" y="210" width="190" height="42" rx="10" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1.2" />
+    <circle cx="480" cy="231" r="11" fill="#7C3AED" />
+    <text x="480" y="235" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="700" style={{ fontFamily: 'system-ui' }}>3</text>
+    <text x="567" y="236" textAnchor="middle" fill="#1E1B4B" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Actionable Roadmap</text>
+    {/* Footer note */}
+    <text x="350" y="295" textAnchor="middle" fill="#6B7280" fontSize="9.5" fontWeight="500" style={{ fontFamily: 'system-ui' }}>Activities feed back iteratively — this is not a waterfall process</text>
+  </svg>
+</div>
+
+</VariantPicker>
 
 ## Phase 1: Iterative Diagnosis
 
@@ -27,7 +235,7 @@ Each activity feeds back into the others. A finding from diagnosis may trigger a
 
 ## Phase 2: Prioritization
 
-Once opportunities are identified and documented, Phase 2 applies structured scoring methods to review and rank them by value, complexity, and strategic alignment. This transforms a list of possibilities into a sequenced roadmap that stakeholders can act on.
+Once opportunities are identified and documented, Phase 2 applies structured scoring methods to rank them by value, complexity, and strategic alignment. This transforms a list of possibilities into a sequenced roadmap that stakeholders can review and act on.
 
 <Callout type="tip" title="Why This Matters">
 Traditional problem-solving can take weeks of interviews and workshops before a single insight emerges. With AI-empowered diagnosis, practitioners can surface data-driven insights within hours, then validate those insights with stakeholders — dramatically accelerating time to action.

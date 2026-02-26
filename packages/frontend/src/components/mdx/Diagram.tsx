@@ -6,6 +6,12 @@ interface DiagramProps {
   title?: string;
 }
 
+function resolveVar(name: string, fallback: string): string {
+  if (typeof document === 'undefined') return fallback;
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value || fallback;
+}
+
 export default function Diagram({ code, title }: DiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string>('');
@@ -21,12 +27,14 @@ export default function Diagram({ code, title }: DiagramProps) {
           startOnLoad: false,
           theme: 'base',
           themeVariables: {
-            primaryColor: 'var(--color-primary-light)',
-            primaryBorderColor: 'var(--color-primary)',
-            primaryTextColor: 'var(--color-text-primary)',
-            lineColor: 'var(--color-border)',
-            secondaryColor: 'var(--color-surface)',
-            tertiaryColor: 'var(--color-background)',
+            primaryColor: resolveVar('--color-primary-light', '#EEF2FF'),
+            primaryBorderColor: resolveVar('--color-primary', '#4F46E5'),
+            primaryTextColor: resolveVar('--color-text-primary', '#1A1A2E'),
+            lineColor: resolveVar('--color-border', '#E5E7EB'),
+            secondaryColor: resolveVar('--color-surface', '#F8F9FA'),
+            tertiaryColor: resolveVar('--color-background', '#FFFFFF'),
+            fontFamily: 'inherit',
+            fontSize: '14px',
           },
         });
         const { svg: renderedSvg } = await mermaid.render(idRef.current, code);

@@ -66,8 +66,8 @@ export async function getLesson(
 
   const source = fs.readFileSync(mdxPath, 'utf-8');
 
-  // Extract frontmatter (simple YAML between --- delimiters)
-  const frontmatterMatch = source.match(/^---\n([\s\S]*?)\n---/);
+  // Extract frontmatter (simple YAML between --- delimiters, tolerates CRLF)
+  const frontmatterMatch = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   let meta: LessonMeta = {
     title: lessonSlug.replace(/^\d+-/, '').replace(/-/g, ' '),
     slug: lessonSlug,
@@ -114,19 +114,19 @@ export function getCourseNavTree(courseSlug: string): CourseNavTree | null {
       };
     }
 
-    const lessons: NavLesson[] = mod.lessons.map((lessonSlug, lessonIndex) => {
+    const lessons: NavLesson[] = mod.lessons.map((lessonSlug: string, lessonIndex: number) => {
       // Read frontmatter title from MDX file
       let title = lessonSlug
         .replace(/^\d+-/, '')
         .replace(/-/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+        .replace(/\b\w/g, (c: string) => c.toUpperCase());
       let duration = 5;
 
       const mdxPath = path.join(coursesDir(), courseSlug, 'modules', moduleSlug, 'lessons', `${lessonSlug}.mdx`);
       if (fs.existsSync(mdxPath)) {
         try {
           const source = fs.readFileSync(mdxPath, 'utf-8');
-          const fmMatch = source.match(/^---\n([\s\S]*?)\n---/);
+          const fmMatch = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
           if (fmMatch) {
             const titleMatch = fmMatch[1].match(/^title:\s*"?([^"\n]+)"?/m);
             if (titleMatch) title = titleMatch[1].trim();

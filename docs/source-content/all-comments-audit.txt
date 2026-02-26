@@ -1,0 +1,211 @@
+ALL COMMENTS EXTRACTED FROM: HTML REVIEW COPY _ AOMT-Playbook.docx
+Total comments: 68
+Extraction date: 2026-02-25
+====================================================================================================
+
+#0 (Deniz Oker, 2026-02-24T11:41:00Z): @Patryk Mazinski All comments with screenshots of graphics refer to the playbook ppt:  AOMT Playbook.pptx Please grab directly from that file and feel free to improve the visuals as you insert them into live html.
+   Anchored to: [(empty anchor range)]
+
+#28 (Paul Giessler, 2026-02-23T08:55:00Z): Since the Playbook summary section in only part of one page … do we need the sub-section breakdown ...let’s just have one item for the Summary
+   Anchored to: [Module 1: Playbook Overview6Welcome to the Playbook6Table of Contents6Playbook Objectives6Guiding Principles6Core Design Principles7Introducing AI Enabled Problem-Solving 7Two Core Principles7Playbook Structure7Section I: Practitioners Playbook 7Section II: Performance Management & Sustainment8Section III: Organizational Change Management8Module 2: AI-Empowered Problem-Solving10AI-Empowered Problem-Solving10Phase 2: Prioritization10Diagnosis Overview10The 6-Step Iterative Process10Iterative by Design11How AI Accelerates Each Step11Problem Statement11The 7 Elements12Crafting the Problem Statement with AI12Metro Cable Example12Issues Tree & Hypotheses13MECE Decomposition13Hypothesis Framework13Testing and Interpreting Results13Building the Tree Iteratively13Data Request & Ingestion14The Formal Data Request14Data Visualization14AI-Enabled Visualization Approach14Common Visualization Types 14Example: Geographic Mapping15Curiosity-Enabled Analysis15The Context + Task + Output Framework15Prompt Scoring Exercise16Analysis Validation16Four Methods for Validating AI Output16The Validation Framework16Root Cause vs. Symptom17Validation Checklist17AI-Enabled Research17Benchmarking with AI17Research Applications18Combining Internal and External Research18Data Analysis Plan185 Components of the Analysis Plan18Building the Plan with AI19The Living Document Concept19Example Plan Structure19Opportunity Synthesis19From Findings to Opportunities19Developing the Option Set20Structuring the Synthesis Output20Module 3: Opportunity Prioritization23Opportunity Documentation23Documentation Template23Prioritization Methods Overview23Comparing the Two Methods24When to Use Each Method24Recommended Approach: Use Both24WSJF Scoring Method24The WSJF Formula24Scoring Components25Generating the Prioritized Roadmap25Value vs. Complexity Matrix25The Four Quadrants26When to Use Each Method26Plotting the Matrix26Module 4: AI Tool Development & Agile Delivery29AI Tool Development29From Opportunity to Solution29Selecting the Right Solution Type29Design & Prototype294 Prototyping Principles30Epic and User Story Structure30Prototype Testing30Projects vs. Agile Approaches30When to Use Each Approach30SAFe Development Methods31The 5-Step SAFe Process for AI Enabled Problem-Solving 31The Product Owner Role31Key SAFe Artifacts 31SAFe Stages and Key Roles32Stage 1: Assess & Plan32Stage 2: Agile Design, Build, Test32Stage 3: Deploy & Adopt Users32Module 5: Performance Management & Sustainment35Sustainment Framework35The Three Pillars35The Drift Problem35Sustainment Is Not Maintenance36Structure (Alignment)36Key Questions for Structural Alignment36Incentive Alignment36Support (Learning)365 Support Components37Measuring Support Effectiveness37Feedback (Performance)37Feedback Loop: 4 Elements38Monitoring Cadence38Agile Governance for Feedback38Continuous Improvement Cycle38Module 6: Organizational Change Management41Change Readiness Baseline41Three Dimensions of Readiness41Assessing Each Dimension41Using the Baseline42Readiness Assessment42Dimension 1: Case for Change42Dimension 2: Influence Network42Dimension 3: Communications43Readiness Survey Design435 Design Principles43Sample Question Categories43Acting on Survey Results44Communications Management44The 5W Planning Framework44Measuring Communication Effectiveness45Governance Framework454 Governance Components45Meeting Cadence45Governance Decision Rights46Module 7: Playbook Summary & Next Steps49Playbook Summary49Section I: Practitioners Guide49Chapter I: AI-Empowered Problem-Solving49Glossary50]
+
+#79 (Paul Giessler, 2026-02-23T09:00:00Z): We should have a graphic here - preferably one that shows the benefits of AI Enabled Problem Solving compared to traditional linear approaches
+   Anchored to: [(empty anchor range)]
+
+#80 (Deniz Oker, 2026-02-24T11:39:00Z): In live html, this section includes a placeholder video to introduce the concept. And I’ve asked the team to add our graphic to Introduction of AI Enabled Problem Solving section a bit later in the flow. Please see my next comment.
+   Anchored to: [(empty anchor range)]
+
+#96 (Deniz Oker, 2026-02-23T14:30:00Z): We should include the graphic for this concept from S5 of the playbook ppt.
+   Anchored to: [Introducing AI Enabled Problem-Solving]
+
+#97 (Paul Giessler, 2026-02-23T15:33:00Z): This or something better
+   Anchored to: [Introducing AI Enabled Problem-Solving]
+
+#105 (Deniz Oker, 2026-02-23T14:32:00Z): Instead of listing bullet points, a visual like this from S6 of playbook ppt would look nicer and cleaner.
+   Anchored to: [Playbook Structure]
+
+#106 (Paul Giessler, 2026-02-23T15:33:00Z): Agreed
+   Anchored to: [Playbook Structure]
+
+#110 (Paul Giessler, 2026-02-23T18:38:00Z): This question is okay, but can we ensure that the sorting process is intuitive - per our last review session
+   Anchored to: [appear]
+
+#111 (Deniz Oker, 2026-02-24T11:51:00Z): @Patryk Mazinski After completing the knowledge check section and clicking on “continue the course”, it looped back to 1.5 playbook structure section instead of moving on to the next module. Also, I’m realizing that it did not save my answers in the module 1 knowledge check section.
+   Anchored to: [Answer Key]
+
+#115 (Paul Giessler, 2026-02-23T18:41:00Z): @Deniz Oker is there are graphic here? Where does your nice circle go? Also, and I know I have been pushing for MVP - but with that in mind can the graphic have fly-over functions that pop the descriptions? No big deal if that isn’t possible or a ton of work.
+   Anchored to: [and]
+
+#116 (Deniz Oker, 2026-02-24T11:55:00Z): I’ve suggested to include the circular chart to replace the linear chart - see my next comment. We can use it here instead as well. S10 from the deck:
+   Anchored to: [and]
+
+#149 (Deniz Oker, 2026-02-23T14:49:00Z): Consider using the existing visual in S10 of the playbook ppt. This version looks very linear/waterfall, whereas the original graphic demonstrated a circular / iterative approach.
+   Anchored to: [(empty anchor range)]
+
+#156 (Deniz Oker, 2026-02-23T14:51:00Z): This word cloud looks very confusing and disorganized. Consider adding a table or sth.
+   Anchored to: [| Activity | Traditional Approach | AI-Enabled Approach | |------|---------------------|---------------------| | Problem Statement | Weeks of stakeholder interviews | Data-informed scoping in hours | | Issues Tree | Workshop-based brainstorming | AI-generated MECE decomposition with human refinement | | Data Request | Manual inventory of available data | AI-assisted data landscape mapping | | Hypotheses | Experience-based assumptions | Data-pattern-driven hypothesis generation | | Analysis Plan | AI-suggested analytical approaches | | Analysis & Synthesis | Manual spreadsheet analysis | AI-powered pattern recognition and visualization |]
+
+#157 (Paul Giessler, 2026-02-23T18:58:00Z): Agreed .. I think you had it as a table in the slides. Also, and I realize this is nit-picky, but can we try to avoid the word “step” if possible. We stress the approach is non-linear - so step-by-step runs counter to that idea. I realize it won’t be possible in all areas, but let’s see what we can do … I used “activities” here
+   Anchored to: [| Activity | Traditional Approach | AI-Enabled Approach | |------|---------------------|---------------------| | Problem Statement | Weeks of stakeholder interviews | Data-informed scoping in hours | | Issues Tree | Workshop-based brainstorming | AI-generated MECE decomposition with human refinement | | Data Request | Manual inventory of available data | AI-assisted data landscape mapping | | Hypotheses | Experience-based assumptions | Data-pattern-driven hypothesis generation | | Analysis Plan | AI-suggested analytical approaches | | Analysis & Synthesis | Manual spreadsheet analysis | AI-powered pattern recognition and visualization |]
+
+#158 (Deniz Oker, 2026-02-24T12:03:00Z): Recognized the this is already a table in the live html, so we’re good. Just replaced “Step” with “Activity”.
+   Anchored to: [| Activity | Traditional Approach | AI-Enabled Approach | |------|---------------------|---------------------| | Problem Statement | Weeks of stakeholder interviews | Data-informed scoping in hours | | Issues Tree | Workshop-based brainstorming | AI-generated MECE decomposition with human refinement | | Data Request | Manual inventory of available data | AI-assisted data landscape mapping | | Hypotheses | Experience-based assumptions | Data-pattern-driven hypothesis generation | | Analysis Plan | AI-suggested analytical approaches | | Analysis & Synthesis | Manual spreadsheet analysis | AI-powered pattern recognition and visualization |]
+
+#160 (Deniz Oker, 2026-02-23T14:55:00Z): It’s not clear to reader which stage/activity we’re currently on. I’d suggest to add a breadcrumb or some sort of visual clue on progress on sections/chapters/topics/steps. As an example:
+   Anchored to: [Problem Statement]
+
+#161 (Paul Giessler, 2026-02-24T09:33:00Z): Hi Deniz … reach out to Matt D and get the URL for the live version. I’d would like to get your thoughts on how they have tracking setup
+   Anchored to: [Problem Statement]
+
+#162 (Deniz Oker, 2026-02-24T12:05:00Z): I take this back as when I see the actual live html, we can see the progress pane on the left.
+   Anchored to: [Problem Statement]
+
+#164 (Deniz Oker, 2026-02-23T14:53:00Z): Instead of listing bullets, using the following visual graphic from S11 of the playbook ppt would look nicer, if possible.
+   Anchored to: [The 7 ElementsEvery Problem Statement should address these seven elements:Description — A clear, concise articulation of the problem or opportunity being investigated. Avoid solution language; focus on the observable gap between current state and desired state.Customers — Who is affected by this problem? Identify both internal customers (teams, departments) and external customers (end users, clients) impacted by the current state.Decision Makers — Who has the authority to approve recommendations and allocate resources? Identify the specific individuals, not just roles.Decision Drivers — What factors will influence how decisions are made? Consider financial thresholds, strategic priorities, regulatory constraints, and organizational risk appetite.Boundaries — What is explicitly in scope and out of scope? Clear boundaries prevent scope creep and keep analysis focused.Success Measures — How will you know the problem is solved? Define quantifiable metrics (e.g., "reduce average handling time by 15%") rather than vague goals.Timeframe — What is the deadline for delivering findings and recommendations? Include interim milestones for iterative check-ins.]
+
+#166 (Paul Giessler, 2026-02-23T19:02:00Z): I don’t fully understand this statement, and I think the previous sentence can stand on its own.
+   Anchored to: [(empty anchor range)]
+
+#167 (Deniz Oker, 2026-02-24T12:07:00Z): Looks like you’ve already removed that sentence in this review file (to cascade to actual html), so resolving this comment as no further action is needed.
+   Anchored to: [(empty anchor range)]
+
+#169 (Deniz Oker, 2026-02-23T15:06:00Z): In this case study, initial problem statement was driven by evaluation across the 7 elements. As represented earlier in this section. So, we should convey this connection in this example as such: (S12) before taking it to a boiled down problem statement to show the thinking process step by step.
+   Anchored to: [Initial Problem Statement:]
+
+#170 (Paul Giessler, 2026-02-23T19:10:00Z): QUESTION … do we ever come back to the Problem Statement to show revisions based on learnings?
+   Anchored to: [Initial Problem Statement:]
+
+#171 (Deniz Oker, 2026-02-24T12:12:00Z): That’s why I’ve added this next section for problem statement evolution from our playbook.
+   Anchored to: [Initial Problem Statement:]
+
+#172 (Paul Giessler, 2026-02-24T09:36:00Z): Can we check this against the PPT - this paragraph feels like a description of a Problem Statement not an Initial Problem Statement - wondering if Claude rewrote it?
+   Anchored to: [service]
+
+#173 (Lavanya Agarwal, 2026-02-24T10:45:00Z): Seems like a rewrite of the initial statement. To make things clear, might be helpful to add in the initial problem statement as a table with all the descriptors as in slide 12 of the playbook
+   Anchored to: [service]
+
+#174 (Deniz Oker, 2026-02-24T12:13:00Z): Yes, this is the same suggestion I’ve made in my earlier comment (right before this one). To avoid duplicated comments, let’s resolve this one.
+   Anchored to: [service]
+
+#175 (Deniz Oker, 2026-02-23T15:10:00Z): Consider adding an improved version of this process flow to showcase steps to refine the initial problem statements in an iterative manner until we reach the list of ops.
+   Anchored to: [An initial problem statement can be derived from early conversations about the issue to be addressed. This draft version can be used as input to render a “first pass” data request.]
+
+#176 (Paul Giessler, 2026-02-24T09:38:00Z): This is new content … I like it.
+   Anchored to: [boundaries]
+
+#179 (Deniz Oker, 2026-02-23T15:16:00Z): We should display an example of how an issue tree looks like for the case study. From S15:
+   Anchored to: [Metro Cable Example – Issues Tree]
+
+#183 (Paul Giessler, 2026-02-24T09:46:00Z): I like the additional content regarding  how AI can be used to create first-pass artifacts - can we include a “prompt” and/or AI output as a graphic - I suspect it will look different that our depiction and Practitioners should know what they will likely be receiving as output.
+   Anchored to: [additional]
+
+#185 (Paul Giessler, 2026-02-24T09:48:00Z): Earlier we suggest data use to generate Issue Trees etc. - but this is the first reference to a data request. Should we add some words early to suggest preliminary data versus formal data requests?
+   Anchored to: [and]
+
+#186 (Deniz Oker, 2026-02-24T12:27:00Z): S24 from playbook covers the iterative nature of data requests. Similarly, we should show both the preliminary data request and the refined data request based on hypotheses as captured in my next few comments.
+   Anchored to: [and]
+
+#188 (Deniz Oker, 2026-02-23T15:23:00Z): Consider adding the risks and considerations for data requests. S19 from the deck:
+   Anchored to: [The Data Request]
+
+#189 (Paul Giessler, 2026-02-24T10:06:00Z): Let’s make System of Record a glossary term. Highlighting that a lot of organizations store data in multiple repositories and many times reports don’t match. In those cases, as part of the data request Practitioners should get agreement on the “single source of truth” to be used in analysis - this will save a lot of rework when presenting to stakeholders.
+   Anchored to: [record]
+
+#190 (Deniz Oker, 2026-02-23T15:22:00Z): We should add an example data request list for the case study. S18 from the deck:
+   Anchored to: [Metro Cable Example – Initial Data Request]
+
+#191 (Deniz Oker, 2026-02-24T12:28:00Z): Refined Data request example here:
+   Anchored to: [Metro Cable Example - Refined Data Request]
+
+#192 (Deniz Oker, 2026-02-24T12:23:00Z): There are additional subsections (e.g., data ingestion best practices) in the live html that doesn’t show in this review file. We should maintain that content.
+   Anchored to: [Data]
+
+#193 (Paul Giessler, 2026-02-24T10:07:00Z): Let’s check on what the intended content is for Data Governance
+   Anchored to: [(empty anchor range)]
+
+#194 (Deniz Oker, 2026-02-24T12:24:00Z): “Always follow your organization's data governance policies when requesting and handling data. Ensure appropriate access permissions, anonymization requirements, and retention policies are observed throughout the engagement.”
+   Anchored to: [(empty anchor range)]
+
+#197 (Paul Giessler, 2026-02-24T10:10:00Z): Let’s make BI tools a glossary term, or delete BI and just have “traditional tools”. I realize everyone should know the term, but we might get some very non-IT / non-analytical candidates.
+   Anchored to: [tools]
+
+#201 (Paul Giessler, 2026-02-24T10:15:00Z): Can we place very small representations (or fly over pop-ups) for each of the listed visualizations.
+   Anchored to: [plots]
+
+#203 (Paul Giessler, 2026-02-24T10:16:00Z): For Protective … can we include the output visualization along with the AI text?
+   Anchored to: [Mapping]
+
+#219 (Paul Giessler, 2026-02-24T10:28:00Z): @Deniz Oker @Lavanya Agarwal  I think these yellow boxes have content associated with them in the “live” HTLML version. Would it be possible to review the exercise. If it makes sense to you, then I am ok … Also, if the exercise requires any input (i.e., dataset, or spreadsheet, etc.) let’s ensure that whatever is needed in embedded or otherwise easily obtainable for the learner. I want this to be  a self-contained playbook - otherwise it might be better to drop the interaction and offer an example. Does this make sense?
+   Anchored to: [(empty anchor range)]
+
+#220 (Lavanya Agarwal, 2026-02-24T11:23:00Z): Everyone might not be dealing with data on an everyday basis so maybe we can add in a dummy dataset?
+   Anchored to: [(empty anchor range)]
+
+#221 (Lavanya Agarwal, 2026-02-24T11:26:00Z): Other than that, the exercise makes sense to me. @Deniz Oker - feel free to check and comment as you go through the HTML version and this file
+   Anchored to: [(empty anchor range)]
+
+#222 (Deniz Oker, 2026-02-24T12:42:00Z): The interactive portion does not need any data to look into. It simply evaluates your thinking / hypothetical questions without asking for a dataset. See an example below.
+   Anchored to: [(empty anchor range)]
+
+#223 (Deniz Oker, 2026-02-24T12:45:00Z): To Lavanya’s point, we can rephrase the prompt to say “think of a dataset or problem you work with regularly”.
+   Anchored to: [(empty anchor range)]
+
+#235 (Paul Giessler, 2026-02-24T10:52:00Z): Where possible, can we show the AI output in a format similar to what might come out of an LLM …. I am okay if we can’t, but it might be more visually interesting and add a sense of realism.
+   Anchored to: [minutes]
+
+#276 (Paul Giessler, 2026-02-24T11:34:00Z): The term Operational Excellence sort of pops up out of the blue here … since this is the name of the Protective program … I would rather not include it so as to avoid confusion. I don’t think it is critical to the content … let me know if I am missing something.
+   Anchored to: [credibility]
+
+#282 (Paul Giessler, 2026-02-24T11:55:00Z): @Deniz Oker  not for the Playbook, but it occurred to me that this could be another agent?
+   Anchored to: [(empty anchor range)]
+
+#286 (Deniz Oker, 2026-02-24T14:25:00Z): Before we compare the two methods, we should first introduce them. I suggest we use the graphics and overview sentences to introduce each method. For WSJF, see S44 and S45 from the deck:
+For method #2, see S47:
+We can place them under each section as well.
+   Anchored to: [Comparing the Two Methods]
+
+#292 (Paul Giessler, 2026-02-24T12:12:00Z): Probably should include Fibonacci in the glossary as the history might be interesting to some learners Leonardo of Pisa (called Fibonacci) in his 1202 book Liber Abaci.
+He used it to model rabbit population growth (idealized): → A pair of rabbits produces a new pair every month starting from the second month. → No rabbits die. → This leads exactly to the sequence: 1, 1, 2, 3, 5, 8, 13… pairs per month.
+   Anchored to: [Fibonacci]
+
+#295 (Paul Giessler, 2026-02-24T12:19:00Z): Is there a way to bring the Metro Cable example into this module?
+   Anchored to: [Matrix]
+
+#297 (Deniz Oker, 2026-02-24T14:36:00Z): A visual would be nice to show this matrix and quadrants.
+   Anchored to: [The Four Quadrants]
+
+#314 (Deniz Oker, 2026-02-24T14:39:00Z): Consider adding this visual right after we introduce this chapter to showcase the key activities covered. S49:
+   Anchored to: [AI Tool Development]
+
+#318 (Deniz Oker, 2026-02-24T14:41:00Z): Consider adding this visual in this section for design and prototype stages. S50:
+   Anchored to: [Design & Prototype]
+
+#320 (Deniz Oker, 2026-02-24T14:45:00Z): We should utilize the other example from the playbook: digital data request tracker design & prototype slides. S51 and S52:
+   Anchored to: [4 Prototyping Principles]
+
+#330 (Paul Giessler, 2026-02-24T15:12:00Z): Check my edit … if it doesn’t materially change the intent then keep it, otherwise revert. The point here is that at Protective we are encouraging IT/Security involvement throughout the improvement effort rather that a last step check.
+   Anchored to: [and]
+
+#340 (Paul Giessler, 2026-02-24T15:35:00Z): Check the Product Owner title and description with Wayne and Glenn … this will need to align with what has been presented to Protective. As a workaround we could present these details as Product Owner / Product Manager roles
+   Anchored to: [Role]
+
+#345 (Deniz Oker, 2026-02-24T14:47:00Z): S54 from playbook:
+   Anchored to: [SAFe Stages and Key Roles]
+
+#346 (Paul Giessler, 2026-02-24T15:45:00Z): We may need a caveat in this section if the details don’t align to what Glenn, Wayne, and Nick have presented to Protective. I want this to be generic, but they may have added nuances. Something at the beginning of the Section. “This section describes the standard principles of SAFe, organizations occasionally adapt terminology to reflect unique characteristics of a specific implementations.” Hopefully, everything aligns and we don’t have to worry about it.
+   Anchored to: [SAFe Stages and Key Roles]
+
+#356 (Deniz Oker, 2026-02-24T14:51:00Z): If possible, let’s use the graphic from S56 instead:
+   Anchored to: [(empty anchor range)]
+
+#370 (Deniz Oker, 2026-02-24T15:01:00Z): @Patryk Mazinski When user answers incorrectly and clicks the link to review the respective section, the system does not retain the knowledge check answers, forcing back to #1 to repeat the whole questionnaire again. It’d be great if the system would save all answers and the user would resume from the question s/he left.
+   Anchored to: [Module 5 Knowledge Check]
+
+#372 (Paul Giessler, 2026-02-24T16:23:00Z): Maybe I missed it, but I didn’t notice a reference to Scorecard and Dashboards in this section.
+   Anchored to: [values]
+
+#396 (Deniz Oker, 2026-02-24T15:12:00Z): Consider adding an overview like this to recap the key purpose and use of the playbook.
+   Anchored to: [Comprehensive Journey: The Playbook’s three main sections guide users through the entire lifecycle of a project. This journey begins with an initial problem diagnosis and moves systematically through to the final solution development.Foundational Principles: All strategic decisions within the framework are anchored by two core pillars: Data First and AI First. These principles ensure that every step of the process is grounded in empirical evidence and enhanced by intelligent automation.Universal Application: The Playbook utilizes tool-agnostic frameworks that focus on high-level methodologies rather than specific software. This flexible design allows it to be applied to an unlimited number of use cases across any industry or professional context.]
+
+#397 (Deniz Oker, 2026-02-24T15:11:00Z): We should probably end the playbook stronger. Consider including a closing statement (e.g., Adopt with intention. Start with data. Lead with AI. Sustain through people.) Also, if you want to end with the screenshot below, let’s graphically improve it.
+   Anchored to: [Final Thought]

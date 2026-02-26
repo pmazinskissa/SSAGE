@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   X, BookOpen, Search, LayoutDashboard,
   ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight,
@@ -7,6 +7,72 @@ import {
 import { NavLink, Link, useParams } from 'react-router-dom';
 import { useCourse } from '../../context/CourseContext';
 import SidebarNavItem from './SidebarNavItem';
+import type { CourseNavTree, CourseConfig } from '@playbook/shared';
+
+/* ------------------------------------------------------------------ */
+/*  Compute locked lessons and KCs based on course settings + progress  */
+/* ------------------------------------------------------------------ */
+
+function computeLockedItems(
+  navTree: CourseNavTree,
+  course: CourseConfig,
+): { lockedLessons: Set<string>; lockedKCs: Set<string> } {
+  const lockedLessons = new Set<string>();
+  const lockedKCs = new Set<string>();
+
+  const isLinear = course.navigation_mode === 'linear';
+  const requireKC = course.require_knowledge_checks ?? false;
+
+  if (!isLinear && !requireKC) return { lockedLessons, lockedKCs };
+
+  // Flat list of all lessons in order
+  const allLessons: Array<{ modSlug: string; slug: string; status: string }> = [];
+  for (const mod of navTree.modules) {
+    for (const lesson of mod.lessons) {
+      allLessons.push({ modSlug: mod.slug, slug: lesson.slug, status: lesson.status });
+    }
+  }
+
+  // For linear locking: index of first non-completed lesson (-1 if all done)
+  const firstNonCompleted = isLinear ? allLessons.findIndex((l) => l.status !== 'completed') : -1;
+
+  // For KC locking: index of first module whose KC is required but not done
+  let kcBlockedFromModIdx = Infinity;
+  if (requireKC) {
+    for (let i = 0; i < navTree.modules.length; i++) {
+      const mod = navTree.modules[i];
+      if (mod.has_knowledge_check && !mod.knowledge_check_completed) {
+        kcBlockedFromModIdx = i + 1;
+        break;
+      }
+    }
+  }
+
+  let flatIdx = 0;
+  for (let modIdx = 0; modIdx < navTree.modules.length; modIdx++) {
+    const mod = navTree.modules[modIdx];
+
+    for (const lesson of mod.lessons) {
+      const linearLocked = isLinear && firstNonCompleted !== -1 && flatIdx > firstNonCompleted;
+      const kcLocked = requireKC && modIdx >= kcBlockedFromModIdx;
+      if (linearLocked || kcLocked) {
+        lockedLessons.add(`${mod.slug}:${lesson.slug}`);
+      }
+      flatIdx++;
+    }
+
+    if (mod.has_knowledge_check) {
+      const allLessonsDone = mod.lessons.every((l) => l.status === 'completed');
+      const kcLinearLocked = isLinear && !allLessonsDone;
+      const kcKcLocked = requireKC && modIdx >= kcBlockedFromModIdx;
+      if (kcLinearLocked || kcKcLocked) {
+        lockedKCs.add(mod.slug);
+      }
+    }
+  }
+
+  return { lockedLessons, lockedKCs };
+}
 
 /* ------------------------------------------------------------------ */
 /*  Lesson status icon                                                 */
@@ -36,7 +102,12 @@ interface SidebarProps {
 
 export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: SidebarProps) {
   const { slug, moduleSlug } = useParams<{ slug: string; moduleSlug: string }>();
-  const { navTree, loading } = useCourse();
+  const { navTree, course, loading } = useCourse();
+
+  const { lockedLessons, lockedKCs } = useMemo(() => {
+    if (!navTree || !course) return { lockedLessons: new Set<string>(), lockedKCs: new Set<string>() };
+    return computeLockedItems(navTree, course);
+  }, [navTree, course]);
 
   // Track which modules are expanded — only the current module starts expanded
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
@@ -175,7 +246,7 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                         <button
                           onClick={() => toggleModule(mod.slug)}
                           className="w-full flex items-center justify-center py-1 hover:opacity-80 transition-opacity"
-                          title={`Module ${mod.order}: ${mod.title}${mod.status === 'completed' ? ' (Completed)' : ''}`}
+                          title={`${mod.order}. ${mod.title}${mod.status === 'completed' ? ' (Completed)' : ''}`}
                         >
                           <span className="relative">
                             <span className={`w-7 h-7 flex items-center justify-center rounded-full text-[11px] font-bold ${
@@ -201,7 +272,7 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                               <NavLink
                                 key={lesson.slug}
                                 to={`/courses/${slug}/modules/${mod.slug}/lessons/${lesson.slug}`}
-                                title={lesson.title}
+                                title={`${mod.order}.${lesson.order} ${lesson.title}`}
                                 className={({ isActive }) =>
                                   `flex items-center justify-center w-8 h-7 rounded transition-colors ${
                                     isActive
@@ -243,19 +314,23 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                     Loading navigation...
                   </div>
                 ) : navTree ? (
-                  navTree.modules.map((mod) => {
-                    const isExpanded = expandedModules.has(mod.slug);
-                    return (
-                      <div key={mod.slug}>
-                        {/* Module header — clickable to expand/collapse */}
-                        <button
-                          onClick={() => toggleModule(mod.slug)}
-                          className="w-full flex items-center justify-between px-4 py-2 mt-3 first:mt-0 text-left hover:bg-indigo-50/50 rounded-md transition-colors"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                                Module {mod.order}
+                  <>
+                    <p className="px-4 pt-3 pb-1 text-xs font-bold uppercase tracking-widest text-slate-400">
+                      Modules
+                    </p>
+                    {navTree.modules.map((mod) => {
+                      const isExpanded = expandedModules.has(mod.slug);
+                      return (
+                        <div key={mod.slug}>
+                          {/* Module header — clickable to expand/collapse */}
+                          <button
+                            onClick={() => toggleModule(mod.slug)}
+                            className="w-full flex items-center justify-between px-4 py-2 mt-1 first:mt-0 text-left hover:bg-indigo-50/50 rounded-md transition-colors"
+                          >
+                            <div className="min-w-0 flex-1 flex items-center gap-2">
+                              <p className="text-sm font-semibold truncate">
+                                <span className="text-purple-600">{mod.order}.</span>{' '}
+                                <span className="text-slate-800">{mod.title}</span>
                               </p>
                               {mod.status === 'completed' && (
                                 <CheckCircle2 size={12} className="text-success flex-shrink-0" />
@@ -264,46 +339,45 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                                 <Disc size={12} className="text-primary flex-shrink-0" />
                               )}
                             </div>
-                            <p className="text-sm font-semibold text-slate-500 mt-0.5 truncate">
-                              {mod.title}
-                            </p>
-                          </div>
-                          <span className="flex-shrink-0 ml-2">
-                            {isExpanded ? (
-                              <ChevronDown size={16} className="text-primary/40" />
-                            ) : (
-                              <ChevronRight size={16} className="text-primary/40" />
-                            )}
-                          </span>
-                        </button>
+                            <span className="flex-shrink-0 ml-2">
+                              {isExpanded ? (
+                                <ChevronDown size={16} className="text-primary/40" />
+                              ) : (
+                                <ChevronRight size={16} className="text-primary/40" />
+                              )}
+                            </span>
+                          </button>
 
-                        {/* Collapsible lesson list */}
-                        <div
-                          className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
-                            isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                          }`}
-                        >
-                          {mod.lessons.map((lesson) => (
-                            <SidebarNavItem
-                              key={lesson.slug}
-                              to={`/courses/${slug}/modules/${mod.slug}/lessons/${lesson.slug}`}
-                              title={lesson.title}
-                              status={lesson.status}
-                            />
-                          ))}
-                          {mod.has_knowledge_check && (
-                            <SidebarNavItem
-                              key={`${mod.slug}-kc`}
-                              to={`/courses/${slug}/modules/${mod.slug}/knowledge-check`}
-                              title="Knowledge Check"
-                              status="not_started"
-                              isKnowledgeCheck
-                            />
-                          )}
+                          {/* Collapsible lesson list */}
+                          <div
+                            className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                              isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                            }`}
+                          >
+                            {mod.lessons.map((lesson) => (
+                              <SidebarNavItem
+                                key={lesson.slug}
+                                to={`/courses/${slug}/modules/${mod.slug}/lessons/${lesson.slug}`}
+                                title={`${mod.order}.${lesson.order} ${lesson.title}`}
+                                status={lesson.status}
+                                locked={lockedLessons.has(`${mod.slug}:${lesson.slug}`)}
+                              />
+                            ))}
+                            {mod.has_knowledge_check && (
+                              <SidebarNavItem
+                                key={`${mod.slug}-kc`}
+                                to={`/courses/${slug}/modules/${mod.slug}/knowledge-check`}
+                                title="Knowledge Check"
+                                status="not_started"
+                                isKnowledgeCheck
+                                locked={lockedKCs.has(mod.slug)}
+                              />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })
+                      );
+                    })}
+                  </>
                 ) : (
                   <div className="px-4 py-8 text-sm text-slate-500">
                     No content available.

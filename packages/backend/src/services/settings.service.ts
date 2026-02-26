@@ -27,3 +27,16 @@ export async function upsertSetting(key: string, value: string): Promise<void> {
 export async function deleteSetting(key: string): Promise<void> {
   await pool.query('DELETE FROM platform_settings WHERE key = $1', [key]);
 }
+
+export async function getCourseSettings(slug: string): Promise<Record<string, string>> {
+  const prefix = `course.${slug}.`;
+  const result = await pool.query(
+    "SELECT key, value FROM platform_settings WHERE key LIKE $1",
+    [`${prefix}%`]
+  );
+  const settings: Record<string, string> = {};
+  for (const row of result.rows) {
+    settings[row.key.slice(prefix.length)] = row.value;
+  }
+  return settings;
+}

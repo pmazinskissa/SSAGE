@@ -17,7 +17,13 @@ export const config = {
   activeTheme: process.env.ACTIVE_THEME || 'default',
 
   // JWT
-  jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-in-production',
+  jwtSecret: (() => {
+    const secret = process.env.JWT_SECRET;
+    if (!secret && process.env.NODE_ENV === 'production') {
+      throw new Error('JWT_SECRET is required in production');
+    }
+    return secret || 'dev-secret-change-in-production';
+  })(),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
 
   // OAuth

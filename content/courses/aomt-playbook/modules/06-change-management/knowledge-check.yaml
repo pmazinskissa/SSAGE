@@ -90,6 +90,11 @@ questions:
   - id: "m6-q6"
     type: "fill-in-blank"
     question: "Complete the sentence about readiness surveys."
+    word_bank:
+      - "anonymity"
+      - "15-20"
+      - "5-10"
+      - "transparency"
     segments:
       - type: "text"
         value: "Readiness surveys should be limited to "

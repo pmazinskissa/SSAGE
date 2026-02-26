@@ -6,3 +6,4 @@ export * from './knowledge-check.js';
 export * from './user.js';
 export * from './progress.js';
 export * from './admin.js';
+export * from './review.js';

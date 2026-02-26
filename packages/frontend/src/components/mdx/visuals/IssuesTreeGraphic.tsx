@@ -98,5 +98,3 @@ export default function IssuesTreeGraphic() {
     </div>
   );
 }
-
-/* --- Item #8: AI Prompt + Issues Tree Output --- */

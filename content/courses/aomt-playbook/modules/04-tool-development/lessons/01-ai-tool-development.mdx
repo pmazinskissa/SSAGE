@@ -7,27 +7,282 @@ order: 1
 
 # AI Tool Development
 
-With opportunities prioritized and a roadmap in hand, the AOMT process moves from diagnosis to solution development. This chapter covers how to translate validated opportunities into AI-powered tools and solutions that deliver measurable operational improvement.
+With opportunities prioritized and a roadmap in hand, the process moves from diagnosis to solution development. This chapter covers how to translate validated opportunities into AI-powered tools and solutions that deliver measurable operational improvement.
 
 ## From Opportunity to Solution
 
 The transition from opportunity to solution requires a fundamental shift in thinking. During diagnosis, the practitioner asks "What is wrong and why?" During tool development, the question becomes "What AI-powered solution best addresses this validated gap?"
 
 <Callout type="concept" title="AI First Design">
-AOMT solutions are designed AI First. Rather than automating an existing manual process step-by-step, AI First design asks: "If we were building this capability from scratch with full access to AI, what would it look like?" This approach often yields solutions that are fundamentally different from — and dramatically more effective than — incremental automation of legacy processes.
+Solutions are designed AI First. Rather than automating an existing manual process step-by-step, AI First design asks: "If we were building this capability from scratch with full access to AI, what would it look like?" This approach often yields solutions that are fundamentally different from — and dramatically more effective than — incremental automation of legacy processes.
 </Callout>
 
 <AIToolDevelopmentIntro />
 
 ## Types of AI Solutions
 
-AI solutions in AOMT fall into three categories, each with different levels of autonomy and human involvement:
+AI solutions fall into three categories, each with different levels of autonomy and human involvement:
 
 <ProcessFlow steps={[
   { title: "Agentic Solutions", description: "Fully autonomous AI systems that make decisions and take actions independently within defined guardrails. Example: An AI dispatch system that automatically assigns technicians to jobs based on real-time optimization of skills, location, and availability." },
   { title: "Assistive Solutions", description: "AI tools that augment human decision-making by providing recommendations, insights, or draft outputs for human review. Example: An AI assistant that suggests optimal dispatch assignments but requires coordinator approval before execution." },
   { title: "Automation Solutions", description: "Rule-based or AI-enhanced systems that handle repetitive, well-defined tasks without human intervention. Example: Automated scheduling confirmations and reminder messages triggered by dispatch assignments." }
 ]} />
+
+<VariantPicker labels={["Decision Tree", "Solution Type Cards", "Autonomy Spectrum", "Solution Landscape"]}>
+
+<Diagram code={`flowchart TD
+  START[Validated Opportunity] --> Q1{Decision complexity?}
+  Q1 -->|Low, deterministic| AUTO[Automation Solution]
+  Q1 -->|Low-medium, rule-based| AGENT[Agentic Solution]
+  Q1 -->|High, needs judgment| ASSIST[Assistive Solution]
+  AGENT --> Q2{Error tolerance?}
+  Q2 -->|Errors recoverable| AGENT_GO["Deploy Agentic\n(Full autonomy)"]
+  Q2 -->|Errors costly| ASSIST
+  ASSIST --> ASSIST_GO["Deploy Assistive\n(AI recommends, human decides)"]
+  AUTO --> AUTO_GO["Deploy Automation\n(Batch processing)"]
+`} title="AI Solution Type Decision Tree" />
+
+<div className="rounded-xl border border-border overflow-hidden shadow-elevation-1">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Three Types of AI Solutions</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Each type reflects a different level of autonomy and human involvement</p>
+  </div>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-border">
+    <div className="p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm">🤖</span>
+        <div>
+          <p className="text-sm font-bold text-indigo-700">Agentic</p>
+          <p className="text-[10px] text-indigo-500 font-medium uppercase tracking-wider">Full Autonomy</p>
+        </div>
+      </div>
+      <p className="text-xs text-text-secondary mb-3">AI makes decisions and takes actions independently within defined guardrails.</p>
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0" />Low-medium decision complexity</div>
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0" />Errors are recoverable</div>
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0" />Real-time speed needed</div>
+      </div>
+      <div className="mt-3 p-2 rounded-lg bg-indigo-50 border border-indigo-100">
+        <p className="text-[10px] text-indigo-700 font-medium">Example: AI dispatch system that automatically assigns technicians</p>
+      </div>
+    </div>
+    <div className="p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-8 h-8 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center text-sm">🧑‍💻</span>
+        <div>
+          <p className="text-sm font-bold text-violet-700">Assistive</p>
+          <p className="text-[10px] text-violet-500 font-medium uppercase tracking-wider">Human-in-the-Loop</p>
+        </div>
+      </div>
+      <p className="text-xs text-text-secondary mb-3">AI provides recommendations and insights for human review and decision.</p>
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0" />High decision complexity</div>
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0" />Errors are costly or visible</div>
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0" />Human review time acceptable</div>
+      </div>
+      <div className="mt-3 p-2 rounded-lg bg-violet-50 border border-violet-100">
+        <p className="text-[10px] text-violet-700 font-medium">Example: AI suggests dispatch assignments, coordinator approves</p>
+      </div>
+    </div>
+    <div className="p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-sm">⚙️</span>
+        <div>
+          <p className="text-sm font-bold text-blue-700">Automation</p>
+          <p className="text-[10px] text-blue-500 font-medium uppercase tracking-wider">Rule-Based</p>
+        </div>
+      </div>
+      <p className="text-xs text-text-secondary mb-3">Rule-based systems handle repetitive, well-defined tasks without intervention.</p>
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />Low, deterministic rules</div>
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />Errors rare with clear rules</div>
+        <div className="flex items-center gap-2 text-[11px] text-text-secondary"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />Batch processing sufficient</div>
+      </div>
+      <div className="mt-3 p-2 rounded-lg bg-blue-50 border border-blue-100">
+        <p className="text-[10px] text-blue-700 font-medium">Example: Automated scheduling confirmations and reminders</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">AI Solution Autonomy Spectrum</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Three solution types mapped by level of AI autonomy and human control</p>
+  </div>
+  <svg viewBox="0 0 700 280" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="spectrumBar" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#2563EB" />
+        <stop offset="50%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+      <linearGradient id="cardBlue" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#EFF6FF" />
+        <stop offset="100%" stopColor="#DBEAFE" />
+      </linearGradient>
+      <linearGradient id="cardViolet" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#F5F3FF" />
+        <stop offset="100%" stopColor="#EDE9FE" />
+      </linearGradient>
+      <linearGradient id="cardIndigo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#EEF2FF" />
+        <stop offset="100%" stopColor="#E0E7FF" />
+      </linearGradient>
+      <filter id="specCardShadow" x="-5%" y="-5%" width="110%" height="110%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.12" />
+      </filter>
+    </defs>
+
+    {/* Spectrum bar */}
+    <rect x="80" y="185" width="540" height="16" rx="8" fill="url(#spectrumBar)" />
+
+    {/* End labels */}
+    <text x="80" y="175" fontSize="10" fontWeight="600" fill="#2563EB" textAnchor="start" style={{ fontFamily: 'system-ui' }}>Human Control</text>
+    <text x="620" y="175" fontSize="10" fontWeight="600" fill="#7C3AED" textAnchor="end" style={{ fontFamily: 'system-ui' }}>AI Autonomy</text>
+
+    {/* Marker 1: Automation at ~20% */}
+    <line x1="188" y1="185" x2="188" y2="145" stroke="#2563EB" strokeWidth="2" />
+    <circle cx="188" cy="145" r="5" fill="#2563EB" />
+    {/* Card: Automation */}
+    <rect x="118" y="30" width="140" height="105" rx="8" fill="url(#cardBlue)" stroke="#2563EB" strokeWidth="1.5" filter="url(#specCardShadow)" />
+    <text x="188" y="52" textAnchor="middle" fontSize="12" fontWeight="700" fill="#2563EB" style={{ fontFamily: 'system-ui' }}>Automation</text>
+    <text x="188" y="67" textAnchor="middle" fontSize="9" fontWeight="600" fill="#3B82F6" style={{ fontFamily: 'system-ui' }}>Rule-Based</text>
+    <line x1="138" y1="75" x2="238" y2="75" stroke="#BFDBFE" strokeWidth="1" />
+    <text x="188" y="91" textAnchor="middle" fontSize="8.5" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Deterministic</text>
+    <text x="188" y="104" textAnchor="middle" fontSize="8.5" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Batch processing</text>
+    <text x="188" y="117" textAnchor="middle" fontSize="8.5" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Predictable output</text>
+    <line x1="188" y1="135" x2="188" y2="145" stroke="#2563EB" strokeWidth="1.5" />
+
+    {/* Marker 2: Assistive at ~50% */}
+    <line x1="350" y1="185" x2="350" y2="145" stroke="#7C3AED" strokeWidth="2" />
+    <circle cx="350" cy="145" r="5" fill="#7C3AED" />
+    {/* Card: Assistive */}
+    <rect x="280" y="30" width="140" height="105" rx="8" fill="url(#cardViolet)" stroke="#7C3AED" strokeWidth="1.5" filter="url(#specCardShadow)" />
+    <text x="350" y="52" textAnchor="middle" fontSize="12" fontWeight="700" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>Assistive</text>
+    <text x="350" y="67" textAnchor="middle" fontSize="9" fontWeight="600" fill="#8B5CF6" style={{ fontFamily: 'system-ui' }}>Human-in-Loop</text>
+    <line x1="300" y1="75" x2="400" y2="75" stroke="#DDD6FE" strokeWidth="1" />
+    <text x="350" y="91" textAnchor="middle" fontSize="8.5" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>AI recommends</text>
+    <text x="350" y="104" textAnchor="middle" fontSize="8.5" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>Human decides</text>
+    <text x="350" y="117" textAnchor="middle" fontSize="8.5" fill="#5B21B6" style={{ fontFamily: 'system-ui' }}>Trust-building phase</text>
+    <line x1="350" y1="135" x2="350" y2="145" stroke="#7C3AED" strokeWidth="1.5" />
+
+    {/* Marker 3: Agentic at ~80% */}
+    <line x1="512" y1="185" x2="512" y2="145" stroke="#4F46E5" strokeWidth="2" />
+    <circle cx="512" cy="145" r="5" fill="#4F46E5" />
+    {/* Card: Agentic */}
+    <rect x="442" y="30" width="140" height="105" rx="8" fill="url(#cardIndigo)" stroke="#4F46E5" strokeWidth="1.5" filter="url(#specCardShadow)" />
+    <text x="512" y="52" textAnchor="middle" fontSize="12" fontWeight="700" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>Agentic</text>
+    <text x="512" y="67" textAnchor="middle" fontSize="9" fontWeight="600" fill="#6366F1" style={{ fontFamily: 'system-ui' }}>Full Autonomy</text>
+    <line x1="462" y1="75" x2="562" y2="75" stroke="#C7D2FE" strokeWidth="1" />
+    <text x="512" y="91" textAnchor="middle" fontSize="8.5" fill="#3730A3" style={{ fontFamily: 'system-ui' }}>AI decides within</text>
+    <text x="512" y="104" textAnchor="middle" fontSize="8.5" fill="#3730A3" style={{ fontFamily: 'system-ui' }}>guardrails</text>
+    <text x="512" y="117" textAnchor="middle" fontSize="8.5" fill="#3730A3" style={{ fontFamily: 'system-ui' }}>Real-time speed</text>
+    <line x1="512" y1="135" x2="512" y2="145" stroke="#4F46E5" strokeWidth="1.5" />
+
+    {/* Complexity labels below bar */}
+    <text x="188" y="220" textAnchor="middle" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Low</text>
+    <text x="350" y="220" textAnchor="middle" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Medium</text>
+    <text x="512" y="220" textAnchor="middle" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>High</text>
+    <text x="350" y="240" textAnchor="middle" fontSize="10" fontWeight="600" fill="#475569" style={{ fontFamily: 'system-ui' }}>Decision Complexity</text>
+
+    {/* Arrow indicators on bar */}
+    <polygon points="85,193 95,188 95,198" fill="white" fillOpacity="0.6" />
+    <polygon points="615,193 605,188 605,198" fill="white" fillOpacity="0.6" />
+  </svg>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Solution Landscape</p>
+    <p className="text-[10px] opacity-75 mt-0.5">From validated opportunity to the right AI solution type</p>
+  </div>
+  <svg viewBox="0 0 700 280" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="slNodeGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#3730A3" />
+      </linearGradient>
+      <linearGradient id="slDeployGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#059669" />
+        <stop offset="100%" stopColor="#10B981" />
+      </linearGradient>
+      <filter id="slShadow" x="-5%" y="-5%" width="110%" height="110%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.12" />
+      </filter>
+    </defs>
+
+    {/* Starting node: Validated Opportunity */}
+    <circle cx="80" cy="140" r="36" fill="url(#slNodeGrad)" filter="url(#slShadow)" />
+    <path d="M 68,140 L 76,148 L 92,132" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    <text x="80" y="190" textAnchor="middle" fontSize="8.5" fontWeight="600" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>Validated</text>
+    <text x="80" y="201" textAnchor="middle" fontSize="8.5" fontWeight="600" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>Opportunity</text>
+
+    {/* Connecting lines from node to cards */}
+    <line x1="116" y1="120" x2="230" y2="65" stroke="#4F46E5" strokeWidth="2" strokeOpacity="0.4" />
+    <line x1="116" y1="140" x2="230" y2="140" stroke="#7C3AED" strokeWidth="2" strokeOpacity="0.4" />
+    <line x1="116" y1="160" x2="230" y2="215" stroke="#2563EB" strokeWidth="2" strokeOpacity="0.4" />
+
+    {/* Card 1: Agentic (top) */}
+    <rect x="230" y="35" width="260" height="60" rx="12" fill="white" stroke="#E0E7FF" strokeWidth="1" filter="url(#slShadow)" />
+    <rect x="230" y="35" width="6" height="60" rx="3" fill="#4F46E5" />
+    {/* Gear icon */}
+    <circle cx="258" cy="57" r="10" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.5" />
+    <circle cx="258" cy="57" r="4" fill="none" stroke="#4F46E5" strokeWidth="1.5" />
+    <line x1="258" y1="47" x2="258" y2="49" stroke="#4F46E5" strokeWidth="1.5" />
+    <line x1="258" y1="65" x2="258" y2="67" stroke="#4F46E5" strokeWidth="1.5" />
+    <line x1="248" y1="57" x2="250" y2="57" stroke="#4F46E5" strokeWidth="1.5" />
+    <line x1="266" y1="57" x2="268" y2="57" stroke="#4F46E5" strokeWidth="1.5" />
+    <text x="280" y="52" fontSize="11" fontWeight="700" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>Agentic</text>
+    <text x="335" y="52" fontSize="8" fontWeight="500" fill="#6366F1" style={{ fontFamily: 'system-ui' }}>Full Autonomy</text>
+    <text x="280" y="66" fontSize="8" fill="#64748B" style={{ fontFamily: 'system-ui' }}>AI decides within guardrails</text>
+    <rect x="280" y="73" width="70" height="14" rx="7" fill="#EEF2FF" />
+    <text x="315" y="83" textAnchor="middle" fontSize="7" fontWeight="600" fill="#4F46E5" style={{ fontFamily: 'system-ui' }}>Real-time speed</text>
+
+    {/* Card 2: Assistive (middle) */}
+    <rect x="230" y="110" width="260" height="60" rx="12" fill="white" stroke="#F3E8FF" strokeWidth="1" filter="url(#slShadow)" />
+    <rect x="230" y="110" width="6" height="60" rx="3" fill="#7C3AED" />
+    {/* Person + sparkle icon */}
+    <circle cx="258" cy="130" r="10" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1.5" />
+    <circle cx="256" cy="127" r="3" fill="none" stroke="#7C3AED" strokeWidth="1.2" />
+    <path d="M 251,136 Q 256,132 261,136" fill="none" stroke="#7C3AED" strokeWidth="1.2" />
+    <path d="M 265,124 L 266,126 L 268,124 L 266,127 Z" fill="#7C3AED" />
+    <text x="280" y="127" fontSize="11" fontWeight="700" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>Assistive</text>
+    <text x="340" y="127" fontSize="8" fontWeight="500" fill="#8B5CF6" style={{ fontFamily: 'system-ui' }}>Human-in-Loop</text>
+    <text x="280" y="141" fontSize="8" fill="#64748B" style={{ fontFamily: 'system-ui' }}>AI recommends, human decides</text>
+    <rect x="280" y="148" width="70" height="14" rx="7" fill="#F5F3FF" />
+    <text x="315" y="158" textAnchor="middle" fontSize="7" fontWeight="600" fill="#7C3AED" style={{ fontFamily: 'system-ui' }}>Trust building</text>
+
+    {/* Card 3: Automation (bottom) */}
+    <rect x="230" y="185" width="260" height="60" rx="12" fill="white" stroke="#DBEAFE" strokeWidth="1" filter="url(#slShadow)" />
+    <rect x="230" y="185" width="6" height="60" rx="3" fill="#2563EB" />
+    {/* Interlocking gears icon */}
+    <circle cx="254" cy="207" r="10" fill="#EFF6FF" stroke="#2563EB" strokeWidth="1.5" />
+    <circle cx="254" cy="204" r="3.5" fill="none" stroke="#2563EB" strokeWidth="1.2" />
+    <circle cx="260" cy="211" r="3" fill="none" stroke="#2563EB" strokeWidth="1.2" />
+    <text x="280" y="202" fontSize="11" fontWeight="700" fill="#2563EB" style={{ fontFamily: 'system-ui' }}>Automation</text>
+    <text x="348" y="202" fontSize="8" fontWeight="500" fill="#3B82F6" style={{ fontFamily: 'system-ui' }}>Rule-Based</text>
+    <text x="280" y="216" fontSize="8" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Deterministic batch processing</text>
+    <rect x="280" y="223" width="70" height="14" rx="7" fill="#EFF6FF" />
+    <text x="315" y="233" textAnchor="middle" fontSize="7" fontWeight="600" fill="#2563EB" style={{ fontFamily: 'system-ui' }}>Predictable</text>
+
+    {/* Connecting lines from cards to Deploy */}
+    <line x1="490" y1="65" x2="560" y2="140" stroke="#059669" strokeWidth="2" strokeOpacity="0.4" />
+    <line x1="490" y1="140" x2="560" y2="140" stroke="#059669" strokeWidth="2" strokeOpacity="0.4" />
+    <line x1="490" y1="215" x2="560" y2="140" stroke="#059669" strokeWidth="2" strokeOpacity="0.4" />
+
+    {/* Deploy arrow */}
+    <rect x="560" y="120" width="100" height="40" rx="20" fill="url(#slDeployGrad)" filter="url(#slShadow)" />
+    <text x="600" y="143" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>Deploy</text>
+    <polygon points="665,140 655,132 655,148" fill="#059669" />
+
+    {/* Decision fan label */}
+    <text x="170" y="260" textAnchor="middle" fontSize="8" fill="#94A3B8" fontWeight="500" style={{ fontFamily: 'system-ui' }}>Choose the right solution type based on complexity, error tolerance, and speed</text>
+  </svg>
+</div>
+
+</VariantPicker>
 
 ## Selecting the Right Solution Type
 
@@ -38,6 +293,10 @@ The choice between agentic, assistive, and automation depends on three factors:
 | Decision complexity | Low-medium, well-defined rules | High, requires judgment | Low, deterministic |
 | Error tolerance | Errors are recoverable and low-cost | Errors are costly or visible | Errors are rare with clear rules |
 | Speed requirement | Real-time decisions needed | Human review time is acceptable | Batch processing is sufficient |
+
+<Callout type="warning" title="Engage IT and Security Early">
+Before committing to a solution type, involve your organization's IT and Information Security teams. Agentic solutions raise questions about access controls, data exposure, and auditability. Assistive solutions require integration with existing workflows and systems. Even simple automation may need security review if it touches customer data or production environments. Bringing IT and Security in during solution design — not after — prevents costly rework and accelerates deployment approvals.
+</Callout>
 
 <Callout type="tip" title="Metro Cable Dispatch Example">
 For Metro Cable, the dispatch optimization opportunity was designed as an assistive solution for the initial deployment — the AI recommends dispatch assignments, but coordinators review and approve them. This builds trust, generates training data for the AI model, and provides a transition path toward a fully agentic solution once accuracy thresholds are proven.

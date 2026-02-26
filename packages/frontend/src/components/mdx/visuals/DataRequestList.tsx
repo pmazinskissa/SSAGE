@@ -1,6 +1,4 @@
 // @ts-nocheck
-import LIcon from './LIcon';
-
 export default function DataRequestList() {
   const rows = [
     ['Dispatch Records','ServiceNow','CSV/API','18 months','~240K records'],

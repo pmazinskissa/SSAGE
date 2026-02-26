@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback, useMemo, type MouseEvent as ReactMouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useSpring, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import {
   BookOpen,
   Clock,
@@ -16,6 +16,7 @@ import {
   LogOut,
   CheckCircle,
   Trophy,
+  Home,
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
@@ -24,9 +25,9 @@ import Card from '../components/ui/Card';
 import { NoiseOverlay, GradientMesh, TopographicBg } from '../components/ui/Backgrounds';
 import AdminDashboard from './admin/AdminDashboard';
 import AdminUsers from './admin/AdminUsers';
-import AdminUserDetail from './admin/AdminUserDetail';
 import AdminSettings from './admin/AdminSettings';
 import AdminFeedback from './admin/AdminFeedback';
+import Footer from '../components/layout/Footer';
 import type { CourseConfig, CourseNavTree } from '@playbook/shared';
 
 /* ------------------------------------------------------------------ */
@@ -416,7 +417,6 @@ export default function CourseCatalog() {
   const [navMap, setNavMap] = useState<Record<string, CourseNavTree>>({});
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>('courses');
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const { user, logout } = useAuth();
   const { theme } = useTheme();
 
@@ -475,8 +475,14 @@ export default function CourseCatalog() {
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="text-center">
           <BookOpen size={48} className="text-text-secondary mx-auto mb-4" />
-          <h1 className="text-xl font-semibold text-text-primary">No Courses Available</h1>
-          <p className="text-sm text-text-secondary mt-2">Check back later for new content.</p>
+          <h1 className="text-xl font-semibold text-text-primary">
+            {isAdmin ? 'No Courses Available' : 'No Courses Assigned'}
+          </h1>
+          <p className="text-sm text-text-secondary mt-2">
+            {isAdmin
+              ? 'Check back later for new content.'
+              : 'No courses have been assigned to you yet. Contact your administrator to get enrolled.'}
+          </p>
         </div>
       </div>
     );
@@ -512,29 +518,41 @@ export default function CourseCatalog() {
       <NoiseOverlay />
 
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-elevation-1 px-6 h-14 flex items-center justify-between">
-        <img
-          src="/assets/Protective_Life_logo.svg.png"
-          alt={theme?.organization_name || 'Protective Life'}
-          className="h-7"
-        />
-        {user && (
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5">
+      <header className="sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/50 shadow-elevation-1">
+        <div className="relative flex items-center h-14 px-4 gap-3">
+          <button
+            onClick={() => setActiveTab('courses')}
+            className="p-2 rounded-md hover:bg-surface transition-colors"
+            aria-label="All Courses"
+            title="All Courses"
+          >
+            <Home size={20} className="text-primary" />
+          </button>
+          <div className="hidden sm:block shrink-0">
+            <img
+              src="/assets/Protective_Life_logo.svg.png"
+              alt={theme?.organization_name || 'Protective Life'}
+              className="h-8"
+            />
+          </div>
+          <div className="flex-1" />
+
+          {user && (
+            <div className="flex items-center gap-2 ml-2">
               <div className="w-8 h-8 rounded-full bg-primary-light flex items-center justify-center">
                 <span className="text-xs font-bold text-primary leading-none">{initials}</span>
               </div>
+              <button
+                onClick={logout}
+                className="p-1.5 rounded-md hover:bg-surface transition-colors text-text-secondary hover:text-text-primary"
+                aria-label="Log out"
+                title="Log out"
+              >
+                <LogOut size={16} />
+              </button>
             </div>
-            <button
-              onClick={logout}
-              className="p-1.5 rounded-md hover:bg-surface transition-colors text-text-secondary hover:text-text-primary"
-              aria-label="Log out"
-              title="Log out"
-            >
-              <LogOut size={16} />
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </header>
 
       {/* Tab bar */}
@@ -666,17 +684,7 @@ export default function CourseCatalog() {
         ) : activeTab === 'dashboard' ? (
           <AdminDashboard />
         ) : activeTab === 'users' ? (
-          <>
-            <AdminUsers onUserClick={setSelectedUserId} />
-            <AnimatePresence>
-              {selectedUserId && (
-                <AdminUserDetail
-                  userId={selectedUserId}
-                  onClose={() => setSelectedUserId(null)}
-                />
-              )}
-            </AnimatePresence>
-          </>
+          <AdminUsers />
         ) : activeTab === 'settings' ? (
           <AdminSettings />
         ) : activeTab === 'feedback' ? (
@@ -684,13 +692,7 @@ export default function CourseCatalog() {
         ) : null}
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 bg-white/40 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-secondary">
-          <span>{theme?.organization_name || 'Protective Life'} &copy; {new Date().getFullYear()}</span>
-          <span>Practitioner&apos;s Playbook</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

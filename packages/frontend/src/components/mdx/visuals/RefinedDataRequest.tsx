@@ -1,6 +1,4 @@
 // @ts-nocheck
-import LIcon from './LIcon';
-
 export default function RefinedDataRequest() {
   return (
     <div>
@@ -29,5 +27,3 @@ export default function RefinedDataRequest() {
     </div>
   );
 }
-
-/* --- Item #12: Visualization Type Thumbnails --- */

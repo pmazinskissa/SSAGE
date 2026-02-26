@@ -35,6 +35,10 @@ export default {
         card: 'var(--radius-card)',
         input: 'var(--radius-input)',
       },
+      fontSize: {
+        xs: ['0.875rem', '1.4'],  // 14px (up from 12px)
+        sm: ['1rem', '1.5'],  // 16px (up from 14px)
+      },
       maxWidth: {
         prose: '700px',
       },

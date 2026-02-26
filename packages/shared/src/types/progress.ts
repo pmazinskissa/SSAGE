@@ -1,6 +1,7 @@
 import type { LessonStatus } from './navigation.js';
 
 export interface LessonProgressEntry {
+  course_slug?: string;
   module_slug: string;
   lesson_slug: string;
   status: LessonStatus;
@@ -10,6 +11,7 @@ export interface LessonProgressEntry {
 }
 
 export interface KnowledgeCheckSummaryEntry {
+  course_slug?: string;
   module_slug: string;
   total_questions: number;
   correct_answers: number;
@@ -40,6 +42,21 @@ export interface LessonCompletePayload {
 }
 
 export interface KnowledgeCheckSubmission {
+  answers: {
+    question_id: string;
+    selected_answer: string;
+    is_correct: boolean;
+  }[];
+}
+
+export interface KnowledgeCheckDraftPayload {
+  question_id: string;
+  selected_answer: string;
+  is_correct: boolean;
+}
+
+export interface KnowledgeCheckAnswersResponse {
+  status: 'not_started' | 'in_progress' | 'completed';
   answers: {
     question_id: string;
     selected_answer: string;

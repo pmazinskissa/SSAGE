@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock } from 'lucide-react';
 import { useLessonContent } from '../hooks/useLessonContent';
@@ -17,11 +17,68 @@ export default function LessonPage() {
     lessonSlug: string;
   }>();
 
-  const { navTree } = useCourse();
+  const { navTree, course, refreshNavTree } = useCourse();
   const { meta, MdxComponent, loading, error } = useLessonContent(slug, moduleSlug, lessonSlug);
 
   // Heartbeat for time tracking
   useHeartbeat(slug, moduleSlug, lessonSlug);
+
+  // Elapsed-time timer for minimum lesson time enforcement
+  const minLessonTime = course?.min_lesson_time_seconds ?? 0;
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    setElapsed(0);
+    if (minLessonTime <= 0) return;
+    const interval = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(interval);
+  }, [lessonSlug, minLessonTime]);
+
+  const minTimeRemaining = Math.max(0, minLessonTime - elapsed);
+
+  // Check if this lesson is locked (sequential mode or KC gate)
+  const isCurrentLessonLocked = useMemo(() => {
+    if (!navTree || !course || !moduleSlug || !lessonSlug) return false;
+    const isLinear = course.navigation_mode === 'linear';
+    const requireKC = course.require_knowledge_checks ?? false;
+    if (!isLinear && !requireKC) return false;
+
+    const allLessons: Array<{ modSlug: string; slug: string; status: string }> = [];
+    for (const mod of navTree.modules) {
+      for (const lesson of mod.lessons) {
+        allLessons.push({ modSlug: mod.slug, slug: lesson.slug, status: lesson.status });
+      }
+    }
+    const firstNonCompleted = isLinear ? allLessons.findIndex((l) => l.status !== 'completed') : -1;
+    let kcBlockedFromModIdx = Infinity;
+    if (requireKC) {
+      for (let i = 0; i < navTree.modules.length; i++) {
+        const mod = navTree.modules[i];
+        if (mod.has_knowledge_check && !mod.knowledge_check_completed) {
+          kcBlockedFromModIdx = i + 1;
+          break;
+        }
+      }
+    }
+
+    let flatIdx = 0;
+    for (let modIdx = 0; modIdx < navTree.modules.length; modIdx++) {
+      const mod = navTree.modules[modIdx];
+      for (const lesson of mod.lessons) {
+        if (mod.slug === moduleSlug && lesson.slug === lessonSlug) {
+          const linearLocked = isLinear && firstNonCompleted !== -1 && flatIdx > firstNonCompleted;
+          const kcLocked = requireKC && modIdx >= kcBlockedFromModIdx;
+          return linearLocked || kcLocked;
+        }
+        flatIdx++;
+      }
+    }
+    return false;
+  }, [navTree, course, moduleSlug, lessonSlug]);
+
+  // Keep refreshNavTree stable in a ref so the cleanup effect always has the latest
+  const refreshRef = useRef(refreshNavTree);
+  refreshRef.current = refreshNavTree;
 
   // Track current lesson in a ref so the cleanup function always has the latest values
   const currentRef = useRef<{ courseSlug: string; lessonSlug: string; moduleSlug: string } | null>(null);
@@ -32,7 +89,9 @@ export default function LessonPage() {
     // Mark the previous lesson complete when navigating to a different lesson
     const prev = currentRef.current;
     if (prev && (prev.lessonSlug !== lessonSlug || prev.moduleSlug !== moduleSlug)) {
-      api.completeLesson(prev.courseSlug, prev.lessonSlug, prev.moduleSlug).catch(() => {});
+      api.completeLesson(prev.courseSlug, prev.lessonSlug, prev.moduleSlug)
+        .then(() => refreshRef.current())
+        .catch(() => {});
     }
 
     currentRef.current = { courseSlug: slug, lessonSlug, moduleSlug };
@@ -41,7 +100,9 @@ export default function LessonPage() {
     return () => {
       const cur = currentRef.current;
       if (cur) {
-        api.completeLesson(cur.courseSlug, cur.lessonSlug, cur.moduleSlug).catch(() => {});
+        api.completeLesson(cur.courseSlug, cur.lessonSlug, cur.moduleSlug)
+          .then(() => refreshRef.current())
+          .catch(() => {});
         currentRef.current = null;
       }
     };
@@ -94,6 +155,11 @@ export default function LessonPage() {
       completedLessons: navTree.completed_lessons,
     };
   }, [navTree, moduleSlug, lessonSlug, slug]);
+
+  // Redirect to course overview if this lesson is locked
+  if (!loading && isCurrentLessonLocked && slug) {
+    return <Navigate to={`/courses/${slug}`} replace />;
+  }
 
   if (loading) {
     return (
@@ -187,6 +253,7 @@ export default function LessonPage() {
               knowledgeCheckLink={knowledgeCheckLink}
               currentIndex={currentIndex}
               totalLessons={totalLessons}
+              minTimeRemaining={minTimeRemaining}
             />
           )}
         </div>

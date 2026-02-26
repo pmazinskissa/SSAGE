@@ -201,7 +201,7 @@ export default function CourseOverview() {
 
       <div className="relative pb-16">
         <TopographicBg />
-        <div className="relative px-6 sm:px-12 max-w-4xl">
+        <div className="relative px-6 sm:px-12 max-w-4xl mx-auto">
           {/* Narrative Synopsis */}
           {course.narrative_synopsis && (
             <motion.section

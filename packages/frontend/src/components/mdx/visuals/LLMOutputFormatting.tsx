@@ -1,6 +1,4 @@
 // @ts-nocheck
-import LIcon from './LIcon';
-
 export default function LLMOutputFormatting() {
   const UserBubble = ({text}) => (
     <div style={{display:'flex',justifyContent:'flex-end',marginBottom:'0.75rem'}}>

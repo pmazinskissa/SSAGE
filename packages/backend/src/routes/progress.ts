@@ -5,8 +5,11 @@ import {
   updateTimeOnTask,
   completeLessonAndCheck,
   saveKnowledgeCheckResults,
+  saveKnowledgeCheckDraftAnswer,
+  getKnowledgeCheckDraft,
+  getKnowledgeCheckResults,
 } from '../services/progress.service.js';
-import type { HeartbeatPayload, KnowledgeCheckSubmission, LessonCompletePayload } from '@playbook/shared';
+import type { HeartbeatPayload, KnowledgeCheckSubmission, KnowledgeCheckDraftPayload, KnowledgeCheckAnswersResponse, LessonCompletePayload } from '@playbook/shared';
 
 const router = Router();
 
@@ -60,6 +63,58 @@ router.post('/:courseSlug/lessons/:lessonSlug/complete', async (req, res) => {
   } catch (err: any) {
     console.error('[Progress] Complete lesson error:', err.message);
     res.status(500).json({ error: { message: 'Failed to complete lesson' } });
+  }
+});
+
+// POST /api/progress/:courseSlug/modules/:moduleSlug/check/draft — save a single draft answer
+router.post('/:courseSlug/modules/:moduleSlug/check/draft', async (req, res) => {
+  try {
+    const { question_id, selected_answer, is_correct } = req.body as KnowledgeCheckDraftPayload;
+    if (!question_id || selected_answer === undefined || is_correct === undefined) {
+      return res.status(400).json({ error: { message: 'question_id, selected_answer, and is_correct required' } });
+    }
+
+    await saveKnowledgeCheckDraftAnswer(
+      req.user!.id,
+      req.params.courseSlug,
+      req.params.moduleSlug,
+      question_id,
+      selected_answer,
+      is_correct
+    );
+
+    res.json({ data: { ok: true } });
+  } catch (err: any) {
+    console.error('[Progress] KC draft save error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to save draft answer' } });
+  }
+});
+
+// GET /api/progress/:courseSlug/modules/:moduleSlug/check/answers — get saved KC answers (draft or completed)
+router.get('/:courseSlug/modules/:moduleSlug/check/answers', async (req, res) => {
+  try {
+    const userId = req.user!.id;
+    const { courseSlug, moduleSlug } = req.params;
+
+    // Check completed results first
+    const results = await getKnowledgeCheckResults(userId, courseSlug, moduleSlug);
+    if (results.length > 0) {
+      const response: KnowledgeCheckAnswersResponse = { status: 'completed', answers: results };
+      return res.json({ data: response });
+    }
+
+    // Check drafts
+    const drafts = await getKnowledgeCheckDraft(userId, courseSlug, moduleSlug);
+    if (drafts.length > 0) {
+      const response: KnowledgeCheckAnswersResponse = { status: 'in_progress', answers: drafts };
+      return res.json({ data: response });
+    }
+
+    const response: KnowledgeCheckAnswersResponse = { status: 'not_started', answers: [] };
+    res.json({ data: response });
+  } catch (err: any) {
+    console.error('[Progress] KC answers fetch error:', err.message);
+    res.status(500).json({ error: { message: 'Failed to get knowledge check answers' } });
   }
 });
 

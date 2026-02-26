@@ -8,7 +8,7 @@ export default function ProblemStatement7Elements() {
     { n:4, title:'Decision Drivers', desc:'What factors will likely influence decision makers', color:'#1E1B4B', above:false },
     { n:5, title:'Boundaries', desc:'What aspects of the problem are off-limits, or what regulations could constrain solutions', color:'#16A34A', above:true },
     { n:6, title:'Success Measures', desc:'What factors will be reflected in business metrics', color:'#64748B', above:false },
-    { n:7, title:'Timeframe', desc:'How will effective solutions be reflected in business metrics', color:'#1E1B4B', above:true },
+    { n:7, title:'Timeframe', desc:'What is the deadline for delivering findings and recommendations', color:'#1E1B4B', above:true },
   ];
   const N = elements.length;
   const W = 700, midY = 160, r = 28, gap = (W - 80) / (N - 1);

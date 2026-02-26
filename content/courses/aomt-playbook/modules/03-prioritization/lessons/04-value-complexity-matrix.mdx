@@ -1,0 +1,396 @@
+---
+title: "Value vs. Complexity Matrix"
+slug: "04-value-complexity-matrix"
+estimated_duration_minutes: 7
+order: 4
+---
+
+# Value vs. Complexity Matrix
+
+The Value vs. Complexity Matrix is a visual prioritization tool that plots opportunities on a 2x2 grid. While less analytically rigorous than WSJF, it provides an intuitive framework for stakeholder discussions and is particularly effective for initial triage or when precise scoring data is not yet available.
+
+## The Four Quadrants
+
+| Quadrant | Value | Complexity | Action |
+|----------|-------|------------|--------|
+| **Quick Wins** (top-left) | High | Low | Implement immediately. These deliver the fastest return and build momentum for larger initiatives. |
+| **Strategic Bets** (top-right) | High | High | Plan carefully. These require significant investment but offer transformational returns. Sequence after quick wins to leverage early momentum. |
+| **Fill-Ins** (bottom-left) | Low | Low | Implement opportunistically. These are low-effort improvements that can be bundled with other work or used to fill capacity gaps between larger initiatives. |
+| **Avoid** (bottom-right) | Low | High | Deprioritize or eliminate. High effort for low return is rarely justified. Revisit only if strategic context changes significantly. |
+
+<ValueComplexityMatrix />
+
+<FourQuadrantsVisual />
+
+<VariantPicker labels={["Interactive Matrix", "Styled Card Matrix", "Mermaid Quadrant", "Bubble Priority", "Plotted Matrix"]}>
+
+<QuadrantMatrix
+  title="Metro Cable Value vs. Complexity Matrix"
+  xLabel="Complexity"
+  yLabel="Value"
+  quadrants={[
+    { label: "Quick Wins", description: "High value, low complexity — implement immediately", icon: "🚀" },
+    { label: "Strategic Bets", description: "High value, high complexity — plan carefully", icon: "🎯" },
+    { label: "Fill-Ins", description: "Low value, low complexity — implement opportunistically", icon: "🔧" },
+    { label: "Avoid", description: "Low value, high complexity — deprioritize", icon: "✗" }
+  ]}
+  items={[
+    { label: "AI Dispatch Routing Pilot", quadrant: 0, size: "lg" },
+    { label: "Technician Skill-Match Algorithm", quadrant: 0, size: "md" },
+    { label: "Predictive Maintenance Alerting", quadrant: 1, size: "lg" },
+    { label: "Automated Appointment Reminders", quadrant: 2, size: "sm" },
+    { label: "Full Network Digital Twin", quadrant: 3, size: "md" }
+  ]}
+/>
+
+<div className="rounded-xl border border-border overflow-hidden shadow-elevation-1">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Metro Cable Value vs. Complexity Matrix</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Opportunities plotted by strategic value and implementation complexity</p>
+  </div>
+  <div className="p-4">
+    <div className="grid grid-cols-2 gap-3">
+      <div className="p-4 rounded-xl bg-emerald-50 border-2 border-emerald-200 relative">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">🚀</span>
+          <p className="text-sm font-bold text-emerald-700">Quick Wins</p>
+        </div>
+        <p className="text-[10px] text-emerald-600 mb-3 uppercase tracking-wider font-semibold">High Value · Low Complexity</p>
+        <div className="space-y-2">
+          <div className="p-2 rounded-lg bg-white border border-emerald-200 shadow-sm">
+            <p className="text-xs font-semibold text-text-primary">AI Dispatch Routing Pilot</p>
+            <p className="text-[10px] text-text-secondary">Leverages existing dispatch data, prototypable in weeks</p>
+          </div>
+          <div className="p-2 rounded-lg bg-white border border-emerald-200 shadow-sm">
+            <p className="text-xs font-semibold text-text-primary">Technician Skill-Match Algorithm</p>
+            <p className="text-[10px] text-text-secondary">Uses certification database for intelligent job assignment</p>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 rounded-xl bg-amber-50 border-2 border-amber-200 relative">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">🎯</span>
+          <p className="text-sm font-bold text-amber-700">Strategic Bets</p>
+        </div>
+        <p className="text-[10px] text-amber-600 mb-3 uppercase tracking-wider font-semibold">High Value · High Complexity</p>
+        <div className="space-y-2">
+          <div className="p-2 rounded-lg bg-white border border-amber-200 shadow-sm">
+            <p className="text-xs font-semibold text-text-primary">Predictive Maintenance Alerting</p>
+            <p className="text-[10px] text-text-secondary">High savings potential but requires new sensor data pipelines</p>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 rounded-xl bg-sky-50 border-2 border-sky-200 relative">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">🔧</span>
+          <p className="text-sm font-bold text-sky-700">Fill-Ins</p>
+        </div>
+        <p className="text-[10px] text-sky-600 mb-3 uppercase tracking-wider font-semibold">Low Value · Low Complexity</p>
+        <div className="space-y-2">
+          <div className="p-2 rounded-lg bg-white border border-sky-200 shadow-sm">
+            <p className="text-xs font-semibold text-text-primary">Automated Appointment Reminders</p>
+            <p className="text-[10px] text-text-secondary">Modest impact, trivial to implement alongside dispatch work</p>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 rounded-xl bg-rose-50 border-2 border-rose-200 relative">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">✗</span>
+          <p className="text-sm font-bold text-rose-700">Avoid</p>
+        </div>
+        <p className="text-[10px] text-rose-600 mb-3 uppercase tracking-wider font-semibold">Low Value · High Complexity</p>
+        <div className="space-y-2">
+          <div className="p-2 rounded-lg bg-white border border-rose-200 shadow-sm">
+            <p className="text-xs font-semibold text-text-primary">Full Network Digital Twin</p>
+            <p className="text-[10px] text-text-secondary">Infrastructure cost far exceeds near-term value</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-6 mt-3 pt-3 border-t border-border text-[10px] text-text-secondary justify-center">
+      <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-md bg-emerald-400" /> Implement Now</span>
+      <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-md bg-amber-400" /> Plan Carefully</span>
+      <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-md bg-sky-400" /> Opportunistic</span>
+      <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-md bg-rose-400" /> Deprioritize</span>
+    </div>
+  </div>
+</div>
+
+<Diagram code={`quadrantChart
+  title Metro Cable Opportunity Prioritization
+  x-axis Low Complexity --> High Complexity
+  y-axis Low Value --> High Value
+  quadrant-1 Strategic Bets
+  quadrant-2 Quick Wins
+  quadrant-3 Fill-Ins
+  quadrant-4 Avoid
+  AI Dispatch Routing: [0.25, 0.85]
+  Skill-Match Algorithm: [0.30, 0.75]
+  Predictive Maintenance: [0.80, 0.90]
+  Appointment Reminders: [0.15, 0.25]
+  Network Digital Twin: [0.90, 0.30]
+`} title="Metro Cable Value vs. Complexity Matrix" />
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Metro Cable — Opportunity Prioritization</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Bubble size reflects relative impact; position maps value vs. complexity</p>
+  </div>
+  <svg viewBox="0 0 600 450" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <linearGradient id="bubbleGradEmerald" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#34D399" stopOpacity="0.9" />
+        <stop offset="100%" stopColor="#059669" stopOpacity="0.9" />
+      </linearGradient>
+      <linearGradient id="bubbleGradAmber" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.9" />
+        <stop offset="100%" stopColor="#D97706" stopOpacity="0.9" />
+      </linearGradient>
+      <linearGradient id="bubbleGradBlue" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.9" />
+        <stop offset="100%" stopColor="#2563EB" stopOpacity="0.9" />
+      </linearGradient>
+      <linearGradient id="bubbleGradRose" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#FB7185" stopOpacity="0.9" />
+        <stop offset="100%" stopColor="#DC2626" stopOpacity="0.9" />
+      </linearGradient>
+      <filter id="bubbleShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.15" />
+      </filter>
+    </defs>
+
+    {/* Quadrant backgrounds */}
+    <rect x="70" y="20" width="245" height="195" rx="6" fill="#ECFDF5" fillOpacity="0.5" />
+    <rect x="315" y="20" width="245" height="195" rx="6" fill="#FFFBEB" fillOpacity="0.5" />
+    <rect x="70" y="215" width="245" height="195" rx="6" fill="#EFF6FF" fillOpacity="0.5" />
+    <rect x="315" y="215" width="245" height="195" rx="6" fill="#FEF2F2" fillOpacity="0.5" />
+
+    {/* Axes */}
+    <line x1="70" y1="215" x2="560" y2="215" stroke="#CBD5E1" strokeWidth="1" strokeDasharray="4 4" />
+    <line x1="315" y1="20" x2="315" y2="410" stroke="#CBD5E1" strokeWidth="1" strokeDasharray="4 4" />
+
+    {/* Y-axis */}
+    <line x1="70" y1="410" x2="70" y2="20" stroke="#334155" strokeWidth="2" />
+    <polygon points="70,20 65,30 75,30" fill="#334155" />
+    <text x="30" y="220" textAnchor="middle" fontSize="11" fontWeight="600" fill="#334155" transform="rotate(-90, 30, 220)" style={{ fontFamily: 'system-ui' }}>Value →</text>
+    <text x="60" y="408" textAnchor="end" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Low</text>
+    <text x="60" y="30" textAnchor="end" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>High</text>
+
+    {/* X-axis */}
+    <line x1="70" y1="410" x2="560" y2="410" stroke="#334155" strokeWidth="2" />
+    <polygon points="560,410 550,405 550,415" fill="#334155" />
+    <text x="315" y="440" textAnchor="middle" fontSize="11" fontWeight="600" fill="#334155" style={{ fontFamily: 'system-ui' }}>Complexity →</text>
+    <text x="80" y="430" textAnchor="start" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Low</text>
+    <text x="555" y="430" textAnchor="end" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>High</text>
+
+    {/* Quadrant labels */}
+    <text x="100" y="45" fontSize="11" fontWeight="600" fill="#059669" fillOpacity="0.7" style={{ fontFamily: 'system-ui' }}>Quick Wins</text>
+    <text x="450" y="45" fontSize="11" fontWeight="600" fill="#D97706" fillOpacity="0.7" textAnchor="middle" style={{ fontFamily: 'system-ui' }}>Strategic Bets</text>
+    <text x="100" y="240" fontSize="11" fontWeight="600" fill="#2563EB" fillOpacity="0.7" style={{ fontFamily: 'system-ui' }}>Fill-Ins</text>
+    <text x="450" y="240" fontSize="11" fontWeight="600" fill="#DC2626" fillOpacity="0.7" textAnchor="middle" style={{ fontFamily: 'system-ui' }}>Avoid</text>
+
+    {/* Bubble 1: AI Dispatch Routing — top-left, large */}
+    <circle cx="180" cy="80" r="35" fill="url(#bubbleGradEmerald)" filter="url(#bubbleShadow)" />
+    <text x="180" y="84" textAnchor="middle" fontSize="16" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>1</text>
+    <text x="225" y="68" fontSize="9" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>AI Dispatch</text>
+    <text x="225" y="80" fontSize="9" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Routing</text>
+
+    {/* Bubble 2: Skill-Match Algorithm — top-left, medium */}
+    <circle cx="240" cy="140" r="28" fill="url(#bubbleGradEmerald)" filter="url(#bubbleShadow)" />
+    <text x="240" y="144" textAnchor="middle" fontSize="14" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>2</text>
+    <text x="278" y="134" fontSize="9" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Skill-Match</text>
+    <text x="278" y="146" fontSize="9" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Algorithm</text>
+
+    {/* Bubble 3: Predictive Maintenance — top-right, large */}
+    <circle cx="430" cy="90" r="32" fill="url(#bubbleGradAmber)" filter="url(#bubbleShadow)" />
+    <text x="430" y="94" textAnchor="middle" fontSize="15" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>3</text>
+    <text x="472" y="82" fontSize="9" fontWeight="600" fill="#92400E" style={{ fontFamily: 'system-ui' }}>Predictive</text>
+    <text x="472" y="94" fontSize="9" fontWeight="600" fill="#92400E" style={{ fontFamily: 'system-ui' }}>Maintenance</text>
+
+    {/* Bubble 4: Appointment Reminders — bottom-left, small */}
+    <circle cx="160" cy="320" r="20" fill="url(#bubbleGradBlue)" filter="url(#bubbleShadow)" />
+    <text x="160" y="324" textAnchor="middle" fontSize="12" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>4</text>
+    <text x="190" y="316" fontSize="9" fontWeight="600" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Appointment</text>
+    <text x="190" y="328" fontSize="9" fontWeight="600" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Reminders</text>
+
+    {/* Bubble 5: Network Digital Twin — bottom-right, medium */}
+    <circle cx="460" cy="310" r="25" fill="url(#bubbleGradRose)" filter="url(#bubbleShadow)" />
+    <text x="460" y="314" textAnchor="middle" fontSize="13" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>5</text>
+    <text x="496" y="304" fontSize="9" fontWeight="600" fill="#9F1239" style={{ fontFamily: 'system-ui' }}>Network</text>
+    <text x="496" y="316" fontSize="9" fontWeight="600" fill="#9F1239" style={{ fontFamily: 'system-ui' }}>Digital Twin</text>
+  </svg>
+  <div className="px-4 pb-3 pt-1">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-[10px] text-text-secondary">
+      <span><span className="font-semibold text-emerald-700">1</span> AI Dispatch Routing</span>
+      <span><span className="font-semibold text-emerald-700">2</span> Skill-Match Algorithm</span>
+      <span><span className="font-semibold text-amber-700">3</span> Predictive Maintenance</span>
+      <span><span className="font-semibold text-blue-700">4</span> Appointment Reminders</span>
+      <span><span className="font-semibold text-rose-700">5</span> Network Digital Twin</span>
+    </div>
+  </div>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-4 py-2.5 text-center">
+    <p className="text-sm font-bold">Metro Cable — Value vs. Complexity Matrix</p>
+    <p className="text-[10px] opacity-75 mt-0.5">Opportunities plotted on a 2x2 quadrant with labeled data points</p>
+  </div>
+  <svg viewBox="0 0 620 480" className="w-full" style={{ display: 'block' }} xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="plotGradEmerald" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#34D399" stopOpacity="0.95" />
+        <stop offset="100%" stopColor="#059669" stopOpacity="0.95" />
+      </linearGradient>
+      <linearGradient id="plotGradAmber" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.95" />
+        <stop offset="100%" stopColor="#D97706" stopOpacity="0.95" />
+      </linearGradient>
+      <linearGradient id="plotGradBlue" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.95" />
+        <stop offset="100%" stopColor="#2563EB" stopOpacity="0.95" />
+      </linearGradient>
+      <linearGradient id="plotGradRose" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#FB7185" stopOpacity="0.95" />
+        <stop offset="100%" stopColor="#DC2626" stopOpacity="0.95" />
+      </linearGradient>
+      <filter id="plotShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.15" />
+      </filter>
+    </defs>
+
+    {/* 4 Quadrant backgrounds */}
+    {/* Top-left: Quick Wins (emerald) */}
+    <rect x="70" y="20" width="250" height="185" rx="6" fill="#ECFDF5" fillOpacity="0.45" />
+    {/* Top-right: Strategic Bets (amber) */}
+    <rect x="320" y="20" width="250" height="185" rx="6" fill="#FFFBEB" fillOpacity="0.45" />
+    {/* Bottom-left: Fill-Ins (blue) */}
+    <rect x="70" y="205" width="250" height="185" rx="6" fill="#EFF6FF" fillOpacity="0.45" />
+    {/* Bottom-right: Avoid (rose) */}
+    <rect x="320" y="205" width="250" height="185" rx="6" fill="#FEF2F2" fillOpacity="0.45" />
+
+    {/* Grid midpoint dashed lines */}
+    <line x1="320" y1="20" x2="320" y2="390" stroke="#CBD5E1" strokeWidth="1" strokeDasharray="4 4" />
+    <line x1="70" y1="205" x2="570" y2="205" stroke="#CBD5E1" strokeWidth="1" strokeDasharray="4 4" />
+
+    {/* Y-axis */}
+    <line x1="70" y1="390" x2="70" y2="20" stroke="#334155" strokeWidth="2" />
+    <polygon points="70,20 65,30 75,30" fill="#334155" />
+    <text x="28" y="210" textAnchor="middle" fontSize="12" fontWeight="600" fill="#334155" transform="rotate(-90, 28, 210)" style={{ fontFamily: 'system-ui' }}>Value</text>
+    <text x="58" y="388" textAnchor="end" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Low</text>
+    <text x="58" y="30" textAnchor="end" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>High</text>
+    {/* Y-axis tick marks */}
+    <line x1="65" y1="390" x2="75" y2="390" stroke="#334155" strokeWidth="1.5" />
+    <line x1="65" y1="20" x2="75" y2="20" stroke="#334155" strokeWidth="1.5" />
+
+    {/* X-axis */}
+    <line x1="70" y1="390" x2="570" y2="390" stroke="#334155" strokeWidth="2" />
+    <polygon points="570,390 560,385 560,395" fill="#334155" />
+    <text x="320" y="415" textAnchor="middle" fontSize="12" fontWeight="600" fill="#334155" style={{ fontFamily: 'system-ui' }}>Complexity</text>
+    <text x="80" y="408" textAnchor="start" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>Low</text>
+    <text x="565" y="408" textAnchor="end" fontSize="9" fill="#64748B" style={{ fontFamily: 'system-ui' }}>High</text>
+    {/* X-axis tick marks */}
+    <line x1="70" y1="385" x2="70" y2="395" stroke="#334155" strokeWidth="1.5" />
+    <line x1="570" y1="385" x2="570" y2="395" stroke="#334155" strokeWidth="1.5" />
+
+    {/* Quadrant labels */}
+    <text x="95" y="42" fontSize="11" fontWeight="700" fill="#059669" fillOpacity="0.65" style={{ fontFamily: 'system-ui' }}>Quick Wins</text>
+    <text x="460" y="42" textAnchor="middle" fontSize="11" fontWeight="700" fill="#D97706" fillOpacity="0.65" style={{ fontFamily: 'system-ui' }}>Strategic Bets</text>
+    <text x="95" y="228" fontSize="11" fontWeight="700" fill="#2563EB" fillOpacity="0.65" style={{ fontFamily: 'system-ui' }}>Fill-Ins</text>
+    <text x="460" y="228" textAnchor="middle" fontSize="11" fontWeight="700" fill="#DC2626" fillOpacity="0.65" style={{ fontFamily: 'system-ui' }}>Avoid</text>
+
+    {/* Plotted opportunity 1: AI Dispatch Routing Pilot — Quick Wins (25%, 85%) */}
+    {/* x = 70 + 0.25*500 = 195, y = 390 - 0.85*370 = 75.5 */}
+    <circle cx="195" cy="76" r="28" fill="url(#plotGradEmerald)" filter="url(#plotShadow)" />
+    <text x="195" y="81" textAnchor="middle" fontSize="16" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>1</text>
+    {/* Label line */}
+    <line x1="222" y1="68" x2="250" y2="55" stroke="#059669" strokeWidth="1" strokeOpacity="0.6" />
+    <text x="254" y="52" fontSize="8.5" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>AI Dispatch</text>
+    <text x="254" y="63" fontSize="8.5" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Routing Pilot</text>
+
+    {/* Plotted opportunity 2: Technician Skill-Match — Quick Wins (30%, 75%) */}
+    {/* x = 70 + 0.30*500 = 220, y = 390 - 0.75*370 = 112.5 */}
+    <circle cx="220" cy="113" r="22" fill="url(#plotGradEmerald)" filter="url(#plotShadow)" />
+    <text x="220" y="118" textAnchor="middle" fontSize="13" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>2</text>
+    {/* Label line */}
+    <line x1="241" y1="108" x2="265" y2="100" stroke="#059669" strokeWidth="1" strokeOpacity="0.6" />
+    <text x="269" y="97" fontSize="8.5" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Technician</text>
+    <text x="269" y="108" fontSize="8.5" fontWeight="600" fill="#065F46" style={{ fontFamily: 'system-ui' }}>Skill-Match</text>
+
+    {/* Plotted opportunity 3: Predictive Maintenance — Strategic Bets (80%, 90%) */}
+    {/* x = 70 + 0.80*500 = 470, y = 390 - 0.90*370 = 57 */}
+    <circle cx="470" cy="57" r="26" fill="url(#plotGradAmber)" filter="url(#plotShadow)" />
+    <text x="470" y="62" textAnchor="middle" fontSize="15" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>3</text>
+    {/* Label line */}
+    <line x1="495" y1="52" x2="515" y2="42" stroke="#D97706" strokeWidth="1" strokeOpacity="0.6" />
+    <text x="519" y="39" fontSize="8.5" fontWeight="600" fill="#92400E" style={{ fontFamily: 'system-ui' }}>Predictive</text>
+    <text x="519" y="50" fontSize="8.5" fontWeight="600" fill="#92400E" style={{ fontFamily: 'system-ui' }}>Maintenance</text>
+
+    {/* Plotted opportunity 4: Appointment Reminders — Fill-Ins (15%, 25%) */}
+    {/* x = 70 + 0.15*500 = 145, y = 390 - 0.25*370 = 297.5 */}
+    <circle cx="145" cy="298" r="16" fill="url(#plotGradBlue)" filter="url(#plotShadow)" />
+    <text x="145" y="303" textAnchor="middle" fontSize="11" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>4</text>
+    {/* Label line */}
+    <line x1="160" y1="294" x2="180" y2="284" stroke="#2563EB" strokeWidth="1" strokeOpacity="0.6" />
+    <text x="184" y="281" fontSize="8.5" fontWeight="600" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Appointment</text>
+    <text x="184" y="292" fontSize="8.5" fontWeight="600" fill="#1E40AF" style={{ fontFamily: 'system-ui' }}>Reminders</text>
+
+    {/* Plotted opportunity 5: Network Digital Twin — Avoid (90%, 30%) */}
+    {/* x = 70 + 0.90*500 = 520, y = 390 - 0.30*370 = 279 */}
+    <circle cx="520" cy="279" r="20" fill="url(#plotGradRose)" filter="url(#plotShadow)" />
+    <text x="520" y="284" textAnchor="middle" fontSize="12" fontWeight="700" fill="white" style={{ fontFamily: 'system-ui' }}>5</text>
+    {/* Label line */}
+    <line x1="539" y1="274" x2="555" y2="264" stroke="#DC2626" strokeWidth="1" strokeOpacity="0.6" />
+    <text x="519" y="260" fontSize="8.5" fontWeight="600" fill="#9F1239" style={{ fontFamily: 'system-ui' }}>Network</text>
+    <text x="519" y="271" fontSize="8.5" fontWeight="600" fill="#9F1239" style={{ fontFamily: 'system-ui' }}>Digital Twin</text>
+  </svg>
+  {/* Numbered legend */}
+  <div className="px-4 pb-3 pt-1 border-t border-border">
+    <p className="text-[10px] font-semibold text-text-secondary mb-1.5 uppercase tracking-wider">Plotted Opportunities</p>
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-[10px] text-text-secondary">
+      <span><span className="inline-block w-4 h-4 rounded-full bg-emerald-500 text-white text-center text-[8px] leading-4 font-bold mr-1">1</span>AI Dispatch Routing — Quick Win</span>
+      <span><span className="inline-block w-4 h-4 rounded-full bg-emerald-500 text-white text-center text-[8px] leading-4 font-bold mr-1">2</span>Skill-Match — Quick Win</span>
+      <span><span className="inline-block w-4 h-4 rounded-full bg-amber-500 text-white text-center text-[8px] leading-4 font-bold mr-1">3</span>Predictive Maint. — Strategic</span>
+      <span><span className="inline-block w-4 h-4 rounded-full bg-blue-500 text-white text-center text-[8px] leading-4 font-bold mr-1">4</span>Appt. Reminders — Fill-In</span>
+      <span><span className="inline-block w-4 h-4 rounded-full bg-rose-500 text-white text-center text-[8px] leading-4 font-bold mr-1">5</span>Digital Twin — Avoid</span>
+    </div>
+  </div>
+</div>
+
+</VariantPicker>
+
+## When to Use Each Method
+
+<Callout type="concept" title="WSJF vs. Value-Complexity Matrix">
+WSJF is the preferred method when you have well-documented opportunities with quantified impact and estimated effort. The Value vs. Complexity Matrix is better suited for early-stage triage, stakeholder alignment workshops, or when comparing opportunities across different domains where direct quantitative comparison is difficult.
+</Callout>
+
+<Callout type="tip" title="Use Both Methods Together">
+The most effective approach combines both methods. Start with the Value vs. Complexity Matrix in stakeholder workshops to build consensus on relative positioning, then apply WSJF scoring to the opportunities that land in the Quick Wins and Strategic Bets quadrants for more precise sequencing.
+</Callout>
+
+<Callout type="concept" title="Metro Cable Matrix Example">
+During the Metro Cable engagement, the team plotted six validated opportunities on the matrix in a stakeholder workshop:
+
+- **Quick Wins** (High Value, Low Complexity): AI Dispatch Routing Pilot, Technician Skill-Match Algorithm — both leveraged existing data and could be prototyped in weeks.
+- **Strategic Bets** (High Value, High Complexity): Predictive Maintenance Alerting — high projected savings but required new sensor data pipelines and model development.
+- **Fill-Ins** (Low Value, Low Complexity): Automated Appointment Reminders — modest impact but trivial to implement alongside the dispatch work.
+- **Avoid** (Low Value, High Complexity): Full Network Digital Twin — compelling long-term vision but the infrastructure investment far exceeded near-term value.
+
+This single-slide view allowed executives to immediately see why the dispatch pilot was the recommended starting point and why the digital twin was deferred to a future horizon.
+</Callout>
+
+## Plotting the Matrix
+
+When facilitating the matrix exercise with stakeholders:
+
+1. **Define the axes** — Agree on what "value" and "complexity" mean for this specific context. Value might be revenue impact, cost savings, or customer satisfaction improvement. Complexity might include technical difficulty, organizational change required, or time to implement.
+
+2. **Place opportunities independently** — Have each stakeholder place opportunities on the matrix before revealing others' placements. This prevents anchoring bias.
+
+3. **Discuss divergence** — Where stakeholders disagree on placement, facilitate a discussion to surface different assumptions and reach consensus.
+
+4. **Document rationale** — Record why each opportunity was placed in its quadrant, not just where it landed.
+
+<Callout type="tip" title="Presentation Impact">
+The Value vs. Complexity Matrix is one of the most effective presentation tools in the practitioner's toolkit. Executives can absorb the prioritization logic in seconds. Use color-coded dots for each opportunity, size them by estimated financial impact, and present the matrix as a single slide that tells the entire prioritization story at a glance.
+</Callout>

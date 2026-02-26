@@ -8,13 +8,31 @@ import { searchCourseContent } from '../services/search.service.js';
 import { config } from '../config/env.js';
 import { optionalAuth } from '../middleware/auth.js';
 import { getCourseProgress } from '../services/progress.service.js';
+import { getEnrollmentsForEmail } from '../services/admin.service.js';
+import { getCourseSettings } from '../services/settings.service.js';
 import type { CourseNavTree } from '@playbook/shared';
 
 const router = Router();
 
-// GET /api/courses — list all courses
-router.get('/', (_req, res) => {
+// GET /api/courses — list all courses (filtered by enrollment for non-admins)
+router.get('/', async (req, res) => {
   const courses = listCourses();
+  // Admins and dev_admins see all courses
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'dev_admin')) {
+    return res.json({ data: courses });
+  }
+  // Learners: filter to enrolled courses only
+  if (req.user) {
+    try {
+      const enrollments = await getEnrollmentsForEmail(req.user.email);
+      const enrolledSlugs = new Set(enrollments.map((e) => e.course_slug));
+      const filtered = courses.filter((c) => enrolledSlugs.has(c.slug));
+      return res.json({ data: filtered });
+    } catch (err) {
+      console.warn('[Courses] Failed to check enrollments:', err);
+      return res.json({ data: courses });
+    }
+  }
   res.json({ data: courses });
 });
 
@@ -25,6 +43,39 @@ router.get('/:slug', optionalAuth, async (req, res) => {
   if (!course) {
     return res.status(404).json({ error: { message: 'Course not found' } });
   }
+
+  // Enrollment guard for non-admins
+  if (req.user && req.user.role !== 'admin' && req.user.role !== 'dev_admin') {
+    try {
+      const enrollments = await getEnrollmentsForEmail(req.user.email);
+      const enrolledSlugs = new Set(enrollments.map((e) => e.course_slug));
+      if (!enrolledSlugs.has(slug)) {
+        return res.status(403).json({ error: { message: 'Not enrolled in this course' } });
+      }
+    } catch (err) {
+      console.warn('[Courses] Failed to check enrollment:', err);
+    }
+  }
+
+  // Merge admin-configurable overrides from DB into the YAML config
+  try {
+    const overrides = await getCourseSettings(slug);
+    if (overrides.ai_features_enabled !== undefined) {
+      (course as any).ai_features_enabled = overrides.ai_features_enabled === 'true';
+    }
+    if (overrides.ordered_lessons !== undefined) {
+      (course as any).navigation_mode = overrides.ordered_lessons === 'true' ? 'linear' : 'open';
+    }
+    if (overrides.require_knowledge_checks !== undefined) {
+      (course as any).require_knowledge_checks = overrides.require_knowledge_checks === 'true';
+    }
+    if (overrides.min_lesson_time_seconds !== undefined) {
+      (course as any).min_lesson_time_seconds = parseInt(overrides.min_lesson_time_seconds, 10);
+    }
+  } catch {
+    // Non-fatal: serve with YAML defaults
+  }
+
   const navTree = getCourseNavTree(slug);
 
   // Overlay user progress if authenticated
@@ -77,10 +128,14 @@ function overlayProgress(navTree: CourseNavTree, progress: import('@playbook/sha
       }
     }
 
-    // Module status: completed if KC done or all lessons done; in_progress if any started
-    if (kcDone.has(mod.slug) || (allLessonsDone && mod.lessons.length > 0)) {
+    // Expose KC completion so frontend can compute locked state
+    mod.knowledge_check_completed = kcDone.has(mod.slug);
+
+    // Module status: completed only if all lessons done AND KC done (when applicable); in_progress if any started
+    const kcSatisfied = !mod.has_knowledge_check || kcDone.has(mod.slug);
+    if (allLessonsDone && mod.lessons.length > 0 && kcSatisfied) {
       mod.status = 'completed';
-    } else if (moduleHasProgress) {
+    } else if (moduleHasProgress || kcDone.has(mod.slug)) {
       mod.status = 'in_progress';
     }
   }

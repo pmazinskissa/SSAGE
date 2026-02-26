@@ -10,10 +10,19 @@ export interface UserWithProgress extends User {
   }[];
 }
 
+export interface CourseEnrollment {
+  id: string;
+  email: string;
+  course_slug: string;
+  enrolled_at: string;
+  enrolled_by: string | null;
+}
+
 export interface UserDetail extends User {
   lesson_progress: LessonProgressEntry[];
   knowledge_check_scores: KnowledgeCheckSummaryEntry[];
   course_progress: CourseProgress[];
+  enrollments: CourseEnrollment[];
 }
 
 export interface PreEnrollEntry {
@@ -35,6 +44,7 @@ export interface DashboardMetrics {
   not_started: number;
   avg_completion_pct: number;
   avg_time_to_completion_seconds: number;
+  avg_kc_score: number;
   module_funnel: {
     module_slug: string;
     module_title: string;
@@ -70,6 +80,7 @@ export interface ContentFeedback {
   lesson_slug: string;
   feedback_text: string;
   submitter_name: string | null;
+  rating: number | null;
   is_resolved: boolean;
   created_at: string;
 }
@@ -93,11 +104,12 @@ export interface SearchResult {
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
+  displayContent?: string;
   timestamp: string;
 }
 
 export interface AIConfig {
   enabled: boolean;
   model: string;
-  provider: 'anthropic' | 'openai';
+  provider: 'anthropic' | 'openai' | 'azure-openai';
 }

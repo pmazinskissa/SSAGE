@@ -9,12 +9,16 @@ import type {
   CourseProgress,
   HeartbeatPayload,
   KnowledgeCheckSubmission,
+  KnowledgeCheckDraftPayload,
+  KnowledgeCheckAnswersResponse,
   DashboardMetrics,
   UserWithProgress,
   UserDetail,
   ContentFeedback,
   SearchResult,
   UserWithModuleAnalytics,
+  CourseEnrollment,
+  ReviewAnnotation,
 } from '@playbook/shared';
 
 const BASE_URL = '/api';
@@ -85,17 +89,32 @@ export const api = {
       body: JSON.stringify({ module_slug: moduleSlug }),
     }),
   submitKnowledgeCheck: (courseSlug: string, moduleSlug: string, submission: KnowledgeCheckSubmission) =>
-    fetchApi<{ courseCompleted: boolean }>(`/progress/${courseSlug}/modules/${moduleSlug}/check`, {
+    fetchApi<{ courseCompleted: boolean; alreadyCompleted?: boolean }>(`/progress/${courseSlug}/modules/${moduleSlug}/check`, {
       method: 'POST',
       body: JSON.stringify(submission),
     }),
+  saveKnowledgeCheckDraft: (courseSlug: string, moduleSlug: string, draft: KnowledgeCheckDraftPayload) =>
+    fetchApi<{ ok: boolean }>(`/progress/${courseSlug}/modules/${moduleSlug}/check/draft`, {
+      method: 'POST',
+      body: JSON.stringify(draft),
+    }),
+  getKnowledgeCheckAnswers: (courseSlug: string, moduleSlug: string) =>
+    fetchApi<KnowledgeCheckAnswersResponse>(`/progress/${courseSlug}/modules/${moduleSlug}/check/answers`),
 
   // Admin — Dashboard
-  getAdminDashboard: (courseSlug?: string) =>
-    fetchApi<DashboardMetrics>(`/admin/dashboard${courseSlug ? `?course=${courseSlug}` : ''}`),
+  getAdminDashboard: (userIds?: string[]) => {
+    const params = new URLSearchParams();
+    if (userIds && userIds.length > 0) params.set('userIds', userIds.join(','));
+    const qs = params.toString();
+    return fetchApi<DashboardMetrics>(`/admin/dashboard${qs ? `?${qs}` : ''}`);
+  },
 
   // Admin — Users
   getAdminUsers: () => fetchApi<UserWithProgress[]>('/admin/users'),
+  getPreEnrolledUsers: () =>
+    fetchApi<{ id: string; email: string; name: string; role: string; enrolled_at: string; enrolled_by: string | null }[]>('/admin/users/pre-enrolled'),
+  deletePreEnrolledUser: (id: string) =>
+    fetchApi<{ message: string }>(`/admin/users/pre-enrolled/${id}`, { method: 'DELETE' }),
   getAdminUserAnalytics: (courseSlug: string) =>
     fetchApi<UserWithModuleAnalytics[]>(`/admin/users/analytics?course=${encodeURIComponent(courseSlug)}`),
   getAdminUserDetail: (id: string) => fetchApi<UserDetail>(`/admin/users/${id}`),
@@ -110,6 +129,36 @@ export const api = {
     fetchApi<{ message: string }>(`/admin/users/${id}/activate`, { method: 'PUT' }),
   deleteUser: (id: string) =>
     fetchApi<{ message: string }>(`/admin/users/${id}`, { method: 'DELETE' }),
+  updateUserProfile: (id: string, name: string, email: string) =>
+    fetchApi<{ message: string }>(`/admin/users/${id}/profile`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, email }),
+    }),
+  bulkDeleteUsers: (ids: string[]) =>
+    fetchApi<{ message: string }>('/admin/users/bulk/delete', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkDeactivateUsers: (ids: string[]) =>
+    fetchApi<{ message: string }>('/admin/users/bulk/deactivate', {
+      method: 'PUT',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkActivateUsers: (ids: string[]) =>
+    fetchApi<{ message: string }>('/admin/users/bulk/activate', {
+      method: 'PUT',
+      body: JSON.stringify({ ids }),
+    }),
+  bulkEnrollUsers: (emails: string[], courseSlugs: string[]) =>
+    fetchApi<{ message: string }>('/admin/enrollments/bulk', {
+      method: 'POST',
+      body: JSON.stringify({ emails, course_slugs: courseSlugs }),
+    }),
+  bulkUnenrollUsers: (emails: string[], courseSlug: string) =>
+    fetchApi<{ message: string }>('/admin/enrollments/bulk', {
+      method: 'DELETE',
+      body: JSON.stringify({ emails, course_slug: courseSlug }),
+    }),
   exportUsersCSV: async (courseSlug?: string) => {
     const qs = courseSlug ? `?course=${encodeURIComponent(courseSlug)}` : '';
     const res = await fetch(`${BASE_URL}/admin/users/export${qs}`, { credentials: 'include' });
@@ -117,10 +166,35 @@ export const api = {
     const blob = await res.blob();
     return URL.createObjectURL(blob);
   },
-  preEnrollUsers: (entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin' }[]) =>
+  preEnrollUsers: (entries: { name: string; email: string; role: 'learner' | 'admin' | 'dev_admin'; courses?: string[] }[]) =>
     fetchApi<{ added: number; skipped: number }>('/admin/users/pre-enroll', {
       method: 'POST',
       body: JSON.stringify({ entries }),
+    }),
+
+  // Admin — Enrollments
+  getEnrollments: (email: string) =>
+    fetchApi<CourseEnrollment[]>(`/admin/enrollments/${encodeURIComponent(email)}`),
+  enrollUser: (email: string, courseSlugs: string[]) =>
+    fetchApi<{ message: string }>('/admin/enrollments', {
+      method: 'POST',
+      body: JSON.stringify({ email, course_slugs: courseSlugs }),
+    }),
+  unenrollUser: (email: string, courseSlug: string) =>
+    fetchApi<{ message: string }>('/admin/enrollments', {
+      method: 'DELETE',
+      body: JSON.stringify({ email, course_slug: courseSlug }),
+    }),
+
+  // Admin — Courses
+  getAdminCourses: () => fetchApi<CourseConfig[]>('/admin/courses'),
+  updateCourseSettings: (
+    slug: string,
+    settings: { ai_features_enabled: boolean; ordered_lessons: boolean; require_knowledge_checks: boolean; min_lesson_time_seconds: number }
+  ) =>
+    fetchApi<{ message: string }>(`/admin/courses/${slug}/settings`, {
+      method: 'PUT',
+      body: JSON.stringify(settings),
     }),
 
   // Admin — Settings
@@ -156,7 +230,7 @@ export const api = {
     fetchApi<{ message: string }>(`/admin/feedback/${id}`, { method: 'DELETE' }),
 
   // Feedback (any authenticated user)
-  submitFeedback: (data: { course_slug: string; feedback_text: string; submitter_name?: string }) =>
+  submitFeedback: (data: { course_slug: string; feedback_text: string; submitter_name?: string; rating?: number }) =>
     fetchApi<ContentFeedback>('/feedback', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -166,6 +240,15 @@ export const api = {
   searchContent: (courseSlug: string, query: string) =>
     fetchApi<SearchResult[]>(`/courses/${courseSlug}/search?q=${encodeURIComponent(query)}`),
 
+  // Review Mode
+  getReviewStatus: () =>
+    fetchApi<{ enabled: boolean }>('/review/status'),
+  createReviewAnnotation: (data: { page_path: string; page_title?: string; annotation_text: string; annotation_type?: string }) =>
+    fetchApi<ReviewAnnotation>('/review/annotations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
   // AI
   getAIStatus: () =>
     fetchApi<{ available: boolean; model: string | null }>('/ai/status'),
@@ -174,11 +257,12 @@ export const api = {
     course_slug: string;
     module_slug: string;
     lesson_slug: string;
-  }) =>
+  }, signal?: AbortSignal) =>
     fetch(`${BASE_URL}/ai/chat`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal,
     }),
 };

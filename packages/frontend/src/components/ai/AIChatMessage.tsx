@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Markdown from 'react-markdown';
+import { useNavigate } from 'react-router-dom';
 import { User, Bot } from 'lucide-react';
 
 interface AIChatMessageProps {
@@ -9,6 +10,18 @@ interface AIChatMessageProps {
 }
 
 export default function AIChatMessage({ role, content, streaming }: AIChatMessageProps) {
+  const navigate = useNavigate();
+
+  const handleLinkClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      // Use client-side navigation for internal course links
+      if (href.startsWith('/courses/')) {
+        e.preventDefault();
+        navigate(href);
+      }
+    },
+    [navigate],
+  );
   const isUser = role === 'user';
 
   return (
@@ -35,8 +48,22 @@ export default function AIChatMessage({ role, content, streaming }: AIChatMessag
           isUser ? (
             <span>{content}</span>
           ) : (
-            <div className="prose prose-sm max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-pre:my-2 prose-pre:bg-surface prose-pre:text-text-primary prose-code:text-xs prose-code:bg-surface prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
-              <Markdown>{content}</Markdown>
+            <div className="prose prose-sm max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-pre:my-2 prose-pre:bg-surface prose-pre:text-text-primary prose-code:text-xs prose-code:bg-surface prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-a:text-primary prose-a:underline prose-a:decoration-primary/30 hover:prose-a:decoration-primary">
+              <Markdown
+                components={{
+                  a: ({ href, children }) => (
+                    <a
+                      href={href || '#'}
+                      onClick={(e) => handleLinkClick(e, href || '')}
+                      className="text-primary underline decoration-primary/30 hover:decoration-primary transition-colors"
+                    >
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {content}
+              </Markdown>
             </div>
           )
         ) : streaming ? (

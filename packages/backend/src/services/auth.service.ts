@@ -32,9 +32,9 @@ export async function findOrCreateOAuthUser(params: {
     [email]
   );
 
-  // Determine role: admin if matches INITIAL_ADMIN_EMAIL
+  // Determine role: dev_admin if matches INITIAL_ADMIN_EMAIL
   const role = config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()
-    ? 'admin'
+    ? 'dev_admin'
     : 'learner';
 
   // Upsert user
@@ -55,6 +55,14 @@ export async function findOrCreateOAuthUser(params: {
     await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email]);
   }
 
+  // Auto-enroll new users in the course
+  await pool.query(
+    `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+     VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
+     ON CONFLICT (email, course_slug) DO NOTHING`,
+    [crypto.randomUUID(), email.toLowerCase()]
+  );
+
   return result.rows[0] as User;
 }
 
@@ -67,7 +75,7 @@ const DEV_USER: AuthUser = {
   id: '00000000-0000-0000-0000-000000000001',
   email: 'dev@localhost',
   name: 'Dev User',
-  role: 'admin',
+  role: 'dev_admin',
 };
 
 export function getDevUser(): AuthUser {
@@ -77,7 +85,7 @@ export function getDevUser(): AuthUser {
 export async function ensureDevUserInDb(): Promise<User> {
   const result = await pool.query(
     `INSERT INTO users (id, email, name, oauth_provider, oauth_subject_id, role, is_active, created_at, last_active_at)
-     VALUES ($1, $2, $3, 'dev', 'dev', 'admin', true, NOW(), NOW())
+     VALUES ($1, $2, $3, 'dev', 'dev', 'dev_admin', true, NOW(), NOW())
      ON CONFLICT (email) DO UPDATE SET last_active_at = NOW()
      RETURNING *`,
     [DEV_USER.id, DEV_USER.email, DEV_USER.name]
@@ -104,10 +112,10 @@ export async function registerLocalUser(params: {
   const preEnrolled = await pool.query('SELECT role FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
   const preRole = preEnrolled.rows[0]?.role;
 
-  // Determine role: initial admin email gets admin, pre-enrolled role, or learner
+  // Determine role: initial admin email gets dev_admin, pre-enrolled role, or learner
   let role = 'learner';
   if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()) {
-    role = 'admin';
+    role = 'dev_admin';
   } else if (preRole) {
     role = preRole;
   }
@@ -123,6 +131,14 @@ export async function registerLocalUser(params: {
   if (preEnrolled.rows.length > 0) {
     await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
   }
+
+  // Auto-enroll new users in the course
+  await pool.query(
+    `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+     VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
+     ON CONFLICT (email, course_slug) DO NOTHING`,
+    [crypto.randomUUID(), email.toLowerCase()]
+  );
 
   return result.rows[0] as User;
 }
@@ -148,8 +164,13 @@ export async function authenticateLocalUser(email: string, password: string): Pr
     throw new Error('Invalid email or password');
   }
 
-  // Update last active
-  await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
+  // Promote to dev_admin if matches INITIAL_ADMIN_EMAIL
+  if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase() && user.role !== 'dev_admin') {
+    await pool.query('UPDATE users SET role = $1, last_active_at = NOW() WHERE id = $2', ['dev_admin', user.id]);
+    user.role = 'dev_admin';
+  } else {
+    await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
+  }
 
   return user as User;
 }

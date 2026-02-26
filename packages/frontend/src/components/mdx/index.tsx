@@ -17,6 +17,11 @@ import VideoEmbed from './VideoEmbed';
 import DownloadResource from './DownloadResource';
 import AIExercise from './AIExercise';
 import PromptScorer from './PromptScorer';
+import VariantPicker from './VariantPicker';
+import CycleFlow from './CycleFlow';
+import QuadrantMatrix from './QuadrantMatrix';
+import PillarDiagram from './PillarDiagram';
+import ElementGrid from './ElementGrid';
 
 // Visual components (one selected option per tracker item)
 import AIEnabledConceptGraphic from './visuals/AIEnabledConceptGraphic';
@@ -128,6 +133,11 @@ export const mdxComponents: Record<string, ComponentType<any>> = {
   DownloadResource,
   AIExercise,
   PromptScorer,
+  VariantPicker,
+  CycleFlow,
+  QuadrantMatrix,
+  PillarDiagram,
+  ElementGrid,
 
   // Visual components
   AIEnabledConceptGraphic,
@@ -187,4 +197,9 @@ export {
   DownloadResource,
   AIExercise,
   PromptScorer,
+  VariantPicker,
+  CycleFlow,
+  QuadrantMatrix,
+  PillarDiagram,
+  ElementGrid,
 };

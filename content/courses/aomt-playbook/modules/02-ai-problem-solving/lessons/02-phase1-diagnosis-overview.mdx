@@ -7,18 +7,239 @@ order: 2
 
 # Diagnosis Overview
 
-The AOMT diagnostic process is a 6-step iterative cycle. Unlike traditional linear methodologies, these activities are revisited as new data emerges and hypotheses are tested. Each iteration refines the understanding of the problem space and moves closer to actionable, evidence-based opportunities.
+The diagnostic process is a cycle of 6 core activities. Unlike traditional linear methodologies, these activities are revisited as new data emerges and hypotheses are tested. Each iteration refines the understanding of the problem and moves practitioners closer to actionable, evidence-based opportunities.
 
-## The 6-Step Iterative Process
+## The 6 Core Activities
 
-<ProcessFlow steps={[
-  { title: "1. Problem Statement", description: "Define the scope, stakeholders, boundaries, and success measures for the engagement" },
-  { title: "2. Issues Tree", description: "Decompose the problem into MECE (Mutually Exclusive, Collectively Exhaustive) sub-issues for systematic investigation" },
-  { title: "3. Data Request", description: "Identify and formally request the specific datasets needed to test each branch of the issues tree" },
-  { title: "4. Hypotheses", description: "Formulate testable null and alternative hypotheses for each issue, grounded in data rather than assumptions" },
-  { title: "5. Analysis Plan", description: "Define the analytical methods, tools, and sequence for testing each hypothesis" },
-  { title: "6. Analysis & Synthesis", description: "Execute analyses, validate findings, and synthesize results into documented opportunities" }
-]} />
+<VariantPicker labels={["Circular Cycle", "Mermaid Diagram", "Activity Cards", "Network Map", "PPTX Circular"]}>
+
+<CycleFlow
+  title="The 6 Core Diagnostic Activities"
+  centerLabel="Iterative Diagnosis"
+  steps={[
+    { title: "Problem Statement", description: "Define scope, stakeholders, boundaries, and success measures for the engagement", icon: "1" },
+    { title: "Issues Tree", description: "Decompose the problem into MECE sub-issues for systematic investigation", icon: "2" },
+    { title: "Data Request", description: "Identify and formally request datasets needed to test each branch", icon: "3" },
+    { title: "Hypotheses", description: "Formulate testable null and alternative hypotheses for each issue", icon: "4" },
+    { title: "Analysis Plan", description: "Define analytical methods, tools, and sequence for testing hypotheses", icon: "5" },
+    { title: "Analysis & Synthesis", description: "Execute analyses, validate findings, and synthesize into documented opportunities", icon: "6" }
+  ]}
+/>
+
+<Diagram code={`flowchart TD
+  A1["1. Problem Statement"] --> A2["2. Issues Tree"]
+  A2 --> A3["3. Data Request"]
+  A3 --> A4["4. Hypotheses"]
+  A4 --> A5["5. Analysis Plan"]
+  A5 --> A6["6. Analysis & Synthesis"]
+  A6 -.->|Refine scope| A1
+  A6 -.->|New branches| A2
+  A6 -.->|More data| A3
+`} title="6 Core Activities with Feedback Loops" />
+
+<ElementGrid
+  layout="grid"
+  title="The 6 Core Diagnostic Activities"
+  elements={[
+    { title: "Problem Statement", description: "Define the scope, stakeholders, boundaries, and success measures for the engagement" },
+    { title: "Issues Tree", description: "Decompose the problem into MECE (Mutually Exclusive, Collectively Exhaustive) sub-issues" },
+    { title: "Data Request", description: "Identify and formally request the specific datasets needed to test each branch" },
+    { title: "Hypotheses", description: "Formulate testable null and alternative hypotheses grounded in data patterns" },
+    { title: "Analysis Plan", description: "Define the analytical methods, tools, and sequence for testing each hypothesis" },
+    { title: "Analysis & Synthesis", description: "Execute analyses, validate findings, and synthesize results into documented opportunities" }
+  ]}
+/>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-center">
+    <p className="text-white text-sm font-semibold tracking-wide">The 6 Core Diagnostic Activities — Interconnected</p>
+  </div>
+  <svg viewBox="0 0 600 500" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <filter id="nm-shadow" x="-10%" y="-10%" width="120%" height="130%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.12" />
+      </filter>
+      <linearGradient id="nm-grad-1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#6366F1" />
+        <stop offset="100%" stopColor="#4F46E5" />
+      </linearGradient>
+      <linearGradient id="nm-grad-2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#8B5CF6" />
+        <stop offset="100%" stopColor="#7C3AED" />
+      </linearGradient>
+      <linearGradient id="nm-grad-3" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#3B82F6" />
+        <stop offset="100%" stopColor="#2563EB" />
+      </linearGradient>
+      <linearGradient id="nm-grad-4" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#10B981" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+      <linearGradient id="nm-grad-5" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#F59E0B" />
+        <stop offset="100%" stopColor="#D97706" />
+      </linearGradient>
+      <linearGradient id="nm-grad-6" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#F43F5E" />
+        <stop offset="100%" stopColor="#DC2626" />
+      </linearGradient>
+    </defs>
+    {/* MESH CONNECTIONS — 15 lines connecting all pairs */}
+    <line x1="300" y1="68" x2="439" y2="148" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="300" y1="68" x2="439" y2="308" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="300" y1="68" x2="300" y2="388" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="300" y1="68" x2="161" y2="308" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="300" y1="68" x2="161" y2="148" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="148" x2="439" y2="308" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="148" x2="300" y2="388" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="148" x2="161" y2="308" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="148" x2="161" y2="148" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="308" x2="300" y2="388" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="308" x2="161" y2="308" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="439" y1="308" x2="161" y2="148" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="300" y1="388" x2="161" y2="308" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="300" y1="388" x2="161" y2="148" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    <line x1="161" y1="308" x2="161" y2="148" stroke="#A5B4FC" strokeWidth="1" opacity="0.15" />
+    {/* NODE 1 — Problem Statement (top, indigo) */}
+    <circle cx="300" cy="68" r="38" fill="url(#nm-grad-1)" filter="url(#nm-shadow)" />
+    <text x="300" y="73" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="700" style={{ fontFamily: 'system-ui' }}>1</text>
+    <text x="300" y="22" textAnchor="middle" fill="#4F46E5" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Problem Statement</text>
+    {/* NODE 2 — Issues Tree (top-right, violet) */}
+    <circle cx="439" cy="148" r="38" fill="url(#nm-grad-2)" filter="url(#nm-shadow)" />
+    <text x="439" y="153" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="700" style={{ fontFamily: 'system-ui' }}>2</text>
+    <text x="498" y="143" textAnchor="start" fill="#7C3AED" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Issues</text>
+    <text x="498" y="156" textAnchor="start" fill="#7C3AED" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Tree</text>
+    {/* NODE 3 — Data Request (bottom-right, blue) */}
+    <circle cx="439" cy="308" r="38" fill="url(#nm-grad-3)" filter="url(#nm-shadow)" />
+    <text x="439" y="313" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="700" style={{ fontFamily: 'system-ui' }}>3</text>
+    <text x="498" y="303" textAnchor="start" fill="#2563EB" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Data</text>
+    <text x="498" y="316" textAnchor="start" fill="#2563EB" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Request</text>
+    {/* NODE 4 — Hypotheses (bottom, emerald) */}
+    <circle cx="300" cy="388" r="38" fill="url(#nm-grad-4)" filter="url(#nm-shadow)" />
+    <text x="300" y="393" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="700" style={{ fontFamily: 'system-ui' }}>4</text>
+    <text x="300" y="440" textAnchor="middle" fill="#059669" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Hypotheses</text>
+    {/* NODE 5 — Analysis Plan (bottom-left, amber) */}
+    <circle cx="161" cy="308" r="38" fill="url(#nm-grad-5)" filter="url(#nm-shadow)" />
+    <text x="161" y="313" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="700" style={{ fontFamily: 'system-ui' }}>5</text>
+    <text x="102" y="303" textAnchor="end" fill="#D97706" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Analysis</text>
+    <text x="102" y="316" textAnchor="end" fill="#D97706" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Plan</text>
+    {/* NODE 6 — Analysis & Synthesis (top-left, rose) */}
+    <circle cx="161" cy="148" r="38" fill="url(#nm-grad-6)" filter="url(#nm-shadow)" />
+    <text x="161" y="153" textAnchor="middle" fill="#fff" fontSize="16" fontWeight="700" style={{ fontFamily: 'system-ui' }}>6</text>
+    <text x="102" y="143" textAnchor="end" fill="#DC2626" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Analysis &amp;</text>
+    <text x="102" y="156" textAnchor="end" fill="#DC2626" fontSize="10" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Synthesis</text>
+    {/* Legend text */}
+    <text x="300" y="478" textAnchor="middle" fill="#6B7280" fontSize="10" style={{ fontFamily: 'system-ui' }}>Every activity informs every other — the process is truly non-linear</text>
+  </svg>
+</div>
+
+<div className="my-4 rounded-xl border border-border bg-white shadow-elevation-1 overflow-hidden">
+  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-center">
+    <p className="text-white text-sm font-semibold tracking-wide">PPTX Circular — 6 Core Diagnostic Activities</p>
+  </div>
+  <svg viewBox="0 0 700 440" className="w-full" style={{ display: 'block' }}>
+    <defs>
+      <filter id="pc-shadow" x="-4%" y="-4%" width="108%" height="116%">
+        <feDropShadow dx="0" dy="2" stdDeviation="6" floodOpacity="0.12" />
+      </filter>
+      <linearGradient id="pc-indigo-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#4338CA" />
+        <stop offset="50%" stopColor="#4F46E5" />
+        <stop offset="100%" stopColor="#6366F1" />
+      </linearGradient>
+      <linearGradient id="pc-violet-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#6D28D9" />
+        <stop offset="50%" stopColor="#7C3AED" />
+        <stop offset="100%" stopColor="#8B5CF6" />
+      </linearGradient>
+      <marker id="pc-arrow-seq" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="7" markerHeight="5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#6366F1" />
+      </marker>
+      <marker id="pc-arrow-out" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="9" markerHeight="7" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#7C3AED" />
+      </marker>
+    </defs>
+    {/* Phase 1 Pentagon Arrow */}
+    <polygon points="20,8 420,8 445,28 420,48 20,48" fill="url(#pc-indigo-grad)" filter="url(#pc-shadow)" />
+    <text x="225" y="33" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="700" style={{ fontFamily: 'system-ui' }}>PHASE 1: DIAGNOSIS</text>
+    {/* Phase 2 Pentagon Arrow */}
+    <polygon points="455,8 665,8 685,28 665,48 455,48 475,28" fill="url(#pc-violet-grad)" filter="url(#pc-shadow)" />
+    <text x="572" y="33" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="700" style={{ fontFamily: 'system-ui' }}>PHASE 2: PRIORITIZATION</text>
+    {/* Circular arrangement — center at 260,210, radius ~120 */}
+    {/* Curved connecting arcs 1→2→3→4→5→6→1 */}
+    <path d="M 300 95 C 345 100, 375 120, 385 150" fill="none" stroke="#A5B4FC" strokeWidth="1.5" markerEnd="url(#pc-arrow-seq)" />
+    <path d="M 395 190 C 398 225, 385 260, 365 280" fill="none" stroke="#A5B4FC" strokeWidth="1.5" markerEnd="url(#pc-arrow-seq)" />
+    <path d="M 330 310 C 305 325, 270 328, 240 318" fill="none" stroke="#A5B4FC" strokeWidth="1.5" markerEnd="url(#pc-arrow-seq)" />
+    <path d="M 195 295 C 170 275, 150 250, 145 220" fill="none" stroke="#A5B4FC" strokeWidth="1.5" markerEnd="url(#pc-arrow-seq)" />
+    <path d="M 148 175 C 155 145, 170 120, 195 105" fill="none" stroke="#A5B4FC" strokeWidth="1.5" markerEnd="url(#pc-arrow-seq)" />
+    <path d="M 235 80 C 245 75, 260 72, 270 72" fill="none" stroke="#A5B4FC" strokeWidth="1.5" markerEnd="url(#pc-arrow-seq)" />
+    {/* NODE 1 — Problem Statement (top-center) — indigo */}
+    <rect x="218" y="62" width="120" height="44" rx="12" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.5" filter="url(#pc-shadow)" />
+    <circle cx="233" cy="84" r="10" fill="#4F46E5" />
+    <text x="233" y="88" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>1</text>
+    <text x="283" y="80" textAnchor="middle" fill="#1E1B4B" fontSize="8.5" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Problem</text>
+    <text x="283" y="92" textAnchor="middle" fill="#1E1B4B" fontSize="8.5" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Statement</text>
+    {/* NODE 2 — Issues Tree (top-right) — violet */}
+    <rect x="350" y="120" width="110" height="44" rx="12" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1.5" filter="url(#pc-shadow)" />
+    <circle cx="365" cy="142" r="10" fill="#7C3AED" />
+    <text x="365" y="146" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>2</text>
+    <text x="410" y="147" textAnchor="middle" fill="#1E1B4B" fontSize="8.5" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Issues Tree</text>
+    {/* NODE 3 — Data Request & Ingestion (right) — blue */}
+    <rect x="360" y="195" width="110" height="44" rx="12" fill="#EFF6FF" stroke="#2563EB" strokeWidth="1.5" filter="url(#pc-shadow)" />
+    <circle cx="375" cy="217" r="10" fill="#2563EB" />
+    <text x="375" y="221" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>3</text>
+    <text x="420" y="213" textAnchor="middle" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Data Request</text>
+    <text x="420" y="225" textAnchor="middle" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>&amp; Ingestion</text>
+    {/* NODE 4 — Hypotheses (bottom-right) — emerald */}
+    <rect x="288" y="275" width="110" height="44" rx="12" fill="#ECFDF5" stroke="#059669" strokeWidth="1.5" filter="url(#pc-shadow)" />
+    <circle cx="303" cy="297" r="10" fill="#059669" />
+    <text x="303" y="301" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>4</text>
+    <text x="348" y="302" textAnchor="middle" fill="#1E1B4B" fontSize="8.5" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Hypotheses</text>
+    {/* NODE 5 — Analysis Plan (bottom-left) — amber */}
+    <rect x="140" y="275" width="110" height="44" rx="12" fill="#FFFBEB" stroke="#D97706" strokeWidth="1.5" filter="url(#pc-shadow)" />
+    <circle cx="155" cy="297" r="10" fill="#D97706" />
+    <text x="155" y="301" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>5</text>
+    <text x="200" y="296" textAnchor="middle" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Analysis</text>
+    <text x="200" y="308" textAnchor="middle" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Plan</text>
+    {/* NODE 6 — Analysis & Synthesis (left) — rose */}
+    <rect x="90" y="195" width="110" height="44" rx="12" fill="#FFF1F2" stroke="#E11D48" strokeWidth="1.5" filter="url(#pc-shadow)" />
+    <circle cx="105" cy="217" r="10" fill="#E11D48" />
+    <text x="105" y="221" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>6</text>
+    <text x="150" y="213" textAnchor="middle" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Analysis &amp;</text>
+    <text x="150" y="225" textAnchor="middle" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Synthesis</text>
+    {/* Funnel/output arrow from circle to Phase 2 */}
+    <polygon points="480,130 480,270 510,210 510,190" fill="#F5F3FF" stroke="#7C3AED" strokeWidth="1" filter="url(#pc-shadow)" />
+    <text x="496" y="205" textAnchor="middle" fill="#7C3AED" fontSize="7" fontWeight="600" style={{ fontFamily: 'system-ui' }} transform="rotate(-90 496 205)">Output</text>
+    <line x1="510" y1="200" x2="540" y2="200" stroke="#7C3AED" strokeWidth="2" markerEnd="url(#pc-arrow-out)" />
+    {/* Phase 2 summary box */}
+    <rect x="548" y="110" width="130" height="180" rx="12" fill="#F5F3FF" stroke="#DDD6FE" strokeWidth="1" filter="url(#pc-shadow)" />
+    <rect x="548" y="110" width="130" height="28" rx="12" fill="#7C3AED" />
+    <rect x="548" y="126" width="130" height="12" fill="#7C3AED" />
+    <text x="613" y="130" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700" style={{ fontFamily: 'system-ui' }}>Prioritization</text>
+    <text x="565" y="162" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>1. Score Opportunities</text>
+    <text x="565" y="190" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>2. Rank &amp; Sequence</text>
+    <text x="565" y="218" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>3. Actionable</text>
+    <text x="573" y="230" fill="#1E1B4B" fontSize="8" fontWeight="600" style={{ fontFamily: 'system-ui' }}>Roadmap</text>
+    {/* Legend */}
+    <rect x="60" y="340" width="580" height="50" rx="10" fill="#FAFAFE" stroke="#E0E7FF" strokeWidth="1" />
+    <text x="80" y="358" fill="#4F46E5" fontSize="8" fontWeight="700" style={{ fontFamily: 'system-ui' }}>1</text>
+    <text x="92" y="358" fill="#4B5563" fontSize="7.5" style={{ fontFamily: 'system-ui' }}>Problem Statement</text>
+    <text x="195" y="358" fill="#7C3AED" fontSize="8" fontWeight="700" style={{ fontFamily: 'system-ui' }}>2</text>
+    <text x="207" y="358" fill="#4B5563" fontSize="7.5" style={{ fontFamily: 'system-ui' }}>Issues Tree</text>
+    <text x="285" y="358" fill="#2563EB" fontSize="8" fontWeight="700" style={{ fontFamily: 'system-ui' }}>3</text>
+    <text x="297" y="358" fill="#4B5563" fontSize="7.5" style={{ fontFamily: 'system-ui' }}>Data Request &amp; Ingestion</text>
+    <text x="80" y="376" fill="#059669" fontSize="8" fontWeight="700" style={{ fontFamily: 'system-ui' }}>4</text>
+    <text x="92" y="376" fill="#4B5563" fontSize="7.5" style={{ fontFamily: 'system-ui' }}>Hypotheses</text>
+    <text x="195" y="376" fill="#D97706" fontSize="8" fontWeight="700" style={{ fontFamily: 'system-ui' }}>5</text>
+    <text x="207" y="376" fill="#4B5563" fontSize="7.5" style={{ fontFamily: 'system-ui' }}>Analysis Plan</text>
+    <text x="285" y="376" fill="#E11D48" fontSize="8" fontWeight="700" style={{ fontFamily: 'system-ui' }}>6</text>
+    <text x="297" y="376" fill="#4B5563" fontSize="7.5" style={{ fontFamily: 'system-ui' }}>Analysis &amp; Synthesis</text>
+    {/* Bottom note */}
+    <text x="350" y="418" textAnchor="middle" fill="#6B7280" fontSize="9.5" fontWeight="500" style={{ fontFamily: 'system-ui' }}>Note: This chapter walks through each topic step by step</text>
+  </svg>
+</div>
+
+</VariantPicker>
 
 ## Iterative by Design
 
@@ -26,9 +247,9 @@ The AOMT diagnostic process is a 6-step iterative cycle. Unlike traditional line
 Activities are not completed once and abandoned. As analysis reveals new patterns, you will return to earlier activities — refining the problem statement, adding branches to the issues tree, or requesting additional data. Each pass deepens diagnostic accuracy.
 </Callout>
 
-## How AI Accelerates Each Step
+## How AI Accelerates Each Activity
 
-| Step | Traditional Approach | AI-Enabled Approach |
+| Activity | Traditional Approach | AI-Enabled Approach |
 |------|---------------------|---------------------|
 | Problem Statement | Weeks of stakeholder interviews | Data-informed scoping in hours |
 | Issues Tree | Workshop-based brainstorming | AI-generated MECE decomposition with human refinement |

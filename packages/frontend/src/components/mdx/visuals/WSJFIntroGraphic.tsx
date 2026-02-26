@@ -72,5 +72,3 @@ export default function WSJFIntroGraphic() {
     </div>
   );
 }
-
-/* --- Item #14b: WSJF Formula Breakdown --- */

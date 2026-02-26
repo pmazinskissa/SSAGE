@@ -65,6 +65,7 @@ export default function PromptScorer({
   const [result, setResult] = useState<ScoreResult | null>(null);
   const [rawFallback, setRawFallback] = useState<string | null>(null);
   const [showImproved, setShowImproved] = useState(false);
+  const [showSampleAnswer, setShowSampleAnswer] = useState(false);
 
   const handleSubmit = async () => {
     if (!prompt.trim() || streaming || !courseSlug) return;
@@ -72,7 +73,7 @@ export default function PromptScorer({
     setResult(null);
     setRawFallback(null);
 
-    const scoringMessage = `You are evaluating a prompt written by an AOMT practitioner.
+    const scoringMessage = `You are evaluating a prompt written by a practitioner.
 
 SCENARIO: ${scenario}
 AVAILABLE DATA: ${dataContext}
@@ -98,7 +99,21 @@ Respond in this exact JSON format only, no markdown:
       const parsed: ScoreResult = JSON.parse(cleaned);
       setResult(parsed);
     } catch {
-      setRawFallback(response);
+      // If JSON was truncated, try to repair by closing open strings/objects
+      try {
+        let repaired = cleaned;
+        // Close any unclosed string
+        const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length;
+        if (quoteCount % 2 !== 0) repaired += '"';
+        // Close open braces/brackets
+        const opens = (repaired.match(/[{[]/g) || []).length;
+        const closes = (repaired.match(/[}\]]/g) || []).length;
+        for (let i = 0; i < opens - closes; i++) repaired += '}';
+        const repairedParsed: ScoreResult = JSON.parse(repaired);
+        setResult(repairedParsed);
+      } catch {
+        setRawFallback(response);
+      }
     }
   };
 
@@ -134,171 +149,185 @@ Respond in this exact JSON format only, no markdown:
             <span className="font-semibold">Your Objective:</span> {objective}
           </p>
 
-          {available ? (
-            <>
-              {/* Prompt input */}
-              <textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="w-full p-3 border border-border rounded-input text-sm text-text-primary bg-surface/50 resize-y min-h-[100px] focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors font-mono"
-                placeholder="Write your C+T+O prompt here..."
-                rows={5}
-                disabled={streaming}
-              />
+          {/* Prompt input — always shown */}
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="w-full p-3 border border-border rounded-input text-sm text-text-primary bg-surface/50 resize-y min-h-[100px] focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors font-mono"
+            placeholder="Write your C+T+O prompt here..."
+            rows={5}
+            disabled={streaming}
+          />
 
-              {/* Buttons */}
-              <div className="flex items-center gap-3 mt-3">
-                <button
-                  onClick={handleSubmit}
-                  disabled={streaming || !prompt.trim()}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-accent rounded-button hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {streaming ? (
-                    <>
-                      <span className="inline-flex gap-0.5">
-                        <span className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                      </span>
-                      Scoring...
-                    </>
-                  ) : (
-                    <>
-                      <Send size={14} />
-                      Score My Prompt
-                    </>
-                  )}
-                </button>
-
-                {(result || rawFallback) && (
-                  <button
-                    onClick={handleReset}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary bg-surface border border-border rounded-button hover:bg-border/30 transition-colors"
-                  >
-                    <RotateCcw size={14} />
-                    Try Again
-                  </button>
-                )}
-              </div>
-
-              {/* Error */}
-              {error && (
-                <p className="mt-2 text-xs text-error flex items-center gap-1">
-                  <AlertCircle size={12} />
-                  {error}
-                </p>
-              )}
-
-              {/* Parsed score results */}
-              {result && (
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="mt-5"
-                >
-                  {/* Score cards */}
-                  <div className="flex flex-wrap gap-3 mb-4">
-                    <ScoreCard label="Context" score={result.context.score} feedback={result.context.feedback} />
-                    <ScoreCard label="Task" score={result.task.score} feedback={result.task.feedback} />
-                    <ScoreCard label="Output" score={result.output.score} feedback={result.output.feedback} />
-                  </div>
-
-                  {/* Overall score */}
-                  <div className="rounded-card border border-border bg-surface px-4 py-3 mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className={`text-2xl font-bold ${scoreColor(Math.round(result.overall / 3))}`}>
-                        {result.overall}/15
-                      </span>
-                      <p className="text-sm text-text-secondary leading-relaxed">{result.summary}</p>
-                    </div>
-                  </div>
-
-                  {/* Improved prompt (collapsible) */}
-                  {result.improved_prompt && (
-                    <div>
-                      <button
-                        onClick={() => setShowImproved(!showImproved)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-primary-light rounded-button hover:bg-primary/15 transition-colors"
-                      >
-                        {showImproved ? 'Hide Improved Prompt' : 'See Improved Prompt'}
-                        <motion.span
-                          animate={{ rotate: showImproved ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <ChevronDown size={16} />
-                        </motion.span>
-                      </button>
-
-                      <AnimatePresence>
-                        {showImproved && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.4, ease: 'easeInOut' }}
-                            className="overflow-hidden"
-                          >
-                            <div className="mt-3 rounded-card border border-border bg-surface overflow-hidden">
-                              <div className="border-b border-border bg-success/5 px-4 py-2">
-                                <span className="text-xs font-semibold uppercase tracking-wider text-success">
-                                  Improved Prompt
-                                </span>
-                              </div>
-                              <div className="p-4">
-                                <p className="text-sm font-mono text-text-primary whitespace-pre-wrap leading-relaxed">
-                                  {result.improved_prompt}
-                                </p>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  )}
-                </motion.div>
-              )}
-
-              {/* Raw fallback if JSON parsing failed */}
-              {rawFallback && (
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="mt-4 rounded-card border border-border bg-surface overflow-hidden"
-                >
-                  <div className="border-b border-border bg-warning/5 px-4 py-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-warning">
-                      AI Feedback
+          {/* Action button */}
+          <div className="flex items-center gap-3 mt-3">
+            {available ? (
+              <button
+                onClick={handleSubmit}
+                disabled={streaming || !prompt.trim()}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-accent rounded-button hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {streaming ? (
+                  <>
+                    <span className="inline-flex gap-0.5">
+                      <span className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </span>
-                  </div>
-                  <div className="p-4 prose prose-sm max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-pre:my-2 prose-pre:bg-white prose-pre:text-text-primary prose-code:text-xs prose-code:bg-white prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
-                    <Markdown>{rawFallback}</Markdown>
-                  </div>
-                </motion.div>
-              )}
-            </>
-          ) : (
-            <div className="flex items-center gap-2 px-4 py-3 bg-warning/10 border border-warning/20 rounded-card text-sm text-warning">
-              <AlertCircle size={16} />
-              AI features are not enabled. Contact your administrator.
-            </div>
+                    Scoring...
+                  </>
+                ) : (
+                  <>
+                    <Send size={14} />
+                    Score My Prompt
+                  </>
+                )}
+              </button>
+            ) : referencePrompt ? (
+              <button
+                onClick={() => setShowSampleAnswer(!showSampleAnswer)}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-accent rounded-button hover:opacity-90 transition-all"
+              >
+                <Send size={14} />
+                {showSampleAnswer ? 'Hide Sample Answer' : 'Reveal Sample Answer'}
+              </button>
+            ) : null}
+
+            {(result || rawFallback) && (
+              <button
+                onClick={handleReset}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary bg-surface border border-border rounded-button hover:bg-border/30 transition-colors"
+              >
+                <RotateCcw size={14} />
+                Try Again
+              </button>
+            )}
+          </div>
+
+          {/* Error */}
+          {error && (
+            <p className="mt-2 text-xs text-error flex items-center gap-1">
+              <AlertCircle size={12} />
+              {error}
+            </p>
           )}
 
-          {/* Reference prompt (always visible, no AI needed) */}
-          {referencePrompt && (
-            <div className="mt-4 rounded-card border border-border bg-surface overflow-hidden">
-              <div className="border-b border-border bg-primary/5 px-4 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                  Reference Prompt
+          {/* Sample answer reveal (AI off) */}
+          <AnimatePresence>
+            {showSampleAnswer && !available && referencePrompt && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 rounded-card border border-border bg-surface overflow-hidden">
+                  <div className="border-b border-border bg-primary/5 px-4 py-2">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+                      Sample Answer
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm font-mono text-text-primary whitespace-pre-wrap leading-relaxed">
+                      {referencePrompt.split(/(Context:|Task:|Output:)/).map((part, i) =>
+                        /^(Context|Task|Output):$/.test(part) ? (
+                          <strong key={i}>{part}</strong>
+                        ) : (
+                          <span key={i}>{part}</span>
+                        )
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Parsed score results (AI on) */}
+          {result && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="mt-5"
+            >
+              <div className="flex flex-wrap gap-3 mb-4">
+                <ScoreCard label="Context" score={result.context.score} feedback={result.context.feedback} />
+                <ScoreCard label="Task" score={result.task.score} feedback={result.task.feedback} />
+                <ScoreCard label="Output" score={result.output.score} feedback={result.output.feedback} />
+              </div>
+
+              <div className="rounded-card border border-border bg-surface px-4 py-3 mb-4">
+                <div className="flex items-center gap-3">
+                  <span className={`text-2xl font-bold ${scoreColor(Math.round(result.overall / 3))}`}>
+                    {result.overall}/15
+                  </span>
+                  <p className="text-sm text-text-secondary leading-relaxed">{result.summary}</p>
+                </div>
+              </div>
+
+              {result.improved_prompt && (
+                <div>
+                  <button
+                    onClick={() => setShowImproved(!showImproved)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary bg-primary-light rounded-button hover:bg-primary/15 transition-colors"
+                  >
+                    {showImproved ? 'Hide Improved Prompt' : 'See Improved Prompt'}
+                    <motion.span
+                      animate={{ rotate: showImproved ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown size={16} />
+                    </motion.span>
+                  </button>
+
+                  <AnimatePresence>
+                    {showImproved && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-3 rounded-card border border-border bg-surface overflow-hidden">
+                          <div className="border-b border-border bg-success/5 px-4 py-2">
+                            <span className="text-xs font-semibold uppercase tracking-wider text-success">
+                              Improved Prompt
+                            </span>
+                          </div>
+                          <div className="p-4">
+                            <p className="text-sm font-mono text-text-primary whitespace-pre-wrap leading-relaxed">
+                              {result.improved_prompt}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Raw fallback if JSON parsing failed */}
+          {rawFallback && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="mt-4 rounded-card border border-border bg-surface overflow-hidden"
+            >
+              <div className="border-b border-border bg-warning/5 px-4 py-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-warning">
+                  AI Feedback
                 </span>
               </div>
-              <div className="p-4">
-                <p className="text-sm font-mono text-text-primary whitespace-pre-wrap leading-relaxed">
-                  {referencePrompt}
-                </p>
+              <div className="p-4 prose prose-sm max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-pre:my-2 prose-pre:bg-white prose-pre:text-text-primary prose-code:text-xs prose-code:bg-white prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
+                <Markdown>{rawFallback}</Markdown>
               </div>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { AuthUser } from '@playbook/shared';
 import { api } from '../lib/api';
@@ -113,8 +113,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const value = useMemo(
+    () => ({ user, loading, error, providers, login, devLogin, register, localLogin, logout }),
+    [user, loading, error, providers, login, devLogin, register, localLogin, logout]
+  );
+
   return (
-    <AuthContext.Provider value={{ user, loading, error, providers, login, devLogin, register, localLogin, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,6 +10,9 @@ export interface CourseConfig {
   completion_certificate: boolean;
   narrative_synopsis?: string;
   modules: string[];
+  // Admin-configurable settings (may override YAML defaults)
+  require_knowledge_checks?: boolean;
+  min_lesson_time_seconds?: number;
 }
 
 export interface ModuleConfig {

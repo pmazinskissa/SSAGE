@@ -17,6 +17,35 @@ The MECE principle ensures that:
 
 AI is particularly effective at generating initial MECE decompositions. Provide the AI with the Problem Statement and ask it to decompose the problem into 4-6 top-level branches, then 2-4 sub-branches beneath each. The practitioner then reviews, refines, and validates the structure.
 
+<PromptExample
+  prompt="Our problem statement is: 'Metro Cable's first-visit resolution rate has declined from 78% to 62% over the past 12 months, increasing repeat dispatches and customer dissatisfaction.' Decompose this into a MECE Issues Tree with 4-5 top-level branches and 2-3 sub-issues under each. For every sub-issue, suggest a testable hypothesis."
+  response="Here is a MECE Issues Tree for Metro Cable's declining first-visit resolution rate:
+
+1. **Dispatch & Routing Efficiency**
+   - Geographic mismatch between technician location and job site (H1: Avg. travel distance increased >20%, reducing available on-site time)
+   - Skill-to-job-type misalignment in dispatch assignments (H1: Jobs assigned outside a technician's top certification area have 30%+ lower resolution rates)
+
+2. **Technician Capability**
+   - Declining training completion rates for new equipment types (H1: Technicians without updated certifications resolve new-equipment jobs at <50% on first visit)
+   - Experience distribution shift due to workforce turnover (H1: Technicians with <1 year tenure have first-visit resolution rates 25%+ below veterans)
+
+3. **Parts & Equipment Availability**
+   - Truck stock-out rates for commonly needed parts (H1: >15% of return visits are caused by parts not carried on the initial truck)
+   - Inventory forecasting misaligned with seasonal job-type mix (H1: Stock-out rates spike in Q1 and Q3, correlating with resolution rate dips)
+
+4. **Job Complexity & Scope Changes**
+   - Increase in multi-issue service calls being logged as single jobs (H1: Jobs with 2+ issue codes have doubled in the past 12 months)
+   - New service offerings added without updated resolution criteria (H1: Resolution rate for services launched in the past year is <55%)
+
+5. **Customer & Scheduling Factors**
+   - Narrower appointment windows reducing technician flexibility (H1: Jobs with <2-hour windows have 20%+ lower resolution rates)
+   - Incomplete pre-visit information from customer intake (H1: Jobs with missing equipment model or symptom details require return visits at 2x the base rate)"
+/>
+
+<Callout type="tip" title="Review Before You Trust">
+AI-generated decompositions are a starting point. Check each branch for genuine mutual exclusivity — is there overlap between "Dispatch Efficiency" and "Technician Capability"? Validate with domain experts to catch blind spots the AI may miss.
+</Callout>
+
 ## Hypothesis Framework
 
 For each branch of the Issues Tree, formulate a Null Hypothesis (H0) and an Alternative Hypothesis (H1):

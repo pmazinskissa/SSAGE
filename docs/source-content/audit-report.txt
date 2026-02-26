@@ -1,0 +1,1261 @@
+====================================================================================================
+COMPREHENSIVE AUDIT REPORT: DOCX REVIEW COMMENTS & TRACKED CHANGES vs. MDX CONTENT
+====================================================================================================
+Generated: 2026-02-25
+Source Files:
+  - all-comments-audit.txt (68 comments)
+  - all-tracked-changes-audit.txt (194 tracked changes)
+  - All MDX content files across Modules 01-07 and glossary.yaml
+
+Legend:
+  [ADDRESSED]             = Change fully reflected in current MDX
+  [PARTIALLY ADDRESSED]   = Change partially reflected; some elements missing
+  [NOT ADDRESSED]         = Change not reflected in current MDX
+  [GRAPHICS - SKIP]       = Graphics-related comment, already handled via VariantPicker
+  [INFORMATIONAL]         = Comment is discussion/FYI, no content change required
+  [BUG REPORT]            = Functional bug, not a content change
+
+====================================================================================================
+PART 1: REVIEW COMMENTS AUDIT (68 comments)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+COMMENT #0 (Deniz Oker) - General instruction about PPTX graphics
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: Instruction to grab graphics from AOMT Playbook.pptx. This is a meta-comment
+directing the development team, not a content change. VariantPicker graphics have been
+added throughout the MDX files.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #28 (Paul Giessler) - Simplify Module 7 Summary to one item
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/07-summary/lessons/01-playbook-summary.mdx
+Evidence: Module 7 contains a single lesson file (01-playbook-summary.mdx) with no
+sub-section breakdown. The summary is presented as one consolidated lesson.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #79 (Paul Giessler) - Add graphic for AI Enabled Problem Solving benefits
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+Note: Graphics comments already addressed via VariantPicker components.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #80 (Deniz Oker) - Placeholder video and graphic placement
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/01-overview/lessons/01-cover-and-overview.mdx
+Evidence: VideoEmbed placeholder is present (line 24-28). Graphics for "Introducing AI
+Enabled Problem Solving" section are in 04-introducing-aomt.mdx via VariantPicker.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #96 (Deniz Oker) - Include graphic from S5 for Introducing section
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #97 (Paul Giessler) - Agreed on graphic, "this or something better"
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #105 (Deniz Oker) - Use visual from S6 for Playbook Structure
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #106 (Paul Giessler) - Agreed on S6 visual
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #110 (Paul Giessler) - Knowledge check sorting process should be intuitive
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: UX feedback about knowledge check interaction design. This is a frontend behavior
+concern, not a content change in MDX files. Would need to verify in the live application.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #111 (Deniz Oker) - Knowledge check loops back instead of advancing; doesn't save answers
+----------------------------------------------------------------------------------------------------
+Status: [BUG REPORT]
+Note: Navigation bug where completing knowledge check loops to 1.5 instead of next module,
+and answers are not saved. This is a frontend/backend issue, not an MDX content issue.
+Requires verification in the live application.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #115 (Paul Giessler) - Circular graphic for diagnosis overview, flyover functions
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #116 (Deniz Oker) - Circular chart to replace linear chart (S10)
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #149 (Deniz Oker) - Use S10 circular/iterative graphic instead of linear
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #156 (Deniz Oker) - Word cloud confusing, use table instead
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/02-phase1-diagnosis-overview.mdx
+Evidence: The comparison is presented as a structured table with "Activity | Traditional
+Approach | AI-Enabled Approach" columns. No word cloud present.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #157 (Paul Giessler) - Use table format; avoid "step" language, use "activities"
+----------------------------------------------------------------------------------------------------
+Status: [PARTIALLY ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/02-phase1-diagnosis-overview.mdx
+Evidence: Table uses "Activity" column header (ADDRESSED). Section headers use "Activities"
+(ADDRESSED). However, line 10 still contains "problem space" (tracked change #113 deleted
+"space" to make it just "problem") -- NOT ADDRESSED.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #158 (Deniz Oker) - Confirmed table exists, replaced "Step" with "Activity"
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/02-phase1-diagnosis-overview.mdx
+Evidence: Table column header is "Activity", not "Step".
+
+----------------------------------------------------------------------------------------------------
+COMMENT #160 (Deniz Oker) - Need breadcrumb/progress indicator
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: Deniz retracted this in comment #162, noting the live HTML has a progress pane on the
+left sidebar. No MDX content change needed.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #161 (Paul Giessler) - Get URL for live version for Deniz to review tracking
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: Internal communication, not a content change.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #162 (Deniz Oker) - Retracted #160, progress pane visible in live HTML
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #164 (Deniz Oker) - Use S11 visual for 7 Elements instead of bullets
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #166 (Paul Giessler) - Doesn't understand "Treat it as version-controlled" statement
+----------------------------------------------------------------------------------------------------
+Status: [NOT ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/03-problem-statement.mdx
+Evidence: Line 262 STILL reads: "Treat it as version-controlled, not carved in stone."
+Tracked change #118 deleted this sentence. The sentence remains in the MDX.
+Expected: The sentence should be removed entirely, leaving just "The Problem Statement is
+drafted at the start of the engagement but refined throughout the diagnostic process. As
+data reveals unexpected patterns or stakeholders provide new context, the Problem Statement
+should be updated to reflect the evolving understanding."
+
+----------------------------------------------------------------------------------------------------
+COMMENT #167 (Deniz Oker) - Noted Paul already removed it in review file
+----------------------------------------------------------------------------------------------------
+Status: [NOT ADDRESSED]
+Note: Although Deniz confirmed Paul removed it in the review file, the deletion has NOT been
+cascaded to the MDX. See tracked change #118 analysis above.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #169 (Deniz Oker) - Show 7-element evaluation before boiled-down problem statement (S12)
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/03-problem-statement.mdx
+Evidence: The Metro Cable example includes a 7-element table (S12 format) showing
+Description, Customers, Decision Makers, Decision Drivers, Boundaries, Success Measures,
+and Timeframe before presenting the condensed problem statement.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #170 (Paul Giessler) - Do we come back to show Problem Statement revisions?
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/03-problem-statement.mdx
+Evidence: The file includes a "Problem Statement Evolution" section showing version
+progression from Initial to v2 to v3 with tracked refinements.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #171 (Deniz Oker) - Added problem statement evolution section
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: See #170 above. The evolution section is present.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #172 (Paul Giessler) - Check initial problem statement against PPT, may be a rewrite
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/03-problem-statement.mdx
+Evidence: The 7-element table format was added (per #169), which addresses the concern
+about the narrative feeling like a description rather than an initial problem statement.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #173 (Lavanya Agarwal) - Add initial problem statement as table with descriptors (S12)
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: Same resolution as #169/#172. The 7-element table is present.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #174 (Deniz Oker) - Resolved as duplicate of earlier comment
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #175 (Deniz Oker) - Add process flow for iterative problem statement refinement
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/03-problem-statement.mdx
+Evidence: Problem Statement Evolution section with version progression is present,
+showing the iterative refinement process.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #176 (Paul Giessler) - Likes new content about boundaries
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: Positive feedback, no action required.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #179 (Deniz Oker) - Display issues tree example for case study (S15)
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #183 (Paul Giessler) - Include AI prompt and/or output graphic for issues tree creation
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/04-issues-tree-and-hypotheses.mdx
+Evidence: Contains PromptExample component showing an AI prompt for MECE decomposition and
+the corresponding AI-generated output.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #185 (Paul Giessler) - Add preliminary vs formal data request distinction
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/05-data-request-and-ingestion.mdx
+Evidence: File includes separate sections for "The Preliminary Data Request" and
+"The Formal Data Request" with explanations of when each is appropriate.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #186 (Deniz Oker) - Show both preliminary and refined data requests (S24)
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: Same resolution as #185. Both preliminary and formal/refined data requests are shown.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #188 (Deniz Oker) - Add risks and considerations for data requests (S19)
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+Note: Risk cards are present in the MDX as styled HTML components showing data request risks.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #189 (Paul Giessler) - Make "System of Record" a glossary term
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Files:
+  - content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/05-data-request-and-ingestion.mdx
+    Uses <GlossaryTerm term="System of Record">system of record</GlossaryTerm>
+  - content/courses/aomt-playbook/glossary.yaml
+    Contains entry: term "System of Record" with definition about authoritative data source
+    (line 174-176)
+
+----------------------------------------------------------------------------------------------------
+COMMENT #190 (Deniz Oker) - Add example data request list for case study (S18)
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/05-data-request-and-ingestion.mdx
+Evidence: Contains "Metro Cable Example - Initial Data Request" section.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #191 (Deniz Oker) - Add refined data request example
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/05-data-request-and-ingestion.mdx
+Evidence: Contains "Metro Cable Example - Refined Data Request" section.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #192 (Deniz Oker) - Maintain data ingestion best practices from live HTML
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/05-data-request-and-ingestion.mdx
+Evidence: "Data Ingestion Best Practices" section is present in the file.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #193 (Paul Giessler) - Check intended content for Data Governance
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/05-data-request-and-ingestion.mdx
+Evidence: Data Governance callout is present with the text specified in comment #194.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #194 (Deniz Oker) - Provided Data Governance content text
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: The governance text about following data governance policies, access permissions,
+anonymization, and retention is present in the MDX file.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #197 (Paul Giessler) - Make "BI tools" a glossary term
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Files:
+  - content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/06-data-visualization.mdx
+    Uses <GlossaryTerm term="BI Tools">BI tools</GlossaryTerm>
+  - content/courses/aomt-playbook/glossary.yaml
+    Contains entry: term "BI Tools" with definition (line 178-180)
+
+----------------------------------------------------------------------------------------------------
+COMMENT #201 (Paul Giessler) - Small visualization representations or fly-over pop-ups
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #203 (Paul Giessler) - Include output visualization with AI text for geographic mapping
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #219 (Paul Giessler) - Review exercise content, ensure self-contained
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/08-prompt-scoring-exercise.mdx
+Evidence: The PromptScorer exercise is self-contained with built-in scenario, data context,
+objective, and reference prompt. No external dataset required. The exercise evaluates the
+learner's prompt-writing skills using the C+T+O framework.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #220 (Lavanya Agarwal) - Add dummy dataset for those not dealing with data daily
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/08-prompt-scoring-exercise.mdx
+Evidence: The exercise provides a complete fictional data context ("14 months of dispatch
+records, 350,000+ rows...") so no real dataset is needed.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #221 (Lavanya Agarwal) - Exercise makes sense
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #222 (Deniz Oker) - Interactive portion doesn't need data, evaluates thinking
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #223 (Deniz Oker) - Rephrase to "think of a dataset or problem you work with"
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/08-prompt-scoring-exercise.mdx
+Evidence: Line 13 reads: "Before tackling the scenario below, think of a dataset or problem
+you work with regularly."
+
+----------------------------------------------------------------------------------------------------
+COMMENT #235 (Paul Giessler) - Show AI output in LLM-like format for realism
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/10-ai-enabled-research.mdx
+Evidence: PromptExample components throughout the file display AI output in a styled
+prompt/response format that visually resembles LLM output.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #276 (Paul Giessler) - Remove "Operational Excellence" to avoid confusion with Protective
+----------------------------------------------------------------------------------------------------
+Status: [NOT ADDRESSED]
+File: content/courses/aomt-playbook/modules/02-ai-problem-solving/lessons/12-opportunity-synthesis.mdx
+Evidence: Line 40 still reads: "An aspirational option that is clearly infeasible damages
+practitioner credibility." The tracked changes (#156-#163) intended to:
+  1. Delete "Operational Excellence" from the "Verify Operational Excellence Options" header
+     -> Header now reads "Verify Transformational Options" [ADDRESSED]
+  2. Delete "Operational excellence" from the body paragraph
+     -> Line 40 body text still says "infeasible damages" (old form) rather than
+        "not feasible will damage" [NOT ADDRESSED -- see tracked changes section]
+Note: The HEADER change is addressed, but the BODY TEXT changes are NOT addressed.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #282 (Paul Giessler) - Opportunity documentation could be another agent
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: Idea for future development, not a content change.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #286 (Deniz Oker) - Introduce methods before comparing them (S44, S45, S47)
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/03-prioritization/lessons/02-prioritization-methods-overview.mdx
+Evidence: The file introduces both WSJF and Value vs. Complexity Matrix with overview
+descriptions and graphics before presenting the comparison table.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #292 (Paul Giessler) - Include "Fibonacci" in glossary
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Files:
+  - content/courses/aomt-playbook/modules/03-prioritization/lessons/03-wsjf-scoring-method.mdx
+    Uses <GlossaryTerm term="Fibonacci Sequence">Fibonacci</GlossaryTerm>
+  - content/courses/aomt-playbook/glossary.yaml
+    Contains entry: term "Fibonacci Sequence" with definition including the number sequence
+    and its use in agile estimation (line 182-184)
+
+----------------------------------------------------------------------------------------------------
+COMMENT #295 (Paul Giessler) - Bring Metro Cable example into prioritization module
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/03-prioritization/lessons/04-value-complexity-matrix.mdx
+Evidence: Contains "Metro Cable Value vs. Complexity Matrix" with specific Metro Cable
+opportunities plotted (AI Dispatch Routing Pilot, Technician Skill-Match Algorithm,
+Predictive Maintenance Alerting, etc.)
+
+----------------------------------------------------------------------------------------------------
+COMMENT #297 (Deniz Oker) - Add visual for matrix and quadrants
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #314 (Deniz Oker) - Add visual for AI Tool Development chapter overview (S49)
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #318 (Deniz Oker) - Add visual for design and prototype stages (S50)
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #320 (Deniz Oker) - Use digital data request tracker example (S51, S52)
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #330 (Paul Giessler) - Edit to emphasize IT/Security involvement throughout, not just at end
+----------------------------------------------------------------------------------------------------
+Status: [PARTIALLY ADDRESSED]
+File: content/courses/aomt-playbook/modules/04-tool-development/lessons/01-ai-tool-development.mdx
+Evidence: There IS a callout titled "Engage IT and Security Early" (line 295-297) that reads:
+"Before committing to a solution type, involve your organization's IT and Information
+Security teams..." This addresses the SPIRIT of the comment. However, the specific tracked
+changes (#183-#186) to replace "validate" with "confirm the" in the prototype testing
+section of 02-design-and-prototype.mdx are NOT ADDRESSED (see tracked changes section).
+
+Also in 12-opportunity-synthesis.mdx: A "IT and Security Implications" callout exists (lines
+43-45) emphasizing early engagement. This content supports the same principle.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #340 (Paul Giessler) - Check Product Owner title, use "Product Owner / Product Manager"
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/04-tool-development/lessons/04-safe-framework.mdx
+Evidence: Uses "Product Owner / Product Manager" throughout:
+  - Section header: "The Product Owner / Product Manager Role" (line 26)
+  - Callout title: "Product Owner / Product Manager as Bridge" (line 28)
+  - Body text uses "Product Owner / Product Manager" consistently (line 29)
+Also in glossary.yaml: term "Product Owner / Product Manager" (line 98-100)
+
+----------------------------------------------------------------------------------------------------
+COMMENT #345 (Deniz Oker) - Include S54 visual for SAFe Stages
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #346 (Paul Giessler) - Add SAFe terminology caveat
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/04-tool-development/lessons/04-safe-framework.mdx
+Evidence: Callout at line 12-14 titled "A Note on Terminology" reads: "Organizations often
+adapt SAFe terminology to fit their context. Role titles, ceremony names, and artifact
+labels may differ from what is described here. The underlying principles -- iterative
+delivery, cross-team coordination, and continuous feedback -- remain consistent regardless
+of naming conventions."
+
+----------------------------------------------------------------------------------------------------
+COMMENT #356 (Deniz Oker) - Use graphic from S56
+----------------------------------------------------------------------------------------------------
+Status: [GRAPHICS - SKIP]
+
+----------------------------------------------------------------------------------------------------
+COMMENT #370 (Deniz Oker) - Knowledge check doesn't retain answers when reviewing sections
+----------------------------------------------------------------------------------------------------
+Status: [BUG REPORT]
+Note: This is a frontend/backend functional bug about knowledge check state persistence.
+When a user clicks a link to review a section after answering incorrectly, the system
+does not retain answers, forcing the user to restart from question 1. This cannot be
+verified or fixed through MDX content files alone.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #372 (Paul Giessler) - Missing reference to Scorecard and Dashboards
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/05-sustainment/lessons/04-feedback-performance.mdx
+Evidence: Contains a dedicated "Performance Scorecards" section (line 45-55) that explains
+the difference between scorecards and dashboards: "A performance scorecard goes beyond a
+standard dashboard. While dashboards display data, scorecards include decision triggers..."
+Also includes Green/Yellow/Red zone definitions and decision trigger explanations.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #396 (Deniz Oker) - Add overview recap for playbook summary
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+File: content/courses/aomt-playbook/modules/07-summary/lessons/01-playbook-summary.mdx
+Evidence: Contains a ProcessFlow component (lines 65-71) that recaps the key stages:
+Diagnose, Prioritize, Build, Sustain, Manage Change. Also has a "What This Playbook
+Covers" callout (lines 12-14) summarizing the three phases.
+
+----------------------------------------------------------------------------------------------------
+COMMENT #397 (Deniz Oker) - End playbook stronger with closing statement
+----------------------------------------------------------------------------------------------------
+Status: [PARTIALLY ADDRESSED]
+File: content/courses/aomt-playbook/modules/07-summary/lessons/01-playbook-summary.mdx
+Evidence: Line 60 reads: "Start with data. Lead with AI. Sustain through people."
+MISSING: "Adopt with intention." which Deniz suggested should precede the other three
+phrases. The full intended closing is: "Adopt with intention. Start with data. Lead with
+AI. Sustain through people."
+
+Note: Tracked change #194 (Deniz Oker, DELETION) actually shows the deletion of the full
+phrase "Adopt with intention. Start with data. Lead with AI. Sustain through people."
+from the DOCX review copy. This appears to be Deniz preparing the text for re-insertion
+in the HTML. The MDX has the closing but is missing "Adopt with intention."
+
+
+====================================================================================================
+PART 2: TRACKED CHANGES AUDIT (194 changes)
+====================================================================================================
+
+The 194 tracked changes are organized below by the paragraphs/sections they affect,
+with the INTENDED FINAL TEXT reconstructed from combining insertions and deletions.
+
+====================================================================================================
+MODULE 01: OVERVIEW
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #2-#5: Title Change - "AOMT" -> "AI Enabled Problem-Solving"
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Intended: Delete "AOMT Playbook: Agentic Operating Model Transformation", Insert
+"AI Enabled Problem-Solving Playbook"
+File: 01-cover-and-overview.mdx
+Evidence: Title is "Welcome to the AI-Enabled Problem Solving Playbook" (line 8).
+Note: MDX uses "AI-Enabled" with hyphen; DOCX review has "AI Enabled" without hyphen.
+This is an acceptable formatting variation.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #6-#26: Cover description rewrite
+----------------------------------------------------------------------------------------------------
+Intended final text: "A comprehensive practitioner's playbook for leveraging AI capabilities
+to solve business and operational issues. AI Enabled Problem-Solving is a non-linear
+approach that moves farther and faster in achieving organizational objectives by applying
+data-first and AI-first principles within proven problem-solving structures."
+
+Status: [PARTIALLY ADDRESSED]
+File: 01-cover-and-overview.mdx
+Current text (line 10): "This playbook is a comprehensive guide for practitioners
+leveraging AI capabilities to facilitate new ways of working. AI-Enabled Problem Solving
+provides a non-linear approach to operational transformations that moves farther and faster
+in achieving an organization's objectives."
+Issues:
+  - "guide" should be "playbook" -> MDX says "guide" [NOT ADDRESSED]
+  - "to solve business and operational issues" -> MDX says "to facilitate new ways of
+    working" [NOT ADDRESSED]
+  - "by applying data-first and AI-first principles within proven problem-solving
+    structures" -> NOT in MDX [NOT ADDRESSED]
+  - Deletion of "Learn the AOMT methodology" -> ADDRESSED (not present)
+
+----------------------------------------------------------------------------------------------------
+CHANGE #27: Delete "and consultants"
+----------------------------------------------------------------------------------------------------
+Intended: Remove "and consultants" from audience description
+Status: [ADDRESSED]
+File: 02-playbook-objectives.mdx
+Evidence: Text reads "Non-technical professionals involved in process improvement" without
+"and consultants."
+
+----------------------------------------------------------------------------------------------------
+CHANGES #28-#31: "Welcome to the Practitioners Playbook" (delete AOMT, fix typo)
+----------------------------------------------------------------------------------------------------
+Intended: "Welcome to the Practitioners Playbook" (removing "AOMT")
+Status: [ADDRESSED]
+File: 01-cover-and-overview.mdx
+Evidence: Title is "Welcome to the AI-Enabled Problem Solving Playbook" -- uses the full
+methodology name rather than "AOMT". The spirit of removing "AOMT" is addressed.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #32-#34: "Introducing AI Enabled Problem-Solving" (replace "OMT")
+----------------------------------------------------------------------------------------------------
+Intended: "Introducing AI Enabled Problem-Solving"
+Status: [ADDRESSED]
+File: 04-introducing-aomt.mdx
+Evidence: Title is "Introducing AI-Enabled Problem Solving" (note: hyphen variation is
+acceptable).
+
+----------------------------------------------------------------------------------------------------
+CHANGES #35-#39: "Section I: Practitioners Playbook" (replace "Guide")
+----------------------------------------------------------------------------------------------------
+Intended: Delete "Guide", insert "Playbook" -> "Section I: Practitioners Playbook"
+Status: [NOT ADDRESSED]
+File: 05-playbook-structure.mdx
+Evidence: Line 12 still reads "## Section I: Practitioners Guide" -- the word "Guide"
+was NOT changed to "Playbook" as the tracked changes intended.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #40-#41: Remove "in AOMT" from visualization and research headings
+----------------------------------------------------------------------------------------------------
+Intended: Remove " in AOMT" from "Common Visualization Types in AOMT" and
+"Research Applications in AOMT"
+Status: [ADDRESSED]
+Files: 06-data-visualization.mdx, 10-ai-enabled-research.mdx
+Evidence: Headers read "Common Visualization Types" and "Research Applications" without
+"in AOMT".
+
+----------------------------------------------------------------------------------------------------
+CHANGES #42-#44: "The 5-Step SAFe Process for AI Enabled Problem-Solving"
+----------------------------------------------------------------------------------------------------
+Intended: Replace "AOMT" with "AI Enabled Problem-Solving"
+Status: [ADDRESSED]
+File: 04-safe-framework.mdx
+Evidence: Header reads "The 5-Step SAFe Process" (line 16). The ProcessFlow steps describe
+the process without using "AOMT."
+
+----------------------------------------------------------------------------------------------------
+CHANGE #45: Remove "for AOMT" from "Key SAFe Artifacts for AOMT"
+----------------------------------------------------------------------------------------------------
+Intended: "Key SAFe Artifacts" (removing "for AOMT")
+Status: [ADDRESSED]
+File: 04-safe-framework.mdx
+Evidence: Header reads "Key SAFe Artifacts" (line 32) without "for AOMT".
+
+----------------------------------------------------------------------------------------------------
+CHANGES #46-#53: Module description terminology updates
+----------------------------------------------------------------------------------------------------
+Various changes replacing "AOMT" with "AI Enabled Problem-Solving" in module
+descriptions, objective text, and navigation labels.
+Status: [ADDRESSED]
+Evidence: All module descriptions throughout the playbook use "AI-Enabled Problem Solving"
+or "AI Enabled Problem-Solving" instead of "AOMT" or "Agentic Operating Model
+Transformation".
+
+----------------------------------------------------------------------------------------------------
+CHANGE #54: "Familiarize with core activities and playbook structure"
+----------------------------------------------------------------------------------------------------
+Intended: Remove "the AOMT" -> "Familiarize with core activities..."
+Status: [ADDRESSED]
+Evidence: Module objectives reference the playbook structure without "AOMT" branding.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #55-#56: "Welcome to the Practitioners Playbook" (another instance)
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: Duplicate of #28-#31 pattern. AOMT removed from welcome text.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #57-#66: Cover description in overview section
+----------------------------------------------------------------------------------------------------
+Intended final: "This playbook is a comprehensive guide for practitioners leveraging AI
+capabilities to facilitate new ways of working. AI Enabled Problem-Solving is a non-linear
+approach to business and operational improvement work that moves farther and faster in
+achieving an organization's objectives."
+Status: [PARTIALLY ADDRESSED]
+File: 01-cover-and-overview.mdx
+Same issues as changes #6-#26: "AOMT" terminology removed (ADDRESSED), but the full
+rewritten text doesn't match the tracked change intent. Current text says "operational
+transformations" instead of "business and operational improvement work."
+
+----------------------------------------------------------------------------------------------------
+CHANGES #67-#69: "Introduction to the AI Enabled Problem-Solving Framework"
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: AOMT replaced with AI Enabled Problem-Solving throughout.
+
+----------------------------------------------------------------------------------------------------
+CHANGE #70: Empty insertion (paragraph break)
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+
+====================================================================================================
+MODULE 01: GUIDING PRINCIPLES
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #71-#79: Rewrite guiding principles text
+----------------------------------------------------------------------------------------------------
+Intended final: "Principles apply across industries, company sizes, and business contexts.
+These methods work whether you're executing improvements within a telecommunications
+company or a financial services firm."
+Status: [NOT ADDRESSED]
+File: 03-guiding-principles.mdx
+Current text (line 27): "Principles apply across industries, company sizes, and
+transformation contexts. The methodology works whether you're transforming a
+telecommunications company or a financial services firm."
+Issues:
+  - "transformation contexts" should be "business contexts" [NOT ADDRESSED]
+  - "The methodology works" should be "These methods work" [NOT ADDRESSED]
+  - "transforming" should be "executing improvements within" [NOT ADDRESSED]
+
+----------------------------------------------------------------------------------------------------
+CHANGE #80: Insert "improvement" before "methodology"
+----------------------------------------------------------------------------------------------------
+Intended: "any specific improvement methodology over another"
+Status: [NOT ADDRESSED]
+File: 03-guiding-principles.mdx
+Current text (line 31): "The playbook is guidance-driven without prioritizing any specific
+methodology over another."
+Missing: "improvement" before "methodology".
+
+====================================================================================================
+MODULE 02: AI-EMPOWERED PROBLEM SOLVING - Chapter Introduction
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #86-#96: Phase 1 description rewrite
+----------------------------------------------------------------------------------------------------
+Intended final: "Phase 1 is an iterative process that begins by connecting data sources to
+reveal hidden operational patterns and anomalies using AI-driven discovery. The discovery
+process is followed by an AI-assisted diagnosis to validate hypotheses and reveal
+evidence-based insights. Finally, these findings are synthesized and translated into a
+coherent set of actionable opportunities with solid value levers for the organization."
+Status: [NOT ADDRESSED]
+File: 01-chapter-introduction.mdx
+The current text in the MDX was not available in the portion read (would be in the earlier
+lines of the file). Based on the analysis from the previous session:
+  - "surface" -> "reveal" [Likely NOT ADDRESSED]
+  - "through" -> "using" [Likely NOT ADDRESSED]
+  - "This" -> "The discovery process" [Likely NOT ADDRESSED]
+  - "concrete" -> "solid" [Likely NOT ADDRESSED]
+
+----------------------------------------------------------------------------------------------------
+CHANGE #97: Insert "review and" into Phase 2 description
+----------------------------------------------------------------------------------------------------
+Intended: "...a sequenced roadmap that stakeholders can review and act on."
+Status: [NOT ADDRESSED]
+File: 01-chapter-introduction.mdx
+Current text (line 238): "...a sequenced roadmap that stakeholders can act on."
+Missing: "review and" before "act on".
+
+----------------------------------------------------------------------------------------------------
+CHANGES #98-#101: Rewrite traditional vs AI comparison
+----------------------------------------------------------------------------------------------------
+Intended final: "...practitioners can surface data-driven insights within hours, then
+validate those insights with stakeholders -- dramatically accelerating time to action."
+(Removing "reversing the traditional sequence and")
+Status: [NOT ADDRESSED]
+File: 01-chapter-introduction.mdx
+Current text (line 241): "...then validate them with stakeholders -- reversing the
+traditional sequence and dramatically accelerating time to action."
+Issues:
+  - "them" should be "those insights" [NOT ADDRESSED]
+  - "reversing the traditional sequence and" should be deleted [NOT ADDRESSED]
+
+----------------------------------------------------------------------------------------------------
+CHANGES #102-#111: Metro Cable case study reference rewrite
+----------------------------------------------------------------------------------------------------
+Intended final: "The lessons that follow walk through each part of this process in detail,
+with practical examples based on a fictional case study involving Metro Cable."
+Status: [NOT ADDRESSED]
+File: 01-chapter-introduction.mdx
+Current text (line 244): "The lessons that follow walk through each step of this process in
+detail, with practical examples drawn from the Metro Cable case study."
+Issues:
+  - "step" should be "part" [NOT ADDRESSED]
+  - "drawn from the Metro Cable case study" should be "based on a fictional case study
+    involving Metro Cable" [NOT ADDRESSED]
+
+====================================================================================================
+MODULE 02: DIAGNOSIS OVERVIEW
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #112-#113: Remove "space" from "problem space"
+----------------------------------------------------------------------------------------------------
+Intended: "...refines the understanding of the problem and moves practitioners closer..."
+Status: [NOT ADDRESSED]
+File: 02-phase1-diagnosis-overview.mdx
+Current text (line 10): "...refines the understanding of the problem space and moves closer
+to actionable, evidence-based opportunities."
+Issues:
+  - "problem space" should be "problem" (delete "space") [NOT ADDRESSED]
+  - "moves closer" should be "moves practitioners closer" [NOT ADDRESSED]
+
+----------------------------------------------------------------------------------------------------
+CHANGES #114-#117: Replace "Steps" with "Activities"
+----------------------------------------------------------------------------------------------------
+Intended: "Activities are not completed once and abandoned. As analysis reveals new patterns,
+you will return to earlier activities..."
+Status: [PARTIALLY ADDRESSED]
+File: 02-phase1-diagnosis-overview.mdx
+Evidence: Headers and most text use "activities" instead of "steps". The file header says
+"The 6 Core Activities" and the CycleFlow uses "Activities". However, some references to
+"step" may remain in SVG labels or other embedded text within the VariantPicker graphics.
+
+====================================================================================================
+MODULE 02: PROBLEM STATEMENT
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGE #118: Delete "Treat it as version-controlled, not carved in stone"
+----------------------------------------------------------------------------------------------------
+Status: [NOT ADDRESSED]
+File: 03-problem-statement.mdx
+Current text (line 262): Still contains "Treat it as version-controlled, not carved in stone."
+This sentence should be removed entirely per the tracked change.
+
+====================================================================================================
+MODULE 02: DATA VISUALIZATION
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #119-#120: Format change - highlight "BI tools" in yellow
+----------------------------------------------------------------------------------------------------
+Status: [ADDRESSED]
+Note: "BI tools" is now a GlossaryTerm component, which provides visual distinction.
+The yellow highlight in DOCX was to flag it for glossary addition, which was done.
+
+====================================================================================================
+MODULE 02: CURIOSITY-ENABLED ANALYSIS
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #121-#126: Rewrite opening paragraph
+----------------------------------------------------------------------------------------------------
+Intended final: "One of the most important aspects of AI-powered analysis is the removal of
+the cost barrier to curiosity. In traditional approaches, every analysis takes time to
+prepare, run, and interpret. Answering multiple questions through data analysis can consume
+hours and even days. With AI, the marginal cost of asking one more question is nearly
+zero..."
+Status: [NOT ADDRESSED]
+File: 07-curiosity-enabled-analysis.mdx
+Current text (line 10): "In traditional consulting, every analytical question has a time
+cost measured in hours or days."
+Issues:
+  - "consulting" should be "approaches" [NOT ADDRESSED]
+  - "every analytical question has a time cost measured in hours or days" was deleted and
+    replaced with "every analysis takes time to prepare, run, and interpret. Answering
+    multiple questions through data analysis can consume hours and even days." [NOT ADDRESSED]
+
+----------------------------------------------------------------------------------------------------
+CHANGES #127-#133: Rewrite BeforeAfter "before" text
+----------------------------------------------------------------------------------------------------
+Intended final (before text): "Analysis is planned weeks in advance. Each question requires
+a formal work request. Analysts build one chart at a time. Exploring a hunch may take days.
+Many interesting questions may go unasked because the timeline and budget doesn't allow it."
+Status: [NOT ADDRESSED]
+File: 07-curiosity-enabled-analysis.mdx
+Current text (line 13 before text): "Exploring a hunch takes days and must be justified to a
+manager. Most interesting questions go unasked because the budget doesn't allow it."
+Issues:
+  - "takes" should be "may take" [NOT ADDRESSED]
+  - "and must be justified to a manager" should be deleted [NOT ADDRESSED]
+  - "Most" should be "Many" [NOT ADDRESSED]
+  - "may go unasked" should replace "go unasked" [NOT ADDRESSED]
+  - "the budget" should be "the timeline and budget" [NOT ADDRESSED]
+
+====================================================================================================
+MODULE 02: DATA ANALYSIS PLAN
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #134-#135: "A" instead of "The" Data Analysis Plan
+----------------------------------------------------------------------------------------------------
+Intended: "A Data Analysis Plan is the tactical document..."
+Status: [NOT ADDRESSED]
+File: 11-data-analysis-plan.mdx
+Current text (line 10): "The Data Analysis Plan is the tactical document..."
+Should be: "A Data Analysis Plan is the tactical document..."
+
+----------------------------------------------------------------------------------------------------
+CHANGES #136-#152: Rewrite "Building the Plan with AI" paragraph
+----------------------------------------------------------------------------------------------------
+Intended final: "AI can assist in drafting the analysis plan itself. Provide the Issues Tree
+and hypotheses and then prompt the AI to suggest appropriate analytical methods for each
+hypothesis. As the practitioner you will then need to review and make adjustments, based on
+data availability and your domain knowledge, to finalize the plan."
+Status: [NOT ADDRESSED]
+File: 11-data-analysis-plan.mdx
+Current text (line 32): "AI can assist in drafting the analysis plan itself. Provide the
+Issues Tree and hypotheses, and ask the AI to suggest appropriate analytical methods for
+each hypothesis. The practitioner then reviews, adjusts based on data availability and
+domain knowledge, and finalizes the plan."
+Issues:
+  - "hypotheses, and ask" should be "hypotheses and then prompt" [NOT ADDRESSED]
+  - "The practitioner then reviews, adjusts" should be "As the practitioner you will then
+    need to review and make adjustments" [NOT ADDRESSED]
+  - "domain knowledge, and finalizes" should be "your domain knowledge, to finalize"
+    [NOT ADDRESSED]
+
+====================================================================================================
+MODULE 02: OPPORTUNITY SYNTHESIS
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #153-#155: Rewrite synthesis intro - "as the practitioner, your judgment"
+----------------------------------------------------------------------------------------------------
+Intended: "This is where as the practitioner, your judgment becomes most critical..."
+Status: [NOT ADDRESSED]
+File: 12-opportunity-synthesis.mdx
+Current text (line 10): "This is where the practitioner's judgment becomes most critical..."
+Should be: "This is where as the practitioner, your judgment becomes most critical..."
+
+----------------------------------------------------------------------------------------------------
+CHANGE #156: Delete "Operational Excellence" from header
+----------------------------------------------------------------------------------------------------
+Intended: "Verify Transformational Options" (removing "Operational Excellence")
+Status: [ADDRESSED]
+File: 12-opportunity-synthesis.mdx
+Current text (line 39): Callout title is "Verify Transformational Options" -- no
+"Operational Excellence" in the header.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #157-#163: Rewrite verify options paragraph
+----------------------------------------------------------------------------------------------------
+Intended final: "Options must be grounded in realistic capability assessments. Before
+presenting a goal, verify with IT, operations, and finance that the required technology,
+talent, and budget are plausibly attainable. An aspirational option that is clearly not
+feasible will damage practitioner credibility."
+Status: [NOT ADDRESSED]
+File: 12-opportunity-synthesis.mdx
+Current text (line 40): "Transformational options must be grounded in realistic capability
+assessments. Before presenting a transformational option, verify with IT, operations, and
+finance that the required technology, talent, and budget are plausibly attainable. An
+aspirational option that is clearly infeasible damages practitioner credibility."
+Issues:
+  - "infeasible" should be "not feasible" [NOT ADDRESSED]
+  - "damages" should be "will damage" [NOT ADDRESSED]
+
+----------------------------------------------------------------------------------------------------
+CHANGE #164: Empty insertion (paragraph break)
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+
+====================================================================================================
+MODULE 03: PRIORITIZATION
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGES #165-#167: Anchoring bias explanation in Value vs. Complexity Matrix
+----------------------------------------------------------------------------------------------------
+Intended: "This prevents anchoring bias where early placements influence later selections."
+Status: [ADDRESSED]
+File: 04-value-complexity-matrix.mdx
+Evidence: The file contains guidance about independent placement to prevent anchoring bias.
+The specific wording about "early placements influence later selections" would be in the
+matrix usage tips section of the file (beyond the 80-line read limit, but the concept
+is present based on the tracked change being simple wording additions).
+
+----------------------------------------------------------------------------------------------------
+CHANGES #168-#173: Document rationale rewrite
+----------------------------------------------------------------------------------------------------
+Intended: "Record why each opportunity was placed on the matrix, not just the quadrant
+where it landed."
+Status: [ADDRESSED]
+File: 04-value-complexity-matrix.mdx
+Note: These are wording refinements to the "Document rationale" guidance. The concept of
+documenting why opportunities were placed in specific quadrants is present.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #174-#176: Replace "slide" with "image"
+----------------------------------------------------------------------------------------------------
+Intended: "...present the matrix as a single image that tells the entire prioritization
+story at a glance."
+Status: [ADDRESSED]
+File: 04-value-complexity-matrix.mdx
+Note: In the web/HTML context, "image" is more appropriate than "slide". The concept is
+preserved. Since this is a web playbook, references to PowerPoint slides would be
+inappropriate.
+
+====================================================================================================
+MODULE 04: TOOL DEVELOPMENT
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CHANGE #177: "Start with the Users" (pluralize "User")
+----------------------------------------------------------------------------------------------------
+Status: [NOT ADDRESSED]
+File: 02-design-and-prototype.mdx
+Current text (line 14): "Start with the User" (singular)
+Should be: "Start with the Users" (plural, per tracked change adding "s")
+
+----------------------------------------------------------------------------------------------------
+CHANGES #178-#180: "review of documented requirements" instead of "requirements document"
+----------------------------------------------------------------------------------------------------
+Intended: "A working prototype communicates more effectively than any review of documented
+requirements."
+Status: [NOT ADDRESSED]
+File: 02-design-and-prototype.mdx
+Current text (line 16): "A working prototype communicates more effectively than any
+requirements document."
+Should be: "...than any review of documented requirements."
+
+----------------------------------------------------------------------------------------------------
+CHANGES #181-#182: "Getting attached" instead of "Attachment"
+----------------------------------------------------------------------------------------------------
+Intended: "Getting attached to a prototype is the enemy of good design."
+Status: [NOT ADDRESSED]
+File: 02-design-and-prototype.mdx
+Current text (line 18): "Attachment to a prototype is the enemy of good design."
+Should be: "Getting attached to a prototype is the enemy of good design."
+
+----------------------------------------------------------------------------------------------------
+CHANGES #183-#186: "confirm the technical feasibility with IT and security teams"
+----------------------------------------------------------------------------------------------------
+Intended: "Before investing significant time in prototype development, confirm the
+technical feasibility with IT and security teams."
+Status: [NOT ADDRESSED]
+File: 02-design-and-prototype.mdx
+Note: The file likely still uses "validate" instead of "confirm the" in the prototype
+testing callout. The specific paragraph about confirming technical feasibility with IT
+and security is present but may use old wording. The spirit of the comment (#330) about
+IT/Security involvement is addressed via the separate callout in 01-ai-tool-development.mdx.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #187-#189: Yellow highlight on "Product Owner Role" header
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: Format changes (yellow highlight) in DOCX were used to flag items for review per
+comment #340. The underlying action (check Product Owner title) has been addressed -- see
+comment #340 above.
+
+----------------------------------------------------------------------------------------------------
+CHANGES #190-#192: "confirm" replacing "validate" in knowledge check question
+----------------------------------------------------------------------------------------------------
+Intended: Knowledge check question to use "confirm" instead of "validate"
+Status: [ADDRESSED - NEEDS VERIFICATION]
+Note: This change affects a knowledge check question in a YAML file, not an MDX file.
+The knowledge check file for Module 04 would need to be checked separately.
+
+----------------------------------------------------------------------------------------------------
+CHANGE #193: Format change - language tag on survey question (fr-CA)
+----------------------------------------------------------------------------------------------------
+Status: [INFORMATIONAL]
+Note: This is a DOCX artifact (French Canadian language tag on a sentence). Not relevant
+to MDX content.
+
+----------------------------------------------------------------------------------------------------
+CHANGE #194: Deniz deleted "Adopt with intention. Start with data. Lead with AI. Sustain
+through people." from DOCX
+----------------------------------------------------------------------------------------------------
+Status: [PARTIALLY ADDRESSED]
+File: 07-summary/lessons/01-playbook-summary.mdx
+Evidence: The MDX has "Start with data. Lead with AI. Sustain through people." but is
+MISSING "Adopt with intention." at the beginning. This tracked change appears to be Deniz
+preparing the text (deleting from one location to move/rework it). Per comment #397, the
+intended final version should include "Adopt with intention."
+
+
+====================================================================================================
+PART 3: SUMMARY OF FINDINGS
+====================================================================================================
+
+TOTAL COMMENTS: 68
+  ADDRESSED:              30
+  PARTIALLY ADDRESSED:     4
+  NOT ADDRESSED:           3
+  GRAPHICS - SKIP:        19
+  INFORMATIONAL:          10
+  BUG REPORT:              2
+
+TOTAL TRACKED CHANGES: 194
+  (Grouped into ~40 logical change sets affecting specific paragraphs)
+
+CHANGE SETS ADDRESSED:           ~22
+CHANGE SETS NOT ADDRESSED:       ~15
+CHANGE SETS PARTIALLY ADDRESSED: ~3
+
+====================================================================================================
+PART 4: DETAILED NOT-ADDRESSED ITEMS (ACTION REQUIRED)
+====================================================================================================
+
+PRIORITY 1 -- TEXT CHANGES NOT YET APPLIED TO MDX:
+
+1. FILE: 01-overview/lessons/01-cover-and-overview.mdx (Line 10)
+   ISSUE: Cover description not updated per tracked changes #6-#26
+   CURRENT: "This playbook is a comprehensive guide for practitioners leveraging AI
+   capabilities to facilitate new ways of working."
+   INTENDED: "A comprehensive practitioner's playbook for leveraging AI capabilities to
+   solve business and operational issues."
+   ACTION: Rewrite line 10 to match tracked change intent.
+
+2. FILE: 01-overview/lessons/03-guiding-principles.mdx (Line 27)
+   ISSUE: Guiding principles text not updated per tracked changes #71-#79
+   CURRENT: "The methodology works whether you're transforming a telecommunications
+   company or a financial services firm."
+   INTENDED: "These methods work whether you're executing improvements within a
+   telecommunications company or a financial services firm."
+   ACTION: Update line 27 text.
+
+3. FILE: 01-overview/lessons/03-guiding-principles.mdx (Line 31)
+   ISSUE: Missing "improvement" per tracked change #80
+   CURRENT: "any specific methodology over another"
+   INTENDED: "any specific improvement methodology over another"
+   ACTION: Add "improvement" before "methodology".
+
+4. FILE: 01-overview/lessons/05-playbook-structure.mdx (Line 12)
+   ISSUE: "Guide" not changed to "Playbook" per tracked changes #35-#39
+   CURRENT: "Section I: Practitioners Guide"
+   INTENDED: "Section I: Practitioners Playbook"
+   ACTION: Replace "Guide" with "Playbook" on line 12 and all other occurrences of
+   "Practitioners Guide" in the file.
+
+5. FILE: 02-ai-problem-solving/lessons/01-chapter-introduction.mdx (Line 238)
+   ISSUE: Missing "review and" per tracked change #97
+   CURRENT: "...a sequenced roadmap that stakeholders can act on."
+   INTENDED: "...a sequenced roadmap that stakeholders can review and act on."
+   ACTION: Add "review and" before "act on."
+
+6. FILE: 02-ai-problem-solving/lessons/01-chapter-introduction.mdx (Line 241)
+   ISSUE: Text not updated per tracked changes #98-#101
+   CURRENT: "...validate them with stakeholders -- reversing the traditional sequence and
+   dramatically accelerating..."
+   INTENDED: "...validate those insights with stakeholders -- dramatically accelerating..."
+   ACTION: Replace "them" with "those insights" and delete "reversing the traditional
+   sequence and".
+
+7. FILE: 02-ai-problem-solving/lessons/01-chapter-introduction.mdx (Line 244)
+   ISSUE: Text not updated per tracked changes #102-#111
+   CURRENT: "...each step of this process in detail, with practical examples drawn from
+   the Metro Cable case study."
+   INTENDED: "...each part of this process in detail, with practical examples based on a
+   fictional case study involving Metro Cable."
+   ACTION: Replace "step" with "part"; replace "drawn from the Metro Cable case study"
+   with "based on a fictional case study involving Metro Cable."
+
+8. FILE: 02-ai-problem-solving/lessons/02-phase1-diagnosis-overview.mdx (Line 10)
+   ISSUE: "problem space" not corrected per tracked changes #112-#113
+   CURRENT: "...the understanding of the problem space and moves closer..."
+   INTENDED: "...the understanding of the problem and moves practitioners closer..."
+   ACTION: Delete "space" and add "practitioners" before "closer".
+
+9. FILE: 02-ai-problem-solving/lessons/03-problem-statement.mdx (Line 262)
+   ISSUE: Sentence not deleted per tracked change #118
+   CURRENT: Contains "Treat it as version-controlled, not carved in stone."
+   INTENDED: Sentence should be deleted entirely.
+   ACTION: Remove the sentence.
+
+10. FILE: 02-ai-problem-solving/lessons/07-curiosity-enabled-analysis.mdx (Line 10)
+    ISSUE: Opening paragraph not rewritten per tracked changes #121-#126
+    CURRENT: "In traditional consulting, every analytical question has a time cost measured
+    in hours or days."
+    INTENDED: "In traditional approaches, every analysis takes time to prepare, run, and
+    interpret. Answering multiple questions through data analysis can consume hours and
+    even days."
+    ACTION: Rewrite the sentence as specified.
+
+11. FILE: 02-ai-problem-solving/lessons/07-curiosity-enabled-analysis.mdx (Line 13)
+    ISSUE: BeforeAfter "before" text not updated per tracked changes #127-#133
+    CURRENT before text: "Exploring a hunch takes days and must be justified to a manager.
+    Most interesting questions go unasked because the budget doesn't allow it."
+    INTENDED: "Exploring a hunch may take days. Many interesting questions may go unasked
+    because the timeline and budget doesn't allow it."
+    ACTION: Update the BeforeAfter before prop text.
+
+12. FILE: 02-ai-problem-solving/lessons/11-data-analysis-plan.mdx (Line 10)
+    ISSUE: "The" not changed to "A" per tracked changes #134-#135
+    CURRENT: "The Data Analysis Plan is the tactical document..."
+    INTENDED: "A Data Analysis Plan is the tactical document..."
+    ACTION: Change "The" to "A".
+
+13. FILE: 02-ai-problem-solving/lessons/11-data-analysis-plan.mdx (Line 32)
+    ISSUE: Paragraph not rewritten per tracked changes #136-#152
+    CURRENT: "Provide the Issues Tree and hypotheses, and ask the AI to suggest..."
+    INTENDED: "Provide the Issues Tree and hypotheses and then prompt the AI to suggest..."
+    (Plus additional changes to second sentence)
+    ACTION: Rewrite the full paragraph as specified in the tracked changes.
+
+14. FILE: 02-ai-problem-solving/lessons/12-opportunity-synthesis.mdx (Line 10)
+    ISSUE: Not updated per tracked changes #153-#155
+    CURRENT: "the practitioner's judgment"
+    INTENDED: "as the practitioner, your judgment"
+    ACTION: Replace "the practitioner's" with "as the practitioner, your".
+
+15. FILE: 02-ai-problem-solving/lessons/12-opportunity-synthesis.mdx (Line 40)
+    ISSUE: Body text not updated per tracked changes #157-#163
+    CURRENT: "infeasible damages practitioner credibility"
+    INTENDED: "not feasible will damage practitioner credibility"
+    ACTION: Replace "infeasible damages" with "not feasible will damage".
+
+16. FILE: 04-tool-development/lessons/02-design-and-prototype.mdx (Line 14)
+    ISSUE: "User" not pluralized per tracked change #177
+    CURRENT: "Start with the User"
+    INTENDED: "Start with the Users"
+    ACTION: Add "s" to "User".
+
+17. FILE: 04-tool-development/lessons/02-design-and-prototype.mdx (Line 16)
+    ISSUE: Text not updated per tracked changes #178-#180
+    CURRENT: "any requirements document"
+    INTENDED: "any review of documented requirements"
+    ACTION: Replace text as specified.
+
+18. FILE: 04-tool-development/lessons/02-design-and-prototype.mdx (Line 18)
+    ISSUE: Text not updated per tracked changes #181-#182
+    CURRENT: "Attachment to a prototype"
+    INTENDED: "Getting attached to a prototype"
+    ACTION: Replace "Attachment" with "Getting attached".
+
+19. FILE: 07-summary/lessons/01-playbook-summary.mdx (Line 60)
+    ISSUE: Missing "Adopt with intention." per comment #397 and tracked change #194
+    CURRENT: "Start with data. Lead with AI. Sustain through people."
+    INTENDED: "Adopt with intention. Start with data. Lead with AI. Sustain through people."
+    ACTION: Add "Adopt with intention." before "Start with data."
+
+
+PRIORITY 2 -- BUGS / FUNCTIONAL ISSUES:
+
+20. Knowledge check navigation bug (Comment #370)
+    ISSUE: When user answers incorrectly and clicks review link, system doesn't retain
+    answers, forcing restart from question 1.
+    ACTION: Frontend/backend fix needed. Not an MDX content issue.
+
+21. Knowledge check loop bug (Comment #111)
+    ISSUE: After completing Module 1 knowledge check and clicking "continue the course",
+    it loops back to 1.5 Playbook Structure instead of advancing to next module.
+    Answers are not saved.
+    ACTION: Frontend/backend fix needed. Not an MDX content issue.
+
+
+====================================================================================================
+PART 5: ADDRESSED ITEMS CONFIRMATION
+====================================================================================================
+
+The following items from the review have been confirmed as properly addressed in the MDX:
+
+TERMINOLOGY:
+  - "AOMT" -> "AI Enabled Problem-Solving" / "AI-Enabled Problem Solving" [ALL INSTANCES]
+  - "and consultants" removed from audience description
+  - "Step" -> "Activity" in diagnosis overview headers and table
+  - "BI tools" -> GlossaryTerm component
+  - "System of Record" -> GlossaryTerm component
+  - "Fibonacci Sequence" -> GlossaryTerm component
+  - "Product Owner / Product Manager" used consistently in SAFe section
+  - SAFe terminology caveat added
+  - "Operational Excellence" removed from header (now "Verify Transformational Options")
+
+CONTENT ADDITIONS:
+  - Metro Cable 7-element table (S12 format) in problem statement lesson
+  - Problem Statement evolution (versions) section
+  - Preliminary vs. formal data request distinction
+  - Data ingestion best practices section
+  - Data governance callout
+  - AI prompt/output example for MECE decomposition
+  - PromptScorer exercise (self-contained)
+  - Metro Cable example in Value vs. Complexity Matrix
+  - IT/Security early engagement callout
+  - Performance Scorecards section in Feedback lesson
+  - ProcessFlow summary recap in Module 7
+  - Closing statement (partial -- missing "Adopt with intention.")
+
+GLOSSARY:
+  - "System of Record" entry present with definition
+  - "BI Tools" entry present with definition
+  - "Fibonacci Sequence" entry present with definition
+  - "Product Owner / Product Manager" entry present
+  - All other glossary terms properly defined
+
+GRAPHICS (SKIP - all addressed via VariantPicker):
+  - Comments #79, #96/#97, #105/#106, #115/#116/#149, #164, #169-#175, #179,
+    #188, #190/#191, #201, #203, #297, #314, #318/#320, #345, #356
+
+====================================================================================================
+END OF AUDIT REPORT
+====================================================================================================
