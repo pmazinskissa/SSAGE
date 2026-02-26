@@ -97,6 +97,18 @@ body {
   66% { transform: translate(-40px, 30px) scale(0.92); }
 }
 
+/* Section numbering — remove this block to disable */
+article[data-section-numbering] {
+  counter-reset: h2section;
+}
+article[data-section-numbering] h2::before {
+  counter-increment: h2section;
+  content: var(--lesson-prefix) "." counter(h2section) "\00a0\00a0";
+  font-weight: 700;
+  color: var(--color-primary, #4F46E5);
+  opacity: 0.7;
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
