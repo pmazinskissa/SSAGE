@@ -1,7 +1,7 @@
 import { Target, BarChart3, Bot, Users } from 'lucide-react';
 import ScrollReveal from '../ScrollReveal';
 
-const iconMap: Record<string, React.ComponentType<{ size: number }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: string | number }>> = {
   Target,
   BarChart3,
   Bot,
