@@ -14,6 +14,31 @@ import VideoEmbed from './VideoEmbed';
 import DownloadResource from './DownloadResource';
 import AIExercise from './AIExercise';
 import PromptScorer from './PromptScorer';
+import {
+  PhaseProgressionHex,
+  BenefitsGraphic,
+  PlaybookStructure,
+  CircularActivityFlow,
+  ProblemStatementElements,
+  ProblemStatementEvaluation,
+  IssuesTreeInteractive,
+  AIConversationIssuesTree,
+  FormalDataRequest,
+  DataRequestRisks,
+  DataRequestRefinement,
+  VisualizationTypes,
+  MultiTurnPromptFCR,
+  WSJFScoringFactors,
+  WSJFFormulaBreakdown,
+  ValueComplexityScatter,
+  ValueComplexityMatrix,
+  IterativeCycleDiagram,
+  DesignPrototypeStages,
+  AgileStagesRoles,
+  AgileContinuousCycle,
+  ProblemSolvingMandate,
+  GeographicHeatMap,
+} from './visuals';
 
 // HTML element overrides for MDX content
 function createHeading(level: 1 | 2 | 3) {
@@ -97,6 +122,31 @@ export const mdxComponents: Record<string, ComponentType<any>> = {
   DownloadResource,
   AIExercise,
   PromptScorer,
+
+  // Visual graphics
+  PhaseProgressionHex,
+  BenefitsGraphic,
+  PlaybookStructure,
+  CircularActivityFlow,
+  ProblemStatementElements,
+  ProblemStatementEvaluation,
+  IssuesTreeInteractive,
+  AIConversationIssuesTree,
+  FormalDataRequest,
+  DataRequestRisks,
+  DataRequestRefinement,
+  VisualizationTypes,
+  MultiTurnPromptFCR,
+  WSJFScoringFactors,
+  WSJFFormulaBreakdown,
+  ValueComplexityScatter,
+  ValueComplexityMatrix,
+  IterativeCycleDiagram,
+  DesignPrototypeStages,
+  AgileStagesRoles,
+  AgileContinuousCycle,
+  ProblemSolvingMandate,
+  GeographicHeatMap,
 
   // HTML overrides
   h1: createHeading(1),

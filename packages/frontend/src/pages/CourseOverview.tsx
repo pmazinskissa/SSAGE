@@ -291,6 +291,22 @@ export default function CourseOverview() {
               </div>
             </div>
           </motion.section>
+
+          {/* Bottom CTA */}
+          <motion.div
+            className="mt-12 flex justify-center"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+          >
+            <Link to={hasProgress ? continueLink : startLink}>
+              <Button className="text-base px-8 py-3">
+                {hasProgress ? 'Continue Course' : 'Start Course'}
+                <ChevronRight size={18} />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </div>
     </div>

@@ -11,6 +11,8 @@ Prototyping moves fast. AI tools enable practitioners to build functional protot
 
 ## 4 Prototyping Principles
 
+<DesignPrototypeStages />
+
 1. **Start with the Users** — Every prototype begins with a clear understanding of who will use it and what task they need to accomplish. Observe current workflows before designing new ones.
 
 2. **Show, Don't Tell** — A working prototype communicates more effectively than any review of documented requirements. Build the simplest version that demonstrates the core value proposition.
@@ -31,7 +33,7 @@ An **Epic** represents the overall solution (e.g., "AI-Optimized Dispatch Routin
 
 <PromptExample
   prompt="Based on the AI dispatch routing opportunity, generate a set of user stories for the MVP prototype. The primary users are dispatch coordinators and field technicians. Focus on the core dispatch optimization workflow. Format each story as: As a [role], I want [capability] so that [benefit]. Include acceptance criteria for each story."
-  response="Epic: AI-Optimized Dispatch Routing MVP\n\nStory 1: As a dispatch coordinator, I want to see AI-recommended technician assignments for each incoming job so that I can make faster, better-informed routing decisions.\nAcceptance Criteria: Recommendations appear within 5 seconds of job creation; each recommendation includes match score and reasoning.\n\nStory 2: As a dispatch coordinator, I want to approve, modify, or reject AI recommendations so that I maintain control over final assignments.\nAcceptance Criteria: One-click approve; drag-and-drop reassignment; rejection requires reason code.\n\nStory 3: As a field technician, I want to see my optimized daily route on a map so that I can minimize travel time between jobs.\nAcceptance Criteria: Map updates in real-time; shows estimated travel time between stops; recalculates when jobs are added or removed.\n\nStory 4: As a dispatch coordinator, I want to see a dashboard comparing AI recommendations vs. actual assignments so that I can track how often I override the AI and why.\nAcceptance Criteria: Daily summary of accept/modify/reject rates; filterable by coordinator, zone, and job type."
+  response="**Epic: AI-Optimized Dispatch Routing MVP**\n\n**Story 1:** As a dispatch coordinator, I want to see AI-recommended technician assignments for each incoming job so that I can make faster, better-informed routing decisions.\n- *Acceptance Criteria:* Recommendations appear within 5 seconds of job creation; each recommendation includes match score and reasoning.\n\n**Story 2:** As a dispatch coordinator, I want to approve, modify, or reject AI recommendations so that I maintain control over final assignments.\n- *Acceptance Criteria:* One-click approve; drag-and-drop reassignment; rejection requires reason code.\n\n**Story 3:** As a field technician, I want to see my optimized daily route on a map so that I can minimize travel time between jobs.\n- *Acceptance Criteria:* Map updates in real-time; shows estimated travel time between stops; recalculates when jobs are added or removed.\n\n**Story 4:** As a dispatch coordinator, I want to see a dashboard comparing AI recommendations vs. actual assignments so that I can track how often I override the AI and why.\n- *Acceptance Criteria:* Daily summary of accept/modify/reject rates; filterable by coordinator, zone, and job type."
 />
 
 <Callout type="warning" title="Verify with IT Early">

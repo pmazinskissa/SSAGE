@@ -9,15 +9,9 @@ order: 3
 
 <GlossaryTerm term="WSJF">Weighted Shortest Job First (WSJF)</GlossaryTerm> is a prioritization framework that ranks opportunities by the ratio of their value to their implementation cost. It ensures that the highest-value, lowest-effort opportunities rise to the top of the roadmap.
 
-## The WSJF Formula
+<WSJFScoringFactors />
 
-**WSJF = Cost of Delay / Job Size**
-
-Where **Cost of Delay** is the sum of three value components:
-
-- **Business Value** — The direct operational or financial impact of implementing this opportunity
-- **Time Criticality** — How much value is lost by delaying implementation (regulatory deadlines, competitive pressure, compounding costs)
-- **Risk Reduction / Opportunity Enablement** — The degree to which this opportunity reduces organizational risk or enables future opportunities
+<WSJFFormulaBreakdown />
 
 ## Scoring Components
 
@@ -56,5 +50,5 @@ Once all opportunities are scored, sort them by WSJF score (highest first) to ge
 
 <PromptExample
   prompt="Using the WSJF scores in the attached opportunity matrix, create a prioritized implementation roadmap. Group opportunities into three horizons: Horizon 1 (immediate, next 90 days), Horizon 2 (near-term, 90-180 days), and Horizon 3 (strategic, 180+ days). For each horizon, list the opportunities in WSJF priority order with their scores and estimated implementation effort."
-  response="Prioritized Implementation Roadmap:\n\nHorizon 1 (Next 90 Days) — WSJF > 8.0:\n1. AI Dispatch Routing Pilot (WSJF: 13.0, Effort: S)\n2. Technician Skill-Match Algorithm (WSJF: 10.5, Effort: S)\n3. Parts Inventory Prediction Model (WSJF: 8.7, Effort: M)\n\nHorizon 2 (90-180 Days) — WSJF 4.0-8.0:\n4. Customer Self-Service Portal Redesign (WSJF: 6.5, Effort: M)\n5. Predictive Maintenance Alerting (WSJF: 5.2, Effort: L)\n\nHorizon 3 (180+ Days) — WSJF < 4.0:\n6. Full Network Digital Twin (WSJF: 3.1, Effort: XL)\n7. Autonomous Dispatch System (WSJF: 2.8, Effort: XL)"
+  response="**Prioritized Implementation Roadmap**\n\n**Horizon 1** (Next 90 Days) — WSJF > 8.0:\n1. **AI Dispatch Routing Pilot** — WSJF: 13.0, Effort: S\n2. **Technician Skill-Match Algorithm** — WSJF: 10.5, Effort: S\n3. **Parts Inventory Prediction Model** — WSJF: 8.7, Effort: M\n\n**Horizon 2** (90–180 Days) — WSJF 4.0–8.0:\n1. **Customer Self-Service Portal Redesign** — WSJF: 6.5, Effort: M\n2. **Predictive Maintenance Alerting** — WSJF: 5.2, Effort: L\n\n**Horizon 3** (180+ Days) — WSJF < 4.0:\n1. **Full Network Digital Twin** — WSJF: 3.1, Effort: XL\n2. **Autonomous Dispatch System** — WSJF: 2.8, Effort: XL"
 />
