@@ -23,20 +23,39 @@ A **white-label training and learning platform** that replaces static training d
 - npm 10+
 - Docker & Docker Compose (for full-stack deployment)
 
-### Development
+### Local Development
 
 ```bash
-# Install dependencies
-npm install
+# 1. Start the database
+docker compose up -d db
 
-# Start backend dev server
+# 2. One-time setup (copies .env, installs deps, runs migrations)
+npm run setup
+
+# 3. Start both servers (in separate terminals)
 npm run dev:backend
-
-# Start frontend dev server (in another terminal)
 npm run dev:frontend
 ```
 
-The frontend dev server runs on `http://localhost:5173` and proxies `/api` requests to the backend on port `3001`.
+Open `http://localhost:5173` — the frontend proxies `/api` requests to the backend on port `3001`.
+
+#### Authentication
+
+By default (`.env.example` ships with `OAUTH_PROVIDER=none` and `DEV_AUTH_BYPASS=true`), the login page shows both a one-click **Dev Login** button and a local **email/password** form. You can use either:
+
+- **Dev Login** — instant access as `dev@localhost` with `dev_admin` role
+- **Register** — create a local account with any email/password
+
+To use only local auth, set `DEV_AUTH_BYPASS=false` in `.env`. To use OAuth instead, configure the `OAUTH_*` variables (see `.env.example` for details).
+
+#### Troubleshooting
+
+The login page shows amber warning banners when something is wrong:
+
+| Banner | Meaning | Fix |
+|--------|---------|-----|
+| **Backend not reachable** | API server isn't running | `npm run dev:backend` |
+| **Database not connected** | Postgres isn't running or is unreachable | `docker compose up -d db` |
 
 ### Docker
 
