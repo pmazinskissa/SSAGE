@@ -1,11 +1,11 @@
 title: "AI Tool Development & Agile Delivery"
 slug: "04-tool-development"
-description: "Design, prototype, and deliver AI-powered solutions using agile methodologies."
+description: "Design, prototype, and deliver AI-powered solutions using Agile methodologies."
 objectives:
   - "Understand the AI tool development lifecycle"
   - "Apply design and prototyping techniques"
-  - "Choose between project-based and agile delivery approaches"
-  - "Leverage SAFe framework principles for enterprise delivery"
+  - "Choose between project-based and Agile delivery approaches"
+  - "Leverage Agile framework principles for enterprise delivery"
 estimated_duration_minutes: 30
 lessons:
   - "01-ai-tool-development"

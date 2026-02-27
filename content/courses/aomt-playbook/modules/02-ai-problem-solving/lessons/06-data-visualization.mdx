@@ -13,26 +13,16 @@ AI-enabled data visualization transforms raw data into interpretable visual patt
 
 Rather than spending days learning visualization tool syntax or building dashboard configurations, practitioners describe their visualization needs directly to AI. The AI generates the visualization, and the practitioner interprets the results and requests refinements.
 
-### Common Visualization Types
-
-| Visualization | Use Case | When to Apply |
-|--------------|----------|---------------|
-| Geographic heat maps | Spatial pattern analysis | Service area optimization, regional performance |
-| Time series plots | Trend identification | Volume patterns, seasonal effects, before/after |
-| Distribution charts | Spread and outlier analysis | Performance variation, workload balance |
-| Correlation matrices | Relationship mapping | Multi-variable hypothesis testing |
-| Sankey diagrams | Process flow analysis | Customer journey, escalation paths |
-
-
+<VisualizationTypes />
 
 ## Example: Geographic Mapping
 
 <PromptExample
   prompt="Using the dispatch dataset, create a geographic heat map showing first-visit resolution rates by service zone. Overlay technician home base locations as points. Color-code zones from red (below 60% resolution) to green (above 85% resolution). Include a legend and label the 5 worst-performing zones."
-  response="Here is the geographic heat map of first-visit resolution rates across 47 service zones. Key findings: The 5 worst-performing zones (Southeast-12, Northeast-7, Central-3, West-19, South-22) are clustered in areas where average technician travel distance exceeds 45 minutes. Three of these zones have no technician home base within the zone boundary, suggesting a geographic coverage gap rather than a skill gap."
+  response="Here is the geographic heat map of first-visit resolution rates across 47 service zones.\n\n**Key findings:**\n\n- The 5 worst-performing zones (**Southeast-12, Northeast-7, Central-3, West-19, South-22**) are clustered in areas where average technician travel distance exceeds 45 minutes.\n- Three of these zones have no technician home base within the zone boundary, suggesting a **geographic coverage gap** rather than a skill gap."
 />
 
-
+<GeographicHeatMap />
 
 <Callout type="tip" title="Speed Advantage">
 A visualization that would take 2-4 hours to build in traditional BI tools (data preparation, tool configuration, formatting) can be generated in under 2 minutes through AI prompting. This speed enables practitioners to explore dozens of visual perspectives in a single analysis session, dramatically increasing the likelihood of discovering meaningful patterns.
@@ -47,6 +37,8 @@ The real power of AI-enabled visualization is rapid iteration. After reviewing t
 - "Overlay weather data to check for seasonal correlation"
 
 Each iteration takes seconds, enabling a conversational exploration of the data that is impossible with traditional tools.
+
+<MultiTurnPromptFCR />
 
 ## Practice: Craft a Visualization Prompt
 

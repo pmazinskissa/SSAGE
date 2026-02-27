@@ -1,6 +1,6 @@
 entries:
   - term: "AI-Enabled Problem Solving"
-    definition: "A three-phase methodology for diagnosing operational problems, prioritizing solutions, and sustaining improvements using agile governance. Rests on two foundational principles: Data First and AI First."
+    definition: "A three-phase methodology for diagnosing operational problems, prioritizing solutions, and sustaining improvements using Agile governance. Rests on two foundational principles: Data First and AI First."
     first_lesson: "04-introducing-aomt"
 
   - term: "Data First"
@@ -147,8 +147,8 @@ entries:
     definition: "How often metrics are checked: daily (zone-level), weekly (feedback analysis), monthly (trends), quarterly (solution health). Too frequent creates alert fatigue; too infrequent allows drift."
     first_lesson: "04-feedback-performance"
 
-  - term: "SAFe"
-    definition: "Scaled Agile Framework. Provides structured approach to agile development at enterprise scale. The methodology leverages SAFe principles for continuous value delivery."
+  - term: "Agile"
+    definition: "An iterative approach to software development and project delivery that emphasizes short cycles, continuous feedback, and adaptive planning. Agile teams deliver working increments in 2-week sprints, enabling rapid course correction based on real user feedback rather than upfront speculation."
     first_lesson: "04-safe-framework"
 
   - term: "Diagnostic Interviews"
@@ -180,5 +180,5 @@ entries:
     first_lesson: "06-data-visualization"
 
   - term: "Fibonacci Sequence"
-    definition: "A number sequence (1, 2, 3, 5, 8, 13...) used in agile estimation and WSJF scoring to force meaningful differentiation between items. The increasing gaps between values prevent false precision in relative sizing."
+    definition: "A number sequence (1, 2, 3, 5, 8, 13...) used in Agile estimation and WSJF scoring to force meaningful differentiation between items. The increasing gaps between values prevent false precision in relative sizing."
     first_lesson: "03-wsjf-scoring-method"

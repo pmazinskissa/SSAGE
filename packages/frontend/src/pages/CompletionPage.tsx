@@ -49,7 +49,8 @@ export default function CompletionPage() {
   });
 
   const totalLessons = navTree?.modules.reduce((sum, mod) => sum + mod.lessons.length, 0) || 0;
-  const completedLessons = progress?.lessons.filter((l) => l.status === 'completed').length || 0;
+  const rawCompleted = progress?.lessons.filter((l) => l.status === 'completed').length || 0;
+  const completedLessons = Math.min(rawCompleted, totalLessons);
 
   const kcScores = progress?.knowledge_checks || [];
   const avgKcScore = kcScores.length > 0
