@@ -6,6 +6,7 @@ import { requireAuth } from '../middleware/auth.js';
 import { signToken, ensureDevUserInDb, getDevUser, registerLocalUser, authenticateLocalUser } from '../services/auth.service.js';
 import { findOrCreateOAuthUser } from '../services/auth.service.js';
 import { isOAuthEnabled, buildAuthUrl, handleCallback } from '../services/oauth.service.js';
+import { AppError } from '../errors.js';
 
 const router = Router();
 
@@ -33,7 +34,7 @@ const COOKIE_OPTIONS = {
 // GET /api/auth/providers — available auth methods
 router.get('/providers', (_req, res) => {
   // Local auth is available when no OAuth provider is configured (OAUTH_PROVIDER=none)
-  const localAuth = !isOAuthEnabled() && !config.devAuthBypass;
+  const localAuth = !isOAuthEnabled();
   res.json({
     data: {
       oauth: isOAuthEnabled() ? config.oauthProvider : null,
@@ -109,6 +110,9 @@ router.post('/dev-login', async (req, res) => {
     res.json({ data: authUser });
   } catch (err: any) {
     console.error('[Auth] Dev login error:', err.message);
+    if (err instanceof AppError) {
+      return res.status(err.statusCode).json({ error: { message: err.message, code: err.code } });
+    }
     res.status(500).json({ error: { message: 'Failed to create dev session' } });
   }
 });
@@ -131,6 +135,9 @@ router.post('/register', async (req, res) => {
     res.json({ data: authUser });
   } catch (err: any) {
     console.error('[Auth] Register error:', err.message);
+    if (err instanceof AppError) {
+      return res.status(err.statusCode).json({ error: { message: err.message, code: err.code } });
+    }
     res.status(400).json({ error: { message: err.message || 'Registration failed' } });
   }
 });
@@ -150,6 +157,9 @@ router.post('/local-login', async (req, res) => {
     res.json({ data: authUser });
   } catch (err: any) {
     console.error('[Auth] Local login error:', err.message);
+    if (err instanceof AppError) {
+      return res.status(err.statusCode).json({ error: { message: err.message, code: err.code } });
+    }
     res.status(401).json({ error: { message: err.message || 'Login failed' } });
   }
 });

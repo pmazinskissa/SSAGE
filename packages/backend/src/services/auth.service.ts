@@ -4,6 +4,18 @@ import bcrypt from 'bcryptjs';
 import { pool } from '../config/database.js';
 import { config } from '../config/env.js';
 import type { AuthUser, User } from '@playbook/shared';
+import { DatabaseConnectionError, DuplicateUserError, AuthenticationError } from '../errors.js';
+
+function isDbConnectionError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  const code = (err as any).code;
+  // ECONNREFUSED, ENOTFOUND, ETIMEDOUT, or pg "connection terminated"
+  if (typeof code === 'string' && /^(ECONNREFUSED|ENOTFOUND|ETIMEDOUT|ECONNRESET)$/.test(code)) return true;
+  if (err.message?.includes('connection terminated')) return true;
+  if (err.message?.includes('Connection terminated')) return true;
+  if (err.message?.includes('the database system is starting up')) return true;
+  return false;
+}
 
 export function signToken(user: AuthUser): string {
   return jwt.sign(
@@ -83,14 +95,19 @@ export function getDevUser(): AuthUser {
 }
 
 export async function ensureDevUserInDb(): Promise<User> {
-  const result = await pool.query(
-    `INSERT INTO users (id, email, name, oauth_provider, oauth_subject_id, role, is_active, created_at, last_active_at)
-     VALUES ($1, $2, $3, 'dev', 'dev', 'dev_admin', true, NOW(), NOW())
-     ON CONFLICT (email) DO UPDATE SET last_active_at = NOW()
-     RETURNING *`,
-    [DEV_USER.id, DEV_USER.email, DEV_USER.name]
-  );
-  return result.rows[0] as User;
+  try {
+    const result = await pool.query(
+      `INSERT INTO users (id, email, name, oauth_provider, oauth_subject_id, role, is_active, created_at, last_active_at)
+       VALUES ($1, $2, $3, 'dev', 'dev', 'dev_admin', true, NOW(), NOW())
+       ON CONFLICT (email) DO UPDATE SET last_active_at = NOW()
+       RETURNING *`,
+      [DEV_USER.id, DEV_USER.email, DEV_USER.name]
+    );
+    return result.rows[0] as User;
+  } catch (err) {
+    if (isDbConnectionError(err)) throw new DatabaseConnectionError();
+    throw err;
+  }
 }
 
 export async function registerLocalUser(params: {
@@ -100,77 +117,89 @@ export async function registerLocalUser(params: {
 }): Promise<User> {
   const { email, name, password } = params;
 
-  // Check if user already exists
-  const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
-  if (existing.rows.length > 0) {
-    throw new Error('An account with this email already exists');
+  try {
+    // Check if user already exists
+    const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase()]);
+    if (existing.rows.length > 0) {
+      throw new DuplicateUserError();
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Check if pre-enrolled (may have a role assigned)
+    const preEnrolled = await pool.query('SELECT role FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
+    const preRole = preEnrolled.rows[0]?.role;
+
+    // Determine role: initial admin email gets dev_admin, pre-enrolled role, or learner
+    let role = 'learner';
+    if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()) {
+      role = 'dev_admin';
+    } else if (preRole) {
+      role = preRole;
+    }
+
+    const result = await pool.query(
+      `INSERT INTO users (id, email, name, password_hash, role, is_active, created_at, last_active_at)
+       VALUES ($1, $2, $3, $4, $5, true, NOW(), NOW())
+       RETURNING *`,
+      [crypto.randomUUID(), email.toLowerCase(), name, passwordHash, role]
+    );
+
+    // Clean up pre-enrollment
+    if (preEnrolled.rows.length > 0) {
+      await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
+    }
+
+    // Auto-enroll new users in the course
+    await pool.query(
+      `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
+       VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
+       ON CONFLICT (email, course_slug) DO NOTHING`,
+      [crypto.randomUUID(), email.toLowerCase()]
+    );
+
+    return result.rows[0] as User;
+  } catch (err) {
+    if (err instanceof DuplicateUserError) throw err;
+    if (isDbConnectionError(err)) throw new DatabaseConnectionError();
+    throw err;
   }
-
-  const passwordHash = await bcrypt.hash(password, 10);
-
-  // Check if pre-enrolled (may have a role assigned)
-  const preEnrolled = await pool.query('SELECT role FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
-  const preRole = preEnrolled.rows[0]?.role;
-
-  // Determine role: initial admin email gets dev_admin, pre-enrolled role, or learner
-  let role = 'learner';
-  if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase()) {
-    role = 'dev_admin';
-  } else if (preRole) {
-    role = preRole;
-  }
-
-  const result = await pool.query(
-    `INSERT INTO users (id, email, name, password_hash, role, is_active, created_at, last_active_at)
-     VALUES ($1, $2, $3, $4, $5, true, NOW(), NOW())
-     RETURNING *`,
-    [crypto.randomUUID(), email.toLowerCase(), name, passwordHash, role]
-  );
-
-  // Clean up pre-enrollment
-  if (preEnrolled.rows.length > 0) {
-    await pool.query('DELETE FROM pre_enrolled_users WHERE email = $1', [email.toLowerCase()]);
-  }
-
-  // Auto-enroll new users in the course
-  await pool.query(
-    `INSERT INTO course_enrollments (id, email, course_slug, enrolled_at, enrolled_by)
-     VALUES ($1, $2, 'aomt-playbook', NOW(), NULL)
-     ON CONFLICT (email, course_slug) DO NOTHING`,
-    [crypto.randomUUID(), email.toLowerCase()]
-  );
-
-  return result.rows[0] as User;
 }
 
 export async function authenticateLocalUser(email: string, password: string): Promise<User> {
-  const result = await pool.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase()]);
-  const user = result.rows[0];
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase()]);
+    const user = result.rows[0];
 
-  if (!user) {
-    throw new Error('Invalid email or password');
+    if (!user) {
+      throw new AuthenticationError('Invalid email or password');
+    }
+
+    if (!user.password_hash) {
+      throw new AuthenticationError('This account uses SSO login. Please sign in with your identity provider.');
+    }
+
+    if (!user.is_active) {
+      throw new AuthenticationError('Account deactivated');
+    }
+
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) {
+      throw new AuthenticationError('Invalid email or password');
+    }
+
+    // Promote to dev_admin if matches INITIAL_ADMIN_EMAIL
+    if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase() && user.role !== 'dev_admin') {
+      await pool.query('UPDATE users SET role = $1, last_active_at = NOW() WHERE id = $2', ['dev_admin', user.id]);
+      user.role = 'dev_admin';
+    } else {
+      await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
+    }
+
+    return user as User;
+  } catch (err) {
+    if (err instanceof AuthenticationError) throw err;
+    if (isDbConnectionError(err)) throw new DatabaseConnectionError();
+    throw err;
   }
-
-  if (!user.password_hash) {
-    throw new Error('This account uses SSO login. Please sign in with your identity provider.');
-  }
-
-  if (!user.is_active) {
-    throw new Error('Account deactivated');
-  }
-
-  const valid = await bcrypt.compare(password, user.password_hash);
-  if (!valid) {
-    throw new Error('Invalid email or password');
-  }
-
-  // Promote to dev_admin if matches INITIAL_ADMIN_EMAIL
-  if (config.initialAdminEmail && email.toLowerCase() === config.initialAdminEmail.toLowerCase() && user.role !== 'dev_admin') {
-    await pool.query('UPDATE users SET role = $1, last_active_at = NOW() WHERE id = $2', ['dev_admin', user.id]);
-    user.role = 'dev_admin';
-  } else {
-    await pool.query('UPDATE users SET last_active_at = NOW() WHERE id = $1', [user.id]);
-  }
-
-  return user as User;
 }

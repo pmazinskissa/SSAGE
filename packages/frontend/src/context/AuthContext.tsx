@@ -9,11 +9,17 @@ interface Providers {
   localAuth: boolean;
 }
 
+interface BackendHealth {
+  reachable: boolean;
+  dbConnected: boolean;
+}
+
 interface AuthContextValue {
   user: AuthUser | null;
   loading: boolean;
   error: string | null;
   providers: Providers | null;
+  backendHealth: BackendHealth | null;
   login: () => void;
   devLogin: () => Promise<void>;
   register: (email: string, name: string, password: string) => Promise<void>;
@@ -26,6 +32,7 @@ const AuthContext = createContext<AuthContextValue>({
   loading: true,
   error: null,
   providers: null,
+  backendHealth: null,
   login: () => {},
   devLogin: async () => {},
   register: async () => {},
@@ -44,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [providers, setProviders] = useState<Providers | null>(null);
+  const [backendHealth, setBackendHealth] = useState<BackendHealth | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -56,13 +64,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSearchParams(searchParams, { replace: true });
     }
 
-    // Load session + providers in parallel
+    // Load session + providers + health in parallel
     Promise.all([
       api.getMe().catch(() => null),
       api.getProviders().catch(() => null),
-    ]).then(([me, prov]) => {
+      api.getHealth(),
+    ]).then(([me, prov, health]) => {
       if (me) setUser(me);
       if (prov) setProviders(prov);
+      setBackendHealth({
+        reachable: health.reachable,
+        dbConnected: health.reachable ? (health as any).db ?? false : false,
+      });
       setLoading(false);
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -114,8 +127,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, loading, error, providers, login, devLogin, register, localLogin, logout }),
-    [user, loading, error, providers, login, devLogin, register, localLogin, logout]
+    () => ({ user, loading, error, providers, backendHealth, login, devLogin, register, localLogin, logout }),
+    [user, loading, error, providers, backendHealth, login, devLogin, register, localLogin, logout]
   );
 
   return (

@@ -11,6 +11,7 @@
     "build": "npm run build -w packages/shared && npm run build -w packages/backend && npm run build -w packages/frontend",
     "build:frontend": "npm run build -w packages/frontend",
     "build:backend": "npm run build -w packages/backend",
+    "setup": "node scripts/setup.mjs",
     "start": "npm run start -w packages/backend"
   },
   "engines": {

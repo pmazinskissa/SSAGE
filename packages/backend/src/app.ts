@@ -34,9 +34,10 @@ export function createApp() {
   app.use(requestLogger);
 
   // Rate limiting
+  const isDev = config.nodeEnv !== 'production';
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5,
+    max: isDev ? 50 : 5,
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: { message: 'Too many requests, please try again later' } },

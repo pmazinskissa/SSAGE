@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogIn, AlertCircle, UserPlus, Mail, Lock, User } from 'lucide-react';
+import { LogIn, AlertCircle, AlertTriangle, UserPlus, Mail, Lock, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import Card from '../components/ui/Card';
@@ -16,7 +16,7 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 export default function LoginPage() {
-  const { user, loading, error, providers, login, devLogin, register, localLogin } = useAuth();
+  const { user, loading, error, providers, backendHealth, login, devLogin, register, localLogin } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
 
@@ -102,6 +102,26 @@ export default function LoginPage() {
                   : 'Sign in to continue learning'}
               </p>
             </div>
+
+            {/* Health warning banners */}
+            {backendHealth && !backendHealth.reachable && (
+              <div className="flex items-start gap-2.5 p-3.5 mb-4 rounded-card bg-amber-50 border border-amber-200">
+                <AlertTriangle size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-amber-800">
+                  <p className="font-medium">Backend not reachable</p>
+                  <p className="mt-0.5 text-amber-700">Run <code className="px-1 py-0.5 bg-amber-100 rounded text-xs">npm run dev:backend</code> to start the API server.</p>
+                </div>
+              </div>
+            )}
+            {backendHealth && backendHealth.reachable && !backendHealth.dbConnected && (
+              <div className="flex items-start gap-2.5 p-3.5 mb-4 rounded-card bg-amber-50 border border-amber-200">
+                <AlertTriangle size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-amber-800">
+                  <p className="font-medium">Database not connected</p>
+                  <p className="mt-0.5 text-amber-700">Run <code className="px-1 py-0.5 bg-amber-100 rounded text-xs">docker compose up -d db</code> to start PostgreSQL.</p>
+                </div>
+              </div>
+            )}
 
             {/* Error banner */}
             <AnimatePresence mode="wait">

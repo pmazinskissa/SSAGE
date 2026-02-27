@@ -41,6 +41,17 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> 
 }
 
 export const api = {
+  // Health (does not throw on 503 — DB down is a valid response)
+  getHealth: async (): Promise<{ reachable: true; db: boolean } | { reachable: false }> => {
+    try {
+      const res = await fetch(`${BASE_URL}/health`, { credentials: 'include' });
+      const json = await res.json();
+      return { reachable: true, db: json.data?.db ?? false };
+    } catch {
+      return { reachable: false };
+    }
+  },
+
   // Theme
   getTheme: () => fetchApi<ThemeConfig>('/themes/active'),
   getThemes: () => fetchApi<ThemeConfig[]>('/themes'),
