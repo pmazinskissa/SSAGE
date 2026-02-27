@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (prov) setProviders(prov);
       setBackendHealth({
         reachable: health.reachable,
-        dbConnected: health.reachable ? (health as any).db ?? false : false,
+        dbConnected: health.reachable && 'db' in health ? health.db : false,
       });
       setLoading(false);
     });
