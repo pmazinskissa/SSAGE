@@ -1,7 +1,7 @@
 import ScrollReveal from '../ScrollReveal';
 import { AlertTriangle, Users, Shield, User, BarChart3, Zap, Clock } from 'lucide-react';
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: string | number; color?: string }>> = {
   AlertTriangle,
   Users,
   Shield,

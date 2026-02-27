@@ -2,7 +2,7 @@ import React from 'react';
 import ScrollReveal from '../ScrollReveal';
 import { ClipboardList, Zap, Target, RefreshCw } from 'lucide-react';
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: string | number; color?: string }>> = {
   ClipboardList,
   Zap,
   Target,

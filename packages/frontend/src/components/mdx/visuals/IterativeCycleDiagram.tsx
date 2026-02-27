@@ -1,7 +1,7 @@
 import { Pencil, Wrench, Rocket, TrendingUp } from 'lucide-react';
 import ScrollReveal from '../ScrollReveal';
 
-const iconMap: Record<string, React.ComponentType<{ size: number; color: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: string | number; color?: string }>> = {
   Pencil,
   Wrench,
   Rocket,
