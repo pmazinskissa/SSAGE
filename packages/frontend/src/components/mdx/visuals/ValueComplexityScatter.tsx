@@ -25,15 +25,15 @@ export default function ValueComplexityScatter() {
 
   return (
     <ScrollReveal>
-      <div className="my-8" style={{ marginLeft: '-6rem', marginRight: '-6rem', width: 'calc(100% + 12rem)' }}>
+      <div className="my-8" style={{ maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
         <h3 style={{ fontWeight: 700, fontSize: '1.1rem', color: '#1E1B4B', marginBottom: '0.25rem' }}>
           Value vs. Complexity Scatter Plot
         </h3>
         <p style={{ fontSize: '0.85rem', color: '#6B7280', marginBottom: '1rem' }}>
           Plotting opportunities by value and implementation complexity
         </p>
-        <div style={{ display: 'flex', background: 'white', borderRadius: 10, border: '1px solid #E5E7EB', padding: '1rem', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ flex: '1', minWidth: 280, maxWidth: 440, overflow: 'visible' }}>
+        <div style={{ display: 'flex', background: 'white', borderRadius: 10, border: '1px solid #E5E7EB', padding: '1rem', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap', maxWidth: 700 }}>
+          <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ flex: '1 1 300px', minWidth: 280, maxWidth: 380, overflow: 'visible' }}>
             {/* High priority triangle: upper-left */}
             <polygon points={`${toSvgX(0)},${toSvgY(0)} ${toSvgX(0)},${toSvgY(20)} ${toSvgX(10)},${toSvgY(20)}`} fill="#818CF8" opacity="0.2" />
             {/* Low priority triangle: lower-right */}
