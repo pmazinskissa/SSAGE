@@ -58,6 +58,7 @@ export interface UserModuleProgress {
   lessons_completed: number;
   total_lessons: number;
   time_spent_seconds: number;
+  active_time_seconds: number;
   kc_score: number | null;
 }
 
@@ -68,6 +69,7 @@ export interface UserWithModuleAnalytics {
   role: string;
   status: string;
   total_time_seconds: number;
+  active_time_seconds: number;
   modules: UserModuleProgress[];
 }
 

@@ -3,6 +3,15 @@ import { pool } from '../config/database.js';
 import { getCourseNavTree } from './content.service.js';
 import type { CourseProgress, LessonProgressEntry, KnowledgeCheckSummaryEntry } from '@playbook/shared';
 
+/** Idempotently add engagement columns to lesson_progress (run once on startup). */
+export async function ensureEngagementColumns(): Promise<void> {
+  await pool.query(`
+    ALTER TABLE lesson_progress
+      ADD COLUMN IF NOT EXISTS active_time_seconds INT DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS max_scroll_depth SMALLINT DEFAULT 0
+  `);
+}
+
 export async function getCourseProgress(userId: string, courseSlug: string): Promise<CourseProgress | null> {
   // Course-level progress
   const cpResult = await pool.query(
@@ -18,7 +27,7 @@ export async function getCourseProgress(userId: string, courseSlug: string): Pro
 
   // Lesson progress
   const lpResult = await pool.query(
-    'SELECT module_slug, lesson_slug, status, time_spent_seconds, first_viewed_at, completed_at FROM lesson_progress WHERE user_id = $1 AND course_slug = $2',
+    'SELECT module_slug, lesson_slug, status, time_spent_seconds, active_time_seconds, max_scroll_depth, first_viewed_at, completed_at FROM lesson_progress WHERE user_id = $1 AND course_slug = $2',
     [userId, courseSlug]
   );
 
@@ -27,6 +36,8 @@ export async function getCourseProgress(userId: string, courseSlug: string): Pro
     lesson_slug: row.lesson_slug,
     status: row.status,
     time_spent_seconds: row.time_spent_seconds || 0,
+    active_time_seconds: row.active_time_seconds ?? 0,
+    max_scroll_depth: row.max_scroll_depth ?? 0,
     first_viewed_at: row.first_viewed_at?.toISOString() || null,
     completed_at: row.completed_at?.toISOString() || null,
   }));
@@ -72,8 +83,8 @@ export async function recordLessonView(
 ): Promise<void> {
   // Upsert lesson_progress as in_progress
   await pool.query(
-    `INSERT INTO lesson_progress (id, user_id, course_slug, module_slug, lesson_slug, status, time_spent_seconds, first_viewed_at)
-     VALUES ($1, $2, $3, $4, $5, 'in_progress', 0, NOW())
+    `INSERT INTO lesson_progress (id, user_id, course_slug, module_slug, lesson_slug, status, time_spent_seconds, active_time_seconds, max_scroll_depth, first_viewed_at)
+     VALUES ($1, $2, $3, $4, $5, 'in_progress', 0, 0, 0, NOW())
      ON CONFLICT (user_id, course_slug, module_slug, lesson_slug) DO NOTHING`,
     [crypto.randomUUID(), userId, courseSlug, moduleSlug, lessonSlug]
   );
@@ -95,16 +106,22 @@ export async function updateTimeOnTask(
   courseSlug: string,
   moduleSlug: string,
   lessonSlug: string,
-  deltaSeconds: number
+  deltaSeconds: number,
+  activeDeltaSeconds?: number,
+  scrollDepth?: number
 ): Promise<void> {
-  // Cap delta at 120s to prevent inflation
+  // Cap deltas to prevent inflation
   const cappedDelta = Math.min(Math.max(deltaSeconds, 0), 120);
+  const cappedActiveDelta = Math.min(Math.max(activeDeltaSeconds ?? deltaSeconds, 0), 120);
+  const clampedScrollDepth = scrollDepth != null ? Math.min(Math.max(Math.round(scrollDepth), 0), 100) : null;
 
   await pool.query(
     `UPDATE lesson_progress
-     SET time_spent_seconds = time_spent_seconds + $1
-     WHERE user_id = $2 AND course_slug = $3 AND module_slug = $4 AND lesson_slug = $5`,
-    [cappedDelta, userId, courseSlug, moduleSlug, lessonSlug]
+     SET time_spent_seconds = time_spent_seconds + $1,
+         active_time_seconds = active_time_seconds + $2,
+         max_scroll_depth = GREATEST(max_scroll_depth, COALESCE($3, max_scroll_depth))
+     WHERE user_id = $4 AND course_slug = $5 AND module_slug = $6 AND lesson_slug = $7`,
+    [cappedDelta, cappedActiveDelta, clampedScrollDepth, userId, courseSlug, moduleSlug, lessonSlug]
   );
 
   await pool.query(

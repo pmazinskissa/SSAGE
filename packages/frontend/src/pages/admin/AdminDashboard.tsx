@@ -308,6 +308,209 @@ export default function AdminDashboard() {
                 </span>
               ))}
             </div>
+          ) : (() => {
+            const lower = userSearch.toLowerCase();
+            const filtered = lower
+              ? userAnalytics.filter((u) => u.name.toLowerCase().includes(lower) || u.email.toLowerCase().includes(lower))
+              : userAnalytics;
+            if (filtered.length === 0) return (
+              <Card className="p-8 text-center">
+                <p className="text-sm text-text-secondary">No user data found.</p>
+              </Card>
+            );
+            return (
+              <div className="space-y-2">
+                {filtered.map((user) => {
+                  const isExpanded = expandedUserId === user.id;
+                  const detail = expandedUserDetail[user.id];
+                  const isDetailLoading = userDetailLoading === user.id;
+
+                  return (
+                    <Card key={user.id} className="overflow-hidden">
+                      <button
+                        onClick={() => toggleUserExpand(user.id)}
+                        className="w-full flex items-center gap-3 p-3.5 text-left hover:bg-surface/30 transition-colors"
+                      >
+                        <StatusIcon status={user.status} size={16} />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-semibold text-text-primary">{user.name}</span>
+                          <p className="text-xs text-text-secondary truncate">{user.email}</p>
+                        </div>
+                        {user.total_time_seconds > 0 && (() => {
+                          const active = user.active_time_seconds;
+                          const total = user.total_time_seconds;
+                          const showBoth = active != null && active < total * 0.9;
+                          return (
+                            <span className="text-xs text-text-secondary">
+                              {showBoth ? `${formatTime(active!)} active / ${formatTime(total)}` : formatTime(total)}
+                            </span>
+                          );
+                        })()}
+                        <ChevronDown
+                          size={16}
+                          className={`text-text-secondary transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+
+                      {isExpanded && (
+                        <div className="border-t border-border/50 px-3.5 pb-3.5">
+                          {isDetailLoading ? (
+                            <div className="flex items-center gap-2 py-4 pl-7 text-xs text-text-secondary">
+                              <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                              Loading progress...
+                            </div>
+                          ) : detail ? (() => {
+                            const lessonLookup = new Map<string, Map<string, Map<string, LessonProgressEntry>>>();
+                            for (const lp of detail.lesson_progress) {
+                              const cs = lp.course_slug || '';
+                              if (!lessonLookup.has(cs)) lessonLookup.set(cs, new Map());
+                              const modMap = lessonLookup.get(cs)!;
+                              if (!modMap.has(lp.module_slug)) modMap.set(lp.module_slug, new Map());
+                              modMap.get(lp.module_slug)!.set(lp.lesson_slug, lp);
+                            }
+                            const kcLookup = new Map<string, { score: number }>();
+                            for (const kc of detail.knowledge_check_scores) {
+                              kcLookup.set(`${kc.course_slug || ''}:${kc.module_slug}`, kc);
+                            }
+                            const enrolledSlugs = new Set((detail.enrollments || []).map(e => e.course_slug));
+                            const enrolledCourses = courses.filter(c => enrolledSlugs.has(c.slug));
+
+                            if (enrolledCourses.length === 0) {
+                              return <p className="text-xs text-text-secondary py-4 pl-7">No courses enrolled.</p>;
+                            }
+
+                            return (
+                              <div className="mt-2 space-y-1">
+                                {enrolledCourses.map((course) => {
+                                  const courseKey = `${user.id}:${course.slug}`;
+                                  const isCourseExpanded = expandedUserCourses.has(courseKey);
+                                  const tree = userNavTrees[course.slug];
+                                  const courseLessons = lessonLookup.get(course.slug);
+                                  const cp = detail.course_progress.find(p => p.course_slug === course.slug);
+                                  const courseStatus = cp?.status || 'not_started';
+
+                                  return (
+                                    <div key={course.slug} className="border border-border/40 rounded-xl bg-white/50 overflow-hidden">
+                                      <button
+                                        onClick={() => toggleUserCourse(courseKey, course.slug)}
+                                        className="w-full flex items-center gap-3 p-3 text-left hover:bg-surface/30 transition-colors"
+                                      >
+                                        <StatusIcon status={courseStatus} size={16} />
+                                        <span className="flex-1 text-sm font-semibold text-text-primary truncate">{course.title}</span>
+                                        <ChevronDown
+                                          size={14}
+                                          className={`text-text-secondary transition-transform ${isCourseExpanded ? 'rotate-180' : ''}`}
+                                        />
+                                      </button>
+
+                                      {isCourseExpanded && (
+                                        <div className="px-3 pb-3 border-t border-border/30">
+                                          {!tree ? (
+                                            <div className="flex items-center gap-2 py-3 pl-7 text-xs text-text-secondary">
+                                              <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                                              Loading modules...
+                                            </div>
+                                          ) : (
+                                            <div className="mt-2 space-y-1">
+                                              {tree.modules.map((mod) => {
+                                                const modKey = `${user.id}:${course.slug}:${mod.slug}`;
+                                                const isModExpanded = expandedUserModules.has(modKey);
+                                                const modLessons = courseLessons?.get(mod.slug);
+                                                const completedCount = modLessons
+                                                  ? Array.from(modLessons.values()).filter(l => l.status === 'completed').length
+                                                  : 0;
+                                                const totalCount = mod.lessons.length;
+                                                const modStatus = completedCount >= totalCount && totalCount > 0
+                                                  ? 'completed'
+                                                  : completedCount > 0
+                                                    ? 'in_progress'
+                                                    : 'not_started';
+                                                const kc = kcLookup.get(`${course.slug}:${mod.slug}`);
+
+                                                return (
+                                                  <div key={mod.slug}>
+                                                    <button
+                                                      onClick={() => toggleUserModule(modKey)}
+                                                      className="w-full flex items-center gap-2.5 py-2 pl-7 pr-2 text-left hover:bg-surface/30 rounded-md transition-colors"
+                                                    >
+                                                      <StatusIcon status={modStatus} />
+                                                      <span className="flex-1 text-xs font-medium text-text-primary truncate">{mod.title}</span>
+                                                      <span className={`text-[11px] font-medium ${
+                                                        modStatus === 'completed' ? 'text-success' : modStatus === 'in_progress' ? 'text-primary' : 'text-text-secondary'
+                                                      }`}>
+                                                        {modStatus === 'completed'
+                                                          ? 'complete'
+                                                          : modStatus === 'in_progress'
+                                                            ? `in progress (${completedCount}/${totalCount})`
+                                                            : `0/${totalCount}`}
+                                                      </span>
+                                                      {kc && (
+                                                        <span className="text-[10px] font-medium text-primary ml-1">KC: {kc.score}%</span>
+                                                      )}
+                                                      <ChevronDown
+                                                        size={12}
+                                                        className={`text-text-secondary/50 transition-transform ${isModExpanded ? 'rotate-180' : ''}`}
+                                                      />
+                                                    </button>
+
+                                                    {isModExpanded && (
+                                                      <div className="pl-12 pr-2 pb-1 space-y-0.5">
+                                                        {mod.lessons.map((lesson) => {
+                                                          const lp = modLessons?.get(lesson.slug);
+                                                          const lessonStatus = lp?.status || 'not_started';
+                                                          const total = lp?.time_spent_seconds || 0;
+                                                          const active = lp?.active_time_seconds;
+                                                          const showBothTimes = active != null && total > 0 && active < total * 0.9;
+                                                          return (
+                                                            <div key={lesson.slug} className="flex items-center gap-2 py-1.5 text-xs">
+                                                              <StatusIcon status={lessonStatus} size={12} />
+                                                              <span className="flex-1 text-text-primary truncate">{lesson.title}</span>
+                                                              {lp?.max_scroll_depth != null && (
+                                                                <div
+                                                                  className="w-12 h-1.5 bg-surface rounded-full overflow-hidden flex-shrink-0"
+                                                                  title={`Scrolled ${lp.max_scroll_depth}% of page`}
+                                                                >
+                                                                  <div className="h-full bg-primary/50 rounded-full" style={{ width: `${lp.max_scroll_depth}%` }} />
+                                                                </div>
+                                                              )}
+                                                              {total > 0 ? (
+                                                                <span className="text-text-secondary">
+                                                                  {showBothTimes
+                                                                    ? `${Math.round(active! / 60)}m active / ${Math.round(total / 60)}m`
+                                                                    : `${Math.round(total / 60)}m`}
+                                                                </span>
+                                                              ) : null}
+                                                              {lp?.completed_at && (
+                                                                <span className="text-text-secondary">{new Date(lp.completed_at).toLocaleDateString()}</span>
+                                                              )}
+                                                            </div>
+                                                          );
+                                                        })}
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                );
+                                              })}
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })() : (
+                            <p className="text-xs text-text-secondary py-4 pl-7">Failed to load user details.</p>
+                          )}
+                        </div>
+                      )}
+                    </Card>
+                  );
+                })}
+              </div>
+            );
+          })()}
           </div>
           <div className="flex h-6 rounded-full overflow-hidden bg-gray-100">
             {statusSegments.map((s) => {

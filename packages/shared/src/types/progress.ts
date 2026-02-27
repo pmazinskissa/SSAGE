@@ -6,6 +6,8 @@ export interface LessonProgressEntry {
   lesson_slug: string;
   status: LessonStatus;
   time_spent_seconds: number;
+  active_time_seconds?: number;
+  max_scroll_depth?: number;
   first_viewed_at: string | null;
   completed_at: string | null;
 }
@@ -35,6 +37,8 @@ export interface HeartbeatPayload {
   module_slug: string;
   lesson_slug: string;
   time_delta_seconds: number;
+  active_time_delta_seconds?: number;
+  scroll_depth?: number;
 }
 
 export interface LessonCompletePayload {

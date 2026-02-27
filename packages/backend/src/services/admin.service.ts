@@ -44,7 +44,7 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
   const user = userResult.rows[0];
 
   const lpResult = await pool.query(
-    'SELECT course_slug, module_slug, lesson_slug, status, time_spent_seconds, first_viewed_at, completed_at FROM lesson_progress WHERE user_id = $1',
+    'SELECT course_slug, module_slug, lesson_slug, status, time_spent_seconds, active_time_seconds, max_scroll_depth, first_viewed_at, completed_at FROM lesson_progress WHERE user_id = $1',
     [userId]
   );
 
@@ -75,6 +75,8 @@ export async function getUserDetail(userId: string): Promise<UserDetail | null> 
       lesson_slug: row.lesson_slug,
       status: row.status,
       time_spent_seconds: row.time_spent_seconds || 0,
+      active_time_seconds: row.active_time_seconds ?? 0,
+      max_scroll_depth: row.max_scroll_depth ?? 0,
       first_viewed_at: row.first_viewed_at?.toISOString() || null,
       completed_at: row.completed_at?.toISOString() || null,
     })),
@@ -470,8 +472,21 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
     pool.query(
       `SELECT user_id, module_slug,
               COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
-              COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
+              COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds,
+              COALESCE(SUM(active_time_seconds), 0)::int as active_seconds
        FROM lesson_progress
+       WHERE user_id = $1 AND course_slug = $2
+       GROUP BY module_slug`,
+      [user.id, courseSlug]
+    );
+    const lpMap: Record<string, { completed: number; time_seconds: number; active_seconds: number }> = {};
+    for (const row of lpResult.rows) {
+      lpMap[row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds, active_seconds: row.active_seconds };
+    }
+
+    // KC scores per module
+    const kcResult = await pool.query(
+      `SELECT module_slug,
        WHERE user_id = ANY($1::uuid[]) AND course_slug = $2
        GROUP BY user_id, module_slug`,
       [userIds, courseSlug]
@@ -518,10 +533,14 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
         lessons_completed: lp?.completed || 0,
         total_lessons: m.lessonCount,
         time_spent_seconds: lp?.time_seconds || 0,
+        active_time_seconds: lp?.active_seconds || 0,
         kc_score: kc && kc.total > 0 ? Math.round((kc.correct / kc.total) * 100) : null,
       };
     });
 
+    const totalActiveSeconds = moduleProgress.reduce((sum, m) => sum + m.active_time_seconds, 0);
+
+    results.push({
     return {
       id: user.id,
       name: user.name,
@@ -529,6 +548,7 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
       role: user.role,
       status: cp?.status || 'not_started',
       total_time_seconds: cp?.total_time_seconds || 0,
+      active_time_seconds: totalActiveSeconds,
       modules: moduleProgress,
     };
   });
