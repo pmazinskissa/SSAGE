@@ -57,7 +57,7 @@ export default function KnowledgeCheckSummary({ result, moduleSlug, nextModuleSl
       variants={springBounce}
       initial="hidden"
       animate="visible"
-      className="bg-white/70 backdrop-blur-md rounded-card border border-white/50 shadow-elevation-1 p-8"
+      className="bg-white rounded-card border border-border/40 shadow-elevation-1 p-8"
     >
       {/* Score section */}
       <div className="flex flex-col items-center text-center mb-8">

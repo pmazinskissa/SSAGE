@@ -89,7 +89,7 @@ export default function QuestionCard({
       variants={springBounce}
       initial="hidden"
       animate="visible"
-      className="bg-white/70 backdrop-blur-md rounded-card border border-white/50 shadow-elevation-1 overflow-hidden"
+      className="bg-white rounded-card border border-border/40 shadow-elevation-1 overflow-hidden"
     >
       {/* Feedback border */}
       <div className={`border-l-[6px] ${

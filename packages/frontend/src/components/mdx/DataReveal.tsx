@@ -49,7 +49,7 @@ export default function DataReveal({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45 }}
-      className="bg-white/70 backdrop-blur-md rounded-card border border-white/50 p-6 shadow-elevation-1 my-6 text-center"
+      className="bg-white rounded-card border border-border/40 p-6 shadow-elevation-1 my-6 text-center"
     >
       <p className="text-4xl font-bold text-primary">
         {displayValue.toLocaleString()}
