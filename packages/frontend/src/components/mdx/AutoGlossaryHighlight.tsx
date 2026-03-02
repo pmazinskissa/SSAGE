@@ -1,5 +1,6 @@
 import { type ReactNode, useMemo, Children, isValidElement, cloneElement } from 'react';
 import { useGlossary } from '../../context/GlossaryContext';
+import { useGlossarySeen } from '../../context/GlossarySeenContext';
 import GlossaryTerm from './GlossaryTerm';
 
 /**
@@ -9,6 +10,7 @@ import GlossaryTerm from './GlossaryTerm';
  */
 export default function AutoGlossaryHighlight({ children }: { children: ReactNode }) {
   const { entries } = useGlossary();
+  const seenRef = useGlossarySeen();
 
   const termPattern = useMemo(() => {
     if (entries.length === 0) return null;
@@ -22,7 +24,9 @@ export default function AutoGlossaryHighlight({ children }: { children: ReactNod
     return <>{children}</>;
   }
 
-  const matched = new Set<string>();
+  // Use the page-level shared Set when available so each term is only
+  // highlighted once across all blocks; fall back to a local Set otherwise.
+  const matched = seenRef ? seenRef.current : new Set<string>();
   return <>{processChildren(children, termPattern, entries, matched)}</>;
 }
 

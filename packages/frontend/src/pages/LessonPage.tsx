@@ -5,6 +5,7 @@ import { Clock } from 'lucide-react';
 import { useLessonContent } from '../hooks/useLessonContent';
 import { useHeartbeat } from '../hooks/useHeartbeat';
 import { useCourse } from '../context/CourseContext';
+import { GlossarySeenProvider } from '../context/GlossarySeenContext';
 import LessonNav from '../components/layout/LessonNav';
 import { GradientMesh, TopographicBg } from '../components/ui/Backgrounds';
 import { pageTransition } from '../lib/animations';
@@ -242,13 +243,15 @@ export default function LessonPage() {
         <TopographicBg />
         <div className="relative max-w-3xl mx-auto px-6 sm:px-12 py-8">
           {/* MDX content */}
-          <article
-            data-section-numbering
-            style={{ '--lesson-prefix': `'${moduleNumber}.${lessonInModule}'` } as React.CSSProperties}
-            className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-text-primary prose-p:text-text-secondary prose-a:text-link prose-strong:text-text-primary prose-code:text-primary prose-code:bg-primary-light prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-th:text-white"
-          >
-            {MdxComponent && <MdxComponent />}
-          </article>
+          <GlossarySeenProvider>
+            <article
+              data-section-numbering
+              style={{ '--lesson-prefix': `'${moduleNumber}.${lessonInModule}'` } as React.CSSProperties}
+              className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-text-primary prose-p:text-text-secondary prose-a:text-link prose-strong:text-text-primary prose-code:text-primary prose-code:bg-primary-light prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-th:text-white"
+            >
+              {MdxComponent && <MdxComponent />}
+            </article>
+          </GlossarySeenProvider>
 
           {/* Previous/Next navigation */}
           {slug && (
