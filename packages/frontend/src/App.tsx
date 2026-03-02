@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
+import { FontSizeProvider } from './context/FontSizeContext';
 import { CourseProvider } from './context/CourseContext';
 import { GlossaryProvider } from './context/GlossaryContext';
 import { AIProvider } from './context/AIContext';
@@ -23,6 +24,7 @@ const ReviewWidget = lazy(() => import('./components/review/ReviewWidget'));
 export default function App() {
   return (
     <ThemeProvider>
+      <FontSizeProvider>
       <AuthProvider>
         <ErrorBoundary>
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-pulse text-text-secondary">Loading...</div></div>}>
@@ -76,6 +78,7 @@ export default function App() {
           </Suspense>
         )}
       </AuthProvider>
+      </FontSizeProvider>
     </ThemeProvider>
   );
 }

@@ -1,8 +1,9 @@
-import { Home, Menu, LogOut } from 'lucide-react';
+import { Home, Menu, LogOut, ZoomIn, ZoomOut } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useCourse } from '../../context/CourseContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { useFontSize } from '../../context/FontSizeContext';
 
 interface TopBarProps {
   onMobileMenuToggle: () => void;
@@ -13,6 +14,7 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
   const { course, navTree } = useCourse();
   const { theme } = useTheme();
   const { user, logout } = useAuth();
+  const { canZoomIn, canZoomOut, zoomIn, zoomOut } = useFontSize();
 
   const completedPercent = navTree
     ? Math.round((navTree.completed_lessons / Math.max(navTree.total_lessons, 1)) * 100)
@@ -58,6 +60,27 @@ export default function TopBar({ onMobileMenuToggle }: TopBarProps) {
         <div className="flex-1" />
 
         {/* Right group */}
+        <div className="hidden sm:flex items-center gap-1">
+          <button
+            onClick={zoomOut}
+            disabled={!canZoomOut}
+            className="p-1.5 rounded-md hover:bg-surface transition-colors text-text-secondary hover:text-text-primary disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Decrease text size"
+            title="Decrease text size"
+          >
+            <ZoomOut size={16} />
+          </button>
+          <button
+            onClick={zoomIn}
+            disabled={!canZoomIn}
+            className="p-1.5 rounded-md hover:bg-surface transition-colors text-text-secondary hover:text-text-primary disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Increase text size"
+            title="Increase text size"
+          >
+            <ZoomIn size={16} />
+          </button>
+        </div>
+
         <div className="hidden sm:flex items-center gap-3 text-xs text-text-secondary">
           <span>{completedPercent}% complete</span>
         </div>
