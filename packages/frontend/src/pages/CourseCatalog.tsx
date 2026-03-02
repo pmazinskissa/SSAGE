@@ -382,7 +382,7 @@ function AdminTabBar({
 }) {
   return (
     <nav className="sticky top-14 z-30 bg-primary border-b border-primary">
-      <div className="max-w-6xl mx-auto px-6 flex overflow-x-auto -mb-px items-center">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10 flex overflow-x-auto -mb-px items-center">
         {allTabs.map((tab, index) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
@@ -575,7 +575,7 @@ export default function CourseCatalog() {
               {/* Animated gradient mesh */}
               <GradientMesh />
 
-              <div className="relative max-w-6xl mx-auto px-6 pt-14 pb-12">
+              <div className="relative max-w-6xl mx-auto px-6 sm:px-10 pt-14 pb-12">
                 <div className="flex items-center justify-between gap-8">
                   {/* Left: text content */}
                   <motion.div
@@ -661,7 +661,7 @@ export default function CourseCatalog() {
             <section className="relative pb-20 flex-1">
               {/* Topographic background */}
               <TopographicBg />
-              <div className="max-w-6xl mx-auto px-6 pt-8">
+              <div className="max-w-6xl mx-auto px-6 sm:px-10 pt-8">
                 <motion.div
                   className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
                   variants={cardStagger}

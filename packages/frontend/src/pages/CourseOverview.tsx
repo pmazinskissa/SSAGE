@@ -66,7 +66,7 @@ export default function CourseOverview() {
     <div className="pb-16">
       {/* Hero */}
       <motion.section
-        className="relative bg-gradient-to-br from-primary to-secondary px-6 sm:px-12 py-16 sm:py-24 overflow-hidden"
+        className="relative bg-gradient-to-br from-primary to-secondary px-8 sm:px-16 py-16 sm:py-24 overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -164,7 +164,7 @@ export default function CourseOverview() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="px-6 sm:px-12 py-4 bg-primary-light border-b border-border"
+          className="px-8 sm:px-16 py-4 bg-primary-light border-b border-border"
         >
           <Link
             to={continueLink}
@@ -180,7 +180,7 @@ export default function CourseOverview() {
 
       {/* Metadata row */}
       <motion.div
-        className="flex flex-wrap gap-6 px-6 sm:px-12 py-6 border-b border-border"
+        className="flex flex-wrap gap-6 px-8 sm:px-16 py-6 border-b border-border"
         variants={stagger}
         initial="hidden"
         animate="visible"
@@ -201,7 +201,7 @@ export default function CourseOverview() {
 
       <div className="relative pb-16">
         <TopographicBg />
-        <div className="relative px-6 sm:px-12 max-w-4xl mx-auto">
+        <div className="relative px-8 sm:px-16 max-w-4xl mx-auto">
           {/* Narrative Synopsis */}
           {course.narrative_synopsis && (
             <motion.section

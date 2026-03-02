@@ -95,7 +95,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-8">
+    <div className="max-w-2xl mx-auto px-6 sm:px-12 py-8">
       <h1
         className="text-2xl font-bold text-text-primary mb-6"
         style={{ fontFamily: 'var(--font-heading)' }}

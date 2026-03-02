@@ -31,7 +31,7 @@ export default function GlossaryFullPage() {
 
   if (loading) {
     return (
-      <div className="max-w-prose mx-auto px-6 py-12">
+      <div className="max-w-prose mx-auto px-6 sm:px-12 py-12">
         <div className="animate-pulse space-y-4">
           <div className="h-8 bg-surface rounded w-1/3" />
           <div className="h-10 bg-surface rounded w-full" />
@@ -43,7 +43,7 @@ export default function GlossaryFullPage() {
   }
 
   return (
-    <div className="max-w-prose mx-auto px-6 py-8">
+    <div className="max-w-prose mx-auto px-6 sm:px-12 py-8">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <h1
           className="text-2xl sm:text-3xl font-bold text-text-primary mb-2"

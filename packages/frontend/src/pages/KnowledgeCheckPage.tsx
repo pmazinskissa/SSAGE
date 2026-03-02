@@ -146,7 +146,7 @@ export default function KnowledgeCheckPage() {
 
   if (loading) {
     return (
-      <div className="max-w-prose mx-auto px-6 py-12">
+      <div className="max-w-prose mx-auto px-6 sm:px-12 py-12">
         <div className="animate-pulse space-y-4">
           <div className="h-4 bg-surface rounded w-1/4" />
           <div className="h-8 bg-surface rounded w-3/4" />
@@ -158,7 +158,7 @@ export default function KnowledgeCheckPage() {
 
   if (error || !data) {
     return (
-      <div className="max-w-prose mx-auto px-6 py-12 text-center">
+      <div className="max-w-prose mx-auto px-6 sm:px-12 py-12 text-center">
         <p className="text-error font-semibold">Failed to load knowledge check</p>
         <p className="text-text-secondary mt-2">{error || 'Not found'}</p>
       </div>
@@ -176,7 +176,7 @@ export default function KnowledgeCheckPage() {
       {/* Mini-hero header */}
       <section className="relative overflow-hidden">
         <GradientMesh className="opacity-40" />
-        <div className="relative max-w-prose mx-auto px-6 pt-8 pb-6">
+        <div className="relative max-w-prose mx-auto px-6 sm:px-12 pt-8 pb-6">
           <div className="flex items-center gap-2 mb-2">
             <ClipboardCheck size={18} className="text-primary" />
             <p className="text-xs font-bold uppercase tracking-wider text-primary">
@@ -196,7 +196,7 @@ export default function KnowledgeCheckPage() {
       {/* Content area with topo background */}
       <div className="relative">
         <TopographicBg />
-        <div className="relative max-w-prose mx-auto px-6 py-8">
+        <div className="relative max-w-prose mx-auto px-6 sm:px-12 py-8">
           {/* Progress bar */}
           <div className="mb-6">
             <div className="h-2 bg-surface rounded-full overflow-hidden">
