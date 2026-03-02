@@ -14,7 +14,6 @@ narrative_synopsis: |
 modules:
   - "01-overview"
   - "02-ai-problem-solving"
-  - "03-prioritization"
   - "04-tool-development"
   - "05-sustainment"
   - "06-change-management"

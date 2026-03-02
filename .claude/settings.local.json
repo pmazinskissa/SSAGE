@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:backend:*)",
+      "Bash(gh pr create:*)",
+      "Bash(winpty gh --version)",
+      "Bash(gh.exe:*)",
+      "Bash(winget install:*)",
+      "Bash(powershell -Command \"Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex\")",
+      "Bash(scoop install:*)",
+      "Bash(~/scoop/shims/scoop install:*)",
+      "Bash(~/scoop/shims/gh auth status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(python3:*)",
+      "Bash(curl:*)",
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(pg_isready:*)",
+      "Bash(ss:*)",
+      "Bash(powershell -Command \"Test-NetConnection -ComputerName localhost -Port 5433\")",
+      "Bash(docker:*)"
+    ]
+  }
+}

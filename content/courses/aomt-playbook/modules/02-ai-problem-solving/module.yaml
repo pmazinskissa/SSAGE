@@ -1,12 +1,13 @@
-title: "AI-Empowered Problem Solving"
+title: "Practitioners Playbook"
 slug: "02-ai-problem-solving"
-description: "Leverage AI to diagnose organizational challenges and identify key opportunities through data-driven insights."
+description: "Leverage AI to diagnose organizational challenges, identify key opportunities, and prioritize them through data-driven insights."
 objectives:
   - "Structure problems using problem statements and issues trees"
   - "Apply hypothesis testing to validate operational gaps"
   - "Use AI for data visualization, analysis, and research"
   - "Synthesize findings into actionable opportunities"
-estimated_duration_minutes: 75
+  - "Document and prioritize opportunities using WSJF and Value vs. Complexity frameworks"
+estimated_duration_minutes: 106
 lessons:
   - "01-chapter-introduction"
   - "02-phase1-diagnosis-overview"
@@ -21,3 +22,8 @@ lessons:
   - "11-data-analysis-plan"
   - "12-opportunity-synthesis"
   - "13-metro-cable-exercise"
+  - "01-opportunity-documentation"
+  - "02-prioritization-methods-overview"
+  - "03-wsjf-scoring-method"
+  - "04-value-complexity-matrix"
+  - "05-metro-cable-exercise"
