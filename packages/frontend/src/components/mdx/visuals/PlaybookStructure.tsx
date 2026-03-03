@@ -6,19 +6,47 @@ export default function PlaybookStructure() {
       title: 'Section I',
       sub: 'Practitioners Playbook',
       color: '#4F46E5',
-      chapters: ['AI Problem-Solving Process', 'Data Analysis Techniques', 'Prioritization Methods', 'AI Tool Development', 'Agile Delivery', 'Value Realization'],
+      chapters: [
+        {
+          name: 'Chapter I: AI-Empowered Problem Solving',
+          topics: ['Diagnose Data with AI', 'Prioritize Opportunities'],
+        },
+        {
+          name: 'Chapter II: AI Tool / Solution Development & Agile Delivery',
+          topics: ['Design / Prototype AI Tools', 'Consider Agile Delivery Approach'],
+        },
+      ],
     },
     {
       title: 'Section II',
-      sub: 'Sustainment',
+      sub: 'Performance Management & Sustainment',
       color: '#0D9488',
-      chapters: ['Embedding New Capabilities', 'Governance & Performance', 'Continuous Improvement', 'OCM Integration Points'],
+      chapters: [
+        {
+          name: null,
+          topics: [
+            'Structure, Support, and Feedback Framework',
+            'Sustain Improvements through Continuous Monitoring',
+            'Manage Performance with Scorecards and Goal Setting',
+          ],
+        },
+      ],
     },
     {
       title: 'Section III',
-      sub: 'Org Change Mgmt',
+      sub: 'Organizational Change Management',
       color: '#7C3AED',
-      chapters: ['Change Strategy', 'Stakeholder Engagement', 'Communication Planning', 'Training & Adoption'],
+      chapters: [
+        {
+          name: null,
+          topics: [
+            'Change Readiness Baseline and Assessment',
+            'Influence Network Mapping',
+            'Communications Management',
+            'Governance Framework',
+          ],
+        },
+      ],
     },
   ];
 
@@ -39,21 +67,41 @@ export default function PlaybookStructure() {
                 <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{s.sub}</div>
               </div>
               <div style={{ padding: '0.75rem' }}>
-                {s.chapters.map((c, ci) => (
-                  <div
-                    key={ci}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      padding: '0.25rem 0',
-                      fontSize: '0.8rem',
-                      color: '#374151',
-                      borderBottom: ci < s.chapters.length - 1 ? '1px solid #F3F4F6' : 'none',
-                    }}
-                  >
-                    <span style={{ color: s.color }}>›</span>
-                    {c}
+                {s.chapters.map((ch, chi) => (
+                  <div key={chi}>
+                    {ch.name && (
+                      <div
+                        style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 600,
+                          color: s.color,
+                          marginTop: chi > 0 ? '0.75rem' : '0',
+                          marginBottom: '0.25rem',
+                          paddingBottom: '0.25rem',
+                          borderBottom: `1px solid ${s.color}33`,
+                        }}
+                      >
+                        {ch.name}
+                      </div>
+                    )}
+                    {ch.topics.map((t, ti) => (
+                      <div
+                        key={ti}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          padding: '0.2rem 0',
+                          paddingLeft: ch.name ? '0.5rem' : '0',
+                          fontSize: '0.78rem',
+                          color: '#374151',
+                          borderBottom: ti < ch.topics.length - 1 ? '1px solid #F3F4F6' : 'none',
+                        }}
+                      >
+                        <span style={{ color: s.color }}>›</span>
+                        {t}
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
