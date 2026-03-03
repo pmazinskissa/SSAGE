@@ -1,3 +1,4 @@
+export { default as CourseTOC } from './CourseTOC';
 export { default as PhaseProgressionHex } from './PhaseProgressionHex';
 export { default as BenefitsGraphic } from './BenefitsGraphic';
 export { default as PlaybookStructure } from './PlaybookStructure';

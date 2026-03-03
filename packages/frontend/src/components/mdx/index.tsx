@@ -16,6 +16,7 @@ import AIExercise from './AIExercise';
 import PromptScorer from './PromptScorer';
 import MultipleChoice from './MultipleChoice';
 import {
+  CourseTOC,
   PhaseProgressionHex,
   BenefitsGraphic,
   PlaybookStructure,
@@ -126,6 +127,7 @@ export const mdxComponents: Record<string, ComponentType<any>> = {
   MultipleChoice,
 
   // Visual graphics
+  CourseTOC,
   PhaseProgressionHex,
   BenefitsGraphic,
   PlaybookStructure,
