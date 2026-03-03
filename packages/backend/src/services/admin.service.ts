@@ -495,10 +495,10 @@ export async function getUsersWithModuleProgress(courseSlug: string): Promise<Us
     cpMap.set(row.user_id, row);
   }
 
-  const lpMap = new Map<string, Record<string, { completed: number; time_seconds: number }>>();
+  const lpMap = new Map<string, Record<string, { completed: number; time_seconds: number; active_seconds: number }>>();
   for (const row of lpResult.rows) {
     if (!lpMap.has(row.user_id)) lpMap.set(row.user_id, {});
-    lpMap.get(row.user_id)![row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
+    lpMap.get(row.user_id)![row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds, active_seconds: row.active_seconds };
   }
 
   const kcMap = new Map<string, Record<string, { total: number; correct: number }>>();
@@ -562,7 +562,7 @@ export async function exportUsersCSV(courseSlug?: string): Promise<string> {
 
   // If a course is specified, get its nav tree for per-module columns
   let modules: { slug: string; title: string; lessonCount: number }[] = [];
-  let lpMap = new Map<string, Record<string, { completed: number; time_seconds: number }>>();
+  let lpMap = new Map<string, Record<string, { completed: number; time_seconds: number; active_seconds: number }>>();
   let kcMap = new Map<string, Record<string, { total: number; correct: number }>>();
 
   if (courseSlug) {
@@ -580,7 +580,8 @@ export async function exportUsersCSV(courseSlug?: string): Promise<string> {
         pool.query(
           `SELECT user_id, module_slug,
                   COUNT(*) FILTER (WHERE status = 'completed')::int as completed,
-                  COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds
+                  COALESCE(SUM(time_spent_seconds), 0)::int as time_seconds,
+                  COALESCE(SUM(active_time_seconds), 0)::int as active_seconds
            FROM lesson_progress
            WHERE user_id = ANY($1::uuid[]) AND course_slug = $2
            GROUP BY user_id, module_slug`,
@@ -599,7 +600,7 @@ export async function exportUsersCSV(courseSlug?: string): Promise<string> {
 
       for (const row of lpResult.rows) {
         if (!lpMap.has(row.user_id)) lpMap.set(row.user_id, {});
-        lpMap.get(row.user_id)![row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds };
+        lpMap.get(row.user_id)![row.module_slug] = { completed: row.completed, time_seconds: row.time_seconds, active_seconds: row.active_seconds };
       }
       for (const row of kcResult.rows) {
         if (!kcMap.has(row.user_id)) kcMap.set(row.user_id, {});
