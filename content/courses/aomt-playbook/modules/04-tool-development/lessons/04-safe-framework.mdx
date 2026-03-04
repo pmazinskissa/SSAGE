@@ -15,16 +15,6 @@ Organizations often adapt Agile terminology to fit their context. Role titles, c
 
 ## The 5-Step Agile Process
 
-<ProcessFlow steps={[
-  { title: "Define the Backlog", description: "Translate prioritized opportunities and user stories into a structured product backlog. Use WSJF scoring to sequence backlog items for maximum value delivery." },
-  { title: "Plan the Increment", description: "Conduct Program Increment (PI) Planning to align multiple teams on shared objectives, identify dependencies, and commit to delivery targets for the next 8-12 week increment." },
-  { title: "Execute Sprints", description: "Teams work in 2-week sprints, delivering working increments and conducting regular demos. Cross-team synchronization occurs through Scrum of Scrums and shared integration environments." },
-  { title: "Review and Adapt", description: "At the end of each Program Increment, conduct a system demo and Inspect & Adapt workshop. Assess what was delivered against plan, identify systemic impediments, and adjust the approach." },
-  { title: "Continuous Delivery", description: "Establish a continuous delivery pipeline that enables frequent, reliable releases to production. AI models are versioned and deployed through the same pipeline as application code." }
-]} />
-
-<AgileContinuousCycle />
-
 ## The Product Owner / Product Manager Role
 
 <Callout type="concept" title="Product Owner / Product Manager as Bridge">
@@ -45,8 +35,6 @@ In Agile, user feedback from sprint demos and production usage is systematically
 </Callout>
 
 ## Agile Stages and Key Roles
-
-<AgileStagesRoles />
 
 The Agile lifecycle flows through three stages, each with distinct roles and responsibilities:
 
@@ -75,6 +63,8 @@ Teams work in consistent sprints but deploy when features are ready and business
 - **Release Management** coordinates deployment logistics and rollback plans
 - **Change Management Team** ensures end users are prepared, trained, and supported
 - Continuous feedback flows back to Stage 1, creating a virtuous improvement cycle
+
+<img src="/design-screenshots/agile-lifecycle.png" alt="Solution Development Lifecycle" style={{ width: '100%', borderRadius: '8px', border: '1px solid #E5E7EB', marginTop: '1rem', marginBottom: '1rem' }} />
 
 <Callout type="warning" title="Right-Size the Framework">
 Agile is designed for large-scale, multi-team efforts. For smaller engagements with a single development team, basic Scrum or Kanban may be more appropriate. Applying Agile to a small team adds unnecessary overhead. Match the framework to the scale of the effort.

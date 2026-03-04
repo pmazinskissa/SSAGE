@@ -19,6 +19,8 @@ export { default as ValueComplexityScatter } from './ValueComplexityScatter';
 export { default as ValueComplexityMatrix } from './ValueComplexityMatrix';
 export { default as IterativeCycleDiagram } from './IterativeCycleDiagram';
 export { default as DesignPrototypeStages } from './DesignPrototypeStages';
+export { default as DesignExample } from './DesignExample';
+export { default as PrototypeExample } from './PrototypeExample';
 export { default as AgileStagesRoles } from './AgileStagesRoles';
 export { default as AgileContinuousCycle } from './AgileContinuousCycle';
 export { default as ProblemSolvingMandate } from './ProblemSolvingMandate';
