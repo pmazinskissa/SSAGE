@@ -13,7 +13,7 @@ export default function ScrollReveal({ children, className = '' }: ScrollRevealP
       variants={fadeInUp}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-40px' }}
+      viewport={{ once: true, amount: 0 }}
       className={className}
     >
       {children}
