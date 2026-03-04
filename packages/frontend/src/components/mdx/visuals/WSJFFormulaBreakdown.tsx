@@ -1,19 +1,28 @@
 import ScrollReveal from '../ScrollReveal';
+import { BarChart3, Clock, Shield, Settings } from 'lucide-react';
+
+const iconMap: Record<string, React.ComponentType<{ size?: number; color?: string }>> = { BarChart3, Clock, Shield, Settings };
 
 export default function WSJFFormulaBreakdown() {
   const eqFactors = [
-    { abbr: 'BV', label: 'Business Value', color: '#1E1B4B' },
-    { abbr: 'TC', label: 'Time Criticality', color: '#0891B2' },
-    { abbr: 'RR', label: 'Risk Reduction & OE', color: '#16A34A' },
+    { abbr: 'BV', label: 'Business Value', color: '#1E1B4B', icon: 'BarChart3' },
+    { abbr: 'TC', label: 'Time Criticality', color: '#0891B2', icon: 'Clock' },
+    { abbr: 'RR', label: 'Risk Reduction & OE', color: '#16A34A', icon: 'Shield' },
   ];
-  const jsF = { abbr: 'JS', label: 'Job Size', color: '#2563EB' };
+  const jsF = { abbr: 'JS', label: 'Job Size', color: '#2563EB', icon: 'Settings' };
 
-  const Badge = ({ f, large }: { f: { abbr: string; label: string; color: string }; large?: boolean }) => (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: `${f.color}15`, border: `1.5px solid ${f.color}50`, borderRadius: 8, padding: large ? '0.35rem 0.8rem' : '0.25rem 0.6rem', fontSize: large ? '0.88rem' : '0.78rem', fontWeight: 700, color: f.color }}>
-      <span style={{ width: large ? 26 : 20, height: large ? 26 : 20, borderRadius: '50%', background: f.color, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: large ? '0.72rem' : '0.6rem', fontWeight: 800, flexShrink: 0 }}>{f.abbr}</span>
-      {f.label}
-    </span>
-  );
+  const Badge = ({ f, large }: { f: { abbr: string; label: string; color: string; icon: string }; large?: boolean }) => {
+    const Icon = iconMap[f.icon];
+    return (
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: `${f.color}15`, border: `1.5px solid ${f.color}50`, borderRadius: 8, padding: large ? '0.35rem 0.8rem' : '0.25rem 0.6rem', fontSize: large ? '0.88rem' : '0.78rem', fontWeight: 700, color: f.color }}>
+        <span style={{ width: large ? 26 : 20, height: large ? 26 : 20, borderRadius: '50%', background: f.color, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          {Icon && <Icon size={large ? 13 : 10} color="white" />}
+        </span>
+        <span style={{ fontSize: large ? '0.65rem' : '0.56rem', fontWeight: 800, letterSpacing: '0.03em' }}>{f.abbr}</span>
+        {f.label}
+      </span>
+    );
+  };
 
   const opps = [
     { name: 'Real-time FCR Dashboard', bv: 9, tc: 9, rr: 7, js: 3 },

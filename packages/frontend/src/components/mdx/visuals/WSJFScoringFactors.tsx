@@ -11,7 +11,7 @@ const iconMap: Record<string, React.ComponentType<{ size?: string | number; colo
 export default function WSJFScoringFactors() {
   const factors = [
     {
-      label: 'Business Value', color: '#1E1B4B', icon: 'BarChart3',
+      label: 'Business Value', abbr: 'BV', color: '#1E1B4B', icon: 'BarChart3',
       tiers: [
         { score: '9-10', desc: 'Transformational impact' },
         { score: '7-8', desc: 'Significant KPI impact' },
@@ -21,7 +21,7 @@ export default function WSJFScoringFactors() {
       ]
     },
     {
-      label: 'Time Criticality', color: '#0891B2', icon: 'Clock',
+      label: 'Time Criticality', abbr: 'TC', color: '#0891B2', icon: 'Clock',
       tiers: [
         { score: '9-10', desc: 'Regulatory/competitive deadline' },
         { score: '7-8', desc: 'Significant opp cost if delayed' },
@@ -31,7 +31,7 @@ export default function WSJFScoringFactors() {
       ]
     },
     {
-      label: 'Risk Reduction & OE', color: '#16A34A', icon: 'Shield',
+      label: 'Risk Reduction & OE', abbr: 'RR', color: '#16A34A', icon: 'Shield',
       tiers: [
         { score: '9-10', desc: 'Eliminates major risk' },
         { score: '7-8', desc: 'Reduces operational risk' },
@@ -41,7 +41,7 @@ export default function WSJFScoringFactors() {
       ]
     },
     {
-      label: 'Job Size', color: '#2563EB', icon: 'Settings',
+      label: 'Job Size', abbr: 'JS', color: '#2563EB', icon: 'Settings',
       tiers: [
         { score: '9-10', desc: '>12mo major changes' },
         { score: '7-8', desc: '6-12mo significant tech' },
@@ -75,7 +75,10 @@ export default function WSJFScoringFactors() {
                 <div style={{width:40,height:40,borderRadius:'50%',background:`${f.color}15`,display:'flex',alignItems:'center',justifyContent:'center'}}>
                   {Icon && <Icon size={20} color={f.color} />}
                 </div>
-                <div style={{fontWeight:700,fontSize:'0.8rem',color:f.color,textAlign:'center',marginBottom:'0.2rem'}}>{f.label}</div>
+                <div style={{display:'flex',alignItems:'center',gap:'0.3rem',justifyContent:'center'}}>
+                  <span style={{background:f.color,color:'white',fontSize:'0.6rem',fontWeight:800,padding:'0.1rem 0.3rem',borderRadius:3,letterSpacing:'0.03em'}}>{(f as any).abbr}</span>
+                  <span style={{fontWeight:700,fontSize:'0.8rem',color:f.color,textAlign:'center'}}>{f.label}</span>
+                </div>
                 <div style={{width:'100%'}}>
                   {f.tiers.map((t, ti) => (
                     <div key={ti} style={{display:'flex',gap:'0.3rem',alignItems:'flex-start',marginBottom:'0.2rem',fontSize:'0.7rem'}}>
