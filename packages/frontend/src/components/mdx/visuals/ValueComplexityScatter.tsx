@@ -2,12 +2,12 @@ import ScrollReveal from '../ScrollReveal';
 
 export default function ValueComplexityScatter() {
   const opps = [
-    { id: 1, name: 'AI-powered dispatch routing', x: 8, y: 18, type: 'high' },
+    { id: 1, name: 'AI Dispatch Routing', x: 8, y: 18, type: 'high' },
     { id: 2, name: 'Technician certification tracker', x: 12, y: 14, type: 'blue' },
-    { id: 3, name: 'Customer satisfaction survey automation', x: 14, y: 8, type: 'blue' },
+    { id: 3, name: 'Customer Survey Automation', x: 3, y: 11, type: 'quick' },
     { id: 4, name: 'Predictive maintenance alerts', x: 10, y: 16, type: 'blue' },
     { id: 5, name: 'Knowledge base AI assistant', x: 2, y: 12, type: 'quick' },
-    { id: 6, name: 'Real-time FCR dashboard', x: 6, y: 17, type: 'high' },
+    { id: 6, name: 'Real-time FCR Dashboard', x: 6, y: 17, type: 'high' },
     { id: 7, name: 'Automated reporting pipeline', x: 16, y: 6, type: 'low' },
     { id: 8, name: 'Appointment scheduling bot', x: 3, y: 4, type: 'quick' },
     { id: 9, name: 'Customer churn predictor', x: 4, y: 15, type: 'high' },
