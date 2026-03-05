@@ -20,7 +20,8 @@
       "Bash(pg_isready:*)",
       "Bash(ss:*)",
       "Bash(powershell -Command \"Test-NetConnection -ComputerName localhost -Port 5433\")",
-      "Bash(docker:*)"
+      "Bash(docker:*)",
+      "Bash(xargs grep -l \"2\\\\.4\")"
     ]
   }
 }

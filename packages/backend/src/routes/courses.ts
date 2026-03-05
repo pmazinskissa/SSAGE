@@ -16,6 +16,7 @@ const router = Router();
 
 // GET /api/courses — list all courses (filtered by enrollment for non-admins)
 router.get('/', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   const courses = listCourses();
   // Admins and dev_admins see all courses
   if (req.user && (req.user.role === 'admin' || req.user.role === 'dev_admin')) {

@@ -8,6 +8,21 @@ interface BeforeAfterProps {
   afterLabel?: string;
 }
 
+function toBullets(content: ReactNode) {
+  if (typeof content !== 'string') return <div className="text-sm text-text-secondary leading-relaxed">{content}</div>;
+  const items = content.split('.').map(s => s.trim()).filter(Boolean);
+  return (
+    <ul className="text-sm text-text-secondary space-y-1.5 list-none p-0 m-0">
+      {items.map((item, i) => (
+        <li key={i} className="flex gap-2 items-start">
+          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-current flex-shrink-0 opacity-50" />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function BeforeAfter({
   before,
   after,
@@ -21,13 +36,13 @@ export default function BeforeAfter({
           <p className="text-xs font-bold uppercase tracking-wider text-error mb-3">
             {beforeLabel}
           </p>
-          <div className="text-sm text-text-secondary leading-relaxed">{before}</div>
+          {toBullets(before)}
         </div>
         <div className="p-5 bg-success/5">
           <p className="text-xs font-bold uppercase tracking-wider text-success mb-3">
             {afterLabel}
           </p>
-          <div className="text-sm text-text-secondary leading-relaxed">{after}</div>
+          {toBullets(after)}
         </div>
       </div>
     </ScrollReveal>
