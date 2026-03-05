@@ -103,17 +103,17 @@ export default function ValueComplexityMatrix() {
   return (
     <ScrollReveal>
       <div className="my-8" style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ background: 'white', borderRadius: 10, border: '1px solid #E5E7EB', padding: '1.25rem' }}>
+        <div style={{ background: 'white', borderRadius: 10, border: '1px solid #E5E7EB', padding: '1.25rem', maxWidth: 560 }}>
           {/* Caption */}
-          <div style={{ fontSize: '0.75rem', color: '#6366F1', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.15rem' }}>
+          <div style={{ fontSize: '0.75rem', color: '#6366F1', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.15rem', textAlign: 'center' }}>
             Metro Cable Example
           </div>
-          <div style={{ fontWeight: 700, fontSize: '1rem', color: '#1E1B4B', marginBottom: '1rem' }}>
+          <div style={{ fontWeight: 700, fontSize: '1rem', color: '#1E1B4B', marginBottom: '1rem', textAlign: 'center' }}>
             Opportunity Prioritization using Value vs. Complexity Matrix
           </div>
 
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
-            {/* SVG matrix + scatter */}
+          {/* SVG matrix + scatter — centered */}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <svg
               viewBox={`0 0 ${svgW} ${svgH}`}
               style={{ width: 480, flexShrink: 0, overflow: 'visible' }}
@@ -177,50 +177,49 @@ export default function ValueComplexityMatrix() {
                 );
               })}
             </svg>
+          </div>
 
-            {/* Right panel */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flexShrink: 0 }}>
-              {/* Quadrant descriptions */}
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1E1B4B', marginBottom: '0.4rem' }}>Quadrants</div>
-                {quadrantDefs.map(q => {
-                  const s = quadrantStyles[q.id];
-                  return (
-                    <div key={q.id} style={{ display: 'flex', gap: '0.45rem', alignItems: 'flex-start', marginBottom: '0.55rem' }}>
-                      <div style={{ width: 11, height: 11, borderRadius: 2, background: s.fill, border: `1.5px solid ${s.border}`, flexShrink: 0, marginTop: 3 }} />
-                      <div style={{ width: 155 }}>
-                        <div style={{ fontWeight: 700, fontSize: '0.78rem', color: s.text, lineHeight: 1.2 }}>{q.label}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#6B7280', lineHeight: 1.35 }}>{q.desc}</div>
+          {/* Quadrant descriptions — 2x2 grid below matrix */}
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1E1B4B', marginBottom: '0.5rem' }}>Quadrants</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+              {quadrantDefs.map(q => {
+                const s = quadrantStyles[q.id];
+                return (
+                  <div key={q.id} style={{ display: 'flex', gap: '0.45rem', alignItems: 'flex-start', background: s.fill, border: `1px solid ${s.border}`, borderRadius: 6, padding: '0.45rem 0.6rem' }}>
+                    <div style={{ width: 10, height: 10, borderRadius: 2, background: s.border, flexShrink: 0, marginTop: 3 }} />
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: '0.78rem', color: s.text, lineHeight: 1.2 }}>{q.label}</div>
+                      <div style={{ fontSize: '0.72rem', color: '#6B7280', lineHeight: 1.35 }}>{q.desc}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: '#E5E7EB', margin: '0.75rem 0' }} />
+
+          {/* Opportunities — two columns below quadrants */}
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1E1B4B', marginBottom: '0.4rem' }}>Opportunities</div>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              {[oppCol1, oppCol2].map((col, ci) => (
+                <div key={ci} style={{ flex: 1 }}>
+                  {col.map(o => {
+                    const qid = getQuadrant(o.x, o.y);
+                    return (
+                      <div key={o.id} style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-start', marginBottom: '0.28rem', fontSize: '0.75rem', color: '#374151', lineHeight: 1.35 }}>
+                        <span style={{ background: dotColor[qid], color: 'white', borderRadius: '50%', width: 17, height: 17, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>
+                          {o.id}
+                        </span>
+                        {o.name}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Divider */}
-              <div style={{ height: 1, background: '#E5E7EB' }} />
-
-              {/* Opportunities — two columns */}
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1E1B4B', marginBottom: '0.4rem' }}>Opportunities</div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                  {[oppCol1, oppCol2].map((col, ci) => (
-                    <div key={ci} style={{ width: 150 }}>
-                      {col.map(o => {
-                        const qid = getQuadrant(o.x, o.y);
-                        return (
-                          <div key={o.id} style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-start', marginBottom: '0.28rem', fontSize: '0.75rem', color: '#374151', lineHeight: 1.35 }}>
-                            <span style={{ background: dotColor[qid], color: 'white', borderRadius: '50%', width: 17, height: 17, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>
-                              {o.id}
-                            </span>
-                            {o.name}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
