@@ -97,23 +97,26 @@ export default function ValueComplexityMatrix() {
     avoid:     { x: toX(20) - 7,  y: toY(0) - 20,  anchor: 'end' as const   },
   };
 
+  const oppCol1 = opps.slice(0, 5);
+  const oppCol2 = opps.slice(5);
+
   return (
     <ScrollReveal>
-      <div className="my-8">
-        <div style={{ background: 'white', borderRadius: 10, border: '1px solid #E5E7EB', padding: '1.25rem', maxWidth: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
+      <div className="my-8" style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ background: 'white', borderRadius: 10, border: '1px solid #E5E7EB', padding: '1.25rem' }}>
           {/* Caption */}
-          <div style={{ fontSize: '0.7rem', color: '#6366F1', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.15rem' }}>
+          <div style={{ fontSize: '0.75rem', color: '#6366F1', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.15rem' }}>
             Metro Cable Example
           </div>
-          <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1E1B4B', marginBottom: '1rem' }}>
+          <div style={{ fontWeight: 700, fontSize: '1rem', color: '#1E1B4B', marginBottom: '1rem' }}>
             Opportunity Prioritization using Value vs. Complexity Matrix
           </div>
 
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
             {/* SVG matrix + scatter */}
             <svg
               viewBox={`0 0 ${svgW} ${svgH}`}
-              style={{ flex: '1 1 300px', minWidth: 280, maxWidth: 480, overflow: 'visible' }}
+              style={{ width: 480, flexShrink: 0, overflow: 'visible' }}
             >
               {/* Quadrant fills */}
               {(Object.keys(quadRects) as Array<keyof typeof quadRects>).map(qid => {
@@ -140,10 +143,10 @@ export default function ValueComplexityMatrix() {
                 const s = quadrantStyles[qid];
                 return (
                   <g key={qid + '-lbl'}>
-                    <text x={pos.x} y={pos.y} textAnchor={pos.anchor} fill={s.text} fontSize="10" fontWeight="800">
+                    <text x={pos.x} y={pos.y} textAnchor={pos.anchor} fill={s.text} fontSize="12" fontWeight="800">
                       {def.label}
                     </text>
-                    <text x={pos.x} y={pos.y + 11} textAnchor={pos.anchor} fill={s.text} fontSize="7" opacity="0.85" fontStyle="italic">
+                    <text x={pos.x} y={pos.y + 13} textAnchor={pos.anchor} fill={s.text} fontSize="8.5" opacity="0.85" fontStyle="italic">
                       {def.action}
                     </text>
                   </g>
@@ -151,13 +154,13 @@ export default function ValueComplexityMatrix() {
               })}
 
               {/* Axis labels */}
-              <text x={toX(5)}  y={toY(0) + 14} textAnchor="middle" fill="#6B7280" fontSize="7.5" fontWeight="600">Low</text>
-              <text x={toX(10)} y={toY(0) + 28} textAnchor="middle" fill="#374151" fontSize="9"   fontWeight="700">Complexity →</text>
-              <text x={toX(15)} y={toY(0) + 14} textAnchor="middle" fill="#6B7280" fontSize="7.5" fontWeight="600">High</text>
+              <text x={toX(5)}  y={toY(0) + 14} textAnchor="middle" fill="#6B7280" fontSize="9" fontWeight="600">Low</text>
+              <text x={toX(10)} y={toY(0) + 30} textAnchor="middle" fill="#374151" fontSize="11" fontWeight="700">Complexity →</text>
+              <text x={toX(15)} y={toY(0) + 14} textAnchor="middle" fill="#6B7280" fontSize="9" fontWeight="600">High</text>
 
-              <text x={margin.left - 36} y={toY(5)}  textAnchor="middle" fill="#6B7280" fontSize="7.5" fontWeight="600" transform={`rotate(-90,${margin.left - 36},${toY(5)})`}>Low</text>
-              <text x={margin.left - 36} y={toY(10)} textAnchor="middle" fill="#374151" fontSize="9"   fontWeight="700" transform={`rotate(-90,${margin.left - 36},${toY(10)})`}>↑ Value</text>
-              <text x={margin.left - 36} y={toY(15)} textAnchor="middle" fill="#6B7280" fontSize="7.5" fontWeight="600" transform={`rotate(-90,${margin.left - 36},${toY(15)})`}>High</text>
+              <text x={margin.left - 36} y={toY(5)}  textAnchor="middle" fill="#6B7280" fontSize="9" fontWeight="600" transform={`rotate(-90,${margin.left - 36},${toY(5)})`}>Low</text>
+              <text x={margin.left - 36} y={toY(10)} textAnchor="middle" fill="#374151" fontSize="11" fontWeight="700" transform={`rotate(-90,${margin.left - 36},${toY(10)})`}>↑ Value</text>
+              <text x={margin.left - 36} y={toY(15)} textAnchor="middle" fill="#6B7280" fontSize="9" fontWeight="600" transform={`rotate(-90,${margin.left - 36},${toY(15)})`}>High</text>
 
               {/* Opportunity dots */}
               {opps.map(o => {
@@ -175,19 +178,19 @@ export default function ValueComplexityMatrix() {
               })}
             </svg>
 
-            {/* Right panel: two columns side-by-side */}
-            <div style={{ flex: '0 0 auto', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+            {/* Right panel */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flexShrink: 0 }}>
               {/* Quadrant descriptions */}
-              <div style={{ width: 150 }}>
-                <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#1E1B4B', marginBottom: '0.35rem' }}>Quadrants</div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1E1B4B', marginBottom: '0.4rem' }}>Quadrants</div>
                 {quadrantDefs.map(q => {
                   const s = quadrantStyles[q.id];
                   return (
-                    <div key={q.id} style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                      <div style={{ width: 10, height: 10, borderRadius: 2, background: s.fill, border: `1.5px solid ${s.border}`, flexShrink: 0, marginTop: 2 }} />
-                      <div>
-                        <div style={{ fontWeight: 700, fontSize: '0.72rem', color: s.text, lineHeight: 1.2 }}>{q.label}</div>
-                        <div style={{ fontSize: '0.67rem', color: '#6B7280', lineHeight: 1.35 }}>{q.desc}</div>
+                    <div key={q.id} style={{ display: 'flex', gap: '0.45rem', alignItems: 'flex-start', marginBottom: '0.55rem' }}>
+                      <div style={{ width: 11, height: 11, borderRadius: 2, background: s.fill, border: `1.5px solid ${s.border}`, flexShrink: 0, marginTop: 3 }} />
+                      <div style={{ width: 155 }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.78rem', color: s.text, lineHeight: 1.2 }}>{q.label}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#6B7280', lineHeight: 1.35 }}>{q.desc}</div>
                       </div>
                     </div>
                   );
@@ -195,22 +198,28 @@ export default function ValueComplexityMatrix() {
               </div>
 
               {/* Divider */}
-              <div style={{ width: 1, background: '#E5E7EB', alignSelf: 'stretch' }} />
+              <div style={{ height: 1, background: '#E5E7EB' }} />
 
-              {/* Opportunity list */}
-              <div style={{ width: 150 }}>
-                <div style={{ fontWeight: 700, fontSize: '0.76rem', color: '#1E1B4B', marginBottom: '0.35rem' }}>Opportunities</div>
-                {opps.map(o => {
-                  const qid = getQuadrant(o.x, o.y);
-                  return (
-                    <div key={o.id} style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-start', marginBottom: '0.22rem', fontSize: '0.7rem', color: '#374151', lineHeight: 1.35 }}>
-                      <span style={{ background: dotColor[qid], color: 'white', borderRadius: '50%', width: 15, height: 15, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.55rem', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>
-                        {o.id}
-                      </span>
-                      {o.name}
+              {/* Opportunities — two columns */}
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1E1B4B', marginBottom: '0.4rem' }}>Opportunities</div>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  {[oppCol1, oppCol2].map((col, ci) => (
+                    <div key={ci} style={{ width: 150 }}>
+                      {col.map(o => {
+                        const qid = getQuadrant(o.x, o.y);
+                        return (
+                          <div key={o.id} style={{ display: 'flex', gap: '0.3rem', alignItems: 'flex-start', marginBottom: '0.28rem', fontSize: '0.75rem', color: '#374151', lineHeight: 1.35 }}>
+                            <span style={{ background: dotColor[qid], color: 'white', borderRadius: '50%', width: 17, height: 17, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700, flexShrink: 0, marginTop: 1 }}>
+                              {o.id}
+                            </span>
+                            {o.name}
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
