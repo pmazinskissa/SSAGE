@@ -83,8 +83,15 @@ export function createApp() {
 
   // Serve static frontend in production
   const frontendDist = path.resolve(__dirname, '../../frontend/dist');
-  app.use(express.static(frontendDist));
+  // Hashed assets (JS/CSS bundles) — cache forever
+  app.use('/assets', express.static(path.join(frontendDist, 'assets'), {
+    maxAge: '1y',
+    immutable: true,
+  }));
+  // Everything else — no caching so index.html is always fresh
+  app.use(express.static(frontendDist, { maxAge: 0, etag: false }));
   app.get('*', (_req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
 
