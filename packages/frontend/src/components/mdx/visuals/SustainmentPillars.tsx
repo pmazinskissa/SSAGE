@@ -42,10 +42,10 @@ export default function SustainmentPillars() {
             <div style={{ flex: '1 1 160px', maxWidth: 200 }}>
               <PillarCard
                 title="STRUCTURE"
-                color="#2563EB"
+                color="#3B82F6"
                 bg="#EFF6FF"
                 border="#BFDBFE"
-                textColor="#1E40AF"
+                textColor="#2563EB"
                 bullets={['Reporting Lines', 'Incentives & Career Path']}
               />
             </div>
@@ -53,17 +53,17 @@ export default function SustainmentPillars() {
             {/* Central SVG */}
             <div style={{ flexShrink: 0 }}>
               <svg viewBox="0 0 220 220" width="210" height="210" aria-label="Three interconnected cycle arrows">
-                {/* Arc 1: Structure (blue) — 275° → 25° CW */}
-                <path d={arcBand(275, 25)} fill="#2563EB" />
-                <polygon points={arrowHead(25)} fill="#2563EB" />
+                {/* Arc 1: Support (navy) — 275° → 25° CW, right/top side near Support card */}
+                <path d={arcBand(275, 25)} fill="#1E3A8A" />
+                <polygon points={arrowHead(25)} fill="#1E3A8A" />
 
-                {/* Arc 2: Support (navy) — 35° → 145° CW */}
-                <path d={arcBand(35, 145)} fill="#1D4ED8" />
-                <polygon points={arrowHead(145)} fill="#1D4ED8" />
+                {/* Arc 2: Feedback (teal) — 35° → 145° CW, bottom side near Feedback card */}
+                <path d={arcBand(35, 145)} fill="#0D9488" />
+                <polygon points={arrowHead(145)} fill="#0D9488" />
 
-                {/* Arc 3: Feedback (teal) — 155° → 265° CW */}
-                <path d={arcBand(155, 265)} fill="#0D9488" />
-                <polygon points={arrowHead(265)} fill="#0D9488" />
+                {/* Arc 3: Structure (blue) — 155° → 265° CW, left side near Structure card */}
+                <path d={arcBand(155, 265)} fill="#3B82F6" />
+                <polygon points={arrowHead(265)} fill="#3B82F6" />
 
                 {/* Center */}
                 <circle cx={CX} cy={CY} r="36" fill="white" stroke="#E5E7EB" strokeWidth="1" />
@@ -76,10 +76,10 @@ export default function SustainmentPillars() {
             <div style={{ flex: '1 1 160px', maxWidth: 200, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <PillarCard
                 title="SUPPORT"
-                color="#1D4ED8"
-                bg="#EFF6FF"
-                border="#BFDBFE"
-                textColor="#1E40AF"
+                color="#1E3A8A"
+                bg="#EEF2FF"
+                border="#C7D2FE"
+                textColor="#1E3A8A"
                 bullets={['Continuous Learning', 'Team Collaboration']}
               />
               <PillarCard
