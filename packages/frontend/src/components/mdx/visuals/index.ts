@@ -26,3 +26,4 @@ export { default as AgileContinuousCycle } from './AgileContinuousCycle';
 export { default as AgileLifecycle } from './AgileLifecycle';
 export { default as ProblemSolvingMandate } from './ProblemSolvingMandate';
 export { default as GeographicHeatMap } from './GeographicHeatMap';
+export { default as SustainmentPillars } from './SustainmentPillars';

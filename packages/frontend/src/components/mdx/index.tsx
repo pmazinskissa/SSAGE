@@ -46,6 +46,7 @@ import {
   AgileLifecycle,
   ProblemSolvingMandate,
   GeographicHeatMap,
+  SustainmentPillars,
 } from './visuals';
 
 // HTML element overrides for MDX content
@@ -163,6 +164,7 @@ export const mdxComponents: Record<string, ComponentType<any>> = {
   AgileLifecycle,
   ProblemSolvingMandate,
   GeographicHeatMap,
+  SustainmentPillars,
 
   // HTML overrides
   h1: createHeading(1),
