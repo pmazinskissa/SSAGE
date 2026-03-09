@@ -14,7 +14,7 @@ export default function WSJFScoringFactors() {
       label: 'Business Value', abbr: 'BV', color: '#1E1B4B', icon: 'BarChart3',
       sub: 'Customer/Business Benefit',
       tiers: [
-        { score: '9-10', desc: 'Transformational impact', full: 'Transformational impact on customer experience, revenue, or competitive position' },
+        { score: '9-10', desc: 'Change impact', full: 'Change impact on customer experience, revenue, or competitive position' },
         { score: '7-8',  desc: '25%+ cost reduction / major KPI impact', full: 'Significant measurable impact on KPIs, cost reduction 25%+, or customer satisfaction' },
         { score: '5-6',  desc: '10–25% efficiency gains', full: 'Moderate impact, measurable efficiency gains 10–25%, improved analytics' },
         { score: '3-4',  desc: 'Small incremental improvement', full: 'Small incremental improvement, limited scope impact' },

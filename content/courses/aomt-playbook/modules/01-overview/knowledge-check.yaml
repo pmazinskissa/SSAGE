@@ -14,7 +14,7 @@ questions:
       - id: "d"
         text: "AI-Optimized Management Technique"
     correct_option: "b"
-    explanation: "The methodology is called AI-Enabled Problem Solving — a non-linear approach to operational transformations leveraging AI capabilities."
+    explanation: "The methodology is called AI-Enabled Problem Solving — a non-linear approach to operational changes leveraging AI capabilities."
     lesson_link: "01-cover-and-overview"
     lesson_link_label: "Review: Cover & Overview"
 
@@ -28,7 +28,7 @@ questions:
 
   - id: "m1-q3"
     type: "multiple-choice-single"
-    question: "Which of the following best describes the AI-Enabled Problem Solving approach to operational transformation?"
+    question: "Which of the following best describes the AI-Enabled Problem Solving approach to operational change?"
     options:
       - id: "a"
         text: "A linear, phase-gated waterfall methodology"
@@ -39,7 +39,7 @@ questions:
       - id: "d"
         text: "A traditional Six Sigma process improvement method"
     correct_option: "b"
-    explanation: "AI-Enabled Problem Solving provides a non-linear approach to operational transformations that moves farther and faster in achieving an organization's objectives by leveraging AI capabilities."
+    explanation: "AI-Enabled Problem Solving provides a non-linear approach to operational changes that moves farther and faster in achieving an organization's objectives by leveraging AI capabilities."
     lesson_link: "04-introducing-aomt"
     lesson_link_label: "Review: Introducing AI-Enabled Problem Solving"
 
@@ -79,7 +79,7 @@ questions:
           - "nonlinear"
           - "non linear"
       - type: "text"
-        value: " approach to operational transformations powered by "
+        value: " approach to operational changes powered by "
       - type: "blank"
         value: "AI"
         accept:
@@ -88,6 +88,6 @@ questions:
           - "ai"
       - type: "text"
         value: " capabilities."
-    explanation: "AI-Enabled Problem Solving provides a non-linear approach powered by AI capabilities, distinguishing it from traditional sequential transformation methodologies."
+    explanation: "AI-Enabled Problem Solving provides a non-linear approach powered by AI capabilities, distinguishing it from traditional sequential change methodologies."
     lesson_link: "04-introducing-aomt"
     lesson_link_label: "Review: Introducing AI-Enabled Problem Solving"

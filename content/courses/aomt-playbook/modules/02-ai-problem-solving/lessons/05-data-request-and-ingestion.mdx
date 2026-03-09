@@ -35,7 +35,7 @@ Once the data landscape is understood, the formal data request should be specifi
 
 - **Data Description** — What specific data is needed (e.g., "dispatch records for the past 12 months including technician ID, job type, travel time, and resolution outcome")
 - **Source System** — Where does this data reside? Identify the <GlossaryTerm term="System of Record">system of record</GlossaryTerm>.
-- **Format Requirements** — Preferred file format, schema expectations, and any transformation needs
+- **Format Requirements** — Preferred file format, schema expectations, and any change needs
 - **Time Period** — The date range required for the analysis
 - **Granularity** — The level of detail needed (e.g., daily vs. monthly, individual vs. aggregated)
 - **Issues Tree Mapping** — Which branch or hypothesis does this data support?
@@ -65,7 +65,7 @@ Data governance is not a checkbox — it must be woven into every stage of the d
 - **Anonymization and PII** — Identify any personally identifiable information (PII) in the dataset. Work with the data owner to anonymize or pseudonymize sensitive fields before ingestion. Never store raw PII in analysis environments unless explicitly authorized.
 - **Retention and Disposal** — Agree on how long the data will be retained for the engagement and what happens to it afterward. Define clear disposal procedures — delete working copies, purge temporary files, and confirm deletion with the data owner.
 - **Regulatory Compliance** — Determine which regulations apply (e.g., GDPR, HIPAA, SOX, industry-specific standards). Ensure your data handling, storage, and processing practices meet these requirements. When in doubt, consult your organization's legal or compliance team.
-- **Audit Trail** — Maintain a log of what data was requested, when it was received, who accessed it, and any transformations applied. This trail supports reproducibility and demonstrates compliance if the engagement is ever reviewed.
+- **Audit Trail** — Maintain a log of what data was requested, when it was received, who accessed it, and any changes applied. This trail supports reproducibility and demonstrates compliance if the engagement is ever reviewed.
 
 <DecisionPoint
   scenario="You're starting a new engagement. The client offers two data options: (A) a clean, curated dataset covering 3 months of operations, or (B) a raw, uncleaned dataset covering 18 months with known quality issues. Which do you choose?"
