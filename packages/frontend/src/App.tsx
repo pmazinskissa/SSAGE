@@ -19,7 +19,6 @@ const GlossaryFullPage = lazy(() => import('./pages/GlossaryFullPage'));
 const CompletionPage = lazy(() => import('./pages/CompletionPage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
-const ReviewWidget = lazy(() => import('./components/review/ReviewWidget'));
 
 export default function App() {
   return (
@@ -72,11 +71,7 @@ export default function App() {
             </Routes>
           </Suspense>
         </ErrorBoundary>
-        {import.meta.env.VITE_REVIEW_MODE === 'true' && (
-          <Suspense fallback={null}>
-            <ReviewWidget />
-          </Suspense>
-        )}
+
       </AuthProvider>
       </FontSizeProvider>
     </ThemeProvider>
