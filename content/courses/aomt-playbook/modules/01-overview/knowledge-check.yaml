@@ -58,7 +58,7 @@ questions:
       - "sustainment"
       - "change"
     explanation: "The guidebook follows a logical progression: first diagnose and build (Practitioners Guidebook), then sustain (Performance Management), then manage the human side of change (Change Management)."
-    lesson_link: "05-guidebook-structure"
+    lesson_link: "05-playbook-structure"
     lesson_link_label: "Review: Guidebook Structure"
 
   - id: "m1-q5"
