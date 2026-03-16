@@ -396,19 +396,9 @@ export default function Sidebar({ open, collapsed, onClose, onCollapseToggle }: 
                                 const total = mod.lessons.length;
                                 const done = mod.lessons.filter((l) => l.status === 'completed').length;
                                 const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-                                const r = 7;
-                                const circ = 2 * Math.PI * r;
-                                return (
-                                  <svg width="20" height="20" viewBox="0 0 20 20">
-                                    <circle cx="10" cy="10" r={r} fill="none" stroke="#e5e7eb" strokeWidth="2.5" />
-                                    <circle cx="10" cy="10" r={r} fill="none" stroke="var(--color-primary)" strokeWidth="2.5"
-                                      strokeDasharray={circ}
-                                      strokeDashoffset={circ - (pct / 100) * circ}
-                                      strokeLinecap="round"
-                                      transform="rotate(-90 10 10)"
-                                    />
-                                  </svg>
-                                );
+                                return pct > 0 ? (
+                                  <span className="text-[11px] font-semibold text-primary/60">{pct}%</span>
+                                ) : null;
                               })()}
                               {isExpanded ? (
                                 <ChevronDown size={16} className="text-primary/40" />
