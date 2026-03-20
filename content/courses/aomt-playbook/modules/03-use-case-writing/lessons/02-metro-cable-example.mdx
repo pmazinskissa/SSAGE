@@ -1,0 +1,93 @@
+---
+title: "Metro Cable Example"
+description: "A complete sample use case for Metro Cable's Technician Routing System."
+estimated_duration_minutes: 10
+---
+
+Below is a complete sample use case that a business analyst at Metro Cable might hand off to the development team. It covers a core workflow in the proposed geographical routing system: a dispatcher optimizing daily technician assignments.
+
+### UC-01 · Optimize Daily Technician Route Assignments
+*Metro Cable · Technician Routing System · Version 1.0 · Draft · March 2026*
+
+**Goal / Purpose**
+
+The Field Dispatcher needs to assign and sequence daily service calls to available technicians in a way that minimizes total drive time, respects technician skill certifications, and ensures all priority-one outage calls are addressed before end-of-shift. This directly reduces fuel cost and improves customer SLA compliance.
+
+**Primary Actor:** Field Dispatcher
+
+**Secondary Actors:**
+- Routing Engine (automated system component)
+- Workforce Management System (external system, provides tech availability)
+- Customer Service Platform (external system, provides open tickets)
+- Field Technician (receives assignments via mobile app)
+
+**Trigger**
+
+The Field Dispatcher opens the Routing Dashboard each morning at or after 6:00 AM and clicks "Generate Today's Routes." The system may also be re-triggered mid-day if a technician calls out sick or a Priority-1 outage is reported.
+
+**Preconditions**
+- The Dispatcher is authenticated and has the "Dispatch" role.
+- The Workforce Management System has confirmed technician availability for the day.
+- Open service tickets for the day have been imported from the Customer Service Platform.
+- Geographic service zone data and road network data are current (updated within the past 24 hours).
+
+**Main Success Flow**
+
+1. Dispatcher selects the target service date and geographic region from the dashboard.
+2. System displays a map view showing all open service calls as pins, color-coded by priority (P1 = red, P2 = yellow, P3 = green) and by required skill type.
+3. System retrieves available technician list from the Workforce Management System and overlays technician home zones on the map.
+4. Dispatcher reviews the map and clicks "Optimize Routes."
+5. The Routing Engine processes assignments, applying business rules (see below), and returns a proposed schedule within 4 seconds.
+6. System displays each technician's ordered route on the map, with estimated drive time, total job count, and estimated end-of-shift time.
+7. Dispatcher reviews assignments. If satisfied, clicks "Approve & Dispatch." If not, the Dispatcher may manually drag-and-drop service calls between technicians to adjust (Step 8).
+8. *(Optional adjustment)* Dispatcher reassigns one or more jobs; system recalculates affected routes in real time. Dispatcher clicks "Approve & Dispatch."
+9. System pushes confirmed assignments to each technician's mobile app and records the dispatch event with a timestamp.
+
+**Alternative & Exception Flows**
+
+- **ALT A — Unassigned P1 tickets remain after optimization:** System highlights unassigned P1 calls in red and displays a warning banner. Dispatcher must either assign them manually or escalate to a supervisor before approving.
+- **ALT B — Workforce Management System unavailable:** System displays last known technician roster with a staleness warning. Dispatcher may proceed manually or wait for system restoration.
+- **ALT C — Technician calls out after dispatch:** Dispatcher selects the absent technician, clicks "Remove from Roster," and re-runs optimization for affected jobs only. System re-dispatches impacted technicians.
+- **ALT D — Routing Engine times out (> 15 seconds):** System displays error message and provides option to retry or revert to previous day's zone assignments as a fallback.
+- **ALT E — No available technicians with the required skill for a ticket:** System flags the ticket and recommends deferring to the next available qualified technician date, or escalating to a contractor resource.
+
+**Postconditions**
+- All assigned service tickets have a confirmed technician, sequence number, and estimated arrival window.
+- Each technician has received their route via the mobile app.
+- The dispatch event is logged in the audit trail with dispatcher ID, timestamp, and number of jobs dispatched.
+- Any unresolved P1 tickets are flagged for supervisor review.
+
+**Business Rules**
+- **BR-1:** All Priority-1 (service outage) tickets must be assigned before any Priority-3 tickets.
+- **BR-2:** A technician may not be assigned more than 8 jobs per shift or more than 10 hours of estimated work time (inclusive of drive time).
+- **BR-3:** Technicians must only be assigned jobs requiring certifications they currently hold (e.g., Fiber, HSD, Commercial).
+- **BR-4:** Jobs requiring a two-person crew must have a second technician assigned before approval is permitted.
+- **BR-5:** Customer appointment windows (e.g., "8 AM–12 PM") must be honored; the system must not schedule a technician to arrive outside the confirmed window.
+- **BR-6:** Technicians in active union status are governed by collective bargaining rules regarding overtime; the system must flag, but not automatically schedule, overtime assignments.
+
+**Non-Functional Requirements**
+- **Performance:** Route optimization must complete and display results within 4 seconds for up to 200 jobs and 40 technicians.
+- **Availability:** System must be available by 5:30 AM on weekdays; uptime SLA of 99.5%.
+- **Security:** Dispatcher authentication required; technician location data must comply with applicable privacy and labor regulations.
+- **Usability:** The map interface must be usable on a standard 1080p monitor without horizontal scrolling; drag-and-drop must work with both mouse and touch input.
+- **Integration:** Must support REST API calls to the existing Workforce Management System and Customer Service Platform.
+
+**Priority & Frequency**
+
+HIGH PRIORITY — Core daily workflow, executed 1–3 times per business day per dispatch region. Estimated 5–8 dispatch regions company-wide.
+
+**Open Issues & Assumptions**
+- **[OPEN]** What mapping/routing data provider will be used (e.g., Google Maps Platform, HERE, Esri)? Cost and data licensing TBD.
+- **[OPEN]** Will technicians be able to reject or flag a job from their mobile app, and if so, how should the system respond?
+- **[OPEN]** Should the system account for real-time traffic data, or use historical average drive times?
+- **[ASSUMPTION]** Technician home/start location is stored in the Workforce Management System and is accurate.
+- **[ASSUMPTION]** The Customer Service Platform can provide ticket data via a scheduled export or API at 5:30 AM daily.
+- **[ASSUMPTION]** Priority classifications (P1/P2/P3) are already defined and maintained in the Customer Service Platform.
+
+**Related Use Cases**
+- UC-02 · Track Real-Time Technician Location on Map
+- UC-03 · Add Emergency Priority-1 Call Mid-Day
+- UC-04 · Generate End-of-Day Dispatch Performance Report
+- UC-05 · Technician Views and Accepts Daily Route (Mobile)
+
+> **What to notice in this example:** The use case never mentions a specific programming language, database, or UI framework. It describes *behavior* and *business rules*, not implementation. Notice also that the Open Issues section is just as important as the flows — it surfaces assumptions that, left unstated, would cause miscommunication between business and development teams.

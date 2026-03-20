@@ -18,7 +18,7 @@ const sections = [
   {
     num: '03',
     title: 'Creating Use Cases',
-    lessons: 1,
+    lessons: 2,
     description: 'Writing clear, complete use cases that communicate software requirements to development teams',
     color: '#0891B2',
   },

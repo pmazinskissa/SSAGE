@@ -9,3 +9,4 @@ objectives:
 estimated_duration_minutes: 25
 lessons:
   - "01-use-case-guide"
+  - "02-metro-cable-example"
