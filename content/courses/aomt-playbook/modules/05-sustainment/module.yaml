@@ -1,0 +1,15 @@
+title: "Performance Management & Sustainment"
+slug: "05-sustainment"
+description: "Sustain improvements through structured governance, support systems, and feedback loops."
+objectives:
+  - "Implement the three-pillar sustainment framework"
+  - "Design organizational structure for sustained improvement"
+  - "Build continuous learning and support systems"
+  - "Establish performance feedback loops and scorecards"
+estimated_duration_minutes: 30
+lessons:
+  - "01-sustainment-framework"
+  - "02-structure-alignment"
+  - "03-support-learning"
+  - "04-feedback-performance"
+  - "05-metro-cable-exercise"

@@ -1,0 +1,58 @@
+---
+title: "Feedback (Performance)"
+slug: "04-feedback-performance"
+estimated_duration_minutes: 8
+order: 4
+---
+
+
+The Feedback pillar establishes systematic monitoring, measurement, and response mechanisms that detect performance changes and drive continuous improvement. A well-designed <GlossaryTerm term="Feedback Loop">Feedback Loop</GlossaryTerm> transforms raw operational data into actionable intelligence.
+
+## Feedback Loop: 4 Elements
+
+Every effective feedback loop contains four elements:
+
+1. **Measure** — Collect quantitative data on solution performance, user behavior, and operational outcomes at regular intervals. Automate data collection wherever possible to ensure consistency.
+
+2. **Analyze** — Compare measurements against targets, baselines, and trends. Look for both positive signals (opportunities to expand) and negative signals (early indicators of drift).
+
+3. **Decide** — Based on analysis, determine what action is needed. Options include: no action (performance on track), minor adjustment (parameter tuning, process refinement), major intervention (redesign, retraining), or escalation (systemic issue requiring leadership attention).
+
+4. **Act** — Execute the decided action, document what was changed and why, and monitor the impact in the next measurement cycle. Close the loop by confirming the action achieved the intended effect.
+
+## Monitoring Cadence
+
+Different metrics require different monitoring frequencies:
+
+| Cadence | Metrics | Responsible | Action Threshold |
+|---------|---------|-------------|-----------------|
+| **Daily** | System uptime, AI model response time, critical error count | Operations team / automated alerts | Any critical system failure triggers immediate response |
+| **Weekly** | User adoption rate, override frequency, help desk volume | Solution analyst | >10% deviation from baseline triggers investigation |
+| **Monthly** | Business KPIs (FCR, cost per dispatch, customer satisfaction), model accuracy metrics | Solution owner + leadership | >5% decline from target triggers formal review |
+| **Quarterly** | Strategic alignment review, ROI assessment, roadmap update | Executive sponsor + solution owner | Misalignment with strategic objectives triggers re-prioritization |
+
+<Callout type="warning" title="Balance Your Cadence">
+Monitoring too frequently creates noise and alert fatigue. Monitoring too infrequently allows problems to compound undetected. Match the monitoring cadence to the speed at which the metric can change and the cost of delayed detection. Daily monitoring for a metric that moves quarterly wastes attention; quarterly monitoring for a metric that can collapse daily is dangerous.
+</Callout>
+
+## Agile Governance for Feedback
+
+<Callout type="concept" title="Lightweight, Responsive Governance">
+Feedback governance should follow Agile principles: short review cycles, data-driven decisions, and minimal bureaucracy. A monthly 30-minute performance review with the solution owner, key users, and technical lead is more effective than a quarterly 3-hour steering committee. The goal is to detect and respond to changes quickly, not to produce comprehensive reports that no one reads.
+</Callout>
+
+## Performance Scorecards
+
+A performance scorecard goes beyond a standard dashboard. While dashboards display data, scorecards include **decision triggers** — specific metric values that require specific **responses**. Without decision triggers, scorecards become passive information displays that people review and ignore.
+
+Each metric on the scorecard should specify:
+
+- **Green zone** — Performance is on track. No action needed.
+- **Yellow zone** — Performance is drifting. Investigation required within one monitoring cycle.
+- **Red zone** — Performance has breached an unacceptable threshold. Immediate intervention required.
+
+Decision triggers connect observations directly to the product backlog and drive sprint-level improvements, ensuring that monitoring leads to action rather than just awareness.
+
+## Continuous Improvement Cycle
+
+The feedback pillar does not just maintain current performance — it drives improvement. Each monitoring cycle should ask not only "Are we meeting the target?" but also "Can we raise the target?" As the solution matures and the team gains experience, performance standards should ratchet upward to capture the full potential of the AI investment.

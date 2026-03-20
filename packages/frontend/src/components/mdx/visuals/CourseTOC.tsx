@@ -31,10 +31,10 @@ const sections = [
   },
   {
     num: '05',
-    title: 'Organizational Change Management',
-    lessons: 6,
-    description: 'Change readiness, stakeholder assessment, communications, and governance',
-    color: '#7C3AED',
+    title: 'Performance Management & Sustainment',
+    lessons: 5,
+    description: 'Sustainment framework, structure alignment, support systems, and feedback loops',
+    color: '#0D9488',
   },
   {
     num: '06',

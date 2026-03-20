@@ -1,0 +1,101 @@
+---
+title: "Metro Cable Exercise: Sustainment"
+slug: "05-metro-cable-exercise"
+estimated_duration_minutes: 12
+order: 5
+---
+
+
+Design the sustainment framework for Metro Cable's AI Skill-Match Dispatch solution after full deployment.
+
+<Callout type="concept" title="Where You Are in the Engagement">
+The AI Skill-Match Dispatch solution has completed its pilot in Zones 4, 7, and 12 with an 11-point FCR improvement. Full deployment across all 18 zones has been approved. Your job is to design the sustainment framework that keeps those gains from eroding over the next 12 months.
+</Callout>
+
+## Part 1: Identify the Drift Type
+
+<MultipleChoice
+  question="Six months after full deployment, Metro Cable's data shows that the AI recommendation acceptance rate in Zone 9 has dropped from 81% to 54% over eight weeks. No model updates have been made. What type of drift is most likely occurring?"
+  options={[
+    {
+      id: "a",
+      label: "Model drift — the AI's underlying algorithm has degraded over time.",
+      correct: false,
+      explanation: "Model drift causes the AI's predictions to become less accurate as data patterns shift. But the question notes no model updates were made and the drop is zone-specific and sudden — suggesting a behavioral or process change rather than model degradation."
+    },
+    {
+      id: "b",
+      label: "Process drift — coordinators in Zone 9 have developed workarounds that bypass the AI recommendation screen.",
+      correct: true,
+      explanation: "Correct. A zone-specific drop in acceptance rate over a short period, with no model changes, is the signature of process drift. Coordinators have likely found a way to skip the recommendation step for job types they consider routine. The fix is coaching and process reinforcement, not model retraining."
+    },
+    {
+      id: "c",
+      label: "Priority drift — leadership has stopped attending the monthly governance meetings.",
+      correct: false,
+      explanation: "Priority drift is real and damaging, but it manifests as delayed decisions and deprioritized monitoring cadences — not a zone-specific drop in acceptance rate. The acceptance rate data itself exists, suggesting the monitoring cadence is still running."
+    },
+    {
+      id: "d",
+      label: "Knowledge drift — new coordinators in Zone 9 were never trained on the system.",
+      correct: false,
+      explanation: "Knowledge drift is possible, but it would typically produce a gradual decline as new staff replace trained ones — not a sudden drop over 8 weeks. It would also affect override reason code quality, not just acceptance rate."
+    }
+  ]}
+/>
+
+## Part 2: Assign the Right Cadence
+
+<MultipleChoice
+  question="Metro Cable's sustainment framework uses a four-level cadence: daily, weekly, monthly, and quarterly. Which metric belongs at the daily review level?"
+  options={[
+    {
+      id: "a",
+      label: "Company-wide first-visit resolution rate vs. the 85% benchmark.",
+      correct: false,
+      explanation: "FCR is a lagging outcome metric — it reflects the cumulative effect of many decisions over time and is not actionable at a daily granularity. It belongs in the weekly or monthly review where trends are visible and intervention decisions can be made."
+    },
+    {
+      id: "b",
+      label: "AI recommendation acceptance rate by coordinator — flagging any coordinator who drops below 60% in the past 24 hours.",
+      correct: true,
+      explanation: "Correct. Acceptance rate is a leading behavioral signal that can change rapidly and requires a fast response. A coordinator who suddenly drops to 50% acceptance may have found a workaround, encountered a tool issue, or need coaching. Daily monitoring allows intervention before the behavior becomes a habit that spreads to peers."
+    },
+    {
+      id: "c",
+      label: "Model confidence score distribution across all job types — reviewed to determine whether retraining is needed.",
+      correct: false,
+      explanation: "Model confidence score distribution is a quarterly metric. Meaningful drift from data pattern shifts takes months to develop; reviewing this daily adds noise without actionable signal and would trigger false alarms."
+    },
+    {
+      id: "d",
+      label: "Year-over-year FCR improvement compared to the pre-deployment baseline.",
+      correct: false,
+      explanation: "Year-over-year comparisons are strategic metrics reviewed quarterly or annually. They require enough historical data to reveal trend movement and are not actionable on a daily basis."
+    }
+  ]}
+/>
+
+## Part 3: Assign Pillar Ownership
+
+<DecisionPoint
+  scenario="The sustainment review at Month 6 shows that FCR is holding at 82% — strong progress. But two things are slipping: new coordinator onboarding takes 4+ weeks before they feel comfortable using the AI recommendations, and override reason code quality has declined (40% of overrides are logged as 'other'). Which sustainment pillar is failing?"
+  options={[
+    {
+      id: "a",
+      label: "Structure — the organizational roles and accountability framework is unclear.",
+      outcome: "Structure issues typically show up as unclear ownership of metrics and decisions — not onboarding delays or poor data quality. The evidence points elsewhere."
+    },
+    {
+      id: "b",
+      label: "Support — the continuous learning and onboarding system is insufficient.",
+      outcome: "Correct. Both symptoms — slow onboarding and declining override reason quality — are Support pillar failures. New coordinators lack a structured learning path, and all coordinators lack reinforcement on how to correctly log override reasons. The fix is a buddy program, a refreshed reason code training, and a living scenario library. Without Support, knowledge dilutes as staff turns over.",
+      recommended: true
+    },
+    {
+      id: "c",
+      label: "Feedback — coordinators are not receiving performance data that shows how their decisions compare to AI recommendations.",
+      outcome: "Feedback issues matter, but the symptoms described (slow onboarding, poor reason code quality) are not primarily visibility problems — they are capability and process problems. Feedback could be a contributing factor but is not the primary failure."
+    }
+  ]}
+/>
