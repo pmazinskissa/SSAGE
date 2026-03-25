@@ -60,7 +60,7 @@ export default function PlaybookStructure() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
           {sections.map((s, i) => (
             <div key={i} style={{ border: '1px solid #E5E7EB', borderRadius: 8, overflow: 'hidden' }}>
-              <div style={{ background: s.color, padding: '0.75rem 1rem', color: 'white', minHeight: '4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ background: s.color, padding: '0.75rem 1rem', color: 'white', minHeight: '5.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div style={{ fontSize: '0.7rem', opacity: 0.8, textTransform: 'uppercase' }}>{s.title}</div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{s.sub}</div>
               </div>
