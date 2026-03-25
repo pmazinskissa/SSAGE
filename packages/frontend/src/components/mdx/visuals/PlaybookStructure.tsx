@@ -13,7 +13,7 @@ export default function PlaybookStructure() {
         },
         {
           name: 'Chapter II: Use Case Development',
-          topics: ['Write Use Cases that Bridge Business & Dev', 'Design, Prototype, and Deliver AI Solutions'],
+          topics: ['Write Use Cases that Bridge Business & Dev', 'Apply the 12 Components of a Well-Formed Use Case'],
         },
       ],
     },
